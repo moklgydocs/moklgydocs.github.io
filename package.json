@@ -1,7 +1,7 @@
 {
   "name": "moklgydocs",
   "description": "A VuePress project",
-  "version": "0.0.1",
+  "version": "22",
   "license": "MIT",
   "type": "module",
   "scripts": {
