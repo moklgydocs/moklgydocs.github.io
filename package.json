@@ -10,7 +10,7 @@
     "docs:dev": "vuepress dev docs",
     "docs:update-package": "pnpm dlx vp-update"
   },
-  "packageManager": "pnpm@10.10.0", // 核心新增：替换为你的pnpm版本，或写pnpm@9.x
+  "packageManager": "pnpm@10.10.0", 
   "devDependencies": {
     "@vuepress/bundler-vite": "2.0.0-rc.20",
     "@vuepress/theme-default": "2.0.0-rc.88",
