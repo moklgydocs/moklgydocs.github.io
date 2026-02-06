@@ -3,7 +3,7 @@ name: 部署文档
 on:
   push:
     branches:
-      - main  # 确保这是你存放源码的分支名
+      - main
 
 permissions:
   contents: write
@@ -16,25 +16,23 @@ jobs:
       - name: Checkout 代码
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # 获取完整提交记录，这对 vdoing 主题生成“最后更新时间”很重要
+          fetch-depth: 0
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
+        # 删除了 with: version: 9
+        # 它会自动识别 package.json 中的 "packageManager": "pnpm@10.10.0"
 
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18 # 推荐: Node 18 + legacy-provider 是 VuePress 1.x 最稳的组合
+          node-version: 18 # VuePress 1.x 建议用 18
           cache: pnpm
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
       - name: 构建文档
-        # 你的 package.json 中 "build" 脚本已经包含了内存限制(4096)和 defaults 修复，
-        # 所以这里直接运行 build 即可，不需要额外设置 env。
         run: |
           pnpm run build
           touch docs/.vuepress/dist/.nojekyll
