@@ -1,11 +1,9 @@
-
 name: 部署文档
 
 on:
   push:
     branches:
-      # 确保这是你正在使用的分支名称
-      - main
+      - main  # 确保这是你存放源码的分支名
 
 permissions:
   contents: write
@@ -13,37 +11,36 @@ permissions:
 jobs:
   deploy-gh-pages:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout 代码
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-          # 如果你文档需要 Git 子模块，取消注释下一行
-          # submodules: true
+          fetch-depth: 0 # 获取完整提交记录，这对 vdoing 主题生成“最后更新时间”很重要
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v4
-
+        with:
+          version: 9
 
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 18 # 推荐: Node 18 + legacy-provider 是 VuePress 1.x 最稳的组合
           cache: pnpm
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile
 
       - name: 构建文档
-        env:
-          NODE_OPTIONS: --max_old_space_size=8192
-        run: |-
-          pnpm run docs:build
-          > docs/.vuepress/dist/.nojekyll
+        # 你的 package.json 中 "build" 脚本已经包含了内存限制(4096)和 defaults 修复，
+        # 所以这里直接运行 build 即可，不需要额外设置 env。
+        run: |
+          pnpm run build
+          touch docs/.vuepress/dist/.nojekyll
 
-      - name: 部署文档
+      - name: 部署到 GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          # 这是文档部署到的分支名称
           branch: gh-pages
           folder: docs/.vuepress/dist
