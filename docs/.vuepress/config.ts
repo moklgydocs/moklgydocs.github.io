@@ -18,8 +18,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
   locales: {
     '/': {
       lang: 'zh-CN',
-      title: "Evan's blog",
-      description: 'web前端技术博客,专注web前端学习与总结。JavaScript,js,ES6,TypeScript,vue,React,python,css3,html5,Node,git,github等技术文章。',
+      title: "moklgy's blog",
+      description: '全栈技术博客,专注全栈学习与总结。asp.net core,sqlserver,abp,linux,JavaScript,js,ES6,TypeScript,vue,React,python,css3,html5,Node,git,github等技术文章。',
     }
   },
   // base: '/', // 默认'/'。如果你想将你的网站部署到如 https://foo.github.io/bar/，那么 base 应该被设置成 "/bar/",（否则页面将失去样式等文件）
@@ -64,6 +64,24 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
                 text: 'JS设计模式总结',
                 link: '/pages/4643cd/',
               },
+            ],
+          },
+        ],
+      },
+      {
+        text: '后端',
+        link: '/backend/', 
+        items: [ 
+          {
+            text: '后端文章',
+            items: [
+              { text: '.net core', link: '/pages/8863cc480faf8a16/' },
+            ],
+          },
+          {
+            text: 'asp.net core',
+            items: [
+              { text: 'asp.netcore', link: '/note/asp.netcore/' }, 
             ],
           },
         ],
@@ -173,7 +191,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     // 博主信息 (显示在首页侧边栏)
     blogger: {
       avatar: 'https://jsd.cdn.zzko.cn/gh/xugaoyi/image_store/blog/20200103123203.jpg',
-      name: 'Evan Xu',
+      name: 'moklgy Xu',
       slogan: '前端界的小学生',
     },
 
@@ -203,7 +221,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     footer: {
       createYear: 2019, // 博客创建年份
       copyrightInfo:
-        'Evan Xu | <a href="https://github.com/xugaoyi/vuepress-theme-vdoing/blob/master/LICENSE" target="_blank">MIT License</a> | <a href="http://beian.miit.gov.cn/" target="_blank">桂ICP备2024034950号</a> | <img src="/img/beian.png" style="width: 15px; margin-bottom: -3px;" /> <a href="https://beian.mps.gov.cn/#/query/webSearch?code=45142202000030" rel="noreferrer" target="_blank">桂公网安备45142202000030</a>', // 博客版权信息、备案信息等，支持a标签或换行标签</br>
+        "moklgy's blog", // 博客版权信息、备案信息等，支持a标签或换行标签</br>
     },
 
     // 扩展自动生成frontmatter。（当md文件的frontmatter不存在相应的字段时将自动添加。不会覆盖已有的数据。）

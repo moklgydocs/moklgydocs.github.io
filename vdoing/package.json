@@ -3,7 +3,7 @@
   "version": "1.12.9",
   "description": "Vdoing theme for VuePress. 一个基于VuePress的知识管理兼博客主题。",
   "author": {
-    "name": "gaoyi(Evan) Xu"
+    "name": "gaoyi(moklgy) Xu"
   },
   "homepage": "https://github.com/xugaoyi/vuepress-theme-vdoing#readme",
   "bugs": {
@@ -25,7 +25,7 @@
   "main": "index.js",
   "maintainers": [
     {
-      "name": "Evan xu",
+      "name": "moklgy xu",
       "email": "894072666@qq.com"
     }
   ],
