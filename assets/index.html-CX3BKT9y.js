@@ -1,1 +1,0 @@
-import{_ as e,c as t,o as a}from"./app-Dhee27V_.js";const r={};function c(o,s){return a(),t("div")}const l=e(r,[["render",c]]),i=JSON.parse('{"path":"/tag/","title":"Tags","lang":"zh-CN","frontmatter":{"title":"Tags","sidebar":false,"blog":{"type":"category","key":"tag"},"layout":"Tag"},"headers":[],"git":{},"filePathRelative":null,"excerpt":""}');export{l as comp,i as data};
