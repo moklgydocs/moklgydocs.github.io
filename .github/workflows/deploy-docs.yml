@@ -6,39 +6,57 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: write       # 用于推送 gh-pages 分支
+  pages: write          # 补充 Pages 权限，避免新版本兼容问题
+  id-token: write       # 补充身份验证权限
 
 jobs:
   deploy-gh-pages:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages  # 适配 GitHub Pages 环境要求
+      url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
       - name: Checkout 代码
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # 确保获取完整提交记录
 
       - name: 安装 pnpm
         uses: pnpm/action-setup@v4
-        # 删除了 with: version: 9
-        # 它会自动识别 package.json 中的 "packageManager": "pnpm@10.10.0"
+        with:
+          version: 10.10.0  # 明确版本，避免自动识别出错
 
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18 # VuePress 1.x 建议用 18
+          node-version: 18
           cache: pnpm
 
       - name: 安装依赖
         run: pnpm install --frozen-lockfile --shamefully-hoist
 
+      - name: 检查依赖安装结果
+        run: pnpm list  # 新增：验证依赖是否安装成功
+
       - name: 构建文档
         run: |
           pnpm run build
+          # 验证构建产物是否存在
+          if [ ! -d "docs/.vuepress/dist" ]; then
+            echo "构建产物目录不存在！"
+            ls -la docs/.vuepress/  # 打印目录内容，便于排查
+            exit 1
+          fi
           touch docs/.vuepress/dist/.nojekyll
 
       - name: 部署到 GitHub Pages
+        id: deployment  # 新增：标记步骤 ID，用于获取部署 URL
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: docs/.vuepress/dist
+          clean: true  # 新增：部署前清理 gh-pages 分支旧文件
+          clean-exclude: '.nojekyll'  # 保留必要文件
+          token: ${{ github.token }}  # 显式指定 token，避免权限问题
