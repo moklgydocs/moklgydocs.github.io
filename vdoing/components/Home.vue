@@ -395,8 +395,9 @@ export default {
         justify-content space-between
       .feature
         flex-grow 1
-        flex-basis 30%
-        max-width 30%
+        flex-basis 25%
+        max-width 25%
+        margin: 0 10px 20px !important  
         text-align center
         a
           // color lighten($bannerTextColor,10%)
