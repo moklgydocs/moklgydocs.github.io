@@ -79,9 +79,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
             ],
           },
           {
-            text: 'asp.net core',
+            text: '《技术题》',
             items: [
-              { text: 'asp.netcore', link: '/note/asp.netcore/' }, 
+              { text: '《技术题》', link: '/note/interview/' }, 
             ],
           },
         ],
