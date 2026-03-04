@@ -4,7 +4,7 @@ type NoSidebar4DefaultThemeConfig = Omit<DefaultThemeConfig, 'sidebar'> // 忽�
 
 /**
  * Vdoing主题配置类型
- * @see https://doc.xugaoyi.com/
+ * @see https://doc.moklgydocs.com/
  */
 export interface VdoingThemeConfig extends NoSidebar4DefaultThemeConfig {
   /**
@@ -131,7 +131,7 @@ export interface VdoingThemeConfig extends NoSidebar4DefaultThemeConfig {
 
   /**
    * 社交图标 (显示于博主信息栏和页脚栏)
-   * @内置图标-see：https://doc.xugaoyi.com/pages/a20ce8/#social
+   * @内置图标-see：https://doc.moklgydocs.com/pages/a20ce8/#social
    */
   social?: {
     iconfontCssFile?: string,
@@ -160,7 +160,7 @@ export interface VdoingThemeConfig extends NoSidebar4DefaultThemeConfig {
 
   /**
    * 自定义hmtl(广告)模块
-   * @see: https://doc.xugaoyi.com/pages/a20ce8/#htmlmodules
+   * @see: https://doc.moklgydocs.com/pages/a20ce8/#htmlmodules
    */
   htmlModules?: {
     homeSidebarB?: string,

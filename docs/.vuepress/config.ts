@@ -1,5 +1,5 @@
 /**
- * 提示：如您想使用JS版本的配置文件可参考：https://github.com/moklgy/vuepress-theme-vdoing/tree/a2f03e993dd2f2a3afdc57cf72adfc6f1b6b0c32/docs/.vuepress
+ * 提示：如您想使用JS版本的配置文件可参考：https://github.com/moklgydocs/moklgydocs.github.io/
  */
 import { resolve } from 'path'
 import { defineConfig4CustomTheme, UserPlugins } from 'vuepress/config'
@@ -8,7 +8,7 @@ import dayjs from 'dayjs'
 import baiduCode from './config/baiduCode' // 百度统计hm码
 import htmlModules from './config/htmlModules' // 自定义插入的html块
 
-const DOMAIN_NAME = 'moklgy.com' // 域名 (不带https)
+const DOMAIN_NAME = 'moklgydocs.github.io/' // 域名 (不带https)
 const WEB_SITE = `https://${DOMAIN_NAME}` // 网址
 
 export default defineConfig4CustomTheme<VdoingThemeConfig>({
@@ -137,7 +137,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     ],
     sidebarDepth: 2, // 侧边栏显示深度，默认1，最大2（显示到h3标题）
     logo: '/img/logo.png', // 导航栏logo
-    repo: 'moklgy/vuepress-theme-vdoing', // 导航栏右侧生成Github链接
+    repo: 'moklgy/moklgydocs.github.io', // 导航栏右侧生成Github链接
     searchMaxSuggestions: 10, // 搜索结果显示最大数
     lastUpdated: '上次更新', // 开启更新时间，并配置前缀文字   string | boolean (取值为git提交时间)
     docsDir: 'docs', // 编辑的文件夹
@@ -185,14 +185,14 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     // 文章默认的作者信息，(可在md文件中单独配置此信息) string | {name: string, link?: string}
     author: {
       name: 'moklgy', // 必需
-      link: 'https://github.com/moklgy', // 可选的
+      link: 'https://github.com/moklgydocs', // 可选的
     },
 
     // 博主信息 (显示在首页侧边栏)
     blogger: {
-      avatar: 'https://jsd.cdn.zzko.cn/gh/moklgy/image_store/blog/20200103123203.jpg',
+      avatar: '/img/avatar.jpg',
       name: 'moklgy docs',
-      slogan: '前端界的小学生',
+      slogan: '全栈初级小白',
     },
 
     // 社交图标 (显示于博主信息栏和页脚栏。内置图标：https://doc.moklgy.com/pages/a20ce8/#social)

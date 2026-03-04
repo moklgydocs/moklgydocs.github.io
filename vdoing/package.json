@@ -5,13 +5,13 @@
   "author": {
     "name": "gaoyi(moklgy) Xu"
   },
-  "homepage": "https://github.com/xugaoyi/vuepress-theme-vdoing#readme",
+  "homepage": "https://github.com/moklgydocs/vuepress-theme-vdoing#readme",
   "bugs": {
-    "url": "https://github.com/xugaoyi/vuepress-theme-vdoing/issues"
+    "url": "https://github.com/moklgydocs/vuepress-theme-vdoing/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/xugaoyi/vuepress-theme-vdoing.git"
+    "url": "git+https://github.com/moklgydocs/vuepress-theme-vdoing.git"
   },
   "keywords": [
     "documentation",
