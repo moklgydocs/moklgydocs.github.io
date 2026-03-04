@@ -75,7 +75,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           {
             text: '后端文章',
             items: [
-              { text: '.net core', link: '/pages/8863cc480faf8a16/' },
+              { text: '基础', link: '/pages/fundamental01/' },
             ],
           },
           {
