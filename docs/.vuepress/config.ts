@@ -347,8 +347,8 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       {
         choosen: 'gitalk',
         options: {
-          clientID: 'Iv23ctuoNjpI14PQi50l',
-          clientSecret: '90c19b1ece253216c289f0e97230d460320bcf17',
+          clientID: 'Ov23lic9CLCxo81wIXVY',//'Iv23ctuoNjpI14PQi50l',
+          clientSecret: 'dc2bf02626d1bbf9a7db2c3380ee39a8fe490aa5',//'90c19b1ece253216c289f0e97230d460320bcf17',
           repo: 'moklgydocs.github.io', // GitHub 仓库
           owner: 'moklgy', // GitHub仓库所有者
           admin: ['moklgy'], // 对仓库有写权限的人
