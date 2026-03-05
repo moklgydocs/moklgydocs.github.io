@@ -192,7 +192,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     blogger: {
       avatar: '/img/avatar.jpg',
       name: 'moklgy docs',
-      slogan: '全栈初级小白',
+      slogan: '全栈初级开发工程师',
     },
 
     // 社交图标 (显示于博主信息栏和页脚栏。内置图标：https://doc.moklgy.com/pages/a20ce8/#social)
