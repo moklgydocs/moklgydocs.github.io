@@ -75,13 +75,14 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           {
             text: '后端文章',
             items: [
-              { text: '基础', link: '/pages/fundamental01/' },
+              { text: '技术题', link: '/pages/fundamental01/' },
             ],
           },
           {
-            text: '《技术题》',
+            text: '.netcore',
             items: [
-              { text: '《技术题》', link: '/note/interview/' }, 
+              { text: '依赖注入', link: '/pages/interview/' }, 
+              { text: '中间件', link: '/pages/interview/' }, 
             ],
           },
         ],
