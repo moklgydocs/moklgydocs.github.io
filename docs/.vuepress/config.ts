@@ -81,8 +81,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
           {
             text: '.netcore',
             items: [
-              { text: '依赖注入', link: '/pages/interview/' }, 
-              { text: '中间件', link: '/pages/interview/' }, 
+              { text: '《asp.netcore》笔记', link: '/note/backend/' },  
             ],
           },
         ],
