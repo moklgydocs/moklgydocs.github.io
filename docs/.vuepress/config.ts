@@ -82,6 +82,7 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
             text: '.netcore',
             items: [
               { text: '《asp.netcore》笔记', link: '/note/backend/' },  
+              { text: '《设计模式》', link: '/note/designpattern/' }, 
             ],
           },
         ],
