@@ -21,5 +21,10 @@
     "onlyBuiltDependencies": [
       "esbuild"
     ]
+  },
+  "dependencies": {
+    "@vuepress/plugin-revealjs": "2.0.0-rc.47",
+    "chart.js": "^4.5.1",
+    "echarts": "^6.0.0"
   }
 }
