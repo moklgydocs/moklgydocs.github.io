@@ -1,26 +1,27 @@
 /**
  * 提示：如您想使用JS版本的配置文件可参考：https://github.com/moklgydocs/moklgydocs.github.io/
  */
-import { resolve } from 'path'
-import { defineConfig4CustomTheme, UserPlugins } from 'vuepress/config'
-import { VdoingThemeConfig } from 'vuepress-theme-vdoing/types'
-import dayjs from 'dayjs'
-import baiduCode from './config/baiduCode' // 百度统计hm码
-import htmlModules from './config/htmlModules' // 自定义插入的html块
+import { resolve } from "path";
+import { defineConfig4CustomTheme, UserPlugins } from "vuepress/config";
+import { VdoingThemeConfig } from "vuepress-theme-vdoing/types";
+import dayjs from "dayjs";
+import baiduCode from "./config/baiduCode"; // 百度统计hm码
+import htmlModules from "./config/htmlModules"; // 自定义插入的html块
 
-const DOMAIN_NAME = 'moklgydocs.github.io/' // 域名 (不带https)
-const WEB_SITE = `https://${DOMAIN_NAME}` // 网址
+const DOMAIN_NAME = "moklgydocs.github.io/"; // 域名 (不带https)
+const WEB_SITE = `https://${DOMAIN_NAME}`; // 网址
 
 export default defineConfig4CustomTheme<VdoingThemeConfig>({
-  theme: 'vdoing', // 使用npm主题包
+  theme: "vdoing", // 使用npm主题包
   // theme: resolve(__dirname, '../../vdoing'), // 使用本地主题包
 
   locales: {
-    '/': {
-      lang: 'zh-CN',
+    "/": {
+      lang: "zh-CN",
       title: "moklgy's blog",
-      description: '全栈技术博客,专注全栈学习与总结。asp.net core,sqlserver,abp,linux,JavaScript,js,ES6,TypeScript,vue,React,python,css3,html5,Node,git,github等技术文章。',
-    }
+      description:
+        "全栈技术博客,专注全栈学习与总结。asp.net core,sqlserver,abp,linux,JavaScript,js,ES6,TypeScript,vue,React,python,css3,html5,Node,git,github等技术文章。",
+    },
   },
   // base: '/', // 默认'/'。如果你想将你的网站部署到如 https://foo.github.io/bar/，那么 base 应该被设置成 "/bar/",（否则页面将失去样式等文件）
 
@@ -28,98 +29,102 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
   themeConfig: {
     // 导航配置
     nav: [
-      { text: '首页', link: '/' },
+      { text: "首页", link: "/" },
       {
-        text: '前端',
-        link: '/web/', //目录页链接，此处link是vdoing主题新增的配置项，有二级导航时，可以点击一级导航跳到目录页
+        text: "前端",
+        link: "/web/", //目录页链接，此处link是vdoing主题新增的配置项，有二级导航时，可以点击一级导航跳到目录页
         items: [
           // 说明：以下所有link的值只是在相应md文件头部定义的永久链接（不是什么特殊编码）。另外，注意结尾是有斜杠的
           {
-            text: '前端文章',
-            items: [
-              { text: 'JavaScript', link: '/pages/8143cc480faf9a11/' },
-            ],
+            text: "前端文章",
+            items: [{ text: "JavaScript", link: "/pages/8143cc480faf9a11/" }],
           },
           {
-            text: '学习笔记',
+            text: "学习笔记",
             items: [
-              { text: '《JavaScript教程》', link: '/note/javascript/' },
-              { text: '《JavaScript高级程序设计》', link: '/note/js/' },
-              { text: '《ES6 教程》', link: '/note/es6/' },
-              { text: '《Vue》', link: '/note/vue/' },
-              { text: '《React》', link: '/note/react/' },
+              { text: "《JavaScript教程》", link: "/note/javascript/" },
+              { text: "《JavaScript高级程序设计》", link: "/note/js/" },
+              { text: "《ES6 教程》", link: "/note/es6/" },
+              { text: "《Vue》", link: "/note/vue/" },
+              { text: "《React》", link: "/note/react/" },
               {
-                text: '《TypeScript 从零实现 axios》',
-                link: '/note/typescript-axios/',
+                text: "《TypeScript 从零实现 axios》",
+                link: "/note/typescript-axios/",
               },
               {
-                text: '《Git》',
-                link: '/note/git/',
+                text: "《Git》",
+                link: "/note/git/",
               },
               {
-                text: 'TypeScript',
-                link: '/pages/51afd6/',
+                text: "TypeScript",
+                link: "/pages/51afd6/",
               },
               {
-                text: 'JS设计模式总结',
-                link: '/pages/4643cd/',
+                text: "JS设计模式总结",
+                link: "/pages/4643cd/",
               },
             ],
           },
         ],
       },
       {
-        text: '后端',
-        link: '/backend/', 
-        items: [ 
+        text: "后端",
+        link: "/backend/",
+        items: [
           {
-            text: '后端文章',
-            items: [
-              { text: '技术题', link: '/pages/fundamental01/' },
-            ],
+            text: "后端文章",
+            items: [{ text: "技术题", link: "/pages/fundamental01/" }],
           },
           {
-            text: '.netcore',
+            text: ".netcore",
             items: [
-              { text: '《asp.netcore》笔记', link: '/note/backend/' },  
-              { text: '《设计模式》', link: '/note/designpattern/' }, 
+              { text: "《asp.netcore》笔记", link: "/note/backend/" },
+              { text: "《设计模式》", link: "/note/designpattern/" },
             ],
           },
         ],
       },
       {
-        text: '页面',
-        link: '/ui/',
+        text: "页面",
+        link: "/ui/",
         items: [
-          { text: 'HTML', link: '/pages/8309a5b876fc95e3/' },
-          { text: 'CSS', link: '/pages/0a83b083bdf257cb/' },
+          { text: "HTML", link: "/pages/8309a5b876fc95e3/" },
+          { text: "CSS", link: "/pages/0a83b083bdf257cb/" },
         ],
       },
       {
-        text: '技术',
-        link: '/technology/',
+        text: "技术",
+        link: "/technology/",
         items: [
-          { text: '技术文档', link: '/pages/9a7ee40fc232253e/' },
-          { text: 'GitHub技巧', link: '/pages/4c778760be26d8b3/' },
-          { text: 'Nodejs', link: '/pages/117708e0af7f0bd9/' },
-          { text: '博客搭建', link: '/pages/41f87d890d0a02af/' },
+          { text: "技术文档", link: "/pages/9a7ee40fc232253e/" },
+          { text: "GitHub技巧", link: "/pages/4c778760be26d8b3/" },
+          { text: "Nodejs", link: "/pages/117708e0af7f0bd9/" },
+          { text: "博客搭建", link: "/pages/41f87d890d0a02af/" },
         ],
       },
       {
-        text: '更多',
-        link: '/more/',
+        text: "语言",
+        link: "/lang/",
         items: [
-          { text: '学习', link: '/pages/f2a556/' },
-          { text: '面试', link: '/pages/aea6571b7a8bae86/' },
-          { text: '心情杂货', link: '/pages/2d615df9a36a98ed/' },
-          { text: '实用技巧', link: '/pages/baaa02/' },
-          { text: '友情链接', link: '/friends/' },
+          { text: "日语", link: "/pages/jp/" },
+          { text: "英语", link: "/pages/english/" },
         ],
       },
-      { text: '关于', link: '/about/' },
       {
-        text: '收藏',
-        link: '/pages/beb6c0bd8a66cea6/',
+        text: "更多",
+        link: "/more/",
+        items: [
+          { text: "学习", link: "/pages/f2a556/" },
+          { text: "面试", link: "/pages/aea6571b7a8bae86/" },
+          { text: "心情杂货", link: "/pages/2d615df9a36a98ed/" },
+          { text: "实用技巧", link: "/pages/baaa02/" },
+          { text: "友情链接", link: "/friends/" },
+        ],
+      },
+      { text: "关于", link: "/about/" },
+      {
+        text: "收藏",
+        link: "/pages/beb6c0bd8a66cea6/",
         // items: [
         //   { text: '网站', link: '/pages/beb6c0bd8a66cea6/' },
         //   { text: '资源', link: '/pages/eee83a9211a70f9d/' },
@@ -127,24 +132,24 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
         // ],
       },
       {
-        text: '索引',
-        link: '/archives/',
+        text: "索引",
+        link: "/archives/",
         items: [
-          { text: '分类', link: '/categories/' },
-          { text: '标签', link: '/tags/' },
-          { text: '归档', link: '/archives/' },
+          { text: "分类", link: "/categories/" },
+          { text: "标签", link: "/tags/" },
+          { text: "归档", link: "/archives/" },
         ],
       },
     ],
     sidebarDepth: 2, // 侧边栏显示深度，默认1，最大2（显示到h3标题）
-    logo: '/img/logo.png', // 导航栏logo
-    repo: 'moklgy/moklgydocs.github.io', // 导航栏右侧生成Github链接
+    logo: "/img/logo.png", // 导航栏logo
+    repo: "moklgy/moklgydocs.github.io", // 导航栏右侧生成Github链接
     searchMaxSuggestions: 10, // 搜索结果显示最大数
-    lastUpdated: '上次更新', // 开启更新时间，并配置前缀文字   string | boolean (取值为git提交时间)
-    docsDir: 'docs', // 编辑的文件夹
+    lastUpdated: "上次更新", // 开启更新时间，并配置前缀文字   string | boolean (取值为git提交时间)
+    docsDir: "docs", // 编辑的文件夹
     // docsBranch: 'master', // 编辑的文件所在分支，默认master。 注意：如果你的分支是main则修改为main
     editLinks: true, // 启用编辑
-    editLinkText: '编辑',
+    editLinkText: "编辑",
 
     //*** 以下是Vdoing主题相关配置，文档：https://doc.moklgy.com/pages/a20ce8/ ***//
 
@@ -181,19 +186,19 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     // defaultMode: 'auto',
 
     // 侧边栏  'structuring' | { mode: 'structuring', collapsable: Boolean} | 'auto' | <自定义>    温馨提示：目录页数据依赖于结构化的侧边栏数据，如果你不设置为'structuring',将无法使用目录页
-    sidebar: 'structuring',
+    sidebar: "structuring",
 
     // 文章默认的作者信息，(可在md文件中单独配置此信息) string | {name: string, link?: string}
     author: {
-      name: 'moklgy', // 必需
-      link: 'https://github.com/moklgydocs', // 可选的
+      name: "moklgy", // 必需
+      link: "https://github.com/moklgydocs", // 可选的
     },
 
     // 博主信息 (显示在首页侧边栏)
     blogger: {
-      avatar: '/img/avatar.jpg',
-      name: 'moklgy docs',
-      slogan: '全栈初级开发工程师',
+      avatar: "/img/avatar.jpg",
+      name: "moklgy docs",
+      slogan: "全栈初级开发工程师",
     },
 
     // 社交图标 (显示于博主信息栏和页脚栏。内置图标：https://doc.moklgy.com/pages/a20ce8/#social)
@@ -201,14 +206,14 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       // iconfontCssFile: '//at.alicdn.com/t/xxx.css', // 可选，阿里图标库在线css文件地址，对于主题没有的图标可自己添加。阿里图片库：https://www.iconfont.cn/
       icons: [
         {
-          iconClass: 'icon-youjian',
-          title: '发邮件',
-          link: 'mailto:moklgy@163.com',
+          iconClass: "icon-youjian",
+          title: "发邮件",
+          link: "mailto:moklgy@163.com",
         },
         {
-          iconClass: 'icon-github',
-          title: 'GitHub',
-          link: 'https://github.com/moklgydocs',
+          iconClass: "icon-github",
+          title: "GitHub",
+          link: "https://github.com/moklgydocs",
         },
         // {
         //   iconClass: 'icon-erji',
@@ -221,34 +226,34 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     // 页脚信息
     footer: {
       createYear: 2019, // 博客创建年份
-      copyrightInfo:
-        "moklgy's blog", // 博客版权信息、备案信息等，支持a标签或换行标签</br>
+      copyrightInfo: "moklgy's blog", // 博客版权信息、备案信息等，支持a标签或换行标签</br>
     },
 
     // 扩展自动生成frontmatter。（当md文件的frontmatter不存在相应的字段时将自动添加。不会覆盖已有的数据。）
     extendFrontmatter: {
       author: {
-        name: 'moklgy',
-        link: 'https://github.com/moklgydocs'
-      }
+        name: "moklgy",
+        link: "https://github.com/moklgydocs",
+      },
     },
 
     // 自定义hmtl(广告)模块
-    htmlModules
+    htmlModules,
   },
 
   // 注入到页面<head>中的标签，格式[tagName, { attrName: attrValue }, innerHTML?]
   head: [
-    ['link', { rel: 'icon', href: '/img/favicon.ico' }], //favicons，资源放在public文件夹
+    ["link", { rel: "icon", href: "/img/favicon.ico" }], //favicons，资源放在public文件夹
     [
-      'meta',
+      "meta",
       {
-        name: 'keywords',
-        content: '前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown',
+        name: "keywords",
+        content:
+          "前端博客,个人技术博客,前端,前端开发,前端框架,web前端,前端面试题,技术文档,学习,面试,JavaScript,js,ES6,TypeScript,vue,python,css3,html5,Node,git,github,markdown",
       },
     ],
-    ['meta', { name: 'baidu-site-verification', content: '7F55weZDDc' }], // 百度统计的站长验证（你可以去掉）
-    ['meta', { name: 'theme-color', content: '#11a8cd' }], // 移动浏览器主题颜色
+    ["meta", { name: "baidu-site-verification", content: "7F55weZDDc" }], // 百度统计的站长验证（你可以去掉）
+    ["meta", { name: "theme-color", content: "#11a8cd" }], // 移动浏览器主题颜色
     // [
     //   'script',
     //   {
@@ -259,7 +264,6 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
     // ], // 网站关联Google AdSense 与 html格式广告支持（你可以去掉）
   ],
 
-
   // 插件配置
   plugins: <UserPlugins>[
     [
@@ -269,10 +273,10 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
     ],
 
-    'vuepress-plugin-baidu-autopush', // 百度自动推送
+    "vuepress-plugin-baidu-autopush", // 百度自动推送
 
     [
-      'vuepress-plugin-baidu-tongji', // 百度统计
+      "vuepress-plugin-baidu-tongji", // 百度统计
       {
         hm: baiduCode,
       },
@@ -283,46 +287,49 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
 
     // 可以添加第三方搜索链接的搜索框（继承原官方搜索框的配置参数）
     [
-      'thirdparty-search',
+      "thirdparty-search",
       {
         thirdparty: [
           {
-            title: '在MDN中搜索',
-            frontUrl: 'https://developer.mozilla.org/zh-CN/search?q=', // 搜索链接的前面部分
-            behindUrl: '', // 搜索链接的后面部分，可选，默认 ''
+            title: "在MDN中搜索",
+            frontUrl: "https://developer.mozilla.org/zh-CN/search?q=", // 搜索链接的前面部分
+            behindUrl: "", // 搜索链接的后面部分，可选，默认 ''
           },
           {
-            title: '在Runoob中搜索',
-            frontUrl: 'https://www.runoob.com/?s=',
+            title: "在Runoob中搜索",
+            frontUrl: "https://www.runoob.com/?s=",
           },
           {
-            title: '在Vue API中搜索',
-            frontUrl: 'https://cn.vuejs.org/v2/api/#',
+            title: "在Vue API中搜索",
+            frontUrl: "https://cn.vuejs.org/v2/api/#",
           },
           {
-            title: '在Bing中搜索',
-            frontUrl: 'https://cn.bing.com/search?q=',
+            title: "在Bing中搜索",
+            frontUrl: "https://cn.bing.com/search?q=",
           },
           {
-            title: '通过百度搜索本站的',
+            title: "通过百度搜索本站的",
             frontUrl: `https://www.baidu.com/s?wd=site%3A${DOMAIN_NAME}%20`,
           },
         ],
-      }
+      },
     ],
 
     [
-      'one-click-copy', // 代码块复制按钮
+      "one-click-copy", // 代码块复制按钮
       {
-        copySelector: ['div[class*="language-"] pre', 'div[class*="aside-code"] aside'], // String or Array
-        copyMessage: '复制成功', // default is 'Copy successfully and then paste it for use.'
+        copySelector: [
+          'div[class*="language-"] pre',
+          'div[class*="aside-code"] aside',
+        ], // String or Array
+        copyMessage: "复制成功", // default is 'Copy successfully and then paste it for use.'
         duration: 1000, // prompt message display time.
         showInMobile: false, // whether to display on the mobile side, default: false.
       },
     ],
 
     [
-      'demo-block', // demo演示模块 https://github.com/xiguaxigua/vuepress-plugin-demo-block
+      "demo-block", // demo演示模块 https://github.com/xiguaxigua/vuepress-plugin-demo-block
       {
         settings: {
           // jsLib: ['http://xxx'], // 在线示例(jsfiddle, codepen)中的js依赖
@@ -335,39 +342,38 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
       },
     ],
     [
-      'vuepress-plugin-zooming', // 放大图片
+      "vuepress-plugin-zooming", // 放大图片
       {
-        selector: '.theme-vdoing-content img:not(.no-zoom)', // 排除class是no-zoom的图片
+        selector: ".theme-vdoing-content img:not(.no-zoom)", // 排除class是no-zoom的图片
         options: {
-          bgColor: 'rgba(0,0,0,0.6)',
+          bgColor: "rgba(0,0,0,0.6)",
         },
       },
     ],
     [
-      'vuepress-plugin-comment', // 评论
+      "vuepress-plugin-comment", // 评论
       {
-        choosen: 'gitalk',
+        choosen: "gitalk",
         options: {
-          clientID: 'Ov23lic9CLCxo81wIXVY',//'Iv23ctuoNjpI14PQi50l',
-          clientSecret: 'dc2bf02626d1bbf9a7db2c3380ee39a8fe490aa5',//'90c19b1ece253216c289f0e97230d460320bcf17',
-          repo: 'moklgydocs.github.io', // GitHub 仓库
-          owner: 'moklgydocs', // GitHub仓库所有者
-          admin: ['moklgydocs'], // 对仓库有写权限的人
+          clientID: "Ov23lic9CLCxo81wIXVY", //'Iv23ctuoNjpI14PQi50l',
+          clientSecret: "dc2bf02626d1bbf9a7db2c3380ee39a8fe490aa5", //'90c19b1ece253216c289f0e97230d460320bcf17',
+          repo: "moklgydocs.github.io", // GitHub 仓库
+          owner: "moklgydocs", // GitHub仓库所有者
+          admin: ["moklgydocs"], // 对仓库有写权限的人
           // distractionFreeMode: true,
-          pagerDirection: 'last', // 'first'正序 | 'last'倒序
-          id: '<%- (frontmatter.permalink || frontmatter.to.path).slice(-16) %>', //  页面的唯一标识,长度不能超过50
-          title: '「评论」<%- frontmatter.title %>', // GitHub issue 的标题
-          labels: ['Gitalk', 'Comment'], // GitHub issue 的标签
-          body:
-            '页面：<%- window.location.origin + (frontmatter.to.path || window.location.pathname) %>', // GitHub issue 的内容
+          pagerDirection: "last", // 'first'正序 | 'last'倒序
+          id: "<%- (frontmatter.permalink || frontmatter.to.path).slice(-16) %>", //  页面的唯一标识,长度不能超过50
+          title: "「评论」<%- frontmatter.title %>", // GitHub issue 的标题
+          labels: ["Gitalk", "Comment"], // GitHub issue 的标签
+          body: "页面：<%- window.location.origin + (frontmatter.to.path || window.location.pathname) %>", // GitHub issue 的内容
         },
       },
     ],
     [
-      '@vuepress/last-updated', // "上次更新"时间格式
+      "@vuepress/last-updated", // "上次更新"时间格式
       {
         transformer: (timestamp, lang) => {
-          return dayjs(timestamp).format('YYYY/MM/DD, HH:mm:ss')
+          return dayjs(timestamp).format("YYYY/MM/DD, HH:mm:ss");
         },
       },
     ],
@@ -375,12 +381,9 @@ export default defineConfig4CustomTheme<VdoingThemeConfig>({
 
   markdown: {
     lineNumbers: true,
-    extractHeaders: ['h2', 'h3', 'h4', 'h5', 'h6'], // 提取标题到侧边栏的级别，默认['h2', 'h3']
+    extractHeaders: ["h2", "h3", "h4", "h5", "h6"], // 提取标题到侧边栏的级别，默认['h2', 'h3']
   },
 
   // 监听文件变化并重新构建
-  extraWatchFiles: [
-    '.vuepress/config.ts',
-    '.vuepress/config/htmlModules.ts',
-  ]
-})
+  extraWatchFiles: [".vuepress/config.ts", ".vuepress/config/htmlModules.ts"],
+});
