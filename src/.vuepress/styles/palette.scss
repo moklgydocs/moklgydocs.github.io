@@ -1,1 +1,12 @@
 // you can change colors here
+// Shiki 代码背景色
+$code-bg-color: (
+  light: #f7f7f7,
+  dark: #1e1e1e,
+);
+
+// 文字色（可选）
+$code-color: (
+  light: #333,
+  dark: #eee,
+);

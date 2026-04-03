@@ -3,6 +3,28 @@ import { navbar } from "vuepress-theme-hope";
 export default navbar([
   "/",
   {
+    text: "前端开发",
+    icon: "laptop-code",
+    prefix: "/前端开发/",
+    children: [
+      {
+        text: "TypeScript 从零实现 axios",
+        icon: "bolt",
+        link: "TypeScript 从零实现 axios/"
+      },
+      {
+        text: "JavaScript 教程",
+        icon: "fa6-brands:square-js",
+        link: "JavaScript教程/"
+      },
+      {
+        text: "ES6 教程",
+        icon: "fa6-brands:js",
+        link: "ES6教程/"
+      }
+    ]
+  },
+  {
     text: "后端开发",
     icon: "code",
     prefix: "/后端开发/",
@@ -18,23 +40,6 @@ export default navbar([
         link: "ABP框架/",
       },
     ],
-  },
-  {
-    text: "前端开发",
-    icon: "laptop-code",
-    prefix: "/前端开发/",
-    children: [
-      {
-        text: "JavaScript 教程",
-        icon: "fa6-brands:square-js",
-        link: "JavaScript教程/"
-      },
-      {
-        text: "ES6 教程",
-        icon: "fa6-brands:js",
-        link: "ES6教程/"
-      }
-    ]
   },
   {
     text: "架构与设计",

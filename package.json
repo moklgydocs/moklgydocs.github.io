@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@vuepress/bundler-vite": "2.0.0-rc.27",
+    "@vuepress/plugin-prismjs": "2.0.0-rc.128",
     "@vuepress/plugin-search": "2.0.0-rc.128",
     "sass-embedded": "^1.98.0",
     "vue": "^3.5.31",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@vuepress/plugin-revealjs": "2.0.0-rc.47",
+    "@vuepress/plugin-slimsearch": "2.0.0-rc.61",
     "chart.js": "^4.5.1",
     "echarts": "^6.0.0"
   }

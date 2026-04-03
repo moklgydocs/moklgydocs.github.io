@@ -14,3 +14,31 @@
   transform: translateY(-8px);
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
+/* 苹果风格代码块 */
+.prose pre {
+  position: relative !important;
+  border-radius: 12px !important;
+  padding-top: 40px !important;
+  overflow: hidden !important;
+}
+
+/* 顶部红黄绿三圆 */
+.prose pre::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #ff5f57;
+  box-shadow: 20px 0 0 #ffbd2e, 40px 0 0 #28ca42;
+  z-index: 10;
+}
+
+/* 苹果等宽字体 */
+.prose code,
+.prose pre {
+  font-family: "SF Mono", Menlo, Monaco, "PingFang SC", monospace !important;
+  font-size: 14px !important;
+}

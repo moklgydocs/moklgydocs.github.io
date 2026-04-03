@@ -51,7 +51,7 @@ export default sidebar({
       prefix: "运维与部署/",
       collapsible: true,
       children: "structure"
-    }
+    },
     {
       text: "思维训练",
       icon: "brain",
@@ -61,3 +61,4 @@ export default sidebar({
     }
   ],
 });
+

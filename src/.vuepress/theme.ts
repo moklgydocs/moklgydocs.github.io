@@ -9,7 +9,7 @@ export default hopeTheme({
   },
   themeColor: {
     blue: "#2196f3",
-    cyan: "#00ffcc",  // Added cyber cyan
+    cyan: "#00ffcc", // Added cyber cyan
     red: "#f26d6d",
     green: "#3eaf7c",
     orange: "#fb9b5f",
@@ -50,6 +50,10 @@ export default hopeTheme({
     tabs: true,
     tasklist: true,
     vPre: true,
+    highlighter: {
+      type: "shiki",
+      theme: "one-dark-pro", // 苹果浅色 
+    },
   },
 
   encrypt: {
@@ -61,8 +65,8 @@ export default hopeTheme({
   plugins: {
     slimsearch: {
       locales: {
-        '/': {
-          placeholder: '搜索...',
+        "/": {
+          placeholder: "搜索...",
         },
       },
     },
@@ -74,6 +78,3 @@ export default hopeTheme({
     },
   },
 });
-
-
-
