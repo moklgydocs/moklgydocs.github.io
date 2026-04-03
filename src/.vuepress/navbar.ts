@@ -22,7 +22,19 @@ export default navbar([
   {
     text: "前端开发",
     icon: "laptop-code",
-    link: "/前端开发/",
+    prefix: "/前端开发/",
+    children: [
+      {
+        text: "JavaScript 教程",
+        icon: "fa6-brands:square-js",
+        link: "JavaScript教程/"
+      },
+      {
+        text: "ES6 教程",
+        icon: "fa6-brands:js",
+        link: "ES6教程/"
+      }
+    ]
   },
   {
     text: "架构与设计",
@@ -38,13 +50,42 @@ export default navbar([
   },
   {
      text: "Linux",
-     icon: "linux",
+     icon: "fa6-brands:linux",
      link: "/Linux/"
+  },
+  {
+     text: "语言",
+     icon: "language",
+     prefix: "/语言/",
+     children: [
+       {
+         text: "日语",
+         icon: "language",
+         link: "日语/"
+       }
+     ]
+  },
+  {
+     text: "面试题",
+     icon: "fa6-solid:file-circle-question",
+     prefix: "/面试题/",
+     children: [
+       {
+         text: "后端面试题",
+         icon: "fa6-solid:server",
+         link: "后端面试题/"
+       }
+     ]
   },
   {
      text: "运维与部署",
      icon: "rocket",
      link: "/运维与部署/"
+  },
+  {
+     text: "思维训练",
+     icon: "brain",
+     link: "/思维训练/"
   },
   {
      text: "关于我",

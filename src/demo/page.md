@@ -41,9 +41,9 @@ Markdown 中的第一个 H1 标题会被视为页面标题。
 你可以在 Markdown 的 Frontmatter 中设置页面标题。
 
 ```md
----
+<hr/>
 title: 页面标题
----
+<hr/>
 ```
 
 ## 页面信息
@@ -108,7 +108,7 @@ const MyComponent = defineComponent({
 });
 </script>
 
----
+<hr/>
 
 主题包含一些有用的组件。这里是一些例子:
 
@@ -123,3 +123,4 @@ const MyComponent = defineComponent({
   link: https://mister-hope.com
   background: rgba(253, 230, 138, 0.15)
   ```
+

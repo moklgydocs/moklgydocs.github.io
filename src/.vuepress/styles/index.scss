@@ -1,1 +1,16 @@
-// place your custom styles here
+/* 仅保留对首页大头像的圆角与黑白调优，其余一律去原始设置 */
+.vp-project-home .vp-hero-image {
+  border-radius: 50% !important;
+  filter: grayscale(100%) contrast(1.1) brightness(0.95);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.5s ease;
+  width: 200px !important;
+  height: 200px !important;
+  object-fit: cover !important;
+}
+
+.vp-project-home .vp-hero-image:hover {
+  filter: grayscale(0%) contrast(1.1) brightness(1.05);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}

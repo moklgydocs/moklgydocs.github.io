@@ -15,7 +15,7 @@ export default hopeTheme({
     orange: "#fb9b5f",
   },
 
-  logo: "/logo.png",
+  logo: "/logo.svg",
 
   repo: "moklgydocs/moklgydocs.github.io",
 
@@ -52,7 +52,20 @@ export default hopeTheme({
     vPre: true,
   },
 
+  encrypt: {
+    config: {
+      "/Linux/配置云服务器.html": ["967552"],
+    },
+  },
+
   plugins: {
+    slimsearch: {
+      locales: {
+        '/': {
+          placeholder: '搜索...',
+        },
+      },
+    },
     components: {
       components: ["Badge", "VPCard"],
     },
@@ -61,3 +74,6 @@ export default hopeTheme({
     },
   },
 });
+
+
+
