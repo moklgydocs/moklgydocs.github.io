@@ -4,7 +4,7 @@ import sidebar from "./sidebar.js";
 
 export default hopeTheme({
   author: {
-    name: "Moclgy",
+    name: "Moklgy",
     url: "https://github.com/moklgydocs",
   },
   themeColor: {
@@ -25,7 +25,7 @@ export default hopeTheme({
   sidebar,
 
   footer: "Transmission Clear",
-  displayFooter: true,
+  displayFooter: false,
 
   metaLocales: {
     editLink: "在 GitHub 上编辑此页",
