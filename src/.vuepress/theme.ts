@@ -52,7 +52,7 @@ export default hopeTheme({
     vPre: true,
     highlighter: {
       type: "shiki",
-      theme: "one-dark-pro", // 苹果浅色 
+      theme: "one-dark-pro", // 苹果浅色
     },
   },
 
@@ -75,6 +75,13 @@ export default hopeTheme({
     },
     icon: {
       prefix: "fa6-solid:",
+    },
+    comment: {
+      provider: "Giscus",
+      repo: "moklgydocs/moklgydocs.github.io", // data-repo
+      repoId: "R_kgDOOgzE7A", // data-repo-id
+      category: "General", // data-category
+      categoryId: "DIC_kwDOOgzE7M4C57ms", // data-category-id
     },
   },
 });
