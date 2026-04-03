@@ -2,7 +2,7 @@
 title: SOLID原则
 category:
   - 设计模式
-
+order: 2
 ---
 
 ## `S`单一职责原则
