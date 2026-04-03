@@ -1,10 +1,9 @@
-
 name: 部署文档
 
 on:
   push:
     branches:
-      - main
+      - hopetheme
 
 permissions:
   contents: write
@@ -23,7 +22,6 @@ jobs:
       - name: 设置 pnpm
         uses: pnpm/action-setup@v5
 
-
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
@@ -38,13 +36,13 @@ jobs:
       - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=8192
-        run: |-
+        run: |
           pnpm run docs:build
-          > src\.vuepress\dist\.nojekyll
+          # 创建 .nojekyll 文件，告诉 GitHub Pages 不要使用 Jekyll 处理
+          touch src/.vuepress/dist/.nojekyll
 
       - name: 部署文档
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          # 部署文档
           branch: gh-pages
-          folder: src\.vuepress\dist
+          folder: src/.vuepress/dist   # 修正为 Linux 风格路径
