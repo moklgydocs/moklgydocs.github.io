@@ -8,6 +8,11 @@ export default navbar([
     prefix: "/前端开发/",
     children: [
       {
+        text: "React 19 教程",
+        icon: "fa6-brands:react",
+        link: "react19教程/"
+      },
+      {
         text: "TypeScript 从零实现 axios",
         icon: "bolt",
         link: "TypeScript 从零实现 axios/"
