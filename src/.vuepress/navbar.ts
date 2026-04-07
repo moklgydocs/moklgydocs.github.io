@@ -81,6 +81,11 @@ export default navbar([
      prefix: "/面试题/",
      children: [
        {
+         text: "前端面试题",
+         icon: "fa6-brands:react",
+         link: "前端面试题/"
+       },
+       {
          text: "后端面试题",
          icon: "fa6-solid:server",
          link: "后端面试题/"
