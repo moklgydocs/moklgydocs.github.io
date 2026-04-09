@@ -25,6 +25,7 @@ category:
 - [第十一章（问题处理）](11.客户端授权问题处理.md) —— password 授权类型问题修复、权限模型速查
 - [第十二章（登出安全）](12.Token失效与登出安全.md) —— 引用 Token、Token 撤销、缓存优化
 - [第十三章（扩展篇）](13.完成度评估与第三方登录.md) —— 完成度评估、GitHub/微信第三方登录扩展
+- [第十四章（角色管理）](14.角色管理.md) —— 角色 CRUD、角色-用户关联、RoleAppService 与 RoleManageController
 
 ## 技术栈
 
