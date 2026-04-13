@@ -15,6 +15,7 @@ category:
 - [第一章（聚合根）](01.聚合根.md) —— MokFramework.Domain 实现：实体基类、聚合根、审计、软删除、领域事件、值对象
 - [第二章（聚合根仓储）](02.聚合根仓储.md) —— MokFramework.EntityFrameworkCore 实现：EF Core 集成、审计拦截器、软删除过滤器、仓储、领域事件分发
 - [第三章（平台通用方法）](03.平台通用方法.md) —— MokFramework.AspNetCore 实现：Web API 共享基础设施、统一响应、异常处理、当前用户
+- [第四章（CQRS 集成）](04.CQRS.md) —— Platform.Cqrs 实现：MediatR 适配、Command/Query 分离、管道行为（验证/事务/日志/性能/权限）、完整 ERP 业务示例
 
 ## 技术栈
 
