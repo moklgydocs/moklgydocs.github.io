@@ -1,7 +1,7 @@
 ---
 title: Linux 基础
 index: false
-icon: linux
+icon: uim:linux
 category:
   - 运维与部署
 ---

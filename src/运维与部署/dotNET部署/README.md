@@ -1,7 +1,7 @@
 ---
 title: .NET 部署
 index: false
-icon: microsoft
+icon: typcn:vendor-microsoft
 category:
   - 运维与部署
 ---

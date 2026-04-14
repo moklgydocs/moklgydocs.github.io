@@ -1,7 +1,7 @@
 ---
 title: Docker-Compose
 index: false
-icon: docker
+icon: ant-design:docker-outlined
 category:
   - 运维与部署
 ---

@@ -14,7 +14,7 @@ export default navbar([
       },
       {
         text: "TypeScript 从零实现 axios",
-        icon: "bolt",
+        icon: "proicons:typescript",
         link: "TypeScript 从零实现 axios/"
       },
       {
@@ -36,12 +36,12 @@ export default navbar([
     children: [
       {
         text: "ASP.NET Core",
-        icon: "server",
+        icon: "typcn:vendor-microsoft",
         link: "ASP.NET_Core/",
       },
       {
         text: "ABP框架",
-        icon: "layer-group",
+        icon: "lineicons:vs-code",
         link: "ABP框架/",
       },
     ],
@@ -53,7 +53,7 @@ export default navbar([
     children: [
       {
          text: "设计模式",
-         icon: "object-group",
+         icon: "streamline-logos:designmoo-logo-block",
          link: "设计模式/"
       }
     ]
@@ -94,12 +94,12 @@ export default navbar([
   },
   {
      text: "运维与部署",
-     icon: "rocket",
+     icon: "material-symbols-light:rocket",
      link: "/运维与部署/"
   },
   {
      text: "思维训练",
-     icon: "brain",
+     icon: "fluent:brain-circuit-48-regular",
      link: "/思维训练/"
   },
   {
