@@ -1,7 +1,7 @@
 ---
 title: ASP.NET Core
 index: false
-icon: fab fa-microsoft
+icon: typcn:vendor-microsoft
 category:
   - 后端开发
 ---
