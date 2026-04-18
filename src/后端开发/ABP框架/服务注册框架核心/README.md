@@ -1,0 +1,42 @@
+---
+title: 服务注册框架核心
+index: false
+icon: gears
+category:
+  - ABP框架
+---
+
+# MokFramework — 服务注册框架核心
+
+本文档库记录了 MokFramework 的完整搭建过程，从设计理念到每一个核心组件的实现细节。
+适合希望理解 ABP 框架底层原理、或想搭建自己的模块化框架的 .NET 开发者阅读。
+
+## 目录
+
+### 第一部分：设计与架构
+- [01 - 框架总览与设计理念](01-框架总览与设计理念.md)
+- [02 - 项目结构与依赖关系](02-项目结构与依赖关系.md)
+
+### 第二部分：核心框架 (MokFramework.Core)
+- [03 - 模块系统：从零实现模块化](03-模块系统-从零实现模块化.md)
+- [04 - 依赖注入：约定式自动注册](04-依赖注入-约定式自动注册.md)
+- [05 - Application 类层次结构](05-Application类层次结构.md)
+
+### 第三部分：集成扩展
+- [06 - ASP.NET Core 集成](06-ASP.NET-Core集成.md)
+- [07 - Autofac IOC 容器替换](07-Autofac-IOC容器替换.md)
+- [08 - Serilog 日志集成](08-Serilog日志集成.md)
+
+### 第四部分：实战
+- [09 - Demo 项目解析](09-Demo项目解析.md)
+- [10 - 如何在真实项目中使用](10-如何在真实项目中使用.md)
+
+## 技术栈
+
+| 技术 | 版本 | 用途 |
+|------|------|------|
+| .NET | 10.0 Preview | 目标框架 |
+| Autofac | 8.x | 可选 IOC 容器 |
+| Serilog.AspNetCore | 9.x | 可选日志框架 |
+| Microsoft.Extensions.DependencyInjection | 10.x | 默认 DI 容器 |
+| Microsoft.Extensions.Hosting | 10.x | 宿主抽象 |
