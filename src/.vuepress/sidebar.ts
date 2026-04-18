@@ -53,6 +53,13 @@ export default sidebar({
       children: "structure"
     },
     {
+      text: "业务系统",
+      icon: "building",
+      prefix: "业务系统/",
+      collapsible: true,
+      children: "structure"
+    },
+    {
       text: "思维训练",
       icon: "brain",
       prefix: "思维训练/",
