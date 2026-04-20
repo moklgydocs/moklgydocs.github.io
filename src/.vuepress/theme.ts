@@ -54,6 +54,7 @@ export default hopeTheme({
       type: "shiki",
       theme: "one-dark-pro", // 苹果浅色
     },
+    mermaid: true,
   },
 
   encrypt: {
