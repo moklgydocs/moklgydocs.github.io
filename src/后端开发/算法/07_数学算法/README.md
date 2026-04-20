@@ -2,6 +2,7 @@
 title: 数学算法
 index: false
 icon: calculator
+order: 7
 category:
   - 算法
   - CSharp

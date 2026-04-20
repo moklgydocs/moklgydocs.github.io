@@ -2,6 +2,7 @@
 title: 核心算法思想
 index: false
 icon: lightbulb
+order: 4
 category:
   - 算法
   - CSharp

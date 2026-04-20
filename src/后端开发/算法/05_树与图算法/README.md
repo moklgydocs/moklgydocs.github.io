@@ -2,6 +2,7 @@
 title: 树与图算法
 index: false
 icon: diagram-project
+order: 5
 category:
   - 算法
   - CSharp

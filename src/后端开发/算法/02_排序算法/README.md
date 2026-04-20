@@ -2,6 +2,7 @@
 title: 排序算法
 index: false
 icon: sort
+order: 2
 category:
   - 算法
   - CSharp

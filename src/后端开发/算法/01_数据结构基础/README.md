@@ -2,6 +2,7 @@
 title: 数据结构基础
 index: false
 icon: box
+order: 1
 category:
   - 算法
   - CSharp

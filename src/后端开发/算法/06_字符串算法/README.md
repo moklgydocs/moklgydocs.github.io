@@ -2,6 +2,7 @@
 title: 字符串算法
 index: false
 icon: font
+order: 6
 category:
   - 算法
   - CSharp

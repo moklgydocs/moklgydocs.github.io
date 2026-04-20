@@ -2,6 +2,7 @@
 title: 查找算法
 index: false
 icon: search
+order: 3
 category:
   - 算法
   - CSharp
