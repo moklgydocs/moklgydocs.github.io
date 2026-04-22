@@ -108,7 +108,20 @@ export default sidebar({
         { text: "第二阶段：核心",     icon: "fa6-solid:fire",          prefix: "02_核心阶段/",  collapsible: true, children: "structure" },
         { text: "第三阶段：进阶",     icon: "fa6-solid:bolt",          prefix: "03_进阶阶段/",  collapsible: true, children: "structure" },
         { text: "第四阶段：架构",     icon: "fa6-solid:building-columns", prefix: "04_架构阶段/", collapsible: true, children: "structure" },
-        { text: "第五阶段：业务落地", icon: "fa6-solid:briefcase",         prefix: "05_业务落地/",  collapsible: true, children: "structure" },
+        { text: "第五阶段：业务落地", icon: "fa6-solid:briefcase",            prefix: "05_业务落地/",  collapsible: true, children: "structure" },
+        {
+          text: "AI 演进史",       icon: "fa6-solid:clock-rotate-left",
+          prefix: "06_AI演进史/",  collapsible: true,
+          children: [
+            "",
+            { text: "符号主义与早期探索", icon: "fa6-solid:scroll",            prefix: "01_符号主义时代/",   collapsible: true, children: "structure" },
+            { text: "机器学习兴起",       icon: "fa6-solid:chart-line",         prefix: "02_机器学习兴起/",   collapsible: true, children: "structure" },
+            { text: "深度学习革命",       icon: "fa6-solid:brain",              prefix: "03_深度学习革命/",   collapsible: true, children: "structure" },
+            { text: "Transformer 时代",  icon: "fa6-solid:wand-magic-sparkles", prefix: "04_Transformer时代/", collapsible: true, children: "structure" },
+            { text: "大语言模型时代",     icon: "fa6-solid:microchip",          prefix: "05_大语言模型时代/", collapsible: true, children: "structure" },
+            { text: "Agent 与未来",      icon: "fa6-solid:rocket",             prefix: "06_Agent与未来/",    collapsible: true, children: "structure" },
+          ],
+        },
       ],
     }
   ],
