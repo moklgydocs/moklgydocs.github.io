@@ -1,7 +1,7 @@
 ---
 title: 查找算法
 index: false
-icon: search
+icon: oui:search
 order: 3
 category:
   - 算法

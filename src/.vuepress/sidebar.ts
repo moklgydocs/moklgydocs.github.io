@@ -1,6 +1,8 @@
 import { sidebar } from "vuepress-theme-hope";
 
 export default sidebar({
+
+
   "/": [
     "",
     {
@@ -8,7 +10,44 @@ export default sidebar({
       icon: "code",
       prefix: "后端开发/",
       collapsible: true,
-      children: "structure",
+      children: [
+        { text: "CSharp",       icon: "fa6-brands:microsoft",   prefix: "CSharp/",        collapsible: true, children: "structure" },
+        { text: "ABP框架",      icon: "lineicons:vs-code",       prefix: "ABP框架/",       collapsible: true, children: "structure" },
+        { text: "ASP.NET Core", icon: "typcn:vendor-microsoft",  prefix: "ASP.NET_Core/",  collapsible: true, children: "structure" },
+        // 算法单独显式声明，保证七个模块顺序固定
+        {
+          text: "C# 算法知识库",
+          icon: "code",
+          prefix: "算法/",
+          collapsible: true,
+          children: [
+            "",
+            { text: "01. 数据结构基础", icon: "box",              prefix: "01_数据结构基础/", collapsible: true, children: "structure" },
+            { text: "02. 排序算法",     icon: "sort",             prefix: "02_排序算法/",     collapsible: true, children: "structure" },
+            { text: "03. 查找算法",     icon: "oui:search",           prefix: "03_查找算法/",     collapsible: true, children: "structure" },
+            { text: "04. 核心算法思想", icon: "lightbulb",        prefix: "04_核心算法思想/", collapsible: true, children: "structure" },
+            { text: "05. 树与图算法",   icon: "diagram-project",  prefix: "05_树与图算法/",   collapsible: true, children: "structure" },
+            { text: "06. 字符串算法",   icon: "font",             prefix: "06_字符串算法/",   collapsible: true, children: "structure" },
+            { text: "07. 数学算法",     icon: "calculator",       prefix: "07_数学算法/",     collapsible: true, children: "structure" },
+          ],
+        },
+        // 权限设计单独显式声明，保证六个模块顺序固定
+        {
+          text: "权限系统设计",
+          icon: "fa6-solid:shield-halved",
+          prefix: "权限设计/",
+          collapsible: true,
+          children: [
+            "",
+            { text: "01. 权限模型演进",    icon: "fa6-solid:timeline",     prefix: "01_权限模型演进/",    collapsible: true, children: "structure" },
+            { text: "02. RBAC 深度解析",   icon: "fa6-solid:id-badge",     prefix: "02_RBAC深度解析/",    collapsible: true, children: "structure" },
+            { text: "03. ABAC 细粒度控制", icon: "fa6-solid:filter",        prefix: "03_ABAC细粒度控制/",  collapsible: true, children: "structure" },
+            { text: "04. PBAC 策略引擎",   icon: "fa6-solid:gavel",         prefix: "04_PBAC策略引擎/",    collapsible: true, children: "structure" },
+            { text: "05. 混合架构落地",    icon: "fa6-solid:layer-group",   prefix: "05_混合架构落地/",    collapsible: true, children: "structure" },
+            { text: "06. 性能与工程实践",  icon: "fa6-solid:gauge-high",    prefix: "06_性能与工程实践/",  collapsible: true, children: "structure" },
+          ],
+        },
+      ],
     },
     {
       text: "前端开发",
