@@ -99,11 +99,17 @@ export default sidebar({
       children: "structure"
     },
     {
-      text: "思维训练",
-      icon: "brain",
-      prefix: "思维训练/",
+      text: "AI 实践",
+      icon: "fa6-solid:robot",
+      prefix: "AI实践/",
       collapsible: true,
-      children: "structure"
+      children: [
+        { text: "第一阶段：基础",     icon: "fa6-solid:seedling",      prefix: "01_基础阶段/",  collapsible: true, children: "structure" },
+        { text: "第二阶段：核心",     icon: "fa6-solid:fire",          prefix: "02_核心阶段/",  collapsible: true, children: "structure" },
+        { text: "第三阶段：进阶",     icon: "fa6-solid:bolt",          prefix: "03_进阶阶段/",  collapsible: true, children: "structure" },
+        { text: "第四阶段：架构",     icon: "fa6-solid:building-columns", prefix: "04_架构阶段/", collapsible: true, children: "structure" },
+        { text: "第五阶段：业务落地", icon: "fa6-solid:briefcase",         prefix: "05_业务落地/",  collapsible: true, children: "structure" },
+      ],
     }
   ],
 });
