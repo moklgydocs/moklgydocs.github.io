@@ -89,6 +89,43 @@ export default sidebar({
             },
           ],
         },
+        {
+          text: "Rust",
+          icon: "fa6-brands:rust",
+          prefix: "Rust/",
+          collapsible: true,
+          children: [
+            "",
+            {
+              text: "Rust基础",
+              icon: "fa6-solid:graduation-cap",
+              prefix: "Rust基础/",
+              collapsible: true,
+              children: "structure",
+            },
+            {
+              text: "MoCLI · CLI 工具",
+              icon: "fa6-solid:terminal",
+              prefix: "MoCLI/",
+              collapsible: true,
+              children: "structure",
+            },
+            {
+              text: "Restrel · Web 服务服务器",
+              icon: "fa6-solid:server",
+              prefix: "Restrel/",
+              collapsible: true,
+              children: "structure",
+            },
+            {
+              text: "MoNode · 嵌入式",
+              icon: "fa6-solid:microchip",
+              prefix: "MoNode/",
+              collapsible: true,
+              children: "structure",
+            },
+          ],
+        },
         // 权限设计单独显式声明，保证六个模块顺序固定
         {
           text: "权限系统设计",
