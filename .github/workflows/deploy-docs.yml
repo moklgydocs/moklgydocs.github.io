@@ -11,6 +11,8 @@ permissions:
 jobs:
   deploy-gh-pages:
     runs-on: ubuntu-latest
+    env:
+      CI: true # pnpm11 CI非交互模式，禁用弹窗询问
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,9 +32,8 @@ jobs:
       - name: 安装依赖
         run: |
           corepack enable
-          pnpm config set ignore-scripts false
-          pnpm config set enable-prepost-scripts true
-          pnpm approve-builds
+          # --all 无交互一次性放行所有待审批构建脚本，CI专用参数
+          pnpm approve-builds --all
           pnpm install --frozen-lockfile
 
       - name: 构建文档
