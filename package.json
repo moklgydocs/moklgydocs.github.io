@@ -21,12 +21,6 @@
     "vuepress": "2.0.0-rc.27",
     "vuepress-theme-hope": "2.0.0-rc.105"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "highlight.js"
-    ]
-  },
   "dependencies": {
     "@vuepress/plugin-revealjs": "2.0.0-rc.47",
     "@vuepress/plugin-slimsearch": "2.0.0-rc.61",
