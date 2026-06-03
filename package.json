@@ -23,7 +23,8 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "esbuild"
+      "esbuild",
+      "highlight.js"
     ]
   },
   "dependencies": {
