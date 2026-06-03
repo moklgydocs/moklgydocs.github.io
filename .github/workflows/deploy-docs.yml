@@ -20,17 +20,20 @@ jobs:
       - name: 设置 pnpm
         uses: pnpm/action-setup@v5
         with:
-          version: 10   # 明确指定版本
+          version: 10
 
       - name: 设置 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22 
+          node-version: 22
 
       - name: 安装依赖
         run: |
           corepack enable
-          pnpm install --no-ignore-scripts --frozen-lockfile
+          pnpm config set ignore-scripts false
+          pnpm config set enable-prepost-scripts true
+          pnpm approve-builds
+          pnpm install --frozen-lockfile
 
       - name: 构建文档
         env:
