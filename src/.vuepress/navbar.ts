@@ -79,6 +79,28 @@ export default navbar([
     ]
   },
   {
+    text: "计算机学科",
+    icon: "fa6-solid:graduation-cap",
+    prefix: "/计算机学科/",
+    children: [
+      {
+        text: "计算机网络",
+        icon: "fa6-solid:network-wired",
+        link: "计算机网络/"
+      },
+      {
+        text: "汇编语言",
+        icon: "fa6-solid:microchip",
+        link: "汇编语言/"
+      },
+      {
+        text: "操作系统",
+        icon: "fa6-solid:desktop",
+        link: "操作系统/"
+      },
+    ]
+  },
+  {
     text: "AI 实践",
     icon: "fa6-solid:robot",
     link: "/AI实践/"

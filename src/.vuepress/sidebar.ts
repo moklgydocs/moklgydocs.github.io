@@ -261,6 +261,35 @@ export default sidebar({
       children: "structure",
     },
     {
+      text: "计算机学科",
+      icon: "fa6-solid:graduation-cap",
+      prefix: "计算机学科/",
+      collapsible: true,
+      children: [
+        {
+          text: "计算机网络",
+          icon: "fa6-solid:network-wired",
+          prefix: "计算机网络/",
+          collapsible: true,
+          children: "structure",
+        },
+        {
+          text: "汇编语言",
+          icon: "fa6-solid:microchip",
+          prefix: "汇编语言/",
+          collapsible: true,
+          children: "structure",
+        },
+        {
+          text: "操作系统",
+          icon: "fa6-solid:desktop",
+          prefix: "操作系统/",
+          collapsible: true,
+          children: "structure",
+        },
+      ],
+    },
+    {
       text: "AI 实践",
       icon: "fa6-solid:robot",
       prefix: "AI实践/",
