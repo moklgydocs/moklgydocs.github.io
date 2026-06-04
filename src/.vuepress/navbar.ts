@@ -65,6 +65,11 @@ export default navbar([
         link: "DotNet_IoT/"
       },
       {
+        text: "RabbitMQ",
+        icon: "fa6-solid:envelope",
+        link: "RabbitMQ/"
+      },
+      {
         text: "数据库",
         icon: "fa6-solid:database",
         link: "数据库/"
