@@ -60,6 +60,11 @@ export default navbar([
         link: "ABP框架/",
       },
       {
+        text: "数据库",
+        icon: "fa6-solid:database",
+        link: "数据库/"
+      },
+      {
         text: "后端面试题",
         icon: "fa6-solid:file-circle-question",
         link: "/面试题/后端面试题/"
