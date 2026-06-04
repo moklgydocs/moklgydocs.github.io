@@ -891,7 +891,7 @@ if count <= 0 then
     redis.call('DEL', lock_key)
     return 1
 else
-    -- 减少重入计数
+    -- 减少重入计数（KEEPTTL 需要 Redis 6.0+）
     redis.call('SET', lock_key, holder .. ':' .. count, 'KEEPTTL')
     return 1
 end
