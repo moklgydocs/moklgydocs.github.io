@@ -4,7 +4,7 @@ export default navbar([
   "/",
   {
     text: "前端开发",
-    icon: "laptop-code",
+    icon: "fa6-solid:laptop-code",
     prefix: "/前端开发/",
     children: [
       {
@@ -13,8 +13,13 @@ export default navbar([
         link: "react19教程/"
       },
       {
+        text: "React 中后台架构",
+        icon: "fa6-brands:react",
+        link: "React中后台架构知识库/"
+      },
+      {
         text: "TypeScript 从零实现 axios",
-        icon: "proicons:typescript",
+        icon: "fa6-brands:js",
         link: "TypeScript 从零实现 axios/"
       },
       {
@@ -26,85 +31,83 @@ export default navbar([
         text: "ES6 教程",
         icon: "fa6-brands:js",
         link: "ES6教程/"
-      }
+      },
+      {
+        text: "TailwindCSS",
+        icon: "fa6-brands:css3-alt",
+        link: "TailwindCSS/"
+      },
+      {
+        text: "前端面试题",
+        icon: "fa6-solid:file-circle-question",
+        link: "/面试题/前端面试题/"
+      },
     ]
   },
   {
     text: "后端开发",
-    icon: "code",
+    icon: "fa6-solid:code",
     prefix: "/后端开发/",
     children: [
       {
         text: "ASP.NET Core",
-        icon: "typcn:vendor-microsoft",
+        icon: "fa6-brands:microsoft",
         link: "ASP.NET_Core/",
       },
       {
-        text: "ABP框架",
-        icon: "lineicons:vs-code",
+        text: "ABP 框架",
+        icon: "fa6-brands:microsoft",
         link: "ABP框架/",
+      },
+      {
+        text: "后端面试题",
+        icon: "fa6-solid:file-circle-question",
+        link: "/面试题/后端面试题/"
       },
     ],
   },
   {
     text: "架构与设计",
-    icon: "sitemap",
+    icon: "fa6-solid:sitemap",
     prefix: "/架构与设计/",
     children: [
       {
-         text: "设计模式",
-         icon: "streamline-logos:designmoo-logo-block",
-         link: "设计模式/"
+        text: "设计模式",
+        icon: "fa6-solid:shapes",
+        link: "设计模式/"
       }
     ]
   },
   {
-     text: "Linux",
-     icon: "fa6-brands:linux",
-     link: "/Linux/"
+    text: "AI 实践",
+    icon: "fa6-solid:robot",
+    link: "/AI实践/"
   },
   {
-     text: "语言",
-     icon: "language",
-     prefix: "/语言/",
-     children: [
-       {
-         text: "日语",
-         icon: "language",
-         link: "日语/"
-       }
-     ]
+    text: "语言",
+    icon: "fa6-solid:language",
+    prefix: "/语言/",
+    children: [
+      {
+        text: "英语 · 语法俱乐部",
+        icon: "fa6-solid:book",
+        link: "英语/语法俱乐部/"
+      },
+      {
+        text: "日语",
+        icon: "fa6-solid:book-open",
+        link: "日语/"
+      }
+    ]
   },
   {
-     text: "面试题",
-     icon: "fa6-solid:file-circle-question",
-     prefix: "/面试题/",
-     children: [
-       {
-         text: "前端面试题",
-         icon: "fa6-brands:react",
-         link: "前端面试题/"
-       },
-       {
-         text: "后端面试题",
-         icon: "fa6-solid:server",
-         link: "后端面试题/"
-       }
-     ]
+    text: "运维与部署",
+    icon: "fa6-solid:rocket",
+    link: "/运维与部署/"
   },
   {
-     text: "运维与部署",
-     icon: "material-symbols-light:rocket",
-     link: "/运维与部署/"
-  },
-  {
-     text: "思维训练",
-     icon: "fluent:brain-circuit-48-regular",
-     link: "/思维训练/"
-  },
-  {
-     text: "关于我",
-     icon: "user",
-     link: "/portfolio"
+    text: "关于我",
+    icon: "fa6-solid:user",
+    link: "/portfolio"
   }
 ]);

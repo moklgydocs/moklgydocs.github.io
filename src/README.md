@@ -65,6 +65,16 @@ highlights:
         details: 整理和归纳各种面试笔试题（包括后端等核心题库）
         link: /面试题/后端面试题/
 
+      - title: AI 工程实践
+        icon: fa6-solid:robot
+        details: 从 LLM 基础到 Agent 架构，从 Prompt 工程到业务落地的全链路 AI 实战体系。
+        link: /AI实践/
+
+      - title: ERP 业务系统
+        icon: fa6-solid:building
+        details: 产品研发、采购、生产、库存、销售、MRP、财务——企业级 ERP 全模块拆解。
+        link: /业务系统/
+
 copyright: false
 footer: system online
 ---
