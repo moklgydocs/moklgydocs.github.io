@@ -75,6 +75,11 @@ export default navbar([
         link: "数据库/"
       },
       {
+        text: "Redis",
+        icon: "fa6-solid:bolt",
+        link: "Redis/"
+      },
+      {
         text: "后端面试题",
         icon: "fa6-solid:file-circle-question",
         link: "/面试题/后端面试题/"
@@ -141,6 +146,11 @@ export default navbar([
     text: "运维与部署",
     icon: "fa6-solid:rocket",
     link: "/运维与部署/"
+  },
+  {
+    text: "Linux",
+    icon: "fa6-brands:linux",
+    link: "/Linux/"
   },
   {
     text: "关于我",
