@@ -60,6 +60,11 @@ export default navbar([
         link: "ABP框架/",
       },
       {
+        text: ".NET IoT",
+        icon: "fa6-solid:microchip",
+        link: "DotNet_IoT/"
+      },
+      {
         text: "数据库",
         icon: "fa6-solid:database",
         link: "数据库/"
