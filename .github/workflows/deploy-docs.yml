@@ -32,7 +32,7 @@ jobs:
       - name: 配置 Swap 空间
         run: |
           if [ -f /swapfile ]; then sudo swapoff /swapfile && sudo rm /swapfile; fi
-          sudo fallocate -l 4G /swapfile
+          sudo fallocate -l 8G /swapfile
           sudo chmod 600 /swapfile
           sudo mkswap /swapfile
           sudo swapon /swapfile
@@ -41,7 +41,7 @@ jobs:
       - name: 构建文档
         env:
           DOCS_BUNDLER: webpack
-          NODE_OPTIONS: --max_old_space_size=6656
+          NODE_OPTIONS: --max_old_space_size=12288
         run: |
           pnpm run docs:build:webpack
           touch src/.vuepress/dist/.nojekyll
