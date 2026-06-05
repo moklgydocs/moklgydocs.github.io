@@ -40,9 +40,10 @@ jobs:
 
       - name: 构建文档
         env:
+          DOCS_BUNDLER: webpack
           NODE_OPTIONS: --max_old_space_size=6656
         run: |
-          pnpm run docs:build
+          pnpm run docs:build:webpack
           touch src/.vuepress/dist/.nojekyll
 
       - name: 验证产物
