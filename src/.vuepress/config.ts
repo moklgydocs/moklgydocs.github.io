@@ -1,9 +1,5 @@
 import { defineUserConfig } from "vuepress";
-import { viteBundler } from "@vuepress/bundler-vite";
-import { webpackBundler } from "@vuepress/bundler-webpack";
 import theme from "./theme.js";
-
-const useWebpack = process.env.DOCS_BUNDLER === "webpack";
 
 export default defineUserConfig({
   base: "/",
@@ -14,10 +10,6 @@ export default defineUserConfig({
   head: [
     ["link", { rel: "icon", href: "/logo.svg" }]
   ],
-
-  bundler: useWebpack
-    ? webpackBundler()
-    : viteBundler(),
 
   theme, pagePatterns: ['**/*.md', '!_.md', '!.vuepress', '!node_modules'],
 
