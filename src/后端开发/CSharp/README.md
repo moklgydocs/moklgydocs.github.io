@@ -1,12 +1,4 @@
----
-title: CSharp
-index: false
-icon: fa6-brands:microsoft
-category:
-  - CSharp
----
-
-# CSharp 深度学习
+﻿# CSharp 深度学习
 
 ## 基础加深
 
@@ -16,3 +8,7 @@ category:
 ## .NET IL 中间语言
 
 - [IL 中间语言专栏](/后端开发/CSharp/IL中间语言/) —— 从栈式虚拟机到动态发射，掌握 .NET 运行的基石
+
+## CLR 深度
+
+- [CLR 深度专栏](/后端开发/CSharp/CLR深度/) —— 参考《CLR via C#》第4版，C#高级用法与底层原理
