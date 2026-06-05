@@ -82,7 +82,7 @@ public class ResourceHolder
             IL_0011: conv.i
             IL_0012: bne.un.s IL_001a   // _handle != 0 → 跳转到关闭逻辑
 
-            IL_0014: leave.s IL_002d     // _handle == 0 → 跳过关闭，直接退出 try
+            IL_0014: leave.s IL_003d     // _handle == 0 → 跳过关闭，直接退出 try
 
             IL_001a: ldarg.0
             IL_001b: ldfld native int ResourceHolder::_handle

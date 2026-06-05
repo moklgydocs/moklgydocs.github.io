@@ -46,7 +46,6 @@ classDiagram
         +static Person operator !=(Person? left, Person? right)
         +static bool operator ==(Person? left, Person? right)
         +Person ltClone$gt()
-        +override object MemberwiseClone()
         +Type EqualityContract
     }
 
@@ -55,12 +54,7 @@ classDiagram
         +bool Equals(T? other)
     }
 
-    class ISerializable {
-        <~interface~>
-    }
-
     Person ..|> IEquatable~T~ : IEquatable~Person~
-    Person ..|> ISerializable
 
     note for Person "编译器自动生成所有成员"
 ```
@@ -69,7 +63,7 @@ classDiagram
 
 ```csharp
 // 编译器生成的代码（反编译结果）
-public class Person : IEquatable<Person>, ISerializable
+public class Person : IEquatable<Person>
 {
     // 1. 主构造函数参数 → 自动属性
     public string FirstName { get; init; }
@@ -96,17 +90,15 @@ public class Person : IEquatable<Person>, ISerializable
     .property instance string FirstName()
     {
         .get instance string Person::get_FirstName()
-        .set instance void Person::modreq(
-            [System.Runtime]System.Runtime.CompilerServices.IsExternalInit)
-            set_FirstName(string)
+        .set instance void modreq([System.Runtime]System.Runtime.CompilerServices.IsExternalInit)
+            Person::set_FirstName(string)
     }
 
     .property instance string LastName()
     {
         .get instance string Person::get_LastName()
-        .set instance void Person::modreq(
-            [System.Runtime]System.Runtime.CompilerServices.IsExternalInit)
-            set_LastName(string)
+        .set instance void modreq([System.Runtime]System.Runtime.CompilerServices.IsExternalInit)
+            Person::set_LastName(string)
     }
 
     // 主构造函数
@@ -264,7 +256,7 @@ public override int GetHashCode()
     IL_0007: call instance string Person::get_FirstName()
     IL_000c: ldarg.0
     IL_000d: call instance string Person::get_LastName()
-    IL_0012: call int32 [System.Runtime]System.HashCode::Combine<class [System.Runtime]System.Type, string, string>(!!)
+    IL_0012: call int32 [System.Runtime]System.HashCode::Combine<class [System.Runtime]System.Type, string, string>(!!0, !!1, !!2)
     IL_0017: ret
 }
 ```
@@ -311,7 +303,7 @@ protected virtual bool PrintMembers(StringBuilder builder)
 // 编译器生成
 public static bool operator ==(Person? left, Person? right)
 {
-    return EqualityComparer<Person>.Default.Equals(left, right);
+    return (object)left == (object)right || left?.Equals(right) == true;
 }
 
 public static bool operator !=(Person? left, Person? right)
@@ -354,7 +346,7 @@ var person2 = person1 with { FirstName = "李" };
 ```mermaid
 flowchart TD
     A["person1 with { FirstName = 李 }"] --> B["调用 person1.~Clone~$"]
-    B --> C["MemberwiseClone 浅拷贝"]
+    B --> C["使用复制构造函数"]
     C --> D["设置 FirstName = 李"]
     D --> E["返回新对象 person2"]
 
@@ -407,23 +399,21 @@ var person2 = person1 with { FirstName = "李" };
 // .NET 6+ 的 Clone 实现（反编译）
 public virtual Person <Clone>$()
 {
-    // 使用 MemberwiseClone 进行浅拷贝
-    // 然后调用受保护的拷贝构造函数
+    // 使用复制构造函数创建新实例
     return new Person(this);
 }
 
 // 受保护的拷贝构造函数
 protected Person(Person original)
 {
-    // 对于 record class，实际上使用 MemberwiseClone
-    // 拷贝构造函数是为了让派生类可以正确初始化
+    // 复制所有字段值
     FirstName = original.FirstName;
     LastName = original.LastName;
 }
 ```
 
 ::: important with 表达式的浅拷贝特性
-`with` 表达式使用 `MemberwiseClone` 进行浅拷贝：
+`with` 表达式使用复制构造函数进行浅拷贝：
 1. 值类型字段：按值复制（独立副本）
 2. 引用类型字段：复制引用（共享同一对象）
 3. string 字段：由于字符串不可变，浅拷贝是安全的
@@ -447,13 +437,13 @@ team2.Members.Add("Charlie");
 sequenceDiagram
     participant Original as 原始 Record
     participant Clone as Clone 方法
-    participant Memberwise as MemberwiseClone
+    participant CopyCtor as 复制构造函数
     participant NewObj as 新 Record 对象
 
     Original->>Clone: 调用 ~Clone~$()
-    Clone->>Memberwise: MemberwiseClone()
-    Note over Memberwise: 创建浅拷贝<br/>复制所有字段值
-    Memberwise->>NewObj: 返回克隆对象
+    Clone->>CopyCtor: new Person(this)
+    Note over CopyCtor: 复制所有字段值<br/>浅拷贝语义
+    CopyCtor->>NewObj: 返回新实例
     Clone->>NewObj: 设置修改的属性
     Clone-->>Original: 返回新对象
 
@@ -1099,12 +1089,13 @@ public record Circle(double Radius)
 
 ---
 
-## 十、record 与 ISerializable
+## 十、record 与序列化
 
 ### 10.1 record 的序列化支持
 
 ```csharp
-// record 自动实现 ISerializable（如果是 record class）
+// record 默认不实现 ISerializable
+// 如需二进制序列化支持，需手动添加
 public record Person(string FirstName, string LastName);
 
 // 编译器生成的序列化构造函数
@@ -1355,7 +1346,7 @@ public record PositiveInt(int Value)
 
 var valid = new PositiveInt(5);
 var invalid = valid with { Value = -1 };  // 💥 不会触发验证！
-// with 使用 MemberwiseClone + 直接设置属性
+// with 使用复制构造函数 + 直接设置属性
 // 不经过主构造函数的验证逻辑
 
 // 解决方案: 在 init 属性中验证
@@ -1389,13 +1380,12 @@ mindmap
         ==/!= 运算符
         EqualityContract
       init-only 属性
-      ISerializable
     record struct
       无 EqualityContract
       无继承
       值类型语义
     with 表达式
-      MemberwiseClone
+      复制构造函数
       浅拷贝
       保持多态性
       init 属性设置
@@ -1418,7 +1408,7 @@ mindmap
 ::: important 核心要点
 1. `record` 编译器自动生成 Equals、GetHashCode、ToString、Deconstruct、Clone 等方法
 2. `EqualityContract` 确保 record 继承体系中的类型安全相等性
-3. `with` 表达式通过 `MemberwiseClone` + 属性设置实现，保持多态性
+3. `with` 表达式通过复制构造函数 + 属性设置实现，保持多态性
 4. `PrintMembers` 是虚方法，派生 record 链式调用基类
 5. `record struct` 没有 EqualityContract 和继承，使用值语义
 6. init-only 属性通过 `IsExternalInit modreq` 在 IL 中标记

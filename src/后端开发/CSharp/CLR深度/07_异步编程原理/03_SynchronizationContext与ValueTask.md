@@ -1994,17 +1994,17 @@ public class GCPressureBenchmark
 // ValueTask<int> 的大小
 Console.WriteLine(System.Runtime.InteropServices.Marshal.SizeOf<ValueTask<int>>());
 // 在 64 位系统上：
-// _task: 8 bytes (引用)
+// _obj: 8 bytes (引用 — Task<T> 或 IValueTaskSource<T>，null 表示同步完成)
 // _result: 4 bytes (int)
-// _obj: 8 bytes (引用)
-// padding: 4 bytes
-// 总计约 24 bytes
+// _token: 2 bytes (short)
+// padding: 2 bytes
+// 总计约 16 bytes
 
 // Task<int> 的大小
 // Task 基类约 48 bytes + int 结果
 // 总计约 56+ bytes
 
-// ValueTask<int> 在栈上占 24 bytes，但不产生堆分配
+// ValueTask<int> 在栈上占 16 bytes，但不产生堆分配
 // Task<int> 在堆上占 56+ bytes，且需要 GC 回收
 ```
 

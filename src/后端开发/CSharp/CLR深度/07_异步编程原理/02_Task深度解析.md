@@ -582,39 +582,37 @@ public readonly struct ValueTask<T>
     // 2. Task<T> task — 异步完成，存储 Task
 
     private readonly T _result;
-    private readonly Task<T>? _task;
-    private readonly IValueTaskSource<T>? _valueTaskSource;
-    private readonly short _token;
+    private readonly object? _obj;  // Task<T> 或 IValueTaskSource<T>，null 表示同步完成
+    private readonly short _token;  // 0 表示 _obj 是 Task<T>，非 0 表示 _obj 是 IValueTaskSource<T>
 }
 ```
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│  ValueTask<T> 的两种状态                                     │
+│  ValueTask<T> 的三种状态                                     │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
-│  情况 1: 同步完成（_task = null）                            │
+│  情况 1: 同步完成（_obj = null）                            │
 │  ┌──────────────────────────────────┐                       │
 │  │ _result: T (直接存储值)           │                       │
-│  │ _task: null                       │                       │
-│  │ _valueTaskSource: null            │                       │
+│  │ _obj: null                       │                       │
+│  │ _token: 0                        │                       │
 │  └──────────────────────────────────┘                       │
 │  → 零堆分配！                                                │
 │                                                              │
-│  情况 2: 异步完成（_task != null）                           │
+│  情况 2: 异步完成（_obj 是 Task<T>）                        │
 │  ┌──────────────────────────────────┐                       │
 │  │ _result: default(T)              │                       │
-│  │ _task: Task<T> (引用)             │                       │
-│  │ _valueTaskSource: null            │                       │
+│  │ _obj: Task<T> (引用)             │                       │
+│  │ _token: 0                        │                       │
 │  └──────────────────────────────────┘                       │
 │  → 一次堆分配（Task 对象）                                   │
 │                                                              │
-│  情况 3: 池化（_valueTaskSource != null）.NET 5+             │
+│  情况 3: 池化（_obj 是 IValueTaskSource）.NET 5+            │
 │  ┌──────────────────────────────────┐                       │
 │  │ _result: default(T)              │                       │
-│  │ _task: null                       │                       │
-│  │ _valueTaskSource: IValueTaskSource│ ← 池化对象            │
-│  │ _token: short (版本号)            │                       │
+│  │ _obj: IValueTaskSource<T>        │ ← 池化对象            │
+│  │ _token: short (版本号)           │                       │
 │  └──────────────────────────────────┘                       │
 │  → 池化复用，减少 GC 压力                                    │
 │                                                              │

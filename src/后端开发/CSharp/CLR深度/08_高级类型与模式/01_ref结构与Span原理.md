@@ -1183,11 +1183,15 @@ public class JsonParseBenchmark
 ### 11.1 String 与 ReadOnlySpan&lt;char&gt;
 
 ```csharp
-// 字符串的内部表示
+// 字符串的内部表示（简化）
 public sealed class String
 {
-    // 字符串本质上就是连续的 char 数组
-    private readonly char[] _chars;  // 简化表示
+    // 字符串长度
+    private readonly int _length;
+
+    // 第一个字符 — 实际字符紧跟其后内联存储
+    // 不是 char[] 字段，而是连续的 char 数据内嵌在 String 对象中
+    private readonly char _firstChar;
 
     // AsSpan 实现
     public ReadOnlySpan<char> AsSpan(int start, int length)
@@ -1195,7 +1199,7 @@ public sealed class String
         // 直接返回指向字符串内部数据的 Span
         // 无需复制字符数据
         return new ReadOnlySpan<char>(
-            ref Unsafe.Add(ref _chars[0], start), length);
+            ref Unsafe.Add(ref Unsafe.AsRef(in _firstChar), start), length);
     }
 }
 

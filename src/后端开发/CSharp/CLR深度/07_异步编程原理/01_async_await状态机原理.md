@@ -571,12 +571,12 @@ private ConfiguredTaskAwaitable<int>.ConfiguredTaskAwaiter <>u__1;
 ```csharp
 public static async Task Demo()
 {
-    int a = 1;           // 不跨越 await → 可能被优化掉
-    int b = 2;           // 不跨越 await → 可能被优化掉
+    int a = 1;           // 跨越 await（在 await 后被使用）→ 必须保存为字段
+    int b = 2;           // 跨越 await（在 await 后被使用）→ 必须保存为字段
 
     await Task.Delay(1);
 
-    int c = a + b;       // c 跨越了 await → 必须保存为字段
+    int c = a + b;       // c 跨越了第二个 await → 必须保存为字段
     int d = 3;           // 不跨越 await
 
     await Task.Delay(1);
