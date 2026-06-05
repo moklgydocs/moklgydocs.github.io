@@ -468,8 +468,8 @@ public record struct Point(double X, double Y);
 | 基类 | object | ValueType |
 | 相等性 | 基于类型+值 | 基于值 |
 | EqualityContract | 有 | 无 |
-| MemberwiseClone | 有 | 无（值类型直接复制） |
-| with 表达式 | MemberwiseClone | 直接复制+修改 |
+| 复制构造函数 | 有 | 无（值类型直接复制） |
+| with 表达式 | 复制构造函数 | 直接复制+修改 |
 | 默认不可变 | init 属性 | init 属性 |
 | 继承 | 支持 | 不支持 |
 | PrintMembers | virtual | 非虚 |
@@ -1013,7 +1013,7 @@ public class RecordMemoryBenchmark
 ::: tip record 性能结论
 1. **Equals**：record 比手写 class 快（因为编译器生成了优化的 Equals）
 2. **GetHashCode**：record 远比默认 class 快（`HashCode.Combine` vs 反射）
-3. **with 表达式**：比手动创建新对象稍慢（多了 MemberwiseClone）
+3. **with 表达式**：比手动创建新对象稍慢（多了复制构造函数调用）
 4. **ToString**：record 的 ToString 较慢（StringBuilder），但调试体验好
 5. **内存**：record 和 class 内存布局相同，record 没有额外开销
 :::

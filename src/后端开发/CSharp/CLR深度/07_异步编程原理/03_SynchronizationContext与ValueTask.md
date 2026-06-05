@@ -1085,7 +1085,7 @@ public class ValueTaskVsTaskBenchmark
 ### 7.3 Task.FromResult 的缓存机制
 
 ```csharp
-// .NET Runtime 源码 - Task.cs
+// .NET Runtime 源码 - Task.cs（简化）
 public static Task<TResult> FromResult<TResult>(TResult result)
 {
     // bool 类型的缓存
@@ -1093,6 +1093,9 @@ public static Task<TResult> FromResult<TResult>(TResult result)
     {
         return (result is true ? CachedTrueTask : CachedFalseTask) as Task<TResult>!;
     }
+
+    // int 类型的部分缓存（0 和 -1 等常用值在 AsyncTaskMethodBuilder 中有缓存）
+    // 但 Task.FromResult<int> 本身不缓存，每次创建新 Task
 
     // 其他类型 - 每次创建新 Task
     return new Task<TResult>(result);
