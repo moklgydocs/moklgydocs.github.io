@@ -42,3 +42,172 @@
   font-family: "SF Mono", Menlo, Monaco, "PingFang SC", monospace !important;
   font-size: 14px !important;
 }
+
+/* ── Friends 老友记 · 印刷剧本风格 ─────────────────────── */
+
+/* ── 页面：书芯收窄、两端对齐 ── */
+.friends-page .theme-default-content {
+  max-width: 760px !important;
+}
+.friends-page .prose {
+  font-family: "EB Garamond", "Literata", "Georgia", "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+  font-size: 1.05rem;
+  line-height: 2;
+  text-align: justify;
+  hyphens: auto;
+  color: var(--vp-c-text-1);
+  letter-spacing: 0.01em;
+  orphans: 3;
+  widows: 3;
+}
+
+/* ── 标题：居中、小型大写 ── */
+.friends-page .prose h1 {
+  font-family: "EB Garamond", "Literata", "Georgia", "Noto Serif SC", serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  font-variant: small-caps;
+  letter-spacing: 0.12em;
+  text-align: center;
+  border-bottom: none;
+  margin: 1.5em 0 0.8em;
+  color: var(--vp-c-text-1);
+}
+.friends-page .prose h1 + blockquote {
+  text-align: center;
+  border-left: none;
+  padding-left: 0;
+  font-size: 0.92em;
+  font-style: italic;
+  color: var(--vp-c-text-2);
+}
+
+/* ── 台词段落：剧本格式 ── */
+.friends-page .prose p {
+  margin: 0.35em 0;
+  padding: 2px 6px 2px 0;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+
+/* ── 角色名：小型大写、缩进悬挂 ── */
+.friends-page .prose p > strong:first-child {
+  color: var(--vp-c-text-1);
+  font-weight: 600;
+  font-variant: small-caps;
+  font-variant-numeric: oldstyle-nums;
+  letter-spacing: 0.08em;
+  font-size: 0.92em;
+  margin-right: 4px;
+}
+/* 英文台词内容略轻于角色名 */
+.friends-page .prose p > strong:first-child ~ text,
+.friends-page .prose p:not(:has(> strong:first-child)) {
+  font-weight: 400;
+}
+
+/* ── hover 中文翻译 ── */
+.friends-page .prose p + blockquote {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border-left: 1.5px solid var(--vp-c-divider, #d0d0d0);
+  font-size: 0.88em;
+  line-height: 1.65;
+  color: var(--vp-c-text-3);
+  font-family: "Noto Serif SC", "Source Han Serif SC", "Songti SC", serif;
+  background: transparent;
+  border-radius: 0;
+  transition: max-height 0.3s ease, opacity 0.25s ease, margin 0.2s ease, padding 0.2s ease;
+}
+.friends-page .prose p:hover + blockquote,
+.friends-page .prose blockquote:hover {
+  max-height: 200px;
+  opacity: 1;
+  margin: 1px 0 2px 0;
+  padding: 3px 8px 3px 12px;
+}
+.friends-page .prose p:hover {
+  background: var(--vp-c-bg-soft, #faf8f5);
+}
+
+/* ── 场景描述 🎬 ── */
+.friends-page .prose hr + p {
+  text-align: center;
+  font-style: italic;
+  font-size: 0.92em;
+  color: var(--vp-c-text-2);
+  letter-spacing: 0.04em;
+  margin: 1.2em 0 0.8em;
+  padding: 6px 0;
+  border-top: none;
+}
+.friends-page .prose hr + p + blockquote {
+  text-align: center;
+  border-left: none;
+  padding-left: 0;
+  font-style: italic;
+  font-size: 0.88em;
+  color: var(--vp-c-text-3);
+}
+
+/* ── 舞台指示（独立斜体段落） ── */
+.friends-page .prose p > em:only-child {
+  font-style: italic;
+  font-size: 0.9em;
+  color: var(--vp-c-text-3);
+}
+
+/* ── 分隔线：细线装饰 ── */
+.friends-page .prose hr {
+  border: none;
+  height: 0;
+  text-align: center;
+  margin: 2em 0 0.5em;
+  overflow: visible;
+}
+.friends-page .prose hr::after {
+  content: "❧";
+  font-size: 0.9rem;
+  color: var(--vp-c-text-3);
+  display: inline-block;
+  position: relative;
+  top: -0.5em;
+  padding: 0 0.5em;
+  background: var(--vp-c-bg, #fff);
+}
+
+/* ── 元数据引用块 ── */
+.friends-page .prose blockquote {
+  border-left: 1.5px solid var(--vp-c-divider, #d0d0d0);
+  background: transparent;
+  font-size: 0.9em;
+}
+
+/* ── 时间跳转 ⏱ ── */
+.friends-page .prose p > em:first-child {
+  font-style: italic;
+  color: var(--vp-c-text-3);
+  font-size: 0.9em;
+}
+
+/* ── 暗色模式：纸感暗调 ── */
+[data-theme="dark"] .friends-page .prose p:hover {
+  background: var(--vp-c-bg-soft, #2a2723);
+}
+[data-theme="dark"] .friends-page .prose hr::after {
+  background: var(--vp-c-bg, #1e1e1e);
+}
+
+/* ── 移动端 ── */
+@media (max-width: 768px) {
+  .friends-page .prose {
+    font-size: 0.98rem;
+    line-height: 1.85;
+  }
+  .friends-page .prose h1 {
+    font-size: 1.3rem;
+  }
+}
