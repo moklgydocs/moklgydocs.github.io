@@ -126,12 +126,12 @@ async Task ButtonClickAsync()
     .maxstack 3
     .locals init (
         [0] int32 num,
-        [1] class [mscorlib]System.Threading.SynchronizationContext currentContext
+        [1] class [System.Runtime]System.Threading.SynchronizationContext currentContext
     )
 
     // 捕获当前 SynchronizationContext
-    IL_0000: call class [mscorlib]System.Threading.SynchronizationContext
-            [mscorlib]System.Threading.SynchronizationContext::get_Current()
+    IL_0000: call class [System.Runtime]System.Threading.SynchronizationContext
+            [System.Runtime]System.Threading.SynchronizationContext::get_Current()
     IL_0005: stloc.1          // currentContext = SynchronizationContext.Current
 
     // ... await 后的续延逻辑 ...
@@ -142,14 +142,14 @@ async Task ButtonClickAsync()
 
     IL_0053: ldloc.1
     IL_0054: ldftn void MyStateMachine::<Continuation>(object)
-    IL_0059: newobj instance void [mscorlib]System.Action::.ctor(object, native int)
-    IL_005e: callvirt instance void [mscorlib]System.Threading.SynchronizationContext::Post(
-        class [mscorlib]System.Threading.SendOrPostCallback, object)
+    IL_0059: newobj instance void [System.Runtime]System.Action::.ctor(object, native int)
+    IL_005e: callvirt instance void [System.Runtime]System.Threading.SynchronizationContext::Post(
+        class [System.Runtime]System.Threading.SendOrPostCallback, object)
     IL_0063: ret
 
     IL_0060: // 无 SyncContext，使用 TaskScheduler
-    IL_0061: call class [mscorlib]System.Threading.Tasks.TaskScheduler
-            [mscorlib]System.Threading.Tasks.TaskScheduler::get_Default()
+    IL_0061: call class [System.Runtime]System.Threading.Tasks.TaskScheduler
+            [System.Runtime]System.Threading.Tasks.TaskScheduler::get_Default()
     // ...
 }
 ```
@@ -368,19 +368,19 @@ async Task WithoutConfigureAwaitAsync()
 
 ```il
 // WithoutConfigureAwaitAsync - MoveNext 中的 await 逻辑
-IL_0020: callvirt instance class [mscorlib]System.Threading.Tasks.Task
-        [mscorlib]System.Threading.Tasks.Task::Delay(int32)
-IL_0025: callvirt instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter
-        [mscorlib]System.Threading.Tasks.Task::GetAwaiter()
+IL_0020: callvirt instance class [System.Runtime]System.Threading.Tasks.Task
+        [System.Runtime]System.Threading.Tasks.Task::Delay(int32)
+IL_0025: callvirt instance valuetype [System.Runtime]System.Runtime.CompilerServices.TaskAwaiter
+        [System.Runtime]System.Threading.Tasks.Task::GetAwaiter()
 IL_002a: stloc.s awaiter
 
 // WithConfigureAwaitAsync - MoveNext 中的 await 逻辑
-IL_0020: callvirt instance class [mscorlib]System.Threading.Tasks.Task
-        [mscorlib]System.Threading.Tasks.Task::Delay(int32)
-IL_0025: callvirt instance valuetype [mscorlib]System.Runtime.CompilerServices.ConfiguredTaskAwaitable
-        [mscorlib]System.Threading.Tasks.Task::ConfigureAwait(bool)
-IL_002a: callvirt instance valuetype [mscorlib]System.Runtime.CompilerServices.ConfiguredTaskAwaitable/ConfiguredTaskAwaiter
-        [mscorlib]System.Runtime.CompilerServices.ConfiguredTaskAwaitable::GetAwaiter()
+IL_0020: callvirt instance class [System.Runtime]System.Threading.Tasks.Task
+        [System.Runtime]System.Threading.Tasks.Task::Delay(int32)
+IL_0025: callvirt instance valuetype [System.Runtime]System.Runtime.CompilerServices.ConfiguredTaskAwaitable
+        [System.Runtime]System.Threading.Tasks.Task::ConfigureAwait(bool)
+IL_002a: callvirt instance valuetype [System.Runtime]System.Runtime.CompilerServices.ConfiguredTaskAwaitable/ConfiguredTaskAwaiter
+        [System.Runtime]System.Runtime.CompilerServices.ConfiguredTaskAwaitable::GetAwaiter()
 IL_002f: stloc.s awaiter
 ```
 
@@ -497,58 +497,58 @@ graph TD
 
 ```mermaid
 graph TD
-    subgraph ValueTaskT["ValueTask<T> 结构"]
+    subgraph ValueTaskT["ValueTask~T~ 结构"]
         direction TB
-        VTask["_task: Task<T>?"]
-        VResult["_result: T"]
         VObj["_obj: object?"]
+        VResult["_result: T"]
+        VToken["_token: short"]
 
-        VTask -->|异步完成| TaskObj["堆上的 Task<T> 对象"]
-        VResult -->|同步完成| DirectResult["直接存储结果值"]
-        VObj -->|IValueTaskSource| VTSObj["IValueTaskSource 实现对象"]
+        VObj -->|_token=0, Task~T~| TaskObj["堆上的 Task~T~ 对象"]
+        VResult -->|_obj=null| DirectResult["直接存储结果值"]
+        VObj -->|_token≠0, IValueTaskSource| VTSObj["IValueTaskSource 实现对象"]
     end
 
     subgraph Discriminator["判别逻辑"]
-        D1["_task != null → 使用 _task"]
-        D2["_task == null && _obj == null → 同步完成，_result 有值"]
-        D3["_task == null && _obj != null → 使用 IValueTaskSource"]
+        D1["_obj == null → 同步完成，_result 有值"]
+        D2["_obj is Task~T~ (_token=0) → 使用 Task"]
+        D3["_obj is IValueTaskSource~T~ (_token≠0) → 使用 IValueTaskSource"]
     end
 
-    VTask -.-> Discriminator
     VObj -.-> Discriminator
+    VToken -.-> Discriminator
 ```
 
 ```csharp
 // .NET Runtime 源码 - ValueTask<T> 核心结构
 public readonly struct ValueTask<T>
 {
-    // 字段布局
-    internal readonly Task<T>? _task;
+    // 字段布局（实际字段为 _obj, _result, _token，无单独的 _task 字段）
+    internal readonly object? _obj;    // Task<T> 或 IValueTaskSource<T>，null 表示同步完成
     internal readonly T _result;
-    internal readonly object? _obj;  // IValueTaskSource<T> 或 null
+    internal readonly short _token;    // 0 表示 _obj 是 Task<T>，非 0 表示 _obj 是 IValueTaskSource<T>
 
     // 同步完成构造
     public ValueTask(T result)
     {
-        _task = null;
-        _result = result;
         _obj = null;
+        _result = result;
+        _token = 0;
     }
 
     // 异步完成构造（使用 Task）
     public ValueTask(Task<T> task)
     {
-        _task = task ?? throw new ArgumentNullException(nameof(task));
+        _obj = task ?? throw new ArgumentNullException(nameof(task));
         _result = default!;
-        _obj = null;
+        _token = 0;
     }
 
     // 使用 IValueTaskSource 构造
     public ValueTask(IValueTaskSource<T> source, short token)
     {
-        _task = null;
+        _obj = source;
         _result = default!;
-        _obj = source;  // 存储 IValueTaskSource
+        _token = token;
     }
 
     // 判断是否同步完成
@@ -556,11 +556,11 @@ public readonly struct ValueTask<T>
     {
         get
         {
-            if (_task != null)
-                return _task.IsCompleted;
-            return _obj == null || // 同步完成
-                   (_obj is IValueTaskSource<T> vts &&
-                    vts.GetStatus(token) == ValueTaskSourceStatus.Completed);
+            if (_obj == null)
+                return true; // 同步完成
+            if (_token == 0)
+                return ((Task<T>)_obj).IsCompleted; // Task
+            return ((IValueTaskSource<T>)_obj).GetStatus(_token) == ValueTaskSourceStatus.Completed;
         }
     }
 }
@@ -578,24 +578,24 @@ public readonly struct ValueTask
     // IValueTaskSource → 使用 IValueTaskSource
 
     internal readonly object? _obj;
-    internal readonly bool _result;  // 同步完成时为 true
+    internal readonly short _token;  // 0 表示 _obj 是 Task，非 0 表示 _obj 是 IValueTaskSource
 
     public ValueTask()
     {
         _obj = null;   // 同步完成
-        _result = true;
+        _token = 0;
     }
 
     public ValueTask(Task task)
     {
         _obj = task ?? throw new ArgumentNullException(nameof(task));
-        _result = true;
+        _token = 0;
     }
 
     public ValueTask(IValueTaskSource source, short token)
     {
         _obj = source;
-        _result = true;
+        _token = token;
     }
 }
 ```
@@ -604,10 +604,10 @@ public readonly struct ValueTask
 
 ```mermaid
 stateDiagram-v2
-    [*] --> Created: new ValueTask<T>
-    Created --> SyncCompleted: _task=null, _obj=null
-    Created --> AsyncWithTask: _task!=null
-    Created --> AsyncWithVTS: _obj=IValueTaskSource
+    [*] --> Created: new ValueTask~T~
+    Created --> SyncCompleted: _obj=null
+    Created --> AsyncWithTask: _obj is Task~T~ (_token=0)
+    Created --> AsyncWithVTS: _obj is IValueTaskSource (_token≠0)
 
     SyncCompleted --> GetResult: .Result 直接返回
     AsyncWithTask --> AwaitTask: await Task
@@ -682,44 +682,44 @@ async Task WithTaskAsync()
 // ValueTask await 的核心 IL
 // 在 MoveNext 中的 await 逻辑
 IL_0010: ldloca.s vt           // 加载 ValueTask<int> 的地址
-IL_0012: call instance valuetype [mscorlib]System.Runtime.CompilerServices.ValueTaskAwaiter`1<int32>
-        [mscorlib]System.Threading.Tasks.ValueTask`1<int32>::GetAwaiter()
+IL_0012: call instance valuetype [System.Runtime]System.Runtime.CompilerServices.ValueTaskAwaiter`1<int32>
+        [System.Runtime]System.Threading.Tasks.ValueTask`1<int32>::GetAwaiter()
 IL_0017: stloc.s awaiter
 
 IL_0019: ldloca.s awaiter
-IL_001b: call instance bool [mscorlib]System.Runtime.CompilerServices.ValueTaskAwaiter`1<int32>::get_IsCompleted()
+IL_001b: call instance bool [System.Runtime]System.Runtime.CompilerServices.ValueTaskAwaiter`1<int32>::get_IsCompleted()
 IL_0020: brtrue.s IL_0035      // 同步完成则跳过注册续延
 
 // 注册续延
 IL_0022: ldarg.0
 IL_0023: ldloca.s awaiter
-IL_0025: call instance void [mscorlib]System.Runtime.CompilerServices.ValueTaskAwaiter`1<int32>::UnsafeOnCompleted(
-    class [mscorlib]System.Action)
+IL_0025: call instance void [System.Runtime]System.Runtime.CompilerServices.ValueTaskAwaiter`1<int32>::UnsafeOnCompleted(
+    class [System.Runtime]System.Action)
 
 // 获取结果
 IL_0035: ldloca.s awaiter
-IL_0037: call instance !0 [mscorlib]System.Runtime.CompilerServices.ValueTaskAwaiter`1<int32>::GetResult()
+IL_0037: call instance !0 [System.Runtime]System.Runtime.CompilerServices.ValueTaskAwaiter`1<int32>::GetResult()
 IL_003c: stloc.s result
 ```
 
 ```il
 // Task await 的核心 IL
 IL_0010: ldloc.s t             // 加载 Task<int> 引用
-IL_0012: callvirt instance valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter`1<int32>
-        [mscorlib]System.Threading.Tasks.Task`1<int32>::GetAwaiter()
+IL_0012: callvirt instance valuetype [System.Runtime]System.Runtime.CompilerServices.TaskAwaiter`1<int32>
+        [System.Runtime]System.Threading.Tasks.Task`1<int32>::GetAwaiter()
 IL_0017: stloc.s awaiter
 
 IL_0019: ldloca.s awaiter
-IL_001b: call instance bool [mscorlib]System.Runtime.CompilerServices.TaskAwaiter`1<int32>::get_IsCompleted()
+IL_001b: call instance bool [System.Runtime]System.Runtime.CompilerServices.TaskAwaiter`1<int32>::get_IsCompleted()
 IL_0020: brtrue.s IL_0035
 
 IL_0022: ldarg.0
 IL_0023: ldloca.s awaiter
-IL_0025: call instance void [mscorlib]System.Runtime.CompilerServices.TaskAwaiter`1<int32>::UnsafeOnCompleted(
-    class [mscorlib]System.Action)
+IL_0025: call instance void [System.Runtime]System.Runtime.CompilerServices.TaskAwaiter`1<int32>::UnsafeOnCompleted(
+    class [System.Runtime]System.Action)
 
 IL_0035: ldloca.s awaiter
-IL_0037: call instance !0 [mscorlib]System.Runtime.CompilerServices.TaskAwaiter`1<int32>::GetResult()
+IL_0037: call instance !0 [System.Runtime]System.Runtime.CompilerServices.TaskAwaiter`1<int32>::GetResult()
 IL_003c: stloc.s result
 ```
 
@@ -742,7 +742,7 @@ public interface IValueTaskSource
 {
     ValueTaskSourceStatus GetStatus(short token);
     void OnCompleted(Action<object?> continuation, object? state,
-        short token, ValueTaskSourceFlags flags);
+        short token, ValueTaskSourceOnCompletedFlags flags);
     void GetResult(short token);
 }
 
@@ -750,7 +750,7 @@ public interface IValueTaskSource<out T>
 {
     ValueTaskSourceStatus GetStatus(short token);
     void OnCompleted(Action<object?> continuation, object? state,
-        short token, ValueTaskSourceFlags flags);
+        short token, ValueTaskSourceOnCompletedFlags flags);
     T GetResult(short token);
 }
 ```
@@ -768,7 +768,7 @@ public class ManualValueTaskSource<T> : IValueTaskSource<T>
         => _core.GetStatus(token);
 
     public void OnCompleted(Action<object?> continuation, object? state,
-        short token, ValueTaskSourceFlags flags)
+        short token, ValueTaskSourceOnCompletedFlags flags)
         => _core.OnCompleted(continuation, state, token, flags);
 
     public T GetResult(short token)
@@ -815,7 +815,7 @@ public struct ManualResetValueTaskSourceCore<T>
     }
 
     public void OnCompleted(Action<object?> continuation, object? state,
-        short token, ValueTaskSourceFlags flags)
+        short token, ValueTaskSourceOnCompletedFlags flags)
     {
         if (token != _version)
             throw new InvalidOperationException();
@@ -876,13 +876,13 @@ public struct ManualResetValueTaskSourceCore<T>
 sequenceDiagram
     participant Pool as 对象池
     participant VTS as IValueTaskSource
-    participant VT as ValueTask<T>
+    participant VT as ValueTask~T~
     participant Awaiter as awaiter
 
     Pool->>VTS: 从池中获取
     Note over VTS: _version = 1
 
-    VTS->>VT: new ValueTask<T>(this, version=1)
+    VTS->>VT: new ValueTask~T~(this, version=1)
     VT->>Awaiter: await
 
     alt 同步完成
@@ -955,7 +955,7 @@ public class PooledValueTaskSource<T> : IValueTaskSource<T>
         => _core.GetStatus(token);
 
     public void OnCompleted(Action<object?> continuation, object? state,
-        short token, ValueTaskSourceFlags flags)
+        short token, ValueTaskSourceOnCompletedFlags flags)
         => _core.OnCompleted(continuation, state, token, flags);
 
     public T GetResult(short token)
@@ -1078,7 +1078,7 @@ public class ValueTaskVsTaskBenchmark
 ::: tip 性能结论
 1. **同步完成**：`ValueTask` 比 `Task` 快约 3-4 倍，且零分配
 2. **异步完成**：两者性能相当，都会产生堆分配
-3. `Task.FromResult()` 仍然会在堆上分配 `Task<string>` 对象（尽管 .NET 有缓存小整数的 `Task`，但 `string` 结果不在缓存范围）
+3. `Task.FromResult()` 仍然会在堆上分配 `Task&lt;string&gt;` 对象（尽管 .NET 有缓存小整数的 `Task`，但 `string` 结果不在缓存范围）
 4. `ValueTask` 的真正优势在于**同步完成路径**的零分配
 :::
 
@@ -1252,7 +1252,7 @@ graph LR
 
 ### 8.4 AsyncLocal 与 SynchronizationContext
 
-`AsyncLocal<T>` 是另一种与异步上下文相关的机制，但它与 `SynchronizationContext` 不同：
+`AsyncLocal&lt;T&gt;` 是另一种与异步上下文相关的机制，但它与 `SynchronizationContext` 不同：
 
 ```csharp
 // AsyncLocal - 异步流程中的数据流
@@ -1416,7 +1416,7 @@ public class HighPerformanceReader
             => _core.GetStatus(token);
 
         public void OnCompleted(Action<object?> continuation, object? state,
-            short token, ValueTaskSourceFlags flags)
+            short token, ValueTaskSourceOnCompletedFlags flags)
             => _core.OnCompleted(continuation, state, token, flags);
 
         public int GetResult(short token)
@@ -1750,7 +1750,7 @@ public async Task CorrectCaptureRestoreAsync()
 ```mermaid
 graph TD
     subgraph ExecutionContext["ExecutionContext"]
-        EC1["AsyncLocal<T> 的值"]
+        EC1["AsyncLocal~T~ 的值"]
         EC2["逻辑调用上下文"]
         EC3["安全上下文"]
     end
@@ -1847,12 +1847,12 @@ public struct ValueTaskAwaiter : ICriticalNotifyCompletion
         // IValueTaskSource
         ((IValueTaskSource)_value._obj).OnCompleted(
             state => ((Action)state!)(), continuation,
-            _value._token, ValueTaskSourceFlags.None);
+            _value._token, ValueTaskSourceOnCompletedFlags.None);
     }
 }
 ```
 
-### 14.2 ValueTask<T> 的 GetResult 流程
+### 14.2 ValueTask&lt;T&gt; 的 GetResult 流程
 
 ```mermaid
 flowchart TD

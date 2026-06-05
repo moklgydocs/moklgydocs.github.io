@@ -141,7 +141,7 @@ private sealed class <GetValueAsync>d__0 : IAsyncStateMachine
 ```mermaid
 classDiagram
     class IAsyncStateMachine {
-        <<interface>>
+        <~interface~>
         +MoveNext() void
         +SetStateMachine(IAsyncStateMachine) void
     }
@@ -212,7 +212,7 @@ stateDiagram-v2
 {
     .locals init (
         [0] int32 num,
-        [1] valuetype [mscorlib]System.Runtime.CompilerServices.TaskAwaiter`1<int32> awaiter,
+        [1] valuetype [System.Runtime]System.Runtime.CompilerServices.TaskAwaiter`1<int32> awaiter,
         [2] class <GetValueAsync>d__0 stateMachine
     )
 
@@ -227,12 +227,12 @@ stateDiagram-v2
 
         // state == -1: 初始执行
         IL_000a: ldstr "开始"
-        IL_000f: call void [mscorlib]System.Console::WriteLine(string)
+        IL_000f: call void [System.Runtime]System.Console::WriteLine(string)
 
         // 调用 SomeAsync(x).GetAwaiter()
         IL_0014: ldarg.0
         IL_0015: ldfld int32 <GetValueAsync>d__0::x
-        IL_001a: call class [mscorlib]System.Threading.Tasks.Task`1<int32> SomeAsync(int32)
+        IL_001a: call class [System.Runtime]System.Threading.Tasks.Task`1<int32> SomeAsync(int32)
         IL_001f: callvirt instance valuetype TaskAwaiter`1<int32> GetAwaiter()
         IL_0024: stloc.1
 
@@ -616,10 +616,10 @@ private sealed class <GetValueAsync>d__2 : IAsyncStateMachine
 // 1. 如果结果是同步可用的，不分配 Task 对象
 // 2. 使用 IValueTaskSource 池化
 
-public struct AsyncValueTaskMethodBuilder<int>
+public struct AsyncValueTaskMethodBuilder<T>
 {
     // 同步完成：直接返回 ValueTask（不分配）
-    public void SetResult(int result)
+    public void SetResult(T result)
     {
         // 如果是同步完成（state == -1 且没有 await），
         // 直接返回 new ValueTask<int>(result)

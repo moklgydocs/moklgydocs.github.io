@@ -228,7 +228,7 @@ throw new InvalidOperationException("消息");
 
 ```il
 IL_0000: ldstr "消息"
-IL_0005: newobj instance void [mscorlib]System.InvalidOperationException::.ctor(string)
+IL_0005: newobj instance void [System.Runtime]System.InvalidOperationException::.ctor(string)
 IL_000a: throw
 ```
 
@@ -304,7 +304,7 @@ public static void RethrowDemo()
         IL_0000: call void ThrowException()
         IL_0005: leave.s IL_0014
     }
-    catch [mscorlib]System.InvalidOperationException
+    catch [System.Runtime]System.InvalidOperationException
     {
         IL_0007: stloc.0
 
@@ -357,12 +357,12 @@ public static void CaptureAndRethrow()
 .method public hidebysig instance void Throw() cil managed
 {
     IL_0000: ldarg.0
-    IL_0001: ldfld class [mscorlib]System.Exception ExceptionDispatchInfo::_exception
-    IL_0006: call void ExceptionDispatchInfo::RestoreExceptionDispatch(class [mscorlib]System.Exception)
+    IL_0001: ldfld class [System.Runtime]System.Exception ExceptionDispatchInfo::_exception
+    IL_0006: call void ExceptionDispatchInfo::RestoreExceptionDispatch(class [System.Runtime]System.Exception)
     // 恢复原始栈跟踪信息
 
     IL_000b: ldarg.0
-    IL_000c: ldfld class [mscorlib]System.Exception ExceptionDispatchInfo::_exception
+    IL_000c: ldfld class [System.Runtime]System.Exception ExceptionDispatchInfo::_exception
     IL_0011: throw    // 使用 throw，但栈跟踪已被 RestoreExceptionDispatch 保留
 }
 ```
@@ -415,7 +415,7 @@ public static void FilterDemo()
 
         IL_0013: castclass [System.Net.Http]System.Net.Http.HttpRequestException
         IL_0018: callvirt instance valuetype System.Net.HttpStatusCode get_StatusCode()
-        IL_001d: ldc.i4.7          // HttpStatusCode.NotFound = 7
+        IL_001d: ldc.i4 404         // HttpStatusCode.NotFound = 404
         IL_001e: ceq
         IL_0020: ldc.i4.0
         IL_0021: cgt.un            // != 0 → 匹配
@@ -427,7 +427,7 @@ public static void FilterDemo()
     {
         IL_0027: stloc.0
         IL_0028: ldstr "404 未找到"
-        IL_002d: call void [mscorlib]System.Console::WriteLine(string)
+        IL_002d: call void [System.Runtime]System.Console::WriteLine(string)
         IL_0032: leave.s IL_0040
     }
     // ... 其他 catch 块
@@ -791,7 +791,7 @@ fault
     // 只在异常发生时执行
     // 类似 finally，但不会在正常退出时执行
     IL_0007: ldstr "异常发生了"
-    IL_000c: call void [mscorlib]System.Console::WriteLine(string)
+    IL_000c: call void [System.Runtime]System.Console::WriteLine(string)
     IL_0011: endfault
 }
 

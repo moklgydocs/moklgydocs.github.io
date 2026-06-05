@@ -631,7 +631,7 @@ flowchart TB
     end
 
     subgraph DelegatePath["委托路径"]
-        B["编译为 IL 方法<br/>newobj Func<int,int,int>"]
+        B["编译为 IL 方法<br/>newobj Func~int,int,int~"]
     end
 
     subgraph ExpressionPath["表达式树路径"]
@@ -663,9 +663,9 @@ var users = dbContext.Users
 ```
 
 ::: important 表达式树是 LINQ Provider 的基础
-`IQueryable<T>` 的 `Where`、`Select` 等方法接收 `Expression<Func<...>>` 参数，这使得 LINQ Provider（如 EF Core）可以在运行时解析表达式树，将 C# 代码翻译为 SQL、Cosmos DB 查询等目标语言。
+`IQueryable&lt;T&gt;` 的 `Where`、`Select` 等方法接收 `Expression<Func<...>>` 参数，这使得 LINQ Provider（如 EF Core）可以在运行时解析表达式树，将 C# 代码翻译为 SQL、Cosmos DB 查询等目标语言。
 
-如果传入 `Func<T, bool>` 而非 `Expression<Func<T, bool>>`，则 LINQ to Objects 会直接在内存中过滤，而不会翻译为 SQL。
+如果传入 `Func&lt;T, bool&gt;` 而非 `Expression<Func&lt;T, bool&gt;>`，则 LINQ to Objects 会直接在内存中过滤，而不会翻译为 SQL。
 :::
 
 ## 7. 闭包与内存泄漏
@@ -830,7 +830,7 @@ flowchart TB
     end
 
     subgraph Inner["async 状态机"]
-        SM["<CreateAsyncClosure>d__0<br/>状态机结构体<br/>+ <>8__1 : DisplayClass0_0"]
+        SM["~CreateAsyncClosure~d__0<br/>状态机结构体<br/>+ <>8__1 : DisplayClass0_0"]
     end
 
     DC1 -->|"状态机捕获<br/>DisplayClass"| SM
@@ -930,7 +930,7 @@ public void MultipleCalls()
 2. **缓存委托实例**：避免在循环中创建委托
 3. **使用方法组代替 Lambda**：`list.Where(Filter)` 比 `list.Where(x => Filter(x))` 更高效
 4. **避免不必要的闭包**：只捕获需要的值
-5. **热路径避免表达式树**：`Expression<Func<T>>` 比 `Func<T>` 慢很多
+5. **热路径避免表达式树**：`Expression<Func&lt;T&gt;>` 比 `Func&lt;T&gt;` 慢很多
 :::
 
 ## 10. Lambda 与方法组转换

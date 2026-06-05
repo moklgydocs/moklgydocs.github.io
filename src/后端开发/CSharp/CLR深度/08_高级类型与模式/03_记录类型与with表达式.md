@@ -35,7 +35,7 @@ public record Person(string FirstName, string LastName);
 ```mermaid
 classDiagram
     class Person {
-        <<record>>
+        <~record~>
         +string FirstName
         +string LastName
         +virtual string PrintMembers(StringBuilder sb)
@@ -51,12 +51,12 @@ classDiagram
     }
 
     class IEquatable~T~ {
-        <<interface>>
+        <~interface~>
         +bool Equals(T? other)
     }
 
     class ISerializable {
-        <<interface>>
+        <~interface~>
     }
 
     Person ..|> IEquatable~T~ : IEquatable~Person~
@@ -89,15 +89,15 @@ public class Person : IEquatable<Person>, ISerializable
 ```il
 .class public auto ansi beforefieldinit
     Person
-    extends [mscorlib]System.Object
-    implements class [mscorlib]System.IEquatable`1<class Person>
+    extends [System.Runtime]System.Object
+    implements class [System.Runtime]System.IEquatable`1<class Person>
 {
     // 自动属性 - init-only
     .property instance string FirstName()
     {
         .get instance string Person::get_FirstName()
         .set instance void Person::modreq(
-            [mscorlib]System.Runtime.CompilerServices.IsExternalInit)
+            [System.Runtime]System.Runtime.CompilerServices.IsExternalInit)
             set_FirstName(string)
     }
 
@@ -105,7 +105,7 @@ public class Person : IEquatable<Person>, ISerializable
     {
         .get instance string Person::get_LastName()
         .set instance void Person::modreq(
-            [mscorlib]System.Runtime.CompilerServices.IsExternalInit)
+            [System.Runtime]System.Runtime.CompilerServices.IsExternalInit)
             set_LastName(string)
     }
 
@@ -117,7 +117,7 @@ public class Person : IEquatable<Person>, ISerializable
 
         // 调用基类构造函数
         IL_0000: ldarg.0
-        IL_0001: call instance void [mscorlib]System.Object::.ctor()
+        IL_0001: call instance void [System.Runtime]System.Object::.ctor()
 
         // this.FirstName = FirstName
         IL_0006: ldarg.0
@@ -146,19 +146,19 @@ protected virtual Type EqualityContract
 ```
 
 ```il
-.property instance class [mscorlib]System.Type EqualityContract()
+.property instance class [System.Runtime]System.Type EqualityContract()
 {
-    .get instance class [mscorlib]System.Type Person::get_EqualityContract()
+    .get instance class [System.Runtime]System.Type Person::get_EqualityContract()
 }
 
 .method family hidebysig newslot virtual
-    instance class [mscorlib]System.Type get_EqualityContract() cil managed
+    instance class [System.Runtime]System.Type get_EqualityContract() cil managed
 {
     .maxstack 1
 
     IL_0000: ldtoken Person
-    IL_0005: call class [mscorlib]System.Type
-        [mscorlib]System.Type::GetTypeFromHandle(valuetype [mscorlib]System.RuntimeTypeHandle)
+    IL_0005: call class [System.Runtime]System.Type
+        [System.Runtime]System.Type::GetTypeFromHandle(valuetype [System.Runtime]System.RuntimeTypeHandle)
     IL_000a: ret
 }
 ```
@@ -218,9 +218,9 @@ public virtual bool Equals(Person? other)
 
     // if (EqualityContract != other.EqualityContract) return false
     IL_000a: ldarg.0
-    IL_000b: call instance class [mscorlib]System.Type Person::get_EqualityContract()
+    IL_000b: call instance class [System.Runtime]System.Type Person::get_EqualityContract()
     IL_0010: ldarg.1
-    IL_0011: callvirt instance class [mscorlib]System.Type Person::get_EqualityContract()
+    IL_0011: callvirt instance class [System.Runtime]System.Type Person::get_EqualityContract()
     IL_0016: bne.un.s IL_002c   // 类型不等 → false
 
     // 比较字段
@@ -228,7 +228,7 @@ public virtual bool Equals(Person? other)
     IL_0019: call instance string Person::get_FirstName()
     IL_001e: ldarg.1
     IL_001f: callvirt instance string Person::get_FirstName()
-    IL_0024: call bool [mscorlib]System.String::op_Equality(string, string)
+    IL_0024: call bool [System.Runtime]System.String::op_Equality(string, string)
     IL_0029: brfalse.s IL_002c
 
     IL_002b: ldc.i4.1
@@ -259,12 +259,12 @@ public override int GetHashCode()
     .maxstack 4
 
     IL_0000: ldarg.0
-    IL_0001: call instance class [mscorlib]System.Type Person::get_EqualityContract()
+    IL_0001: call instance class [System.Runtime]System.Type Person::get_EqualityContract()
     IL_0006: ldarg.0
     IL_0007: call instance string Person::get_FirstName()
     IL_000c: ldarg.0
     IL_000d: call instance string Person::get_LastName()
-    IL_0012: call int32 [mscorlib]System.HashCode::Combine<class [mscorlib]System.Type, string, string>(!!)
+    IL_0012: call int32 [System.Runtime]System.HashCode::Combine<class [System.Runtime]System.Type, string, string>(!!)
     IL_0017: ret
 }
 ```
@@ -353,7 +353,7 @@ var person2 = person1 with { FirstName = "李" };
 
 ```mermaid
 flowchart TD
-    A["person1 with { FirstName = 李 }"] --> B["调用 person1.<Clone>$"]
+    A["person1 with { FirstName = 李 }"] --> B["调用 person1.~Clone~$"]
     B --> C["MemberwiseClone 浅拷贝"]
     C --> D["设置 FirstName = 李"]
     D --> E["返回新对象 person2"]
@@ -450,7 +450,7 @@ sequenceDiagram
     participant Memberwise as MemberwiseClone
     participant NewObj as 新 Record 对象
 
-    Original->>Clone: 调用 <Clone>$()
+    Original->>Clone: 调用 ~Clone~$()
     Clone->>Memberwise: MemberwiseClone()
     Note over Memberwise: 创建浅拷贝<br/>复制所有字段值
     Memberwise->>NewObj: 返回克隆对象
@@ -595,7 +595,7 @@ public record Person(string FirstName, string LastName);
     .maxstack 2
 
     IL_0000: ldarg.0
-    IL_0001: call instance void [mscorlib]System.Object::.ctor()
+    IL_0001: call instance void [System.Runtime]System.Object::.ctor()
 
     // this.<FirstName>k__BackingField = FirstName
     IL_0006: ldarg.0
@@ -706,18 +706,18 @@ public record Student(string FirstName, string LastName, int Grade)
 ```il
 // Person.PrintMembers - 直接追加字段
 .method family hidebysig newslot virtual
-    instance bool PrintMembers(class [mscorlib]System.Text.StringBuilder builder) cil managed
+    instance bool PrintMembers(class [System.Runtime]System.Text.StringBuilder builder) cil managed
 {
     IL_0000: ldarg.1
     IL_0001: ldstr "FirstName = "
-    IL_0006: callvirt instance class [mscorlib]System.Text.StringBuilder
-        [mscorlib]System.Text.StringBuilder::Append(string)
+    IL_0006: callvirt instance class [System.Runtime]System.Text.StringBuilder
+        [System.Runtime]System.Text.StringBuilder::Append(string)
 
     IL_000b: ldarg.1
     IL_000c: ldarg.0
     IL_000d: call instance string Person::get_FirstName()
-    IL_0012: callvirt instance class [mscorlib]System.Text.StringBuilder
-        [mscorlib]System.Text.StringBuilder::Append(string)
+    IL_0012: callvirt instance class [System.Runtime]System.Text.StringBuilder
+        [System.Runtime]System.Text.StringBuilder::Append(string)
 
     // ... LastName 类似 ...
 
@@ -727,20 +727,20 @@ public record Student(string FirstName, string LastName, int Grade)
 
 // Student.PrintMembers - 先调用 base
 .method family hidebysig virtual
-    instance bool PrintMembers(class [mscorlib]System.Text.StringBuilder builder) cil managed
+    instance bool PrintMembers(class [System.Runtime]System.Text.StringBuilder builder) cil managed
 {
     // base.PrintMembers(builder)
     IL_0000: ldarg.0
     IL_0001: ldarg.1
-    IL_0002: call instance bool Person::PrintMembers(class [mscorlib]System.Text.StringBuilder)
+    IL_0002: call instance bool Person::PrintMembers(class [System.Runtime]System.Text.StringBuilder)
 
     IL_0007: brfalse.s IL_0010  // 基类没有打印成员
 
     // builder.Append(", ")
     IL_0009: ldarg.1
     IL_000a: ldstr ", "
-    IL_000f: callvirt instance class [mscorlib]System.Text.StringBuilder
-        [mscorlib]System.Text.StringBuilder::Append(string)
+    IL_000f: callvirt instance class [System.Runtime]System.Text.StringBuilder
+        [System.Runtime]System.Text.StringBuilder::Append(string)
 
     // builder.Append("Grade = ")
     IL_0010: ldarg.1
@@ -831,7 +831,7 @@ Person modified = person with { FirstName = "李" };
 Console.WriteLine(modified.GetType().Name);  // "Student"
 ```
 
-这是因为 `<Clone>$()` 是虚方法，调用的是运行时类型的实现：
+这是因为 `&lt;Clone&gt;$()` 是虚方法，调用的是运行时类型的实现：
 
 ```csharp
 // Student 重写的 Clone
@@ -848,7 +848,7 @@ protected Student(Student original) : base(original)
 ```
 
 ::: important with 表达式保持多态性
-1. `with` 表达式调用 `<Clone>$()` 虚方法
+1. `with` 表达式调用 `&lt;Clone&gt;$()` 虚方法
 2. 虚方法分派到运行时类型的实现
 3. 因此 `with` 表达式不会丢失派生类型的信息
 4. 这是 record 继承与普通类克隆的关键区别
@@ -1160,14 +1160,10 @@ public record Person(string FirstName, string LastName);
 ```il
 // init-only 属性的 set 方法使用 IsExternalInit modreq
 .method public hidebysig specialname instance void
+    modreq([System.Runtime]System.Runtime.CompilerServices.IsExternalInit)
     set_FirstName(string 'value') cil managed
 {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor()
-
-    // modreq IsExternalInit 表示 init-only
-    .method public hidebysig specialname instance void
-        modreq([mscorlib]System.Runtime.CompilerServices.IsExternalInit)
-        set_FirstName(string 'value')
+    .custom instance void [System.Runtime]System.Runtime.CompilerServices.CompilerGeneratedAttribute::.ctor()
 
     // IL 实现
     .maxstack 8

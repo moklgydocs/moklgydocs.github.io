@@ -196,12 +196,12 @@ public int Add(int a, int b)
     .locals init (int32 V_0)
     IL_0000: nop
     IL_0001: ldarg.1       // 加载参数 a
-    IL_0003: ldarg.2       // 加载参数 b
-    IL_0004: add           // 执行加法
-    IL_0005: stloc.0       // 存储到局部变量 V_0
-    IL_0006: br.s IL_0008
-    IL_0008: ldloc.0       // 加载局部变量 V_0
-    IL_0009: ret           // 返回
+    IL_0002: ldarg.2       // 加载参数 b
+    IL_0003: add            // 执行加法
+    IL_0004: stloc.0        // 存储到局部变量 V_0
+    IL_0005: br.s IL_0007
+    IL_0007: ldloc.0        // 加载局部变量 V_0
+    IL_0008: ret            // 返回
 }
 ```
 
@@ -580,7 +580,7 @@ ret
 | 循环 | 无循环 | 包含循环 |
 | 异常处理 | 无 try/catch | 包含异常处理 |
 | 方法属性 | AggressiveInlining | NoInlining |
-| 结构体参数 | 无 struct 参数 | 包含 struct 参数（大小>16字节） |
+| 结构体参数 | 无 struct 参数 | 包含 struct 参数（大小\>16字节） |
 
 **常量折叠（Constant Folding）**：
 
@@ -825,7 +825,7 @@ public class PluginLoadContext : AssemblyLoadContext
 
 ### 5.4 程序集绑定重定向
 
-在 .NET Framework 时代，绑定重定向通过 `app.config` 的 `<bindingRedirect>` 实现。在 .NET Core / .NET 5+ 中，绑定重定向由 `deps.json` 文件和运行时自动处理：
+在 .NET Framework 时代，绑定重定向通过 `app.config` 的 `&lt;bindingRedirect&gt;` 实现。在 .NET Core / .NET 5+ 中，绑定重定向由 `deps.json` 文件和运行时自动处理：
 
 ```json
 // MyApp.deps.json 片段
@@ -1235,19 +1235,20 @@ public class PInvokeDemo
 ```il
 .method private hidebysig static native int GetProcAddress(
     native int hModule,
-    string lpProcName) cil managed
+    string lpProcName) cil managed preservesig
 {
-    .maxstack 2
-    IL_0000: ldarg.0
-    IL_0001: ldarg.1
-    IL_0002: newobj instance void [mscorlib]System.Runtime.InteropServices.MarshalAsAttribute::.ctor(valuetype [mscorlib]System.Runtime.InteropServices.UnmanagedType)
-    // ... pinvokeimpl 调用
+    // P/Invoke 方法没有 IL 方法体
+    // MarshalAsAttribute 等信息存储在元数据 (CustomAttribute 表) 中，不是 IL 指令
 }
 // 元数据中的 ImplMap 表记录了 P/Invoke 映射:
 // MemberRef: GetProcAddress
 // ImportName: GetProcAddress
 // ImportScope: ModuleRef("kernel32.dll")
 // MappingFlags: PInvokeCallConvStdCall | PInvokeCharSetAnsi
+//
+// 元数据中的 CustomAttribute 表记录了封送信息:
+// [DllImport("kernel32.dll", CharSet = CharSet.Ansi)]
+// [return: MarshalAs(UnmanagedType.FunctionPtr)]
 ```
 
 ### 10.2 COM 互操作
@@ -1321,7 +1322,7 @@ public unsafe class UnsafeDemo
     // fixed (int* pArr = arr)
     IL_0000: ldloc.1           // 加载 arr
     IL_0001: ldc.i4.0          // 索引 0
-    IL_0002: ldelema [mscorlib]System.Int32  // 获取元素地址
+    IL_0002: ldelema [System.Runtime]System.Int32  // 获取元素地址
     IL_0007: stloc.2           // 存储到 V_2 (pinned)
     // V_2 被标记为 pinned，GC 在此期间不会移动该对象
 
@@ -1341,9 +1342,9 @@ public unsafe class UnsafeDemo
 因此，使用 `unsafe` 代码时必须格外小心，并在 `fixed` 块内尽量缩短非托管指针的生命周期。
 :::
 
-### 10.4 Span<T> —— 安全的内存统一视图
+### 10.4 Span&lt;T&gt; —— 安全的内存统一视图
 
-`Span<T>` 是 .NET 提供的安全且高效的内存访问抽象，它可以在不使用 `unsafe` 代码的情况下统一操作托管内存、栈内存和非托管内存：
+`Span&lt;T&gt;` 是 .NET 提供的安全且高效的内存访问抽象，它可以在不使用 `unsafe` 代码的情况下统一操作托管内存、栈内存和非托管内存：
 
 ```csharp
 using System;
@@ -1391,7 +1392,7 @@ flowchart TB
         PINVOKE["P/Invoke<br/>───────────<br/>DLL 导入<br/>类型封送<br/>调用约定转换"]
         COM["COM 互操作<br/>───────────<br/>RCW/CCW<br/>接口映射<br/>引用计数"]
         UNSAFE["unsafe 代码<br/>───────────<br/>指针操作<br/>fixed 语句<br/>SkipVerification"]
-        SPAN["Span<T><br/>───────────<br/>统一内存视图<br/>零拷贝切片<br/>ref struct"]
+        SPAN["Span~T~<br/>───────────<br/>统一内存视图<br/>零拷贝切片<br/>ref struct"]
     end
 
     subgraph Unmanaged["非托管世界"]
@@ -1529,7 +1530,7 @@ mindmap
       P/Invoke
       COM 互操作
       unsafe 代码
-      Span<T>
+      Span~T~
 ```
 
 ::: important 关键要点回顾
@@ -1539,7 +1540,7 @@ mindmap
 4. **AssemblyLoadContext** 是 .NET Core 中程序集加载和隔离的核心机制，支持可卸载上下文
 5. **AOT 编译**（ReadyToRun/Native AOT）提供了从启动优化到完全静态编译的渐进式方案
 6. **CLR 核心组件**（类型系统、JIT、GC、线程池等）紧密协作，共同支撑 .NET 运行时
-7. **托管/非托管交互**通过 P/Invoke、COM 互操作、unsafe 代码等机制实现，Span<T> 提供了安全的统一内存视图
+7. **托管/非托管交互**通过 P/Invoke、COM 互操作、unsafe 代码等机制实现，Span&lt;T&gt; 提供了安全的统一内存视图
 :::
 
 ---

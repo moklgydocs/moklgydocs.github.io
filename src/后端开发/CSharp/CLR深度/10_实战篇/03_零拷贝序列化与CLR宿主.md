@@ -99,13 +99,13 @@ ArrayPool<byte>.Shared.Return(buffer);
 
 | 原则 | 说明 | 实现手段 |
 |------|------|----------|
-| 避免中间缓冲 | 不创建临时数组或流 | `IBufferWriter<T>` 直接写入 |
+| 避免中间缓冲 | 不创建临时数组或流 | `IBufferWriter&lt;T&gt;` 直接写入 |
 | 避免 `ToArray()` | 不将 Span/Memory 复制为新数组 | 保持引用，传递切片 |
 | 避免装箱 | 值类型不经过堆分配 | 泛型特化、`ref struct` |
 
 ### 1.3 零拷贝与 Span/Memory 的天然结合
 
-`Span<T>` 和 `Memory<T>` 是零拷贝的基础设施：
+`Span&lt;T&gt;` 和 `Memory&lt;T&gt;` 是零拷贝的基础设施：
 
 ```csharp
 // Span<T> 提供对连续内存的类型安全视图，无需拷贝
@@ -131,10 +131,10 @@ async Task ProcessAsync(ReadOnlyMemory<byte> data)
 ```
 
 ::: tip Span vs Memory 选择策略
-- 同步方法 → 优先使用 `Span<T>`（栈约束，零分配，性能最优）
-- 异步方法 → 使用 `Memory<T>`（可存储在堆上，跨越 await）
-- 公共 API → 暴露 `ReadOnlyMemory<T>` 或 `ReadOnlySpan<T>` 作为参数
-- 内部实现 → 尽量使用 `Span<T>` 减少分配
+- 同步方法 → 优先使用 `Span&lt;T&gt;`（栈约束，零分配，性能最优）
+- 异步方法 → 使用 `Memory&lt;T&gt;`（可存储在堆上，跨越 await）
+- 公共 API → 暴露 `ReadOnlyMemory&lt;T&gt;` 或 `ReadOnlySpan&lt;T&gt;` 作为参数
+- 内部实现 → 尽量使用 `Span&lt;T&gt;` 减少分配
 :::
 
 ---
@@ -156,7 +156,7 @@ classDiagram
     }
 
     class IMemoryPackable~T~ {
-        <<interface>>
+        <~interface~>
         +static Write(IBufferWriter~byte~, T, ref int)
         +static Read(ReadOnlySpan~byte~, ref int) T
     }
@@ -178,7 +178,7 @@ classDiagram
     }
 
     class IBufferWriter~byte~ {
-        <<interface>>
+        <~interface~>
         +GetSpan(int size) Span~byte~
         +Advance(int count)
     }
@@ -272,14 +272,14 @@ partial class UserInfo
 
 ::: important 编译时代码生成的关键优势
 1. **零反射**：所有字段访问在编译时确定，没有 `PropertyInfo.GetValue` 开销
-2. **直接内存布局**：`WriteUnmanaged<T>` 对值类型使用 `Unsafe.Write` 直接写入
+2. **直接内存布局**：`WriteUnmanaged&lt;T&gt;` 对值类型使用 `Unsafe.Write` 直接写入
 3. **AOT 友好**：没有动态 IL 生成，完全兼容 Native AOT
 4. **版本容错**：对象头记录字段数，反序列化时自动处理新增/删除字段
 :::
 
-### 2.3 IMemoryPackable<T> 手动实现与 IL 对比
+### 2.3 IMemoryPackable&lt;T&gt; 手动实现与 IL 对比
 
-对于极致性能场景，可以手动实现 `IMemoryPackable<T>`：
+对于极致性能场景，可以手动实现 `IMemoryPackable&lt;T&gt;`：
 
 ```csharp
 // 手动实现 IMemoryPackable<T> —— 绕过属性访问器
@@ -651,7 +651,7 @@ public partial class MyMessage
 MemoryPack 的性能优势来自三个层面：
 1. **内存布局序列化**：值类型直接按二进制布局写入，无需文本编码
 2. **源生成器**：编译时生成特化代码，零反射开销
-3. **零中间拷贝**：直接写入 `IBufferWriter<byte>`，无 `ToArray()` 中转
+3. **零中间拷贝**：直接写入 `IBufferWriter&lt;byte&gt;`，无 `ToArray()` 中转
 :::
 
 ---
@@ -832,7 +832,7 @@ public class StreamService
 ::: warning 零拷贝流的生命周期管理
 `GetReadOnlySequence()` 返回的是内部缓冲区的引用。如果调用 `stream.Dispose()`，缓冲区会被归还到池中，导致引用悬挂。解决方案：
 1. 让调用方负责 `Dispose` 流
-2. 使用 `IMemoryOwner<T>` 模式封装所有权
+2. 使用 `IMemoryOwner&lt;T&gt;` 模式封装所有权
 3. 对于短期使用，直接用 `ToArray()` 更安全
 :::
 
@@ -974,9 +974,9 @@ public class ZeroCopyPipeReader
 }
 ```
 
-### 4.2 ReadOnlySequence<T> 切片与零分配
+### 4.2 ReadOnlySequence&lt;T&gt; 切片与零分配
 
-`ReadOnlySequence<T>` 是零拷贝管道的核心数据结构：
+`ReadOnlySequence&lt;T&gt;` 是零拷贝管道的核心数据结构：
 
 ```csharp
 // ReadOnlySequence<T> 可以引用不连续的内存块
@@ -1041,7 +1041,7 @@ public static class ReadOnlySequenceExtensions
 }
 ```
 
-::: tip ReadOnlySequence<T> 的 IsSingleSegment 优化
+::: tip ReadOnlySequence&lt;T&gt; 的 IsSingleSegment 优化
 在管道读取中，大多数情况下数据是连续的（`IsSingleSegment == true`）。始终优先检查此属性以走快速路径，避免不必要的迭代和拷贝。在基准测试中，快速路径比慢速路径快 3-5 倍。
 :::
 
@@ -1462,14 +1462,18 @@ public static class PluginExports
 #include <string>
 
 // hostfxr API 函数指针类型
-typedef int (*hostfxr_initialize_for_dotnet_cli_fn)(
-    const char_t* argc, int argc_count, void** host_context_handle);
-typedef int (*hostfxr_get_runtime_delegate_fn)(
-    void* host_context_handle, int delegate_type, void** delegate_ptr);
-typedef int (*hostfxr_close_fn)(void* host_context_handle);
+typedef int32_t (*hostfxr_initialize_for_dotnet_cli_fn)(
+    int32_t argc, const char_t** argv,
+    const hostfxr_initialize_parameters* parameters,
+    hostfxr_handle* host_context_handle);
+typedef int32_t (*hostfxr_get_runtime_delegate_fn)(
+    const hostfxr_handle host_context_handle,
+    hostfxr_delegate_type delegate_type,
+    void** delegate_ptr);
+typedef int32_t (*hostfxr_close_fn)(const hostfxr_handle host_context_handle);
 
 // load_assembly_and_get_function_pointer 的签名
-typedef int (*load_assembly_and_get_function_pointer_fn)(
+typedef int32_t (*load_assembly_and_get_function_pointer_fn)(
     const char_t* assembly_path,
     const char_t* type_name,
     const char_t* method_name,
@@ -1515,10 +1519,11 @@ int main(int argc, char* argv[])
 
     // ===== 4. 初始化 .NET 运行时 =====
     const char_t* app_path = L"MyPlugin.dll";
-    void* host_handle = nullptr;
+    hostfxr_handle host_handle = nullptr;
 
-    // 使用 runtimeconfig.json 初始化
-    rc = init_fn(app_path, 0, &host_handle);
+    // 使用应用程序路径初始化（argc=1, argv包含程序集路径）
+    const char_t* argv[] = { app_path };
+    rc = init_fn(1, argv, nullptr, &host_handle);
     if (rc != 0)
     {
         printf("Failed to initialize .NET runtime, error: %d\n", rc);
@@ -1528,9 +1533,11 @@ int main(int argc, char* argv[])
     printf(".NET runtime initialized successfully\n");
 
     // ===== 5. 获取 load_assembly_and_get_function_pointer 委托 =====
-    // delegate_type = hdt_load_assembly_and_get_function_pointer (3)
+    // delegate_type = hdt_load_assembly_and_get_function_pointer
     load_assembly_and_get_function_pointer_fn load_fn = nullptr;
-    rc = get_delegate_fn(host_handle, 3, (void**)&load_fn);
+    rc = get_delegate_fn(host_handle,
+        (hostfxr_delegate_type)3 /* hdt_load_assembly_and_get_function_pointer */,
+        (void**)&load_fn);
     if (rc != 0 || !load_fn)
     {
         printf("Failed to get load_assembly delegate, error: %d\n", rc);
@@ -2505,8 +2512,8 @@ public interface IPlugin
 
 ### 7.4 常见陷阱与解决方案
 
-::: warning 陷阱1：Span<T> 跨越 await 边界
-`Span<T>` 是 `ref struct`，不能存储在堆上，也不能跨越 `await` 边界。在异步方法中必须使用 `Memory<T>`。
+::: warning 陷阱1：Span&lt;T&gt; 跨越 await 边界
+`Span&lt;T&gt;` 是 `ref struct`，不能存储在堆上，也不能跨越 `await` 边界。在异步方法中必须使用 `Memory&lt;T&gt;`。
 
 ```csharp
 // ❌ 编译错误：Span 不能跨 await

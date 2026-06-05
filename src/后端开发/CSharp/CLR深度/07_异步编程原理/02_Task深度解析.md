@@ -63,6 +63,7 @@ public class Task : IAsyncResult, IDisposable
     internal TaskScheduler? m_taskScheduler;   // 调度器
 
     // m_stateFlags 的位域布局：
+    // 注：以下位位置为简化示意，实际运行时中的标志值位于更高位（0x10000+）
     // Bits 0-7:    TaskStateFlags（状态）
     // Bits 8-15:   内部标志
     // Bits 16-23:  状态补充信息
@@ -204,7 +205,7 @@ int result2 = await intTask;           // 异步等待并获取结果
 
 ### 3.1 TaskCompletionSource 的作用
 
-`TaskCompletionSource<T>` 是手动创建 Task 的标准方式——你控制 Task 何时完成、以什么结果完成。
+`TaskCompletionSource&lt;T&gt;` 是手动创建 Task 的标准方式——你控制 Task 何时完成、以什么结果完成。
 
 ```csharp
 public class TaskCompletionSource<T>
@@ -213,6 +214,9 @@ public class TaskCompletionSource<T>
 
     public TaskCompletionSource()
     {
+        // 注：此处为简化伪代码，实际实现使用内部构造模式，
+        // new Task<T>() 并非公开 API，TaskCompletionSource 内部通过
+        // 内部方法创建未完成的 Task 实例
         _task = new Task<T>();
     }
 
@@ -510,8 +514,8 @@ cts.CancelAfter(TimeSpan.FromSeconds(5));  // 5秒后取消
     IL_0006: brfalse.s IL_0013
 
     IL_0008: ldarg.0
-    IL_0009: newobj instance void [mscorlib]System.OperationCanceledException::.ctor(
-        valuetype [mscorlib]System.Threading.CancellationToken)
+    IL_0009: newobj instance void [System.Runtime]System.OperationCanceledException::.ctor(
+        valuetype [System.Runtime]System.Threading.CancellationToken)
     IL_000e: throw
 
     IL_0013: ret
@@ -723,7 +727,7 @@ sequenceDiagram
     Note over Thread,Pool: Task 执行完成
 
     Thread->>Task: 设置 m_stateFlags = RanToCompletion
-    Thread->>Task: 设置 m_result (如果是 Task<T>)
+    Thread->>Task: 设置 m_result (如果是 Task~T~)
 
     Thread->>Task: FinishContinuations()
     Task->>Task: 读取 m_continuationObject
@@ -731,7 +735,7 @@ sequenceDiagram
     alt 单个延续
         Task->>Continuation: 执行回调
     else 多个延续
-        Task->>Task: 遍历 List<object>
+        Task->>Task: 遍历 List~object~
         Task->>Scheduler: 逐个调度
     end
 

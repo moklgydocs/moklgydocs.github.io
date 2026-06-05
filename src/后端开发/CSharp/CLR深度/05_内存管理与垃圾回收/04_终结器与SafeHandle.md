@@ -67,46 +67,43 @@ public class ResourceHolder
 
 ```il
 .class public auto ansi beforefieldinit ResourceHolder
-    extends [mscorlib]System.Object
+    extends [System.Runtime]System.Object
 {
     .method family hidebysig virtual instance void Finalize() cil managed
     {
         .try
         {
             IL_0000: ldstr "Finalize 被调用"
-            IL_0005: call void [mscorlib]System.Console::WriteLine(string)
+            IL_0005: call void [System.Runtime]System.Console::WriteLine(string)
 
             IL_000a: ldarg.0
             IL_000b: ldfld native int ResourceHolder::_handle
             IL_0010: ldc.i4.0
             IL_0011: conv.i
-            IL_0012: bne.un.s IL_0026
+            IL_0012: bne.un.s IL_001a   // _handle != 0 → 跳转到关闭逻辑
 
-            IL_0014: ldarg.0
-            IL_0015: ldc.i4.0
-            IL_0016: conv.i
-            IL_0017: stfld native int ResourceHolder::_handle
+            IL_0014: leave.s IL_002d     // _handle == 0 → 跳过关闭，直接退出 try
 
-            IL_001c: leave.s IL_0035
-
-            IL_001e: ldarg.0
-            IL_001f: ldc.i4.0
-            IL_0020: conv.i
-            IL_0021: stfld native int ResourceHolder::_handle
+            IL_001a: ldarg.0
+            IL_001b: ldfld native int ResourceHolder::_handle
+            IL_0020: call bool NativeMethods::CloseHandle(native int)
+            IL_0025: pop
 
             IL_0026: ldarg.0
-            IL_0027: ldfld native int ResourceHolder::_handle
-            IL_002c: call bool NativeMethods::CloseHandle(native int)
-            IL_0031: pop
-            IL_0032: br.s IL_001e
+            IL_0027: ldc.i4.0
+            IL_0028: conv.i
+            IL_0029: stfld native int ResourceHolder::_handle   // _handle = 0
+
+            IL_002e: leave.s IL_003d     // 退出 try 块
         }
         finally
         {
-            IL_0034: ldarg.0
-            IL_0035: call instance void [mscorlib]System.Object::Finalize()
+            IL_0030: ldarg.0
+            IL_0031: call instance void [System.Runtime]System.Object::Finalize()
+            IL_0036: endfinally
         }
 
-        IL_003a: ret
+        IL_003d: ret
     }
 }
 ```
@@ -542,7 +539,7 @@ public static void UsingDemo()
         IL_000e: ldloc.0
         IL_000f: brfalse.s IL_0017
         IL_0011: ldloc.0
-        IL_0012: callvirt instance void [mscorlib]System.IDisposable::Dispose()
+        IL_0012: callvirt instance void [System.Runtime]System.IDisposable::Dispose()
         IL_0017: endfinally
     }
 
@@ -631,7 +628,7 @@ public void Dispose()
 ```il
 // GC.SuppressFinalize 的 IL
 IL_0000: ldarg.0
-IL_0001: call void [mscorlib]System.GC::SuppressFinalize(object)
+IL_0001: call void [System.Runtime]System.GC::SuppressFinalize(object)
 ```
 
 ### 7.2 SuppressFinalize 的内部机制

@@ -16,7 +16,7 @@ tag:
 
 ## 概述
 
-`ref struct` 和 `Span<T>` 是 .NET 安全高性能编程的基石。它们在不牺牲类型安全的前提下，让 C# 开发者能够以接近 C/C++ 的效率操作内存。本文将从 IL 层面深入剖析 `ref struct` 的编译器约束、`Span<T>` 的内部结构、`ref return` 的实现原理，以及相关的安全规则与性能优化。
+`ref struct` 和 `Span&lt;T&gt;` 是 .NET 安全高性能编程的基石。它们在不牺牲类型安全的前提下，让 C# 开发者能够以接近 C/C++ 的效率操作内存。本文将从 IL 层面深入剖析 `ref struct` 的编译器约束、`Span&lt;T&gt;` 的内部结构、`ref return` 的实现原理，以及相关的安全规则与性能优化。
 
 ---
 
@@ -53,18 +53,18 @@ public ref struct StackOnlyType
 ```il
 .class public sequential sealed beforefieldinit
     StackOnlyType
-    extends [mscorlib]System.ValueType
+    extends [System.Runtime]System.ValueType
 {
     // 关键标记：IsByRefLikeAttribute
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.IsByRefLikeAttribute::.ctor()
+    .custom instance void [System.Runtime]System.Runtime.CompilerServices.IsByRefLikeAttribute::.ctor()
         = (01 00 00 00)
 
     // ObsoleteAttribute 防止从不支持 ref struct 的语言使用
-    .custom instance void [mscorlib]System.ObsoleteAttribute::.ctor(string, bool)
+    .custom instance void [System.Runtime]System.ObsoleteAttribute::.ctor(string, bool)
         = (01 00 50 01 00 00 54 79 70 65 73 20 77 69 74 68  ... // "Types with embedded ref..."
            01 00 00 00)
 
-    .field private valuetype [mscorlib]System.Span`1<int32> _data
+    .field private valuetype [System.Runtime]System.Span`1<int32> _data
 
     .method public hidebysig instance void Process() cil managed
     {
@@ -189,9 +189,9 @@ async Task BadAsync()
 
 ---
 
-## 二、Span<T> 内部结构
+## 二、Span&lt;T&gt; 内部结构
 
-### 2.1 Span<T> 的字段布局
+### 2.1 Span&lt;T&gt; 的字段布局
 
 ```csharp
 // .NET Runtime 源码 - Span<T> 核心结构
@@ -207,7 +207,7 @@ public readonly ref struct Span<T>
 
 ```mermaid
 graph TD
-    subgraph SpanT["Span<T> 内存布局"]
+    subgraph SpanT["Span~T~ 内存布局"]
         direction LR
         Ref["_reference<br/>byref T<br/>8 bytes (64-bit)"]
         Len["_length<br/>int<br/>4 bytes"]
@@ -227,7 +227,7 @@ graph TD
     style Data fill:#ffd43b,color:#000
 ```
 
-### 2.2 Span<T> 的构造方式
+### 2.2 Span&lt;T&gt; 的构造方式
 
 ```csharp
 // 1. 从数组构造
@@ -248,15 +248,15 @@ Memory<int> memory = new Memory<int>(array);
 Span<int> span5 = memory.Span;  // 从 Memory 获取 Span
 ```
 
-### 2.3 Span<T> 的 IL 表示
+### 2.3 Span&lt;T&gt; 的 IL 表示
 
 ```il
 // Span<int> 的字段在 IL 中的表示
 .class public sequential sealed beforefieldinit
     System.Span`1<T>
-    extends [mscorlib]System.ValueType
+    extends [System.Runtime]System.ValueType
 {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.IsByRefLikeAttribute::.ctor()
+    .custom instance void [System.Runtime]System.Runtime.CompilerServices.IsByRefLikeAttribute::.ctor()
 
     // _reference 字段 - 使用托管指针 (byref)
     .field private !0& _reference
@@ -272,10 +272,10 @@ Span<int> span5 = memory.Span;  // 从 Memory 获取 Span
 2. 不能存储在堆上（不能作为类字段、不能装箱）
 3. 只能存在于局部变量、参数和返回值中
 4. GC 能够追踪 byref 指针，确保它们在 GC 后仍然正确
-5. 这是 `Span<T>` 能够安全引用托管内存的关键
+5. 这是 `Span&lt;T&gt;` 能够安全引用托管内存的关键
 :::
 
-### 2.4 Span<T> 的索引器 IL
+### 2.4 Span&lt;T&gt; 的索引器 IL
 
 ```csharp
 // C# 代码
@@ -290,12 +290,12 @@ int value = span[5];
 IL_0001: ldloca.s span         // 加载 Span 的地址
 IL_0003: ldc.i4.5               // 索引 = 5
 IL_0004: ldc.i4.s 42            // 值 = 42
-IL_0006: call instance void [mscorlib]System.Span`1<int32>::set_Item(int32, !0)
+IL_0006: call instance void [System.Runtime]System.Span`1<int32>::set_Item(int32, !0)
 
 // value = span[5]
 IL_0008: ldloca.s span
 IL_000a: ldc.i4.5
-IL_000b: call instance !0 [mscorlib]System.Span`1<int32>::get_Item(int32)
+IL_000b: call instance !0 [System.Runtime]System.Span`1<int32>::get_Item(int32)
 IL_0010: stloc.s value
 ```
 
@@ -480,7 +480,7 @@ object boxed = span;  // 假设可以
 ```mermaid
 sequenceDiagram
     participant Stack as 栈帧
-    participant Span as Span<int>
+    participant Span as Span~int~
     participant Heap as 堆
 
     Note over Stack: 分配 stackalloc int[10]
@@ -568,13 +568,13 @@ void GetSpan(out Span<int> data) { data = default; }  // OK
 
 ---
 
-## 五、Memory<T> 与 Span<T> 对比
+## 五、Memory&lt;T&gt; 与 Span&lt;T&gt; 对比
 
 ### 5.1 核心区别
 
 ```mermaid
 graph LR
-    subgraph SpanT["Span<T>"]
+    subgraph SpanT["Span~T~"]
         S1["ref struct"]
         S2["栈限制"]
         S3["不能跨 await"]
@@ -582,7 +582,7 @@ graph LR
         S5["零拷贝直接访问"]
     end
 
-    subgraph MemoryT["Memory<T>"]
+    subgraph MemoryT["Memory~T~"]
         M1["class（托管对象）"]
         M2["可在堆上"]
         M3["可跨 await"]
@@ -597,7 +597,7 @@ graph LR
     style MemoryT fill:#74c0fc,color:#fff
 ```
 
-### 5.2 Memory<T> 的内部结构
+### 5.2 Memory&lt;T&gt; 的内部结构
 
 ```csharp
 // .NET Runtime 源码 - Memory<T> 核心结构
@@ -715,17 +715,17 @@ Span<int> span = stackalloc int[10];
 {
     .maxstack 2
     .locals init (
-        [0] valuetype [mscorlib]System.Span`1<int32> span
+        [0] valuetype [System.Runtime]System.Span`1<int32> span
     )
 
     // stackalloc 10 个 int
     IL_0000: ldc.i4.s 10          // 元素数量
-    IL_0002: sizeof [mscorlib]System.Int32  // 每个元素大小
+    IL_0002: sizeof [System.Runtime]System.Int32  // 每个元素大小
     IL_0008: mul.un                // 总字节数 = 10 * 4 = 40
     IL_0009: localloc              // 在局部动态内存区分配
     IL_000b: initblk              // 清零
-    IL_000d: call valuetype [mscorlib]System.Span`1<int32>
-            [mscorlib]System.Span`1<int32>::op_Implicit(void*, int32)
+    IL_000d: call valuetype [System.Runtime]System.Span`1<int32>
+            [System.Runtime]System.Span`1<int32>::op_Implicit(void*, int32)
     IL_0012: stloc.0
 }
 ```
@@ -835,17 +835,17 @@ unsafe
 // MemoryMarshal - Span 的高级操作
 public static class MemoryMarshal
 {
-    // 将 Span<byte> 重新解释为 Span<T>
-    public static Span<T> Cast<T>(Span<byte> span) where T : struct;
+    // 将 Span<TFrom> 重新解释为 Span<TTo>
+    public static Span<TTo> Cast<TFrom, TTo>(Span<TFrom> span) where TFrom : struct where TTo : struct;
 
     // 获取 Span 第一个元素的引用（不检查空）
     public static ref T GetReference<T>(Span<T> span);
 
-    // 从只读 Span 创建可变 Span（危险！）
-    public static Span<T> AsSpan<T>(ReadOnlySpan<T> readOnly);
+    // MemoryMarshal 上不存在 AsSpan<T>(ReadOnlySpan<T>) 方法
+    // 如需从 ReadOnlySpan 获取可变 Span，应使用 CreateSpan
 
-    // 从 object 获取 Span
-    public static Span<T> CreateSpan<T>(ReadOnlySpan<T> readOnly);
+    // 从引用创建 Span
+    public static Span<T> CreateSpan<T>(ref T reference, int length);
 }
 
 // 使用示例
@@ -967,9 +967,9 @@ public ref struct RefFieldExample
 ```il
 .class public sequential sealed beforefieldinit
     RefFieldExample
-    extends [mscorlib]System.ValueType
+    extends [System.Runtime]System.ValueType
 {
-    .custom instance void [mscorlib]System.Runtime.CompilerServices.IsByRefLikeAttribute::.ctor()
+    .custom instance void [System.Runtime]System.Runtime.CompilerServices.IsByRefLikeAttribute::.ctor()
 
     // ref 字段 - 使用托管指针类型
     .field private int32& _value
@@ -1104,7 +1104,7 @@ public class SpanAccessBenchmark
 | ReadOnlySpanSum | 843.7 ns | - |
 
 ::: tip Span 与数组的访问性能几乎相同
-因为 `Span<T>` 的索引器被 `AggressiveInlining` 标记，JIT 编译器会将边界检查和指针运算内联，最终生成的机器码与直接数组访问几乎相同。
+因为 `Span&lt;T&gt;` 的索引器被 `AggressiveInlining` 标记，JIT 编译器会将边界检查和指针运算内联，最终生成的机器码与直接数组访问几乎相同。
 :::
 
 ### 10.2 字符串处理性能
@@ -1180,7 +1180,7 @@ public class JsonParseBenchmark
 
 ## 十一、Span 在 .NET 运行时中的使用
 
-### 11.1 String 与 ReadOnlySpan<char>
+### 11.1 String 与 ReadOnlySpan&lt;char&gt;
 
 ```csharp
 // 字符串的内部表示
@@ -1348,7 +1348,7 @@ public class CsvParserExample
 ```mermaid
 sequenceDiagram
     participant Code as 用户代码
-    participant Span as Span<T>
+    participant Span as Span~T~
     participant GC as 垃圾回收器
     participant Heap as 托管堆
 
@@ -1601,13 +1601,13 @@ mindmap
 
 ::: important 核心要点
 1. `ref struct` 通过 `IsByRefLikeAttribute` 在 IL 中标记，编译器确保它不逃逸到堆
-2. `Span<T>` 使用 `byref T&` 托管指针引用数据，GC 能追踪和更新指针
+2. `Span&lt;T&gt;` 使用 `byref T&` 托管指针引用数据，GC 能追踪和更新指针
 3. `ref return` 通过 `ldelema` 指令返回元素引用，编译器确保引用安全
-4. `Memory<T>` 是 `Span<T>` 的堆安全版本，适合异步和长期存储场景
+4. `Memory&lt;T&gt;` 是 `Span&lt;T&gt;` 的堆安全版本，适合异步和长期存储场景
 5. `stackalloc` 使用 `localloc` 指令在栈上分配，避免 GC 压力
 6. `Unsafe` 类提供绕过类型安全的低级操作，需谨慎使用
 7. C# 11 的 `ref field` 和 `scoped` 关键字提供了更精确的引用安全控制
-8. `Span<T>` 的性能与直接数组访问相当，但在字符串处理等场景中显著减少分配
+8. `Span&lt;T&gt;` 的性能与直接数组访问相当，但在字符串处理等场景中显著减少分配
 :::
 
 ---
@@ -1618,5 +1618,5 @@ mindmap
 - ECMA-335 Standard - Common Language Infrastructure
 - [.NET Runtime 源码 - Span.cs](https://github.com/dotnet/runtime/blob/main/src/libraries/System.Private.CoreLib/src/System/Span.cs)
 - [C# Language Specification - Ref structs](https://learn.microsoft.com/en-us/dotnet/csharp/language-reference/proposals/csharp-11/ref-fields)
-- [Span<T> - Stephen Toub](https://learn.microsoft.com/en-us/dotnet/standard/memory-and-spans/memory-t-usage-guidelines)
+- [Span&lt;T&gt; - Stephen Toub](https://learn.microsoft.com/en-us/dotnet/standard/memory-and-spans/memory-t-usage-guidelines)
 - [MemoryMarshal Class](https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.memorymarshal)
