@@ -13,7 +13,6 @@ export default defineUserConfig({
 
   theme, pagePatterns: ['**/*.md', '!_.md', '!.vuepress', '!node_modules'],
 
-  // 和 PWA 一起启用
-  // shouldPrefetch: false,
+  shouldPrefetch: false,
 });
 
