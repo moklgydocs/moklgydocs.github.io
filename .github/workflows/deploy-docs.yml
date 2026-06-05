@@ -31,6 +31,7 @@ jobs:
 
       - name: 配置 Swap 空间
         run: |
+          if [ -f /swapfile ]; then sudo swapoff /swapfile && sudo rm /swapfile; fi
           sudo fallocate -l 4G /swapfile
           sudo chmod 600 /swapfile
           sudo mkswap /swapfile
