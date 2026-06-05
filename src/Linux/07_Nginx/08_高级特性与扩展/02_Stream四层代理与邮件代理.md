@@ -561,6 +561,11 @@ stream {
         server 10.0.0.2:3306 slow_start=30s;
         # slow_start: 服务器恢复后，在30秒内逐步增加权重
         # 避免恢复的服务器瞬间被大量连接压垮
+
+        # ⚠️ 注意：slow_start 是 NGINX Plus 专属功能！
+        # 开源版 Nginx 使用 slow_start 会导致配置错误：
+        # "invalid parameter 'slow_start=30s'"
+        # 开源版替代方案：使用 max_fails + fail_timeout 进行被动恢复
     }
 }
 ```

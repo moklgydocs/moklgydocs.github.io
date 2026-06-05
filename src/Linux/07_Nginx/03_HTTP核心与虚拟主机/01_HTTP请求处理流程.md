@@ -17,17 +17,17 @@ tag:
 
 ## 概述
 
-Nginx 作为一个高性能的 HTTP 服务器和反向代理，其请求处理流程是理解 Nginx 工作原理的核心。Nginx 将一个完整的 HTTP 请求处理过程划分为 **11 个阶段（Phase）**，每个阶段由一组特定的模块和指令负责处理。这种分阶段的设计使得 Nginx 具有极高的模块化程度和可扩展性。
+Nginx 作为一个高性能的 HTTP 服务器和反向代理，其请求处理流程是理解 Nginx 工作原理的核心。Nginx 将一个完整的 HTTP 请求处理过程划分为 **10 个阶段（Phase）**，每个阶段由一组特定的模块和指令负责处理。这种分阶段的设计使得 Nginx 具有极高的模块化程度和可扩展性。
 
-理解这 11 个 Phase 的执行顺序、对应的模块以及各阶段之间的交互机制，是编写高效、正确的 Nginx 配置的基础。
+理解这 10 个 Phase 的执行顺序、对应的模块以及各阶段之间的交互机制，是编写高效、正确的 Nginx 配置的基础。
 
 ::: important 核心概念
 Nginx 的 HTTP 请求处理并非简单的线性流程，而是一个精心设计的状态机。每个 Phase 可以包含多个 Handler，Phase 之间有明确的优先级和跳转规则。理解 Phase 机制是排查配置问题和优化性能的关键。
 :::
 
-## HTTP 请求处理的 11 个 Phase
+## HTTP 请求处理的 10 个 Phase
 
-Nginx 将 HTTP 请求处理划分为以下 11 个阶段，按照固定顺序依次执行：
+Nginx 将 HTTP 请求处理划分为以下 10 个阶段，按照固定顺序依次执行：
 
 ```mermaid
 flowchart LR
@@ -141,7 +141,7 @@ server {
 
 **对应模块**：`ngx_http_rewrite_module`（内部）
 
-此阶段同样不可注册自定义 Handler。它的唯一功能是检查 Phase 3（Rewrite Phase）是否产生了 URI 重写。如果 URI 被重写（使用了 `last` 标志），则将请求跳回 Phase 2（Find Config Phase）重新查找 location，最多循环 10 次（由 `rewrite_max` 控制，默认不可更改），超过则返回 500 错误。
+此阶段同样不可注册自定义 Handler。它的唯一功能是检查 Phase 3（Rewrite Phase）是否产生了 URI 重写。如果 URI 被重写（使用了 `last` 标志），则将请求跳回 Phase 2（Find Config Phase）重新查找 location，最多循环 10 次（由源码常量 `NGX_HTTP_MAX_REWRITE_CYCLES` 控制，默认值为 10，不可通过配置修改），超过则返回 500 错误。
 
 ::: important 重写循环保护
 Nginx 内置了重写循环保护机制，当 `rewrite` 配置不当导致循环跳转时，最多循环 10 次后返回 500 错误。这是防止配置错误导致无限循环的关键保护。
@@ -226,7 +226,7 @@ location /admin/ {
 **执行位置**：内容生成前处理
 
 **对应模块**：
-- `ngx_http_try_files_module`
+- `ngx_http_core_module`
 
 **核心指令**：`try_files`
 
@@ -320,7 +320,7 @@ Log Phase 始终会执行，即使前面的 Phase 返回了错误响应。这使
 | 5 | NGX_HTTP_PREACCESS_PHASE | ngx_http_limit_conn_module, ngx_http_limit_req_module, ngx_http_realip_module | limit_conn, limit_req, set_real_ip_from |
 | 6 | NGX_HTTP_ACCESS_PHASE | ngx_http_access_module, ngx_http_auth_basic_module, ngx_http_auth_request_module | allow, deny, auth_basic, auth_request |
 | 7 | NGX_HTTP_POST_ACCESS_PHASE | — | （内部阶段） |
-| 8 | NGX_HTTP_PRECONTENT_PHASE | ngx_http_try_files_module | try_files |
+| 8 | NGX_HTTP_PRECONTENT_PHASE | ngx_http_core_module | try_files |
 | 9 | NGX_HTTP_CONTENT_PHASE | ngx_http_proxy_module, ngx_http_fastcgi_module, ngx_http_static_module 等 | proxy_pass, fastcgi_pass, root, index |
 | 10 | NGX_HTTP_LOG_PHASE | ngx_http_log_module | access_log, log_format |
 
@@ -1237,11 +1237,11 @@ location /api/ {
 
 ## 小结
 
-Nginx 的 HTTP 请求处理流程是一个精心设计的状态机，通过 11 个 Phase 实现了高度模块化的请求处理。理解每个 Phase 的职责、对应的模块和指令，以及 Phase 之间的跳转规则，是编写正确、高效 Nginx 配置的基础。
+Nginx 的 HTTP 请求处理流程是一个精心设计的状态机，通过 10 个 Phase 实现了高度模块化的请求处理。理解每个 Phase 的职责、对应的模块和指令，以及 Phase 之间的跳转规则，是编写正确、高效 Nginx 配置的基础。
 
 关键要点：
 
-1. **Phase 顺序是固定的**：请求总是按照 11 个 Phase 的固定顺序处理
+1. **Phase 顺序是固定的**：请求总是按照 10 个 Phase 的固定顺序处理
 2. **Rewrite 可导致跳转**：`rewrite ... last` 会跳回 Find Config Phase
 3. **Find Config Phase 不可自定义**：由 Nginx 核心负责 URI 到 location 的映射
 4. **Access Phase 有特殊规则**：`satisfy` 指令控制多种访问控制的逻辑关系

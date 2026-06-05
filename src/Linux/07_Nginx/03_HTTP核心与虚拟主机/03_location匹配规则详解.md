@@ -1091,19 +1091,20 @@ location /api {
 ### 问题 3：location 中的斜杠
 
 ```nginx
-# 这两个是等价的
+# 这两个是不同的
 location /api {
     # 匹配 /api、/api/、/api/users 等
 }
 
 location /api/ {
     # 匹配 /api/、/api/users 等
-    # 注意：也匹配 /api（Nginx 的前缀匹配包含精确匹配）
+    # 注意：不匹配 /api（前缀匹配要求 URI 以模式开头，
+    # /api 不以 /api/ 开头，所以 location /api/ 不匹配 /api）
 }
 ```
 
 ::: important URI 末尾斜杠
-在 location 匹配中，`/api` 和 `/api/` 作为前缀匹配时都能匹配 `/api/` 和 `/api/users`。但精确匹配 `= /api` 和 `= /api/` 是不同的。
+在 location 前缀匹配中，`/api` 能匹配 `/api`、`/api/` 和 `/api/users`。但 `/api/` 只匹配以 `/api/` 开头的 URI（如 `/api/`、`/api/users`），不匹配 `/api`。精确匹配 `= /api` 和 `= /api/` 是不同的。
 :::
 
 ### 问题 4：正则 location 中的捕获组

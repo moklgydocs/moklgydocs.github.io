@@ -424,7 +424,7 @@ server {
 # 优先级 3：后缀通配符（最长匹配优先）
 server {
     listen 80;
-    server_name www.*.*;
+    server_name www.*;
     # 匹配 www.example.com, www.another.org 等
 }
 
@@ -617,8 +617,16 @@ server {
 
 # 仅监听 IPv4
 server {
+    listen 0.0.0.0:80;              # 明确绑定 IPv4 地址
+    server_name example.com;
+}
+
+# 注意：在双栈系统上，listen 80; 会同时监听 IPv4 和 IPv6
+# 如果需要仅监听 IPv4，必须使用 listen 0.0.0.0:80;
+# 如果需要同时监听 IPv4 和 IPv6，可显式写出：
+server {
     listen 80;
-    listen [::]:80 ipv6only=on;  # 这个 listen 仅处理 IPv6
+    listen [::]:80;
     server_name example.com;
 }
 ```

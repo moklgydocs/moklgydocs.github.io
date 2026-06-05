@@ -88,12 +88,19 @@ flowchart TD
 
 ### replacement 中的特殊替换
 
-当 `replacement` 以 `http://`、`https://` 或 `$scheme` 开头时，rewrite 会直接返回重定向响应，相当于 `redirect` 标志：
+当 `replacement` 以 `http://`、`https://` 或 `$scheme` 开头时，rewrite 会直接返回重定向响应：
 
 ```nginx
-# 这两条是等价的
+# permanent 返回 301 永久重定向
 rewrite ^(.*)$ https://$host$1 permanent;
+
+# redirect 返回 302 临时重定向
 rewrite ^(.*)$ https://$host$1 redirect;
+
+# 注意：permanent (301) 和 redirect (302) 语义不同，不能混用
+# 301 会被浏览器缓存，302 不会
+# 301 可能导致 POST 请求变为 GET，302 也有此问题
+# 如需保持请求方法，应使用 return 307/308
 ```
 
 ### rewrite 常见模式
@@ -236,8 +243,8 @@ location /old-api/ {
 
 # 安全用法 2：rewrite ... last/redirect/permanent
 location / {
-    if ($http_host ~* "^www\.(.*)") {
-        rewrite ^(.*)$ https://%1$1 permanent;
+    if ($http_host ~* "^www\.(?<domain>.*)") {
+        rewrite ^(.*)$ https://$domain$1 permanent;
     }
     try_files $uri $uri/ /index.html;
 }
@@ -582,9 +589,9 @@ server {
 当访问 `/old/page` 时，error.log 中会记录：
 
 ```
-2026/06/05 10:00:00 [notice] 1234#0: *1 "^.*/old/(.*)$" matches "/old/page", client: 1.2.3.4
+2026/06/05 10:00:00 [notice] 1234#0: *1 "^/old/(.*)$" matches "/old/page", client: 1.2.3.4
 2026/06/05 10:00:00 [notice] 1234#0: *1 rewritten data: "/new/page", args: ""
-2026/06/05 10:00:00 [notice] 1234#0: *1 "^.*/new/(.*)$" matches "/new/page"
+2026/06/05 10:00:00 [notice] 1234#0: *1 "^/new/(.*)$" matches "/new/page"
 2026/06/05 10:00:00 [notice] 1234#0: *1 rewritten data: "/final/page", args: ""
 ```
 

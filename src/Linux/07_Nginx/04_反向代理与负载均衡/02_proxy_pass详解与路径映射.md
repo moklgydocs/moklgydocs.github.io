@@ -119,7 +119,7 @@ location /api/ {
 | `/api/` | `http://backend/v2` | `/api/users` | `/v2users` ⚠️ |
 | `/api/` | `http://backend/v2/` | `/api/users` | `/v2/users` |
 | `/api` | `http://backend` | `/api/users` | `/api/users` |
-| `/api` | `http://backend/` | `/api/users` | `/users` |
+| `/api` | `http://backend/` | `/api/users` | `//users` ⚠️ |
 | `/` | `http://backend` | `/api/users` | `/api/users` |
 | `/` | `http://backend/` | `/api/users` | `/api/users` |
 
@@ -127,6 +127,12 @@ location /api/ {
 当 `proxy_pass` 的 URI 不以 `/` 结尾时（如 `http://backend/v2`），location 匹配的部分会被替换为 `/v2`，剩余部分直接拼接，导致路径粘在一起：`/v2users` 而不是 `/v2/users`。
 
 这通常不是期望的行为。要么使用 `http://backend/v2/`（带尾部斜杠），要么使用 `http://backend`（不带 URI）配合 `rewrite`。
+:::
+
+::: warning location 无尾部斜杠 + proxy_pass 有尾部斜杠的陷阱
+当 `location /api`（无尾部斜杠）与 `proxy_pass http://backend/`（有尾部斜杠）组合时，location 匹配的部分 `/api` 被替换为 `/`，剩余部分 `users` 直接拼接，结果为 `//users`（双斜杠），而不是 `/users`。这是因为 `location /api` 匹配 `/api/users` 时，替换后的前缀 `/` 和剩余路径 `users` 之间缺少分隔。
+
+要正确去掉前缀，应使用 `location /api/`（带尾部斜杠）配合 `proxy_pass http://backend/`。
 :::
 
 ### 各种路径映射场景
@@ -584,7 +590,7 @@ location /api/ {
 
 1. **需要 resolver**：使用变量时，Nginx 需要配置 `resolver` 指令进行 DNS 解析
 2. **动态解析**：每次请求都会动态解析域名（而不是启动时解析一次）
-3. **不能带 URI**：当变量是地址的一部分时，不能带 URI 部分
+3. **可以带 URI**：自 Nginx 1.7.5 起，变量可以与 URI 组合使用（如 `proxy_pass http://$backend/v2/`）。在更早版本中，变量与 URI 组合会导致配置错误
 
 ```nginx
 # 需要 resolver

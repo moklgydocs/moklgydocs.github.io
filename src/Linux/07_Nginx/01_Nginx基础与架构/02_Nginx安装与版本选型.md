@@ -1254,7 +1254,7 @@ http {
 
     # 连接保持
     keepalive_timeout 65;
-    keepalive_requests 100;
+    keepalive_requests 1000;
 
     # 客户端限制
     client_max_body_size 20m;

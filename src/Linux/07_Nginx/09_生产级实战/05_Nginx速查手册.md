@@ -586,7 +586,7 @@ map $remote_addr $backend {
 |------|--------|------|
 | `use` | - | 事件模型（epoll/kqueue） |
 | `multi_accept` | off | 一次接受多个连接 |
-| `accept_mutex` | on | 是否启用连接互斥锁 |
+| `accept_mutex` | off | 是否启用连接互斥锁（1.11.3+ 默认 off；旧版本默认 on） |
 | `accept_mutex_delay` | 500ms | 获取互斥锁重试间隔 |
 
 ### 3.3 http 指令
@@ -628,7 +628,7 @@ map $remote_addr $backend {
 | `index` | index.html | 默认索引文件 |
 | `ssl_certificate` | - | SSL 证书路径 |
 | `ssl_certificate_key` | - | SSL 私钥路径 |
-| `ssl_protocols` | TLSv1 TLSv1.1 TLSv1.2 | SSL 协议版本 |
+| `ssl_protocols` | TLSv1.2 TLSv1.3 | SSL 协议版本（1.23.4+ 默认值；旧版本为 TLSv1 TLSv1.1 TLSv1.2） |
 | `ssl_ciphers` | HIGH:!aNULL:!MD5 | SSL 密码套件 |
 | `ssl_session_cache` | none | SSL 会话缓存 |
 | `ssl_session_timeout` | 5m | SSL 会话超时 |
@@ -1032,8 +1032,8 @@ net.ipv4.tcp_syncookies = 1                   # SYN Flood 防护
 net.ipv4.tcp_synack_retries = 2               # SYN-ACK 重试次数
 net.ipv4.tcp_timestamps = 1                   # 启用时间戳
 net.ipv4.tcp_sack = 1                         # 启用选择性确认
-net.ipv4.tcp_fack = 1                         # 启用转发确认
-net.ipv4.tcp_low_latency = 1                  # 低延迟模式
+# net.ipv4.tcp_fack = 1                         # [已废弃] Linux 4.7+ 中 FACK 合并到 SACK，此参数已移除
+# net.ipv4.tcp_low_latency = 1                  # [已废弃] Linux 4.14+ 中已移除
 net.ipv4.tcp_fastopen = 3                     # TCP Fast Open
 
 # ===== 端口配置 =====

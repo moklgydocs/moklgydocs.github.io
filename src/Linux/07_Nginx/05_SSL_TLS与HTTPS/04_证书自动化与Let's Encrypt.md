@@ -392,19 +392,19 @@ acme.sh --issue -d example.com --standalone --httpport 8899
 export CF_Token="your_cloudflare_api_token"
 export CF_Zone_ID="your_zone_id"
 
-acme.sh --issue -d example.com -d "*.example.com --dns dns_cf
+acme.sh --issue -d example.com -d "*.example.com" --dns dns_cf
 
 # 阿里云 DNS API
 export Ali_Key="your_access_key"
 export Ali_Secret="your_access_secret"
 
-acme.sh --issue -d example.com -d "*.example.com --dns dns_ali
+acme.sh --issue -d example.com -d "*.example.com" --dns dns_ali
 
 # 腾讯云 DNS API
 export Tencent_SecretId="your_secret_id"
 export Tencent_SecretKey="your_secret_key"
 
-acme.sh --issue -d example.com -d "*.example.com --dns dns_dp
+acme.sh --issue -d example.com -d "*.example.com" --dns dns_dp
 
 # DNS 手动模式
 acme.sh --issue -d example.com --dns --yes-I-know-dns-manual-mode-enough-go-ahead-please

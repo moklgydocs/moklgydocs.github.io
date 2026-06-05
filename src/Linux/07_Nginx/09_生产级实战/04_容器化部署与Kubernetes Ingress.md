@@ -209,7 +209,8 @@ COPY conf.d/ /etc/nginx/conf.d/
 # docker-compose.yml
 # Nginx + 多应用服务的完整部署配置
 
-version: '3.8'
+# 注意：version 字段在 Docker Compose V2 中已废弃，此处不再指定
+# 如需兼容旧版 Compose V1，可添加 version: '3.8'
 
 services:
   # ===== Nginx 反向代理 =====
@@ -625,9 +626,9 @@ metadata:
   name: app-ingress
   namespace: production
   annotations:
-    kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  ingressClassName: nginx
   tls:
     - hosts:
         - api.example.com
@@ -667,17 +668,19 @@ metadata:
   name: path-based-ingress
   namespace: production
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/use-regex: "true"
+    # 注意：使用 use-regex: "true" 时，pathType 应设为 ImplementationSpecific
+    # 而非 Prefix。Prefix 要求精确的前缀匹配，与正则表达式矛盾
 spec:
+  ingressClassName: nginx
   rules:
     - host: app.example.com
       http:
         paths:
           # API 路径
           - path: /api(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: app-api
@@ -686,7 +689,7 @@ spec:
 
           # 管理后台
           - path: /admin(/|$)(.*)
-            pathType: Prefix
+            pathType: ImplementationSpecific
             backend:
               service:
                 name: app-admin
@@ -713,7 +716,6 @@ metadata:
   name: tls-ingress
   namespace: production
   annotations:
-    kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
@@ -770,7 +772,8 @@ metadata:
   name: annotated-ingress
   namespace: production
   annotations:
-    kubernetes.io/ingress.class: nginx
+    # 注意：kubernetes.io/ingress.class 注解自 Kubernetes 1.18 起已废弃
+    # 推荐使用 spec.ingressClassName 替代
 
     # SSL 重定向
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
@@ -822,6 +825,7 @@ metadata:
       }
 
 spec:
+  ingressClassName: nginx
   tls:
     - hosts:
         - api.example.com
@@ -1131,9 +1135,8 @@ kind: Ingress
 metadata:
   name: app-production
   namespace: production
-  annotations:
-    kubernetes.io/ingress.class: nginx
 spec:
+  ingressClassName: nginx
   rules:
     - host: app.example.com
       http:
@@ -1153,7 +1156,6 @@ metadata:
   name: app-canary
   namespace: production
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/canary: "true"
 
     # 方式 1：按权重分流（20% 流量到金丝雀）
@@ -1232,7 +1234,6 @@ metadata:
   name: app-canary-header
   namespace: production
   annotations:
-    kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/canary: "true"
     nginx.ingress.kubernetes.io/canary-by-header: "X-Canary"
     nginx.ingress.kubernetes.io/canary-by-header-value: "v2"
@@ -1293,9 +1294,8 @@ kind: Ingress
 metadata:
   name: app-ingress
   namespace: production
-  annotations:
-    kubernetes.io/ingress.class: nginx
 spec:
+  ingressClassName: nginx
   rules:
     - host: app.example.com
       http:

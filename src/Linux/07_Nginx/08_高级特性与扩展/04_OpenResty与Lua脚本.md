@@ -512,12 +512,15 @@ dict:replace("key", "new_value")      -- 仅当key存在时替换
 dict:expire("key", 120)               -- 设置/更新TTL
 dict:ttl("key")                        -- 获取剩余TTL
 
--- 列表操作
-dict:lpush("queue", "item1")          -- 左侧推入
-dict:rpush("queue", "item2")          -- 右侧推入
-dict:lpop("queue")                     -- 左侧弹出
-dict:rpop("queue")                     -- 右侧弹出
-dict:llen("queue")                     -- 列表长度
+-- 列表操作（ngx.shared.DICT 不支持列表操作！）
+-- lpush / rpush / lpop / rpop / llen 不存在
+-- 如需队列功能，建议通过 Redis（lua-resty-redis）实现队列
+-- 或通过 Redis（lua-resty-redis）实现队列
+
+-- 共享字典支持的完整 API：
+-- get / set / add / replace / incr / delete
+-- expire / ttl / flush_all / flush_expired
+-- get_keys / capacity / free_space
 
 -- 获取所有键
 local keys = dict:get_keys(100)       -- 获取前100个键
@@ -540,10 +543,11 @@ cosocket（Coroutine Socket）是 OpenResty 的核心特性之一，它让 Lua �
 
 -- 可在以下阶段使用：
 -- rewrite_by_lua, access_by_lua, content_by_lua,
--- log_by_lua, ngx.timer, balancer_by_lua
+-- ngx.timer, balancer_by_lua,
+-- init_worker_by_lua（自 lua-nginx-module v0.10.7 起）
 
 -- 不可在以下阶段使用：
--- init_by_lua, init_worker_by_lua, header_filter_by_lua, body_filter_by_lua
+-- init_by_lua, header_filter_by_lua, body_filter_by_lua, log_by_lua
 ```
 
 ### 5.2 TCP cosocket

@@ -49,11 +49,11 @@ timeline
 | 0.1.0 | 2004-10-04 | 首个公开发布版本，基础 HTTP 服务与代理功能 |
 | 0.7.x | 2008 | 引入缓存、限流等高级特性 |
 | 1.0.0 | 2011-04-12 | 首个稳定版发布，标志生产就绪 |
-| 1.2.x | 2012 | HTTP/1.1 支持、WebSocket 代理 |
-| 1.4.x | 2013 | SPDY/3 支持、gzip 模块增强 |
+| 1.2.x | 2012 | HTTP/1.1 支持 |
+| 1.4.x | 2013 | SPDY/3 支持、WebSocket 代理、gzip 模块增强 |
 | 1.6.x | 2014 | 增强的缓存控制、线程池支持 |
-| 1.8.x | 2015 | HTTP/2 支持（ngx_http_v2_module） |
-| 1.10.x | 2016 | 流媒体增强、UDP 代理 |
+| 1.8.x | 2015 | upstream zone 与 hash 负载均衡 |
+| 1.10.x | 2016 | HTTP/2 支持（ngx_http_v2_module）、流媒体增强 |
 | 1.12.x | 2017 | 动态模块加载 |
 | 1.14.x | 2018 | gRPC 代理支持 |
 | 1.16.x | 2019 | HTTP/2 推送、随机负载均衡 |
@@ -135,7 +135,7 @@ graph TB
 
 | 对比维度 | Nginx | Apache HTTPD | Caddy | OpenLiteSpeed |
 |----------|-------|-------------|-------|--------------|
-| **首次发布** | 2004 | 1995 | 2015 | 2003 |
+| **首次发布** | 2004 | 1995 | 2015 | 2013 |
 | **开发语言** | C | C | Go | C++ |
 | **许可证** | BSD-2-Clause | Apache 2.0 | Apache 2.0 | GPL v3 |
 | **架构模型** | 事件驱动/异步非阻塞 | 多种MPM可选 | 事件驱动/协程 | 事件驱动 |
@@ -321,7 +321,7 @@ server {
 ```
 
 ::: tip sendfile 的性能优势
-传统的 `read() + write()` 需要四次数据拷贝和两次上下文切换，而 `sendfile()` 只需要两次拷贝和一次上下文切换，性能提升显著。参考：[https://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile](https://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile)
+传统的 `read() + write()` 需要四次数据拷贝和四次上下文切换（每次系统调用涉及两次切换），而 `sendfile()` 只需要两次拷贝和两次上下文切换（仅一次系统调用），性能提升显著。参考：[https://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile](https://nginx.org/en/docs/http/ngx_http_core_module.html#sendfile)
 :::
 
 ### 3.2 反向代理服务器（Reverse Proxy）
@@ -350,7 +350,7 @@ upstream backend_app {
     server 192.168.1.11:8080 weight=2;
     server 192.168.1.12:8080 backup;
 
-    # 健康检查
+    # 健康检查（注意：health_check 指令需要 NGINX Plus 商业订阅，开源版不支持）
     health_check interval=5s fails=3 passes=2;
 }
 
@@ -541,7 +541,6 @@ Nginx 模块体系
 | 模块名称 | 功能描述 | 官方文档 |
 |----------|----------|----------|
 | `ngx_http_core_module` | HTTP 核心指令：server、location、root、alias 等 | [链接](https://nginx.org/en/docs/http/ngx_http_core_module.html) |
-| `ngx_http_ssl_module` | HTTPS/SSL/TLS 支持 | [链接](https://nginx.org/en/docs/http/ngx_http_ssl_module.html) |
 | `ngx_http_proxy_module` | HTTP 反向代理 | [链接](https://nginx.org/en/docs/http/ngx_http_proxy_module.html) |
 | `ngx_http_upstream_module` | 服务器组与负载均衡 | [链接](https://nginx.org/en/docs/http/ngx_http_upstream_module.html) |
 | `ngx_http_rewrite_module` | URL 重写与重定向 | [链接](https://nginx.org/en/docs/http/ngx_http_rewrite_module.html) |
@@ -559,15 +558,8 @@ Nginx 模块体系
 | `ngx_http_autoindex_module` | 目录自动索引 | [链接](https://nginx.org/en/docs/http/ngx_http_autoindex_module.html) |
 | `ngx_http_auth_basic_module` | HTTP 基本认证 | [链接](https://nginx.org/en/docs/http/ngx_http_auth_basic_module.html) |
 | `ngx_http_access_module` | IP 访问控制 | [链接](https://nginx.org/en/docs/http/ngx_http_access_module.html) |
-| `ngx_http_addition_module` | 响应内容追加 | [链接](https://nginx.org/en/docs/http/ngx_http_addition_module.html) |
-| `ngx_http_sub_module` | 响应内容替换 | [链接](https://nginx.org/en/docs/http/ngx_http_sub_module.html) |
-| `ngx_http_dav_module` | WebDAV 支持 | [链接](https://nginx.org/en/docs/http/ngx_http_dav_module.html) |
-| `ngx_http_flv_module` | FLV 流媒体 | [链接](https://nginx.org/en/docs/http/ngx_http_flv_module.html) |
-| `ngx_http_mp4_module` | MP4 流媒体 | [链接](https://nginx.org/en/docs/http/ngx_http_mp4_module.html) |
 | `ngx_http_browser_module` | 浏览器识别 | [链接](https://nginx.org/en/docs/http/ngx_http_browser_module.html) |
 | `ngx_http_userid_module` | Cookie 用户标识 | [链接](https://nginx.org/en/docs/http/ngx_http_userid_module.html) |
-| `ngx_http_stub_status_module` | 状态信息 | [链接](https://nginx.org/en/docs/http/ngx_http_stub_status_module.html) |
-| `ngx_http_realip_module` | 真实 IP 获取 | [链接](https://nginx.org/en/docs/http/ngx_http_realip_module.html) |
 | `ngx_http_charset_module` | 字符集转换 | [链接](https://nginx.org/en/docs/http/ngx_http_charset_module.html) |
 | `ngx_http_ssi_module` | SSI 服务端包含 | [链接](https://nginx.org/en/docs/http/ngx_http_ssi_module.html) |
 
@@ -584,7 +576,6 @@ Nginx 模块体系
     --without-http_access_module \     # 禁用IP访问控制
     --without-http_auth_basic_module \ # 禁用HTTP基本认证
     --without-http_autoindex_module \  # 禁用目录自动索引
-    --without-http_status_module \     # 禁用状态页面
     --without-http_map_module \        # 禁用变量映射
     --without-http_split_clients_module \ # 禁用A/B测试
     --without-http_referer_module \    # 禁用Referer控制

@@ -254,10 +254,23 @@ location / {
 磁盘 → 内核缓冲区 → 用户空间缓冲区 → Socket缓冲区 → 网卡
        (DMA拷贝)      (CPU拷贝)         (CPU拷贝)      (DMA拷贝)
 
-sendfile()：
+sendfile()（无 scatter-gather DMA，如旧硬件）：
 磁盘 → 内核缓冲区 → Socket缓冲区 → 网卡
        (DMA拷贝)    (CPU拷贝)     (DMA拷贝)
+
+sendfile()（Linux 2.4+ 支持 scatter-gather DMA）：
+磁盘 → 内核缓冲区 → 网卡
+       (DMA拷贝)    (DMA拷贝，零CPU拷贝)
 ```
+
+::: info sendfile 工作原理
+`sendfile` 系统调用（`sendfile(2)`）让内核直接将文件描述符的数据传输到套接字描述符，无需将数据拷贝到用户空间。
+
+- **Linux 2.2+**：引入 `sendfile`，减少到 2 次 CPU 拷贝（内核缓冲区 → Socket缓冲区仍需 CPU 拷贝）
+- **Linux 2.4+**：支持 scatter-gather DMA，当网卡支持 SG-DMA 时，可完全消除 CPU 参与的数据拷贝，实现真正的零拷贝（仅 2 次 DMA 拷贝）
+
+判断当前路径：如果网卡和内核都支持 scatter-gather DMA（绝大多数现代环境），sendfile 走 2 次 DMA 拷贝路径；否则退化为 3 次拷贝路径（2 次 DMA + 1 次 CPU 拷贝）。注意：`sendfile` 的 Nginx 默认值为 `off`，但大多数发行版的默认配置文件会将其设为 `on`。
+:::
 
 ```nginx
 server {
@@ -273,9 +286,6 @@ server {
     }
 }
 ```
-
-::: info sendfile 工作原理
-`sendfile` 系统调用（`sendfile(2)`）让内核直接将文件描述符的数据传输到套接字描述符，无需将数据拷贝到用户空间。在 Linux 2.2+ 中引入，2.4+ 版本支持 scatter-gather DMA，进一步减少了一次 CPU 拷贝。Nginx 默认在 `http` 块中开启 `sendfile on`。
 :::
 
 ### 2.2 tcp_nopush：优化数据包发送
@@ -403,6 +413,8 @@ gzip_min_length 1024;  # 小于1KB不压缩
 
 ::: tip 如何确定 gzip_min_length
 一般的经验值是 1KB（1024 字节）。但更精确的做法是：如果原始大小减去压缩后大小小于 Gzip 头部大小（约 20 字节），就不值得压缩。对于极短的 JSON API 响应，压缩可能反而增大体积。
+
+注意：`gzip_min_length` 通过检查 `Content-Length` 响应头来判断是否压缩。如果上游使用 chunked transfer encoding 且未提供 `Content-Length` 头，则 `gzip_min_length` 的检查不会生效，响应将始终被压缩（无论实际大小）。
 :::
 
 **gzip_comp_level**
@@ -417,6 +429,8 @@ gzip_min_length 1024;  # 小于1KB不压缩
 | 6 | 中高（约72%） | 中高 | 平衡之选 |
 | 7-8 | 高（约75%） | 高 | 带宽紧张 |
 | 9 | 最高（约76%） | 最高 | 极少使用 |
+
+> **关于"压缩率"的定义**：本文中的"压缩率"指 savings_ratio（节省比例），即 `1 - 压缩后大小/原始大小`。例如压缩率 70% 表示压缩后体积为原始的 30%。另一种常见的定义是 output_ratio（压缩后/原始），此时 70% 的压缩率意味着压缩后体积为原始的 70%（即节省 30%）。阅读其他资料时请注意区分。
 
 ```nginx
 # 推荐：大多数场景下 level 4-6 的性价比最高

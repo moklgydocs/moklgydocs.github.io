@@ -132,6 +132,10 @@ flowchart LR
 
 ModSecurity 是最成熟的开源 WAF 引擎，由 Trustwave 维护，目前作为 OWASP 项目继续发展。它以 Nginx 动态模块形式运行，提供完整的规则引擎和丰富的生态。
 
+::: warning ModSecurity v3 已归档
+SpiderLabs/ModSecurity（即 ModSecurity v3）已于 2024 年归档，不再积极维护。对于新项目，推荐使用 [Coraza WAF](https://github.com/corazawaf/coraza) 作为替代。Coraza 是 ModSecurity v3 的 Go 语言重写，兼容 SecRule 语法和 OWASP CRS，且仍在活跃开发中。
+:::
+
 ```
 ModSecurity 核心能力：
 ┌─────────────────────────────────────────────┐
@@ -242,7 +246,7 @@ SecRuleEngine DetectionOnly
 
 # 请求体处理
 SecRequestBodyAccess On
-SecRequestBodyLimit 13107200              # 10MB 最大请求体
+SecRequestBodyLimit 13107200              # 12.5MB 最大请求体
 SecRequestBodyNoFilesLimit 1048576         # 1MB 非文件部分
 SecRequestBodyInMemoryLimit 131072        # 128KB 内存缓存
 
@@ -898,14 +902,16 @@ SecRule FILES \
      severity:'CRITICAL'"
 
 # 限制上传文件名长度
+# 注意：FILES_NAMES 是字符串变量，@gt 会将非数字字符串转为 0，
+# 因此 @gt 无法正确判断字符串长度。应使用 @rx 正则匹配长度。
 SecRule FILES_NAMES \
-    "@gt 255" \
+    "@rx ^.{256,}" \
     "id:993004,\
      phase:2,\
      deny,\
      log,\
      msg:'Upload Filename Too Long',\
-     logdata:'Length: %{TX.0}',\
+     logdata:'Filename: %{TX.0}',\
      tag:'attack-upload',\
      ver:'custom/1.0',\
      severity:'WARNING'"
@@ -1579,7 +1585,10 @@ SecRule REQUEST_METHOD "!@pm GET HEAD POST PUT DELETE PATCH OPTIONS" \
 
 # ===== 规则 5：请求参数长度限制 =====
 # 防止超长参数攻击（缓冲区溢出尝试）
-SecRule ARGS_NAMES "@gt 100" \
+# 注意：ARGS_NAMES 是字符串变量，@gt 会将非数字字符串转为 0，
+# 应使用 @rx 正则匹配长度
+SecRule ARGS_NAMES \
+    "@rx ^.{101,}" \
     "id:995040,\
      phase:2,\
      deny,\
@@ -1590,7 +1599,8 @@ SecRule ARGS_NAMES "@gt 100" \
      ver:'custom/1.0',\
      severity:'WARNING'"
 
-SecRule ARGS "@gt 65535" \
+SecRule ARGS \
+    "@rx ^.{65536,}" \
     "id:995041,\
      phase:2,\
      deny,\

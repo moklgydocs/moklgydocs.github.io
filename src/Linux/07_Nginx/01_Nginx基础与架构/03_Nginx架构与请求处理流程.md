@@ -422,8 +422,8 @@ sequenceDiagram
 ```nginx
 events {
     # accept_mutex：是否启用连接互斥锁
-    # on（默认）：Worker 轮流获取锁，避免惊群
-    # off：所有 Worker 同时竞争，高并发时性能更好
+    # 1.11.3 之前默认为 on：Worker 轮流获取锁，避免惊群
+    # 1.11.3 起默认为 off：所有 Worker 同时竞争，高并发时性能更好
 
     # Nginx 1.11.3+ 默认为 off
     # 原因：现代内核已通过 SO_REUSEPORT 等方式解决惊群问题
@@ -891,7 +891,7 @@ void ngx_signal_handler(int signo) {
 
 | 信号 | 发送方式 | Master 行为 | Worker 行为 |
 |------|----------|------------|------------|
-| TERM | `kill -TERM $(cat /run/nginx.pid)` | 快速关闭，向 Worker 发送 TERM | 处理完当前请求后立即退出 |
+| TERM | `kill -TERM $(cat /run/nginx.pid)` | 快速关闭，向 Worker 发送 TERM | 立即退出（快速关闭） |
 | QUIT | `kill -QUIT $(cat /run/nginx.pid)` | 优雅关闭，向 Worker 发送 QUIT | 处理完当前请求后退出 |
 | HUP | `kill -HUP $(cat /run/nginx.pid)` | 重新加载配置 | 旧 Worker 优雅退出，新 Worker 启动 |
 | USR1 | `kill -USR1 $(cat /run/nginx.pid)` | 重新打开日志文件 | 关闭旧日志，打开新日志 |

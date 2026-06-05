@@ -575,6 +575,10 @@ server {
 
 ### 4.1 Nginx Service Mesh 架构
 
+::: warning NSM 已停止维护
+Nginx Service Mesh (NSM) 已于 2023 年停止开发和维护，以下内容仅供学习参考。生产环境建议使用 Istio 或 Linkerd。
+:::
+
 Nginx Service Mesh（NSM）是 F5/NGINX 推出的轻量级 Service Mesh 方案，使用 Nginx 作为 Sidecar 代理。
 
 ```mermaid
@@ -829,17 +833,14 @@ load_module modules/ngx_http_opentelemetry_module.so;
 http {
     # OpenTelemetry 配置
     opentelemetry on;
-    opentelemetry_traces otel;
+    opentelemetry_trust_incoming_spans on;
+    opentelemetry_operation_name "$uri";
 
-    opentelemetry_exporter {
-        endpoint http://otel-collector.observability:4317;
-    }
-
-    opentelemetry_resource {
-        service.name nginx-ingress;
-        service.version 1.0.0;
-        deployment.environment production;
-    }
+    # 注意：endpoint、service_name 等配置通过环境变量设置，而非 nginx 指令
+    # 在 Docker 或 systemd 中配置环境变量：
+    # OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector.observability:4317
+    # OTEL_SERVICE_NAME=nginx-ingress
+    # OTEL_RESOURCE_ATTRIBUTES=service.version=1.0.0,deployment.environment=production
 
     server {
         listen 80;

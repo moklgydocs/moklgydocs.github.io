@@ -299,12 +299,12 @@ http {
     # HTTP/2 并发流数
     http2_max_concurrent_streams 128;
 
-    # HTTP/2 帧大小
-    http2_max_field_size 16k;
-    http2_max_header_size 32k;
-
     # HTTP/2 接收缓冲区
     http2_recv_buffer_size 256k;
+
+    # 注意：http2_max_field_size 和 http2_max_header_size
+    # 自 Nginx 1.19.7 起已废弃，改用 large_client_header_buffers 替代
+    large_client_header_buffers 4 32k;
 
     server {
         listen 443 ssl http2;
@@ -505,9 +505,9 @@ server {
     location / {
         grpc_pass grpc://grpc_backend;
 
-        # HTTP/1.1 长连接（Nginx→上游）
-        grpc_http_version 1.1;
-        grpc_set_header Connection "";
+        # gRPC 模块原生使用 HTTP/2，无需设置 HTTP 版本
+        # 不存在 grpc_http_version 和 grpc_set_header Connection 指令
+        # grpc_pass 与 proxy_pass 不同，始终以 HTTP/2 与上游通信
     }
 }
 ```

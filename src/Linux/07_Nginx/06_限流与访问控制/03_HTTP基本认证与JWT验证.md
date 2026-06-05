@@ -449,6 +449,11 @@ server {
 ```nginx
 # 使用第三方 nginx-jwt-module
 # https://github.com/TeslaGov/nginx-jwt-module
+#
+# 注意：以下配置为概念示意。nginx-jwt-module 实际主指令为 auth_jwt，
+# 支持 on/off 控制启用与关闭，以及 auth_jwt_key / auth_jwt_key_file
+# 设置 HMAC 密钥或 RSA 公钥。其他指令如 auth_jwt_claim 为示意用法，
+# 实际 claim 传递需通过 $jwt_claim_* 变量在 proxy_set_header 中完成。
 
 server {
     listen 80;
@@ -457,14 +462,14 @@ server {
     # JWT 验证配置
     auth_jwt_key "your-secret-key";    # HMAC 密钥
     # auth_jwt_key_file /etc/nginx/jwt-key.pem;  # RSA 公钥文件
-    auth_jwt_enabled on;
 
     location /api/ {
         auth_jwt on;
-        auth_jwt_claim $jwt_claim_sub X-User-Id;     # sub → X-User-Id
-        auth_jwt_claim $jwt_claim_role X-User-Role;  # role → X-User-Role
 
+        # 将 JWT claim 传递给后端
         proxy_pass http://api_backend;
+        proxy_set_header X-User-Id $jwt_claim_sub;
+        proxy_set_header X-User-Role $jwt_claim_role;
     }
 
     # 登录接口不需要 JWT
@@ -975,17 +980,15 @@ server {
     # optional：请求证书但非必需
     ssl_verify_client optional;
 
-    # optional_no_ca：请求证书但不验证
-    # ssl_verify_client optional_no_ca;
+    # 使用 map 基于证书验证结果选择后端
+    # 避免在 if 中使用 proxy_pass 的反模式
+    map $ssl_client_verify $cert_backend {
+        default      basic_backend;
+        SUCCESS      premium_backend;
+    }
 
     location / {
-        if ($ssl_client_verify = SUCCESS) {
-            # 有有效证书 → 高级访问
-            proxy_pass http://premium_backend;
-        }
-
-        # 无证书 → 基本访问
-        proxy_pass http://basic_backend;
+        proxy_pass http://$cert_backend;
     }
 }
 ```
