@@ -145,7 +145,13 @@ export default navbar([
   {
     text: "运维与部署",
     icon: "fa6-solid:rocket",
-    link: "/运维与部署/"
+    children: [
+      {
+        text: "Docker & K8s",
+        icon: "fa6-brands:docker",
+        link: "Docker_K8s/"
+      }
+    ]
   },
   {
     text: "Linux",
