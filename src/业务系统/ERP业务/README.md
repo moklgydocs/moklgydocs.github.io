@@ -2,6 +2,8 @@
 title: ERP业务
 index: false
 icon: building
+dir:
+  order: 1
 category:
   - 业务系统
 ---

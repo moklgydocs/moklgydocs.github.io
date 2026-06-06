@@ -3,7 +3,7 @@ title: 财务知识
 icon: fa6-solid:coins
 index: false
 dir:
-  order: 3
+  order: 4
 category:
   - 业务系统
   - 财务知识
