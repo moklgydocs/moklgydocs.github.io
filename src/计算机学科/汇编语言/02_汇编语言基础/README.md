@@ -1,6 +1,7 @@
 ---
 title: 汇编语言基础
 icon: fa6-solid:code
+order: 2
 index: false
 category:
   - 计算机学科

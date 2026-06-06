@@ -43,6 +43,9 @@ export default hopeTheme({
     imgSize: true,
     include: true,
     mark: true,
+    math: {
+      type: "katex",
+    },
     // plantuml: true,  // 未使用，关闭以节省构建内存
     spoiler: true,
     sub: true,

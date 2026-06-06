@@ -1,6 +1,7 @@
 ---
 title: 基础篇
 icon: fa6-solid:layer-group
+order: 1
 index: false
 category:
   - 计算机学科

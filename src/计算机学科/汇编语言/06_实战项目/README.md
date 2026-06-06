@@ -1,6 +1,7 @@
 ---
 title: 实战项目
 icon: fa6-solid:rocket
+order: 6
 index: false
 category:
   - 计算机学科

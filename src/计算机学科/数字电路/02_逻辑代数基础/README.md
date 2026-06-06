@@ -1,6 +1,7 @@
 ---
 title: 逻辑代数基础
 icon: fa6-solid:diagram-project
+order: 2
 index: false
 category:
   - 计算机学科

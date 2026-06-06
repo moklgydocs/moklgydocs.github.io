@@ -1,6 +1,7 @@
 ---
 title: 数字逻辑基础
 icon: fa6-solid:signal
+order: 1
 index: false
 category:
   - 计算机学科

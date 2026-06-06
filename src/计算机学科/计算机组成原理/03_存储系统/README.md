@@ -1,6 +1,7 @@
 ---
 title: 存储系统
 icon: fa6-solid:database
+order: 3
 index: false
 category:
   - 计算机学科

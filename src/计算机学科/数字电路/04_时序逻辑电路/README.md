@@ -1,6 +1,7 @@
 ---
 title: 时序逻辑电路
 icon: fa6-solid:clock-rotate-left
+order: 4
 index: false
 category:
   - 计算机学科

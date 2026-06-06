@@ -1,6 +1,7 @@
 ---
 title: 基础概念
 icon: fa6-solid:cube
+order: 1
 index: false
 category:
   - 计算机学科
