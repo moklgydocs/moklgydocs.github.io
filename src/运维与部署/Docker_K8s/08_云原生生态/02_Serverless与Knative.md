@@ -62,17 +62,17 @@ graph TB
         CLIENT[客户端 / 前端]
 
         subgraph "BaaS - 后端即服务"
-            AUTH[认证服务<br/>Auth0 / Firebase Auth]
-            DB[数据库<br/>DynamoDB / CosmosDB]
-            STORAGE[对象存储<br/>S3 / Blob Storage]
-            MQ[消息队列<br/>SQS / Event Grid]
-            CDN[CDN<br/>CloudFront / Azure CDN]
+            AUTH["认证服务<br/>Auth0 / Firebase Auth"]
+            DB["数据库<br/>DynamoDB / CosmosDB"]
+            STORAGE["对象存储<br/>S3 / Blob Storage"]
+            MQ["消息队列<br/>SQS / Event Grid"]
+            CDN["CDN<br/>CloudFront / Azure CDN"]
         end
 
         subgraph "FaaS - 函数即服务"
-            F1[函数 A<br/>订单处理]
-            F2[函数 B<br/>图片处理]
-            F3[函数 C<br/>通知发送]
+            F1["函数 A<br/>订单处理"]
+            F2["函数 B<br/>图片处理"]
+            F3["函数 C<br/>通知发送"]
         end
     end
 
@@ -124,10 +124,10 @@ graph LR
     end
 
     subgraph "事件消费者"
-        C1[订单服务<br/>处理订单逻辑]
-        C2[通知服务<br/>发送邮件/短信]
-        C3[库存服务<br/>更新库存数据]
-        C4[分析服务<br/>实时数据统计]
+        C1["订单服务<br/>处理订单逻辑"]
+        C2["通知服务<br/>发送邮件/短信"]
+        C3["库存服务<br/>更新库存数据"]
+        C4["分析服务<br/>实时数据统计"]
     end
 
     P1 -->|order.created| BUS
@@ -167,8 +167,8 @@ graph TB
     SERVERLESS --> C[自动弹性]
     SERVERLESS --> D[快速迭代]
 
-    A --> A1[缩容到零<br/>零流量零成本]
-    A --> A2[按需付费<br/>只为实际使用买单]
+    A --> A1["缩容到零<br/>零流量零成本"]
+    A --> A2["按需付费<br/>只为实际使用买单"]
 
     B --> B1[无需管理服务器]
     B --> B2[自动补丁和升级]
@@ -269,25 +269,25 @@ Knative 是基于 Kubernetes 的 Serverless 平台，由 Google 发起并捐献�
 ```mermaid
 graph TB
     subgraph "Knative Serving - 请求驱动"
-        KSVC[Service<br/>服务定义入口]
-        CFG[Configuration<br/>版本配置]
-        REV[Revision<br/>不可变版本快照]
-        ROUTE[Route<br/>流量路由规则]
+        KSVC["Service<br/>服务定义入口"]
+        CFG["Configuration<br/>版本配置"]
+        REV["Revision<br/>不可变版本快照"]
+        ROUTE["Route<br/>流量路由规则"]
     end
 
     subgraph "Knative Eventing - 事件驱动"
-        BROKER[Broker<br/>事件总线]
-        TRIGGER[Trigger<br/>事件过滤路由]
-        SOURCE[Source<br/>外部事件源]
-        SINK[Sink<br/>事件消费者]
-        CHANNEL[Channel<br/>事件传输通道]
+        BROKER["Broker<br/>事件总线"]
+        TRIGGER["Trigger<br/>事件过滤路由"]
+        SOURCE["Source<br/>外部事件源"]
+        SINK["Sink<br/>事件消费者"]
+        CHANNEL["Channel<br/>事件传输通道"]
     end
 
     subgraph "基础设施层"
         K8S[Kubernetes 集群]
-        INGRESS[Ingress / Gateway<br/>Kourier / Contour / Istio]
-        ACTIVATOR[Activator<br/>请求缓冲与激活]
-        AUTOSCALER[Autoscaler<br/>KPA 自动伸缩]
+        INGRESS["Ingress / Gateway<br/>Kourier / Contour / Istio"]
+        ACTIVATOR["Activator<br/>请求缓冲与激活"]
+        AUTOSCALER["Autoscaler<br/>KPA 自动伸缩"]
     end
 
     KSVC --> CFG --> REV
@@ -538,12 +538,12 @@ flowchart TD
     J --> K[后续请求直连 Pod]
 
     C --> L[Autoscaler 持续监控并发]
-    L --> M{并发为零<br/>超过 grace-period?}
+    L --> M{"并发为零<br/>超过 grace-period?"}
     M -->|否| L
-    M -->|是| N{超过<br/>retention-period?}
-    N -->|否| O[保持 Pod<br/>等待新请求]
+    M -->|是| N{"超过<br/>retention-period?"}
+    N -->|否| O["保持 Pod<br/>等待新请求"]
     N -->|是| P[缩容到零]
-    P --> Q[Pod 被删除<br/>资源释放]
+    P --> Q["Pod 被删除<br/>资源释放"]
 
     style D fill:#ef476f,color:#fff
     style P fill:#4ecdc4,color:#fff
@@ -563,9 +563,9 @@ Knative Pod Autoscaler（KPA）是 Knative 自研的自动伸缩器，与 Kubern
 ```mermaid
 graph TB
     subgraph "KPA 自动伸缩"
-        METRICS[指标采集<br/>并发请求数 / RPS]
-        STABLE[稳定模式<br/>60s 窗口计算]
-        PANIC[恐慌模式<br/>6s 窗口计算]
+        METRICS["指标采集<br/>并发请求数 / RPS"]
+        STABLE["稳定模式<br/>60s 窗口计算"]
+        PANIC["恐慌模式<br/>6s 窗口计算"]
         DECISION[伸缩决策]
     end
 
@@ -622,10 +622,10 @@ Knative Serving 的 Route 支持精细的流量分割，可以将不同百分比
 
 ```mermaid
 flowchart TD
-    A[客户端请求] --> ROUTE[Route<br/>流量路由]
+    A[客户端请求] --> ROUTE["Route<br/>流量路由"]
 
-    ROUTE -->|"90%"| REV1[Revision v1<br/>当前稳定版本]
-    ROUTE -->|"10%"| REV2[Revision v2<br/>灰度版本]
+    ROUTE -->|"90%"| REV1["Revision v1<br/>当前稳定版本"]
+    ROUTE -->|"10%"| REV2["Revision v2<br/>灰度版本"]
 
     REV1 --> R1[处理请求]
     REV2 --> R2[处理请求]
@@ -827,19 +827,19 @@ spec:
 ```mermaid
 graph TB
     subgraph "事件源 - Sources"
-        API[ApiServerSource<br/>K8s 资源变更事件]
-        PING[PingSource<br/>定时 Cron 事件]
-        KAFKA_SRC[KafkaSource<br/>Kafka 消息]
-        GH[GithubSource<br/>GitHub Webhook]
-        RABBIT[RabbitMQSource<br/>RabbitMQ 消息]
-        HTTP_SRC[HTTP Source<br/>自定义 HTTP 事件]
-        CUSTOM[Custom Source<br/>自定义事件源]
+        API["ApiServerSource<br/>K8s 资源变更事件"]
+        PING["PingSource<br/>定时 Cron 事件"]
+        KAFKA_SRC["KafkaSource<br/>Kafka 消息"]
+        GH["GithubSource<br/>GitHub Webhook"]
+        RABBIT["RabbitMQSource<br/>RabbitMQ 消息"]
+        HTTP_SRC["HTTP Source<br/>自定义 HTTP 事件"]
+        CUSTOM["Custom Source<br/>自定义事件源"]
     end
 
     subgraph "事件总线 - Broker"
-        BROKER[Broker<br/>事件路由与持久化]
-        CHANNEL_KAFKA[Kafka Channel<br/>高可用事件通道]
-        CHANNEL_MEM[In-Memory Channel<br/>开发测试用]
+        BROKER["Broker<br/>事件路由与持久化"]
+        CHANNEL_KAFKA["Kafka Channel<br/>高可用事件通道"]
+        CHANNEL_MEM["In-Memory Channel<br/>开发测试用"]
     end
 
     subgraph "事件过滤 - Trigger"
@@ -850,10 +850,10 @@ graph TB
     end
 
     subgraph "事件消费 - Sink"
-        S1[Order Service<br/>Knative Service]
-        S2[Notification Service<br/>Knative Service]
-        S3[CI/CD Pipeline<br/>Knative Service]
-        S4[Audit Logger<br/>Knative Service]
+        S1["Order Service<br/>Knative Service"]
+        S2["Notification Service<br/>Knative Service"]
+        S3["CI/CD Pipeline<br/>Knative Service"]
+        S4["Audit Logger<br/>Knative Service"]
     end
 
     API --> BROKER
@@ -1357,11 +1357,11 @@ spec:
 
 ```mermaid
 flowchart LR
-    A[请求到达] --> B[调度 Pod<br/>50-200ms]
-    B --> C[拉取镜像<br/>0.5-5s]
-    C --> D[启动容器<br/>0.5-3s]
-    D --> E[应用初始化<br/>0.5-10s]
-    E --> F[健康检查<br/>2-10s]
+    A[请求到达] --> B["调度 Pod<br/>50-200ms"]
+    B --> C["拉取镜像<br/>0.5-5s"]
+    C --> D["启动容器<br/>0.5-3s"]
+    D --> E["应用初始化<br/>0.5-10s"]
+    E --> F["健康检查<br/>2-10s"]
     F --> G[就绪接收请求]
 
     style A fill:#ef476f,color:#fff
@@ -1584,22 +1584,22 @@ ENTRYPOINT ["./MyApp"]
 
 ```mermaid
 graph TB
-    CMD[命令<br/>CreateOrder] --> AGG[聚合根<br/>Order]
+    CMD["命令<br/>CreateOrder"] --> AGG["聚合根<br/>Order"]
     AGG -->|产生事件| EVT1[OrderCreated]
-    EVT1 --> STORE[事件存储<br/>Event Store]
+    EVT1 --> STORE["事件存储<br/>Event Store"]
 
-    CMD2[命令<br/>AddItem] --> AGG
+    CMD2["命令<br/>AddItem"] --> AGG
     AGG -->|产生事件| EVT2[ItemAdded]
     EVT2 --> STORE
 
-    CMD3[命令<br/>ConfirmOrder] --> AGG
+    CMD3["命令<br/>ConfirmOrder"] --> AGG
     AGG -->|产生事件| EVT3[OrderConfirmed]
     EVT3 --> STORE
 
-    STORE -->|重放事件| PROJ[投影<br/>当前状态]
-    STORE -->|快照| SNAP[快照<br/>加速恢复]
+    STORE -->|重放事件| PROJ["投影<br/>当前状态"]
+    STORE -->|快照| SNAP["快照<br/>加速恢复"]
 
-    PROJ --> READ[读模型<br/>查询视图]
+    PROJ --> READ["读模型<br/>查询视图"]
 
     style STORE fill:#ffa502,color:#fff
     style AGG fill:#4ecdc4,color:#fff
@@ -1620,7 +1620,7 @@ CQRS 将读取操作和写入操作分离到不同的模型中，写模型处理
 ```mermaid
 graph LR
     subgraph "写入端"
-        CMD[命令<br/>Create/Update/Delete] --> WRITE[写模型<br/>聚合根]
+        CMD["命令<br/>Create/Update/Delete"] --> WRITE["写模型<br/>聚合根"]
         WRITE --> EVENTS[领域事件]
     end
 
@@ -1629,8 +1629,8 @@ graph LR
     end
 
     subgraph "读取端"
-        PROJ[事件投影] --> READ[读模型<br/>查询优化视图]
-        READ --> QUERY[查询<br/>Read API]
+        PROJ[事件投影] --> READ["读模型<br/>查询优化视图"]
+        READ --> QUERY["查询<br/>Read API"]
     end
 
     EVENTS --> BUS
@@ -1711,11 +1711,11 @@ Saga 模式用于管理跨多个服务的分布式事务，通过一系列本地
 ```mermaid
 graph TB
     subgraph "订单 Saga - 编排模式"
-        ORCH[Saga 编排器<br/>Orchestrator]
+        ORCH["Saga 编排器<br/>Orchestrator"]
 
-        ORCH -->|1. 创建订单| ORDER[订单服务<br/>Order Service]
-        ORDER -->|2. 扣减库存| INV[库存服务<br/>Inventory Service]
-        INV -->|3. 处理支付| PAY[支付服务<br/>Payment Service]
+        ORCH -->|1. 创建订单| ORDER["订单服务<br/>Order Service"]
+        ORDER -->|2. 扣减库存| INV["库存服务<br/>Inventory Service"]
+        INV -->|3. 处理支付| PAY["支付服务<br/>Payment Service"]
         PAY -->|4. 确认订单| ORDER
 
         PAY -.->|3a. 支付失败| COMP_PAY[补偿：退款]
@@ -1850,13 +1850,13 @@ spec:
 ```mermaid
 graph TB
     subgraph "完整 Serverless 平台"
-        KN[Knative<br/>Serving + Eventing]
-        FAAS[OpenFaaS<br/>函数即服务]
-        FIS[Fission<br/>函数即服务]
+        KN["Knative<br/>Serving + Eventing"]
+        FAAS["OpenFaaS<br/>函数即服务"]
+        FIS["Fission<br/>函数即服务"]
     end
 
     subgraph "事件驱动伸缩"
-        KEDA[KEDA<br/>事件驱动 HPA]
+        KEDA["KEDA<br/>事件驱动 HPA"]
     end
 
     subgraph "适用场景"
@@ -2223,20 +2223,20 @@ ENTRYPOINT ["./OrderService"]
 ```mermaid
 graph TB
     subgraph "✅ 适合 Serverless"
-        A1[Web API<br/>请求驱动、峰谷明显]
-        A2[事件处理<br/>异步、低频触发]
-        A3[数据处理<br/>批处理、ETL]
-        A4[定时任务<br/>Cron 触发]
-        A5[文件处理<br/>图片/视频转码]
-        A6[Webhook<br/>第三方回调]
+        A1["Web API<br/>请求驱动、峰谷明显"]
+        A2["事件处理<br/>异步、低频触发"]
+        A3["数据处理<br/>批处理、ETL"]
+        A4["定时任务<br/>Cron 触发"]
+        A5["文件处理<br/>图片/视频转码"]
+        A6["Webhook<br/>第三方回调"]
     end
 
     subgraph "❌ 不适合 Serverless"
-        B1[长连接服务<br/>WebSocket/gRPC Stream]
-        B2[有状态服务<br/>数据库/缓存]
-        B3[高频调用<br/>延迟敏感型]
-        B4[GPU 计算<br/>AI 推理/训练]
-        B5[常驻后台<br/>消息消费/队列监听]
+        B1["长连接服务<br/>WebSocket/gRPC Stream"]
+        B2["有状态服务<br/>数据库/缓存"]
+        B3["高频调用<br/>延迟敏感型"]
+        B4["GPU 计算<br/>AI 推理/训练"]
+        B5["常驻后台<br/>消息消费/队列监听"]
     end
 
     style A1 fill:#06d6a0,color:#fff
@@ -2351,14 +2351,14 @@ flowchart TD
     B -->|是| C{延迟敏感?}
     B -->|否| D{事件触发?}
 
-    C -->|是| E[Deployment + HPA<br/>避免冷启动]
+    C -->|是| E["Deployment + HPA<br/>避免冷启动"]
     C -->|否| F{峰谷明显?}
-    F -->|是| G[Knative Serving<br/>minScale=1]
+    F -->|是| G["Knative Serving<br/>minScale=1"]
     F -->|否| E
 
     D -->|是| H{需要缩容到零?}
-    H -->|是| I[Knative Eventing + Serving<br/>完整 Serverless]
-    H -->|否| J[KEDA<br/>事件驱动伸缩]
+    H -->|是| I["Knative Eventing + Serving<br/>完整 Serverless"]
+    H -->|否| J["KEDA<br/>事件驱动伸缩"]
 
     D -->|否| K{定时触发?}
     K -->|是| L[PingSource + Knative Service]
@@ -2792,9 +2792,9 @@ patches:
 ```mermaid
 graph TB
     subgraph "KEDA"
-        AGENT[KEDA Agent<br/>Metrics Adapter]
-        WEBHOOK[KEDA Webhook<br/>验证准入]
-        SCALER[Scaler<br/>指标获取]
+        AGENT["KEDA Agent<br/>Metrics Adapter"]
+        WEBHOOK["KEDA Webhook<br/>验证准入"]
+        SCALER["Scaler<br/>指标获取"]
     end
 
     subgraph "伸缩目标"

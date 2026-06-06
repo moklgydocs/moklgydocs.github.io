@@ -24,16 +24,16 @@ HTTP 是互联网的通用语言，CoAP 是为受限设备量身定制的"轻量
 ```mermaid
 flowchart TB
     subgraph MODES["HTTP IoT 模式"]
-        A[RESTful API<br/>请求-响应]
-        B[Long Polling<br/>长轮询]
-        C[SSE<br/>Server-Sent Events]
-        D[Webhook<br/>事件回调]
+        A["RESTful API<br/>请求-响应"]
+        B["Long Polling<br/>长轮询"]
+        C["SSE<br/>Server-Sent Events"]
+        D["Webhook<br/>事件回调"]
     end
 
-    A -->|查询/控制| S1[设备管理<br/>配置读写]
-    B -->|近实时| S2[状态等待<br/>指令下发]
-    C -->|单向推送| S3[实时监控<br/>遥测接收]
-    D -->|事件驱动| S4[告警通知<br/>第三方集成]
+    A -->|查询/控制| S1["设备管理<br/>配置读写"]
+    B -->|近实时| S2["状态等待<br/>指令下发"]
+    C -->|单向推送| S3["实时监控<br/>遥测接收"]
+    D -->|事件驱动| S4["告警通知<br/>第三方集成"]
 
     style MODES fill:#FF9800,color:#fff
 ```
@@ -666,11 +666,11 @@ var dtlsUri = new Uri("coaps://192.168.1.50/sensors/temperature"); // coaps = DT
 
 ```mermaid
 flowchart LR
-    D1[受限设备<br/>CoAP + DTLS] -->|5684| GW[边缘网关<br/>.NET]
-    D2[受限设备<br/>CoAP + DTLS] -->|5684| GW
+    D1["受限设备<br/>CoAP + DTLS"] -->|5684| GW["边缘网关<br/>.NET"]
+    D2["受限设备<br/>CoAP + DTLS"] -->|5684| GW
 
-    GW -->|MQTT + TLS| CLOUD[云平台<br/>8883]
-    GW -->|HTTPS| API[管理 API<br/>443]
+    GW -->|MQTT + TLS| CLOUD["云平台<br/>8883"]
+    GW -->|HTTPS| API["管理 API<br/>443"]
 
     style GW fill:#FF9800,color:#fff
     style D1 fill:#4CAF50,color:#fff

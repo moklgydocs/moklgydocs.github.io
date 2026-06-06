@@ -22,29 +22,29 @@ IoT 设备数量庞大、部署分散、资源受限，使其成为安全攻击�
 ```mermaid
 flowchart TD
     subgraph L1["物理层<br/>Physical"]
-        P1[调试端口<br/>JTAG/UART/SWD]
-        P2[闪存提取<br/>Flash 读取]
-        P3[侧信道攻击<br/>功耗/电磁分析]
+        P1["调试端口<br/>JTAG/UART/SWD"]
+        P2["闪存提取<br/>Flash 读取"]
+        P3["侧信道攻击<br/>功耗/电磁分析"]
     end
 
     subgraph L2["网络层<br/>Network"]
-        N1[中间人攻击<br/>MITM]
-        N2[重放攻击<br/>Replay]
-        N3[拒绝服务<br/>DoS]
-        N4[协议漏洞<br/>MQTT/CoAP]
+        N1["中间人攻击<br/>MITM"]
+        N2["重放攻击<br/>Replay"]
+        N3["拒绝服务<br/>DoS"]
+        N4["协议漏洞<br/>MQTT/CoAP"]
     end
 
     subgraph L3["应用层<br/>Application"]
-        A1[固件篡改<br/>恶意固件注入]
-        A2[弱口令<br/>默认凭证]
-        A3[不安全 API<br/>无认证接口]
-        A4[数据泄露<br/>明文传输]
+        A1["固件篡改<br/>恶意固件注入"]
+        A2["弱口令<br/>默认凭证"]
+        A3["不安全 API<br/>无认证接口"]
+        A4["数据泄露<br/>明文传输"]
     end
 
     subgraph L4["管理层<br/>Management"]
-        M1[缺乏更新机制<br/>无法修补漏洞]
-        M2[设备生命周期<br/>退役未注销]
-        M3[供应链安全<br/>组件来源]
+        M1["缺乏更新机制<br/>无法修补漏洞"]
+        M2["设备生命周期<br/>退役未注销"]
+        M3["供应链安全<br/>组件来源"]
     end
 
     L1 --> L2 --> L3 --> L4
@@ -403,12 +403,12 @@ public class AntiReplay
 ```mermaid
 flowchart TD
     subgraph Defense["纵深防御层"]
-        D1[物理安全<br/>外壳/调试口禁用/TPM]
-        D2[安全启动<br/>Bootloader 签名验证]
-        D3[系统硬化<br/>只读FS/最小服务/防火墙]
-        D4[通信安全<br/>TLS/mTLS/证书钉扎]
-        D5[应用安全<br/>输入验证/权限控制/日志]
-        D6[数据安全<br/>加密存储/匿名化/过期]
+        D1["物理安全<br/>外壳/调试口禁用/TPM"]
+        D2["安全启动<br/>Bootloader 签名验证"]
+        D3["系统硬化<br/>只读FS/最小服务/防火墙"]
+        D4["通信安全<br/>TLS/mTLS/证书钉扎"]
+        D5["应用安全<br/>输入验证/权限控制/日志"]
+        D6["数据安全<br/>加密存储/匿名化/过期"]
     end
 
     D1 --> D2 --> D3 --> D4 --> D5 --> D6

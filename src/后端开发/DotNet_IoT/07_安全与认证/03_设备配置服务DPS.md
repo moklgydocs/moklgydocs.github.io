@@ -65,14 +65,14 @@ sequenceDiagram
 
 ```mermaid
 flowchart TB
-    DPS[Azure DPS] --> IND[个体注册<br/>Individual Enrollment]
-    DPS --> GRP[组注册<br/>Enrollment Group]
+    DPS[Azure DPS] --> IND["个体注册<br/>Individual Enrollment"]
+    DPS --> GRP["组注册<br/>Enrollment Group"]
 
-    IND -->|一个注册 → 一台设备| I1[单台设备<br/>X.509 叶子证书]
-    IND -->|灵活配置| I2[单台设备<br/>TPM 认证]
+    IND -->|一个注册 → 一台设备| I1["单台设备<br/>X.509 叶子证书"]
+    IND -->|灵活配置| I2["单台设备<br/>TPM 认证"]
 
-    GRP -->|一个注册 → 一组设备| G1[对称密钥组<br/>批量设备]
-    GRP -->|CA 证书签发| G2[X.509 组<br/>同一 CA 签发的设备]
+    GRP -->|一个注册 → 一组设备| G1["对称密钥组<br/>批量设备"]
+    GRP -->|CA 证书签发| G2["X.509 组<br/>同一 CA 签发的设备"]
 
     style DPS fill:#FF9800,color:#fff
     style GRP fill:#4CAF50,color:#fff
@@ -102,9 +102,9 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    MASTER[Master Key<br/>DPS 组注册主密钥] -->|HMAC-SHA256| K1[Device Key 1<br/>device-001 的派生密钥]
-    MASTER -->|HMAC-SHA256| K2[Device Key 2<br/>device-002 的派生密钥]
-    MASTER -->|HMAC-SHA256| KN[Device Key N<br/>device-00N 的派生密钥]
+    MASTER["Master Key<br/>DPS 组注册主密钥"] -->|HMAC-SHA256| K1["Device Key 1<br/>device-001 的派生密钥"]
+    MASTER -->|HMAC-SHA256| K2["Device Key 2<br/>device-002 的派生密钥"]
+    MASTER -->|HMAC-SHA256| KN["Device Key N<br/>device-00N 的派生密钥"]
 
     K1 --> D1[设备 device-001]
     K2 --> D2[设备 device-002]
@@ -269,17 +269,17 @@ class SymmetricKeyProvisioning
 
 ```mermaid
 flowchart TD
-    CA[中间 CA 证书] -->|上传到 DPS| DPS[Azure DPS<br/>Enrollment Group]
-    CA -->|签发| D1[设备证书<br/>thermostat-001]
-    CA -->|签发| D2[设备证书<br/>thermostat-002]
-    CA -->|签发| DN[设备证书<br/>thermostat-00N]
+    CA[中间 CA 证书] -->|上传到 DPS| DPS["Azure DPS<br/>Enrollment Group"]
+    CA -->|签发| D1["设备证书<br/>thermostat-001"]
+    CA -->|签发| D2["设备证书<br/>thermostat-002"]
+    CA -->|签发| DN["设备证书<br/>thermostat-00N"]
 
     D1 -->|X.509 证明| DPS
     D2 -->|X.509 证明| DPS
     DN -->|X.509 证明| DPS
 
-    DPS -->|验证证书链| VERIFY{CA 签名<br/>有效？}
-    VERIFY -->|是| ASSIGN[分配 IoT Hub<br/>注册设备]
+    DPS -->|验证证书链| VERIFY{"CA 签名<br/>有效？"}
+    VERIFY -->|是| ASSIGN["分配 IoT Hub<br/>注册设备"]
     VERIFY -->|否| REJECT[拒绝注册]
 
     style DPS fill:#FF9800,color:#fff

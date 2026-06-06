@@ -86,9 +86,9 @@ flowchart TB
     end
 
     subgraph ControlPlane["控制面（Control Plane）"]
-        Pilot[Pilot<br/>配置发现与流量管理]
-        Citadel[Citadel<br/>证书与身份管理]
-        Galley[Galley<br/>配置验证]
+        Pilot["Pilot<br/>配置发现与流量管理"]
+        Citadel["Citadel<br/>证书与身份管理"]
+        Galley["Galley<br/>配置验证"]
     end
 
     Pilot --> Sidecar1
@@ -99,7 +99,7 @@ flowchart TB
     Citadel --> Sidecar3
 
     subgraph Ingress["入口网关"]
-        IngressGW[Ingress Gateway<br/>Nginx / Envoy]
+        IngressGW["Ingress Gateway<br/>Nginx / Envoy"]
     end
 
     User[用户] --> IngressGW
@@ -133,23 +133,23 @@ flowchart TB
 ```mermaid
 flowchart TB
     subgraph Mode1["模式一：入口网关"]
-        User1[外部流量] --> NginxGW[Nginx Ingress<br/>入口网关]
-        NginxGW --> Mesh1[Istio Mesh<br/>Envoy Sidecar]
+        User1[外部流量] --> NginxGW["Nginx Ingress<br/>入口网关"]
+        NginxGW --> Mesh1["Istio Mesh<br/>Envoy Sidecar"]
         Mesh1 --> SVC1[服务集群]
     end
 
     subgraph Mode2["模式二：Sidecar 代理"]
         User2[外部流量] --> IngressGW2[入口网关]
         IngressGW2 --> App21[应用 A]
-        App21 --> NginxSidecar[Nginx<br/>Sidecar]
-        NginxSidecar --> App22[应用 B<br/>+ Nginx Sidecar]
+        App21 --> NginxSidecar["Nginx<br/>Sidecar"]
+        NginxSidecar --> App22["应用 B<br/>+ Nginx Sidecar"]
     end
 
     subgraph Mode3["模式三：Nginx Service Mesh"]
         User3[外部流量] --> NginxGW3[Nginx Ingress]
-        NginxGW3 --> NSM[Nginx Service Mesh<br/>控制面]
-        NSM --> App31[应用 A<br/>+ Nginx Sidecar]
-        NSM --> App32[应用 B<br/>+ Nginx Sidecar]
+        NginxGW3 --> NSM["Nginx Service Mesh<br/>控制面"]
+        NSM --> App31["应用 A<br/>+ Nginx Sidecar"]
+        NSM --> App32["应用 B<br/>+ Nginx Sidecar"]
     end
 
     style Mode1 fill:#e1f5fe
@@ -338,14 +338,14 @@ server {
 
 ```mermaid
 flowchart LR
-    Internet[互联网] --> NginxIngress[Nginx Ingress<br/>Controller]
+    Internet[互联网] --> NginxIngress["Nginx Ingress<br/>Controller"]
 
-    NginxIngress --> |HTTP| Frontend_Pod[前端 Pod<br/>+ Envoy Sidecar]
-    NginxIngress --> |HTTP| API_Pod[API Pod<br/>+ Envoy Sidecar]
+    NginxIngress --> |HTTP| Frontend_Pod["前端 Pod<br/>+ Envoy Sidecar"]
+    NginxIngress --> |HTTP| API_Pod["API Pod<br/>+ Envoy Sidecar"]
 
-    Frontend_Pod --> |mTLS| User_Pod[用户服务 Pod<br/>+ Envoy Sidecar]
-    API_Pod --> |mTLS| Order_Pod[订单服务 Pod<br/>+ Envoy Sidecar]
-    API_Pod --> |mTLS| Product_Pod[商品服务 Pod<br/>+ Envoy Sidecar]
+    Frontend_Pod --> |mTLS| User_Pod["用户服务 Pod<br/>+ Envoy Sidecar"]
+    API_Pod --> |mTLS| Order_Pod["订单服务 Pod<br/>+ Envoy Sidecar"]
+    API_Pod --> |mTLS| Product_Pod["商品服务 Pod<br/>+ Envoy Sidecar"]
 
     subgraph Mesh["Istio Service Mesh"]
         Frontend_Pod
@@ -356,7 +356,7 @@ flowchart LR
     end
 
     subgraph Control["Istio 控制面"]
-        Istiod[Istiod<br/>Pilot+Citadel+Galley]
+        Istiod["Istiod<br/>Pilot+Citadel+Galley"]
     end
 
     Istiod -.-> Frontend_Pod
@@ -585,19 +585,19 @@ Nginx Service Mesh（NSM）是 F5/NGINX 推出的轻量级 Service Mesh 方案�
 flowchart TB
     subgraph NSM["Nginx Service Mesh"]
         subgraph DataPlane2["数据面"]
-            Pod1[Pod 1<br/>App + Nginx Sidecar]
-            Pod2[Pod 2<br/>App + Nginx Sidecar]
-            Pod3[Pod 3<br/>App + Nginx Sidecar]
+            Pod1["Pod 1<br/>App + Nginx Sidecar"]
+            Pod2["Pod 2<br/>App + Nginx Sidecar"]
+            Pod3["Pod 3<br/>App + Nginx Sidecar"]
         end
 
         subgraph ControlPlane2["控制面"]
-            NSMController[NSM Controller<br/>配置管理与分发]
-            NSMCert[证书管理<br/>SPIRE 集成]
-            NSMMetrics[指标采集<br/>Prometheus]
+            NSMController["NSM Controller<br/>配置管理与分发"]
+            NSMCert["证书管理<br/>SPIRE 集成"]
+            NSMMetrics["指标采集<br/>Prometheus"]
         end
 
         subgraph Gateway2["网关"]
-            NSMGW[Nginx Ingress<br/>Gateway]
+            NSMGW["Nginx Ingress<br/>Gateway"]
         end
     end
 
@@ -805,17 +805,17 @@ Nginx vs Envoy 作为 Sidecar 对比：
 
 ```mermaid
 flowchart LR
-    Client[客户端] --> Nginx[Nginx<br/>Ingress]
-    Nginx --> |trace_id生成| Envoy1[Envoy<br/>Sidecar A]
-    Envoy1 --> |trace_id传递| Envoy2[Envoy<br/>Sidecar B]
-    Envoy2 --> |trace_id传递| Envoy3[Envoy<br/>Sidecar C]
+    Client[客户端] --> Nginx["Nginx<br/>Ingress"]
+    Nginx --> |trace_id生成| Envoy1["Envoy<br/>Sidecar A"]
+    Envoy1 --> |trace_id传递| Envoy2["Envoy<br/>Sidecar B"]
+    Envoy2 --> |trace_id传递| Envoy3["Envoy<br/>Sidecar C"]
 
     Nginx --> |span上报| Collector[OTel Collector]
     Envoy1 --> |span上报| Collector
     Envoy2 --> |span上报| Collector
     Envoy3 --> |span上报| Collector
 
-    Collector --> Backend[Jaeger / Tempo<br/>追踪后端]
+    Collector --> Backend["Jaeger / Tempo<br/>追踪后端"]
     Backend --> UI[追踪查询 UI]
 ```
 
@@ -1102,16 +1102,16 @@ scrape_configs:
 
 ```mermaid
 flowchart LR
-    Client[客户端] --> |TLS| Nginx[Nginx Ingress<br/>TLS 终止]
+    Client[客户端] --> |TLS| Nginx["Nginx Ingress<br/>TLS 终止"]
 
     subgraph Mesh2["Istio Mesh（mTLS）"]
-        Nginx --> |HTTP| Envoy_In[Envoy 入站<br/>Sidecar]
-        Envoy_In --> |mTLS| Envoy_Out[Envoy 出站<br/>Sidecar]
+        Nginx --> |HTTP| Envoy_In["Envoy 入站<br/>Sidecar"]
+        Envoy_In --> |mTLS| Envoy_Out["Envoy 出站<br/>Sidecar"]
         Envoy_Out --> App[应用服务]
     end
 
     subgraph CertMgmt["证书管理"]
-        Citadel[Istio Citadel<br/>自动签发/轮转]
+        Citadel["Istio Citadel<br/>自动签发/轮转"]
         Citadel -.-> Envoy_In
         Citadel -.-> Envoy_Out
     end
@@ -1224,17 +1224,17 @@ spec:
 ```mermaid
 flowchart TB
     subgraph Layer1["Nginx Ingress 层"]
-        Nginx2[Nginx Ingress<br/>灰度分流]
+        Nginx2["Nginx Ingress<br/>灰度分流"]
     end
 
     subgraph Layer2["Istio Mesh 层"]
-        VS[VirtualService<br/>Mesh 内流量管理]
-        DR[DestinationRule<br/>版本定义]
+        VS["VirtualService<br/>Mesh 内流量管理"]
+        DR["DestinationRule<br/>版本定义"]
     end
 
     subgraph Layer3["服务层"]
-        V1[v1 Pod<br/>稳定版本]
-        V2[v2 Pod<br/>金丝雀版本]
+        V1["v1 Pod<br/>稳定版本"]
+        V2["v2 Pod<br/>金丝雀版本"]
     end
 
     Nginx2 --> |X-Canary: true| VS

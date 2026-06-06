@@ -73,21 +73,21 @@ graph LR
 ```mermaid
 graph TB
     subgraph "Istio 控制面 - istiod"
-        PILOT[Pilot<br/>配置分发]
-        CITADEL[Citadel<br/>证书管理]
-        GALLEY[Galley<br/>配置验证<br/>v1.15+ 已合并]
+        PILOT["Pilot<br/>配置分发"]
+        CITADEL["Citadel<br/>证书管理"]
+        GALLEY["Galley<br/>配置验证<br/>v1.15+ 已合并"]
     end
 
     subgraph "数据面 - Sidecar 代理"
-        E1[Envoy Proxy<br/>Pod A]
-        E2[Envoy Proxy<br/>Pod B]
-        E3[Envoy Proxy<br/>Pod C]
+        E1["Envoy Proxy<br/>Pod A"]
+        E2["Envoy Proxy<br/>Pod B"]
+        E3["Envoy Proxy<br/>Pod C"]
     end
 
     subgraph "Kubernetes 集群"
-        PA[Pod A<br/>应用容器]
-        PB[Pod B<br/>应用容器]
-        PC[Pod C<br/>应用容器]
+        PA["Pod A<br/>应用容器"]
+        PB["Pod B<br/>应用容器"]
+        PC["Pod C<br/>应用容器"]
     end
 
     PILOT -->|xDS API| E1
@@ -222,9 +222,9 @@ spec:
 
 ```mermaid
 graph TB
-    GW[Gateway<br/>入口网关] --> VS[VirtualService<br/>路由规则]
-    VS --> DR[DestinationRule<br/>目标策略]
-    DR --> EP[Endpoint<br/>服务端点]
+    GW["Gateway<br/>入口网关"] --> VS["VirtualService<br/>路由规则"]
+    VS --> DR["DestinationRule<br/>目标策略"]
+    DR --> EP["Endpoint<br/>服务端点"]
 
     VS -->|路由匹配| SUB1[/api → v1/]
     VS -->|路由匹配| SUB2[/api → v2/]
@@ -855,17 +855,17 @@ spec:
 
 ```mermaid
 flowchart TD
-    A[部署 v2 版本] --> B[0% 流量<br/>仅内部测试]
-    B --> C[5% 流量<br/>观察 5 分钟]
+    A[部署 v2 版本] --> B["0% 流量<br/>仅内部测试"]
+    B --> C["5% 流量<br/>观察 5 分钟"]
     C --> D{指标正常?}
     D -->|否| E[回滚到 v1]
-    D -->|是| F[25% 流量<br/>观察 10 分钟]
+    D -->|是| F["25% 流量<br/>观察 10 分钟"]
     F --> G{指标正常?}
     G -->|否| E
-    G -->|是| H[50% 流量<br/>观察 30 分钟]
+    G -->|是| H["50% 流量<br/>观察 30 分钟"]
     H --> I{指标正常?}
     I -->|否| E
-    I -->|是| J[100% 流量<br/>全量发布]
+    I -->|是| J["100% 流量<br/>全量发布"]
     J --> K[下线 v1 版本]
 
     style E fill:#ff6b6b,color:#fff
@@ -1016,10 +1016,10 @@ graph TB
 
     subgraph "Ambient 模式"
         direction TB
-        PA2[Pod A] --> ZTunnelA[Ztunnel<br/>节点级]
-        PB2[Pod B] --> ZTunnelB[Ztunnel<br/>节点级]
+        PA2[Pod A] --> ZTunnelA["Ztunnel<br/>节点级"]
+        PB2[Pod B] --> ZTunnelB["Ztunnel<br/>节点级"]
         ZTunnelA <-->|HBONE mTLS| ZTunnelB
-        Waypoint[Waypoint Proxy<br/>服务级 L7] --> ZTunnelB
+        Waypoint["Waypoint Proxy<br/>服务级 L7"] --> ZTunnelB
     end
 
     style SA1 fill:#ef476f,color:#fff

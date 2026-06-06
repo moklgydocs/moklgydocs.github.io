@@ -21,27 +21,27 @@ Kubernetes 安全模型采用纵深防御（Defense in Depth）策略，从集�
 ```mermaid
 graph TB
     subgraph "第1层：集群访问"
-        A1[API Server 认证<br/>Authentication]
-        A2[API Server 授权<br/>Authorization]
-        A3[准入控制<br/>Admission Control]
+        A1["API Server 认证<br/>Authentication"]
+        A2["API Server 授权<br/>Authorization"]
+        A3["准入控制<br/>Admission Control"]
     end
 
     subgraph "第2层：网络隔离"
-        B1[NetworkPolicy<br/>网络策略]
-        B2[Service Mesh mTLS<br/>服务网格加密]
-        B3[Ingress TLS<br/>入口加密]
+        B1["NetworkPolicy<br/>网络策略"]
+        B2["Service Mesh mTLS<br/>服务网格加密"]
+        B3["Ingress TLS<br/>入口加密"]
     end
 
     subgraph "第3层：应用安全"
-        C1[Pod 安全标准<br/>PSD]
-        C2[SecurityContext<br/>容器安全上下文]
-        C3[Secret 加密<br/>EncryptionConfiguration]
+        C1["Pod 安全标准<br/>PSD"]
+        C2["SecurityContext<br/>容器安全上下文"]
+        C3["Secret 加密<br/>EncryptionConfiguration"]
     end
 
     subgraph "第4层：运行时安全"
-        D1[Seccomp<br/>系统调用过滤]
-        D2[AppArmor<br/>强制访问控制]
-        D3[容器运行时<br/>gVisor/Kata]
+        D1["Seccomp<br/>系统调用过滤"]
+        D2["AppArmor<br/>强制访问控制"]
+        D3["容器运行时<br/>gVisor/Kata"]
     end
 
     A1 --> A2 --> A3
@@ -59,15 +59,15 @@ graph TB
 
 ```mermaid
 flowchart TD
-    A[客户端请求<br/>kubectl/API/用户] --> B{TLS 证书验证}
+    A["客户端请求<br/>kubectl/API/用户"] --> B{TLS 证书验证}
     B -->|失败| C[❌ 拒绝连接]
     B -->|通过| D[认证 Authentication]
     D -->|失败| E[❌ 401 Unauthorized]
-    D -->|通过| F[授权 Authorization<br/>RBAC/ABAC/Webhook]
+    D -->|通过| F["授权 Authorization<br/>RBAC/ABAC/Webhook"]
     F -->|失败| G[❌ 403 Forbidden]
     F -->|通过| H[准入控制 Admission]
     H -->|拒绝| I[❌ 拒绝请求]
-    H -->|通过| J[验证与持久化<br/>etcd]
+    H -->|通过| J["验证与持久化<br/>etcd"]
     J --> K[✅ 请求完成]
 
     style C fill:#ff6b6b,color:#fff
@@ -92,19 +92,19 @@ flowchart TD
 ```mermaid
 graph TB
     subgraph "主体 Subject"
-        U[User<br/>外部用户]
-        G[Group<br/>用户组]
-        SA[ServiceAccount<br/>Pod 身份]
+        U["User<br/>外部用户"]
+        G["Group<br/>用户组"]
+        SA["ServiceAccount<br/>Pod 身份"]
     end
 
     subgraph "角色 Role"
-        R[Role<br/>命名空间级]
-        CR[ClusterRole<br/>集群级]
+        R["Role<br/>命名空间级"]
+        CR["ClusterRole<br/>集群级"]
     end
 
     subgraph "绑定 Binding"
-        RB[RoleBinding<br/>命名空间级绑定]
-        CRB[ClusterRoleBinding<br/>集群级绑定]
+        RB["RoleBinding<br/>命名空间级绑定"]
+        CRB["ClusterRoleBinding<br/>集群级绑定"]
     end
 
     U --> RB
@@ -128,10 +128,10 @@ graph TB
 flowchart LR
     subgraph "Role/ClusterRole"
         direction TB
-        Rules[规则 Rules] --> V[APIGroups<br/>apiGroups]
-        Rules --> R[Resources<br/>resources]
-        Rules --> A[动作<br/>verbs]
-        Rules --> N[资源名<br/>resourceNames]
+        Rules[规则 Rules] --> V["APIGroups<br/>apiGroups"]
+        Rules --> R["Resources<br/>resources"]
+        Rules --> A["动作<br/>verbs"]
+        Rules --> N["资源名<br/>resourceNames"]
     end
 
     subgraph "RoleBinding/ClusterRoleBinding"
@@ -452,21 +452,21 @@ roleRef:
 ```mermaid
 graph TB
     subgraph "Privileged 特权级"
-        P1[ unrestricted<br/>无限制]
+        P1[" unrestricted<br/>无限制"]
         P2[特权容器]
         P3[宿主机访问]
         P4[所有能力]
     end
 
     subgraph "Baseline 基线级"
-        B1[最小限制<br/>阻止已知提权]
+        B1["最小限制<br/>阻止已知提权"]
         B2[禁止特权容器]
         B3[禁止宿主命名空间]
         B4[禁止危险能力]
     end
 
     subgraph "Restricted 受限级"
-        R1[严格限制<br/>最大安全]
+        R1["严格限制<br/>最大安全"]
         R2[禁止特权升级]
         R3[强制非 root]
         R4[Seccomp 必须]
@@ -863,11 +863,11 @@ cert-manager 是 Kubernetes 原生的证书管理工具，自动化 X.509 证书
 
 ```mermaid
 flowchart LR
-    CR[CertificateRequest<br/>证书请求] --> CM[cert-manager]
+    CR["CertificateRequest<br/>证书请求"] --> CM[cert-manager]
     CM -->|ACME| LE[Let's Encrypt]
-    CM -->|CA| CA[CA Issuer<br/>自签名/企业CA]
+    CM -->|CA| CA["CA Issuer<br/>自签名/企业CA"]
     CM -->|Vault| Vault[HashiCorp Vault]
-    LE -->|签发| Secret1[K8s Secret<br/>TLS 证书]
+    LE -->|签发| Secret1["K8s Secret<br/>TLS 证书"]
     CA -->|签发| Secret1
     Vault -->|签发| Secret1
     Secret1 -->|挂载| Ingress[Ingress/TLS]
@@ -1125,15 +1125,15 @@ cat /var/log/kubernetes/audit.log | jq 'select(.verb=="delete")'
 
 ```mermaid
 flowchart TD
-    A[API 请求<br/>通过认证/授权] --> B[Mutating Webhook<br/>变更准入]
+    A["API 请求<br/>通过认证/授权"] --> B["Mutating Webhook<br/>变更准入"]
     B --> C[对象 Schema 验证]
-    C --> D[Validating Webhook<br/>验证准入]
+    C --> D["Validating Webhook<br/>验证准入"]
     D --> E{验证通过?}
     E -->|是| F[持久化到 etcd]
     E -->|否| G[❌ 拒绝请求]
 
-    B -->|修改对象| B1[添加默认标签<br/>注入 Sidecar<br/>修改资源限制]
-    D -->|验证规则| D1[安全策略<br/>资源配额<br/>命名规范]
+    B -->|修改对象| B1["添加默认标签<br/>注入 Sidecar<br/>修改资源限制"]
+    D -->|验证规则| D1["安全策略<br/>资源配额<br/>命名规范"]
 
     style B fill:#4ecdc4,color:#fff
     style D fill:#ffa502,color:#fff

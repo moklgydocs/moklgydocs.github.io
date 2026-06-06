@@ -74,10 +74,10 @@ using var connection = factory.CreateConnection("my-app-name");
 
 ```mermaid
 flowchart TB
-    APP[应用进程] --> CONN[1 个 IConnection<br/>应用生命周期内复用]
-    CONN --> CP[Channel Pool<br/>ConcurrentBag&lt;IModel&gt;]
-    CP --> CH_PUB[发布 Channel<br/>短生命周期<br/>用完归还]
-    CP --> CH_CON[消费 Channel<br/>长生命周期<br/>随消费者存在]
+    APP[应用进程] --> CONN["1 个 IConnection<br/>应用生命周期内复用"]
+    CONN --> CP["Channel Pool<br/>ConcurrentBag&lt;IModel&gt;"]
+    CP --> CH_PUB["发布 Channel<br/>短生命周期<br/>用完归还"]
+    CP --> CH_CON["消费 Channel<br/>长生命周期<br/>随消费者存在"]
 
     style CONN fill:#FF6600,color:#fff
     style CP fill:#2196F3,color:#fff
@@ -404,8 +404,8 @@ flowchart TB
     RETRY -->|是| RECOVER[恢复连接]
     RETRY -->|否| RETRY
 
-    RECOVER --> TOPO[TopologyRecovery<br/>恢复交换机/队列/绑定]
-    TOPO --> CONS[恢复消费者<br/>重新 BasicConsume]
+    RECOVER --> TOPO["TopologyRecovery<br/>恢复交换机/队列/绑定"]
+    TOPO --> CONS["恢复消费者<br/>重新 BasicConsume"]
     CONS --> NORMAL[恢复正常]
 
     style DOWN fill:#F44336,color:#fff

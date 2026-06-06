@@ -706,14 +706,14 @@ RUN --mount=type=bind,source=scripts,target=/scripts \
 ```mermaid
 flowchart TD
     A[Dockerfile 编写] --> B[分析指令变更频率]
-    B --> C[低频指令放前面<br/>系统包安装/依赖安装]
-    C --> D[高频指令放后面<br/>应用代码复制/配置]
+    B --> C["低频指令放前面<br/>系统包安装/依赖安装"]
+    C --> D["高频指令放后面<br/>应用代码复制/配置"]
     D --> E{是否需要外部缓存?}
     E -->|是| F[使用 BuildKit cache mount]
     E -->|否| G[依赖文件单独 COPY]
-    F --> H[启用 BuildKit 构建<br/>DOCKER_BUILDKIT=1]
+    F --> H["启用 BuildKit 构建<br/>DOCKER_BUILDKIT=1"]
     G --> H
-    H --> I[验证缓存命中率<br/>docker build --no-cache 对比]
+    H --> I["验证缓存命中率<br/>docker build --no-cache 对比"]
 ```
 
 ## 四、多阶段构建
@@ -726,13 +726,13 @@ flowchart TD
 flowchart LR
     subgraph 传统构建
         A[源码] --> B[编译器 + SDK + 运行时 + 产物]
-        B --> C[最终镜像<br/>800MB+]
+        B --> C["最终镜像<br/>800MB+"]
     end
     subgraph 多阶段构建
-        D[源码] --> E[Builder 阶段<br/>编译器 + SDK]
+        D[源码] --> E["Builder 阶段<br/>编译器 + SDK"]
         E --> F[仅产物]
-        F --> G[Runtime 阶段<br/>运行时 + 产物]
-        G --> H[最终镜像<br/>50-100MB]
+        F --> G["Runtime 阶段<br/>运行时 + 产物"]
+        G --> H["最终镜像<br/>50-100MB"]
     end
 ```
 
@@ -951,8 +951,8 @@ FROM --platform=$TARGETPLATFORM alpine:3.19 AS runtime
 ```mermaid
 flowchart LR
     A[构建上下文目录] --> B{.dockerignore 过滤}
-    B -->|排除| C[.git<br/>node_modules<br/>__pycache__<br/>.env<br/>日志文件]
-    B -->|保留| D[源码<br/>依赖声明文件<br/>配置文件]
+    B -->|排除| C[".git<br/>node_modules<br/>__pycache__<br/>.env<br/>日志文件"]
+    B -->|保留| D["源码<br/>依赖声明文件<br/>配置文件"]
     D --> E[发送到 Docker Daemon]
     E --> F[构建镜像]
 ```
@@ -1279,12 +1279,12 @@ USER node
 ```mermaid
 flowchart TD
     A[选择基础镜像] --> B{应用类型}
-    B -->|静态编译的二进制| C[scratch<br/>0 MB]
-    B -->|C 语言运行时| D[distroless/static<br/>~2 MB]
-    B -->|需要 glibc| E[distroless/base<br/>~20 MB]
-    B -->|需要 Shell/包管理| F[alpine<br/>~5 MB]
-    B -->|需要完整系统| G[slim 变体<br/>~80 MB]
-    B -->|开发调试| H[完整镜像<br/>~500 MB+]
+    B -->|静态编译的二进制| C["scratch<br/>0 MB"]
+    B -->|C 语言运行时| D["distroless/static<br/>~2 MB"]
+    B -->|需要 glibc| E["distroless/base<br/>~20 MB"]
+    B -->|需要 Shell/包管理| F["alpine<br/>~5 MB"]
+    B -->|需要完整系统| G["slim 变体<br/>~80 MB"]
+    B -->|开发调试| H["完整镜像<br/>~500 MB+"]
 ```
 
 | 基础镜像 | 大小 | 包含内容 | 适用场景 |
@@ -1623,15 +1623,15 @@ flowchart TD
     FROM_CHECK -->|是| CACHE_HIT[✅ 缓存命中]
     FROM_CHECK -->|否| CACHE_MISS[❌ 缓存失效]
 
-    CHECK_INSTR -->|COPY/ADD| COPY_CHECK{源文件校验和<br/>+ 目标路径相同?}
+    CHECK_INSTR -->|COPY/ADD| COPY_CHECK{"源文件校验和<br/>+ 目标路径相同?"}
     COPY_CHECK -->|是| CACHE_HIT
     COPY_CHECK -->|否| CACHE_MISS
 
-    CHECK_INSTR -->|RUN| RUN_CHECK{命令字符串相同<br/>且父层缓存命中?}
+    CHECK_INSTR -->|RUN| RUN_CHECK{"命令字符串相同<br/>且父层缓存命中?"}
     RUN_CHECK -->|是| CACHE_HIT
     RUN_CHECK -->|否| CACHE_MISS
 
-    CHECK_INSTR -->|ENV/LABEL/EXPOSE等| META_CHECK{指令内容相同<br/>且父层缓存命中?}
+    CHECK_INSTR -->|ENV/LABEL/EXPOSE等| META_CHECK{"指令内容相同<br/>且父层缓存命中?"}
     META_CHECK -->|是| CACHE_HIT
     META_CHECK -->|否| CACHE_MISS
 

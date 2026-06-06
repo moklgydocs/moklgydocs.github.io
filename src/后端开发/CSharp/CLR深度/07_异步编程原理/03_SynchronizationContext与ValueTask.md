@@ -1860,7 +1860,7 @@ public struct ValueTaskAwaiter : ICriticalNotifyCompletion
 ```mermaid
 flowchart TD
     A[await ValueTask T] --> B{检查 _obj}
-    B -->|null| C[同步完成<br/>返回 _result]
+    B -->|null| C["同步完成<br/>返回 _result"]
     B -->|Task T| D[调用 Task.GetAwaiter GetResult]
     B -->|IValueTaskSource T| E[调用 VTS.GetResult token]
 

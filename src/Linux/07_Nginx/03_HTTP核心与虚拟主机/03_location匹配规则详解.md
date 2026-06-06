@@ -50,9 +50,9 @@ Nginx location 支持四种修饰符，决定了不同的匹配行为：
 ```mermaid
 flowchart TD
     A[请求URI] --> B{= 精确匹配?}
-    B -->|是| C[使用精确匹配location<br/>停止搜索]
+    B -->|是| C["使用精确匹配location<br/>停止搜索"]
     B -->|否| D{^~ 前缀匹配?}
-    D -->|最长^~匹配| E[使用^~ location<br/>停止搜索]
+    D -->|最长^~匹配| E["使用^~ location<br/>停止搜索"]
     D -->|无^~或非最长| F{记录最长普通前缀}
     F --> G{正则匹配?}
     G -->|第一个正则匹配| H[使用正则location]
@@ -92,17 +92,17 @@ flowchart LR
 ```mermaid
 flowchart TD
     A[开始匹配] --> B[检查所有 = 精确匹配]
-    B -->|找到匹配| C[返回精确匹配location<br/>匹配结束]
-    B -->|未找到| D[检查所有前缀匹配<br/>包括 ^~ 和普通前缀]
+    B -->|找到匹配| C["返回精确匹配location<br/>匹配结束"]
+    B -->|未找到| D["检查所有前缀匹配<br/>包括 ^~ 和普通前缀"]
 
     D --> E[记录最长前缀匹配]
     E --> F{最长前缀是 ^~ ?}
-    F -->|是| G[返回 ^~ location<br/>匹配结束]
+    F -->|是| G["返回 ^~ location<br/>匹配结束"]
     F -->|否| H[按顺序检查正则表达式]
 
     H --> I{找到正则匹配?}
-    I -->|是| J[返回正则location<br/>匹配结束]
-    I -->|否| K[返回最长普通前缀location<br/>匹配结束]
+    I -->|是| J["返回正则location<br/>匹配结束"]
+    I -->|否| K["返回最长普通前缀location<br/>匹配结束"]
 
     style C fill:#c8e6c9
     style G fill:#bbdefb

@@ -25,7 +25,7 @@ SQL Server 的引擎由两大核心组件构成：**关系引擎（Relational En
 flowchart TB
     subgraph 关系引擎["关系引擎 (Relational Engine / Query Processor)"]
         direction TB
-        A[协议层<br/>TDS 协议] --> B[解析器 Parser]
+        A["协议层<br/>TDS 协议"] --> B[解析器 Parser]
         B --> C[代数化器 Algebrizer]
         C --> D[查询优化器 Optimizer]
         D --> E[执行引擎 Execution Engine]
@@ -33,17 +33,17 @@ flowchart TB
 
     subgraph 存储引擎["存储引擎 (Storage Engine)"]
         direction TB
-        F[Buffer Pool<br/>缓冲池]
-        G[日志管理器<br/>Log Manager]
-        H[锁管理器<br/>Lock Manager]
-        I[事务管理器<br/>Transaction Manager]
+        F["Buffer Pool<br/>缓冲池"]
+        G["日志管理器<br/>Log Manager"]
+        H["锁管理器<br/>Lock Manager"]
+        I["事务管理器<br/>Transaction Manager"]
     end
 
     E -->|请求数据| F
     E -->|加锁/解锁| H
     I -->|协调| H
     I -->|写日志| G
-    F -->|磁盘读写| J[(磁盘文件<br/>.mdf / .ndf / .ldf)]
+    F -->|磁盘读写| J["(磁盘文件<br/>.mdf / .ndf / .ldf)"]
     G -->|日志写入| J
 ```
 
@@ -82,16 +82,16 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    A[客户端发送 SQL] --> B[协议层<br/>TDS 协议接收]
-    B --> C[解析器<br/>语法检查]
-    C --> D[代数化器<br/>语义检查 & 绑定]
-    D --> E[查询优化器<br/>成本估算 & 计划选择]
-    E --> F{计划缓存<br/>已有计划?}
+    A[客户端发送 SQL] --> B["协议层<br/>TDS 协议接收"]
+    B --> C["解析器<br/>语法检查"]
+    C --> D["代数化器<br/>语义检查 & 绑定"]
+    D --> E["查询优化器<br/>成本估算 & 计划选择"]
+    E --> F{"计划缓存<br/>已有计划?"}
     F -->|是| G[复用执行计划]
     F -->|否| H[生成新计划 & 缓存]
     G --> I[执行引擎]
     H --> I
-    I --> J[存储引擎<br/>Buffer Pool / 磁盘]
+    I --> J["存储引擎<br/>Buffer Pool / 磁盘"]
     J --> K[返回结果集]
 ```
 

@@ -740,35 +740,35 @@ map $remote_addr $backend {
 graph TB
     ERROR[错误发生] --> CODE{状态码?}
 
-    CODE -->|400| BAD_REQ[400 Bad Request<br/>客户端请求格式错误]
-    BAD_REQ --> FIX1[检查请求参数/头部<br/>Content-Type 是否正确]
+    CODE -->|400| BAD_REQ["400 Bad Request<br/>客户端请求格式错误"]
+    BAD_REQ --> FIX1["检查请求参数/头部<br/>Content-Type 是否正确"]
 
-    CODE -->|403| FORBIDDEN[403 Forbidden<br/>权限不足]
-    FORBIDDEN --> FIX2[检查 allow/deny 规则<br/>auth_basic 配置<br/>文件权限]
+    CODE -->|403| FORBIDDEN["403 Forbidden<br/>权限不足"]
+    FORBIDDEN --> FIX2["检查 allow/deny 规则<br/>auth_basic 配置<br/>文件权限"]
 
-    CODE -->|404| NOT_FOUND[404 Not Found<br/>资源不存在]
-    NOT_FOUND --> FIX3[检查 root/alias 路径<br/>try_files 配置<br/>URL 拼写]
+    CODE -->|404| NOT_FOUND["404 Not Found<br/>资源不存在"]
+    NOT_FOUND --> FIX3["检查 root/alias 路径<br/>try_files 配置<br/>URL 拼写"]
 
-    CODE -->|413| TOO_LARGE[413 Request Entity Too Large<br/>请求体过大]
+    CODE -->|413| TOO_LARGE["413 Request Entity Too Large<br/>请求体过大"]
     TOO_LARGE --> FIX4[增大 client_max_body_size]
 
-    CODE -->|429| RATE_LIMIT[429 Too Many Requests<br/>触发限流]
-    RATE_LIMIT --> FIX5[调整 limit_req 速率<br/>增加 burst 值]
+    CODE -->|429| RATE_LIMIT["429 Too Many Requests<br/>触发限流"]
+    RATE_LIMIT --> FIX5["调整 limit_req 速率<br/>增加 burst 值"]
 
-    CODE -->|497| HTTP_TO_HTTPS[497 HTTP Request Sent to HTTPS Port<br/>HTTP 请求发到 HTTPS 端口]
-    HTTP_TO_HTTPS --> FIX6[配置 HTTP→HTTPS 重定向<br/>error_page 497 =301 https://...]
+    CODE -->|497| HTTP_TO_HTTPS["497 HTTP Request Sent to HTTPS Port<br/>HTTP 请求发到 HTTPS 端口"]
+    HTTP_TO_HTTPS --> FIX6["配置 HTTP→HTTPS 重定向<br/>error_page 497 =301 https://..."]
 
-    CODE -->|499| CLIENT_CLOSE[499 Client Closed Request<br/>客户端提前关闭]
-    CLIENT_CLOSE --> FIX7[检查 upstream 响应时间<br/>考虑 proxy_ignore_client_abort]
+    CODE -->|499| CLIENT_CLOSE["499 Client Closed Request<br/>客户端提前关闭"]
+    CLIENT_CLOSE --> FIX7["检查 upstream 响应时间<br/>考虑 proxy_ignore_client_abort"]
 
-    CODE -->|502| BAD_GW[502 Bad Gateway<br/>上游不可用]
-    BAD_GW --> FIX8[检查 upstream 进程<br/>检查网络连通性<br/>检查 proxy_connect_timeout]
+    CODE -->|502| BAD_GW["502 Bad Gateway<br/>上游不可用"]
+    BAD_GW --> FIX8["检查 upstream 进程<br/>检查网络连通性<br/>检查 proxy_connect_timeout"]
 
-    CODE -->|503| SVC_UNAVAIL[503 Service Unavailable<br/>服务不可用]
-    SVC_UNAVAIL --> FIX9[检查 Worker 进程数<br/>检查 worker_connections<br/>检查限流配置]
+    CODE -->|503| SVC_UNAVAIL["503 Service Unavailable<br/>服务不可用"]
+    SVC_UNAVAIL --> FIX9["检查 Worker 进程数<br/>检查 worker_connections<br/>检查限流配置"]
 
-    CODE -->|504| GW_TIMEOUT[504 Gateway Timeout<br/>上游超时]
-    GW_TIMEOUT --> FIX10[增大 proxy_read_timeout<br/>优化 upstream 性能<br/>检查 upstream 日志]
+    CODE -->|504| GW_TIMEOUT["504 Gateway Timeout<br/>上游超时"]
+    GW_TIMEOUT --> FIX10["增大 proxy_read_timeout<br/>优化 upstream 性能<br/>检查 upstream 日志"]
 
     style BAD_GW fill:#ffcdd2
     style GW_TIMEOUT fill:#ffcdd2

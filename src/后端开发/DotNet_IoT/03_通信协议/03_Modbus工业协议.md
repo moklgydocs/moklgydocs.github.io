@@ -56,9 +56,9 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    M[Master<br/>主站/客户端] -->|Request| S1[Slave 1<br/>从站 地址=1]
-    M -->|Request| S2[Slave 2<br/>从站 地址=2]
-    M -->|Request| S3[Slave 3<br/>从站 地址=3]
+    M["Master<br/>主站/客户端"] -->|Request| S1["Slave 1<br/>从站 地址=1"]
+    M -->|Request| S2["Slave 2<br/>从站 地址=2"]
+    M -->|Request| S3["Slave 3<br/>从站 地址=3"]
 
     S1 -->|Response| M
     S2 -->|Response| M
@@ -367,15 +367,15 @@ flowchart LR
     end
 
     subgraph GW["Modbus 网关 (.NET)"]
-        TCP[Modbus TCP<br/>Server]
-        BRIDGE[协议桥接<br/>路由引擎]
-        RTU[Modbus RTU<br/>Client]
+        TCP["Modbus TCP<br/>Server"]
+        BRIDGE["协议桥接<br/>路由引擎"]
+        RTU["Modbus RTU<br/>Client"]
     end
 
     subgraph FIELD["现场设备"]
-        D1[PLC 地址=1<br/>RS-485]
-        D2[变频器 地址=2<br/>RS-485]
-        D3[仪表 地址=3<br/>RS-485]
+        D1["PLC 地址=1<br/>RS-485"]
+        D2["变频器 地址=2<br/>RS-485"]
+        D3["仪表 地址=3<br/>RS-485"]
     end
 
     HMI -->|Modbus TCP| TCP
@@ -499,12 +499,12 @@ flowchart TB
     end
 
     subgraph GATEWAY["通信网关"]
-        MW[Modbus TCP Client<br/>.NET Worker Service]
+        MW["Modbus TCP Client<br/>.NET Worker Service"]
     end
 
     subgraph PLC["现场 PLC"]
-        P1[S7-1200<br/>地址=1]
-        P2[S7-200<br/>地址=2]
+        P1["S7-1200<br/>地址=1"]
+        P2["S7-200<br/>地址=2"]
     end
 
     MW -->|定时轮询<br/>FC03| P1

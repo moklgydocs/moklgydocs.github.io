@@ -87,9 +87,9 @@ ETag: "abc123"
 
 ```mermaid
 graph TB
-    REQ["请求资源"] --> CC{Cache-Control<br/>是否过期？}
+    REQ["请求资源"] --> CC{"Cache-Control<br/>是否过期？"}
     CC -->|"未过期"| LOCAL["✅ 直接用本地缓存<br/>200 (from disk cache)"]
-    CC -->|"已过期"| ETAG{发送协商缓存请求<br/>带 If-None-Match"}
+    CC -->|"已过期"| ETAG{"发送协商缓存请求<br/>带 If-None-Match"}
     ETAG -->|"资源未变"| R304["304 Not Modified<br/>用缓存，省带宽"]
     ETAG -->|"资源已变"| R200["200 OK<br/>返回新资源 + 新 ETag"]
 

@@ -92,15 +92,15 @@ HTTP/2 请求:
 
 ```mermaid
 flowchart LR
-    Client[gRPC 客户端] -->|HTTP/2| Nginx[Nginx<br/>grpc_pass]
+    Client[gRPC 客户端] -->|HTTP/2| Nginx["Nginx<br/>grpc_pass"]
     Nginx -->|HTTP/2| S1[gRPC Server 1]
     Nginx -->|HTTP/2| S2[gRPC Server 2]
     Nginx -->|HTTP/2| S3[gRPC Server 3]
 
     subgraph Nginx 路由能力
-        R1[方法级路由<br/>/package.Service/Method]
-        R2[服务级路由<br/>/package.Service/]
-        R3[全局路由<br/>/]
+        R1["方法级路由<br/>/package.Service/Method"]
+        R2["服务级路由<br/>/package.Service/"]
+        R3["全局路由<br/>/"]
         R4[负载均衡]
         R5[超时与重试]
         R6[SSL 终端]
@@ -354,7 +354,7 @@ server {
 
 ```mermaid
 flowchart LR
-    Browser[浏览器] -->|gRPC-Web<br/>HTTP/1.1| Nginx[Nginx<br/>grpc-web 模块]
+    Browser[浏览器] -->|gRPC-Web<br/>HTTP/1.1| Nginx["Nginx<br/>grpc-web 模块"]
     Nginx -->|gRPC<br/>HTTP/2| Backend[gRPC Server]
 
     subgraph gRPC-Web 转码
@@ -621,9 +621,9 @@ server {
 
 ```mermaid
 flowchart TD
-    LB[负载均衡器/Nginx] -->|健康检查请求| S1[gRPC Server 1<br/>SERVING]
-    LB -->|健康检查请求| S2[gRPC Server 2<br/>NOT_SERVING]
-    LB -->|健康检查请求| S3[gRPC Server 3<br/>SERVING]
+    LB[负载均衡器/Nginx] -->|健康检查请求| S1["gRPC Server 1<br/>SERVING"]
+    LB -->|健康检查请求| S2["gRPC Server 2<br/>NOT_SERVING"]
+    LB -->|健康检查请求| S3["gRPC Server 3<br/>SERVING"]
 
     S1 -->|SERVING| LB
     S2 -->|NOT_SERVING| LB

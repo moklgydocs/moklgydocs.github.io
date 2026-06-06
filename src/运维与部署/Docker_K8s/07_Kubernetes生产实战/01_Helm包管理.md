@@ -41,7 +41,7 @@ timeline
 graph TB
     subgraph "Helm v2 架构"
         direction TB
-        H2C[Helm Client] -->|gRPC| Tiller[Tiller<br/>集群内服务端]
+        H2C[Helm Client] -->|gRPC| Tiller["Tiller<br/>集群内服务端"]
         Tiller -->|API Server| K8s2[Kubernetes API]
         Tiller -->|etcd| E2[etcd]
 
@@ -53,7 +53,7 @@ graph TB
         direction TB
         H3C[Helm Client] -->|KubeConfig| K8s3[Kubernetes API]
         K8s3 -->|etcd| E3[etcd]
-        R3[Release 存储<br/>Secrets] -.->|K8s Secret| K8s3
+        R3["Release 存储<br/>Secrets"] -.->|K8s Secret| K8s3
 
         style H3C fill:#4ecdc4,color:#fff
         style R3 fill:#95e1d3,color:#fff
@@ -76,14 +76,14 @@ graph TB
 ```mermaid
 graph LR
     subgraph "Helm Client"
-        CLI[helm CLI] --> Engine[模板引擎<br/>Go template + Sprig]
+        CLI[helm CLI] --> Engine["模板引擎<br/>Go template + Sprig"]
         CLI --> Plugin[插件系统]
         CLI --> Repo[仓库管理]
     end
 
     subgraph "Kubernetes 集群"
         API[API Server] --> Store[(Release Secrets)]
-        API --> Resources[K8s 资源<br/>Deployment/Service/...]
+        API --> Resources["K8s 资源<br/>Deployment/Service/..."]
     end
 
     CLI -->|REST API| API
@@ -96,15 +96,15 @@ graph LR
 ```mermaid
 flowchart TD
     A[helm install/upgrade] --> B[加载 Chart]
-    B --> C[合并 values<br/>默认 + 用户 + -f 文件 + --set]
-    C --> D[模板引擎渲染<br/>Go template + Sprig 函数]
+    B --> C["合并 values<br/>默认 + 用户 + -f 文件 + --set"]
+    C --> D["模板引擎渲染<br/>Go template + Sprig 函数"]
     D --> E{Schema 验证}
     E -->|通过| F[生成最终 YAML 清单]
     E -->|失败| G[❌ 报错退出]
-    F --> H[预检查 hooks<br/>pre-install/pre-upgrade]
+    F --> H["预检查 hooks<br/>pre-install/pre-upgrade"]
     H --> I[调用 K8s API 创建资源]
-    I --> J[等待就绪<br/>--wait]
-    J --> K[存储 Release 记录<br/>Secret]
+    I --> J["等待就绪<br/>--wait"]
+    J --> K["存储 Release 记录<br/>Secret"]
     K --> L[✅ 部署完成]
 
     style A fill:#4ecdc4,color:#fff
@@ -355,9 +355,9 @@ postgresql:
 
 ```mermaid
 graph BT
-    A[子 Chart 的 values.yaml<br/>优先级最低] --> B[父 Chart 的 values.yaml]
+    A["子 Chart 的 values.yaml<br/>优先级最低"] --> B[父 Chart 的 values.yaml]
     B --> C[-f 指定的 values 文件]
-    C --> D[--set 参数<br/>优先级最高]
+    C --> D["--set 参数<br/>优先级最高"]
 
     style D fill:#ff6b6b,color:#fff
     style C fill:#ffa502,color:#fff
@@ -1097,7 +1097,7 @@ Harbor 是企业级容器镜像仓库，同时支持 Helm Chart 托管：
 
 ```mermaid
 graph LR
-    Dev[开发者] -->|helm push| Harbor[Harbor<br/>镜像+Chart 仓库]
+    Dev[开发者] -->|helm push| Harbor["Harbor<br/>镜像+Chart 仓库"]
     Harbor -->|helm pull| CI_CD[CI/CD 流水线]
     CI_CD -->|helm install| K8s[Kubernetes 集群]
 
@@ -1214,12 +1214,12 @@ helm get notes myapp --namespace production
 flowchart TD
     A[开发 Chart] --> B[helm lint]
     B --> C{通过检查?}
-    C -->|是| D[helm template<br/>本地渲染]
+    C -->|是| D["helm template<br/>本地渲染"]
     C -->|否| Z[修复问题]
     Z --> B
     D --> E{YAML 正确?}
     E -->|否| Z
-    E -->|是| F[helm upgrade --install<br/>--dry-run]
+    E -->|是| F["helm upgrade --install<br/>--dry-run"]
     F --> G{干跑通过?}
     G -->|否| Z
     G -->|是| H[helm upgrade --install]
@@ -1459,7 +1459,7 @@ configMapGenerator:
 
 ```mermaid
 flowchart LR
-    Git[Git 仓库<br/>Helm Chart + Values] -->|git pull| ArgoCD[ArgoCD]
+    Git["Git 仓库<br/>Helm Chart + Values"] -->|git pull| ArgoCD[ArgoCD]
     ArgoCD -->|helm template| Rendered[渲染后的 YAML]
     Rendered -->|diff & sync| K8s[Kubernetes 集群]
 
@@ -1540,7 +1540,7 @@ spec:
 
 ```mermaid
 graph TD
-    Root[Root App<br/>ArgoCD Application] --> App1[myapp App]
+    Root["Root App<br/>ArgoCD Application"] --> App1[myapp App]
     Root --> App2[redis App]
     Root --> App3[monitoring App]
     Root --> App4[ingress App]

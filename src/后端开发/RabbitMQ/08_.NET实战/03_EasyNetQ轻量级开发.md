@@ -21,16 +21,16 @@ EasyNetQ 是 .NET 生态最轻量的 RabbitMQ 客户端框架，提供类型安�
 
 ```mermaid
 flowchart TB
-    ENQ[EasyNetQ] --> PUBSUB[Pub/Sub<br/>发布/订阅]
-    ENQ --> RPC[Request/Response<br/>RPC 远程调用]
-    ENQ --> SENDRECV[Send/Receive<br/>点对点]
-    ENQ --> AUTOSUB[AutoSubscriber<br/>自动订阅]
-    ENQ --> ADV[Advanced Bus<br/>底层访问]
+    ENQ[EasyNetQ] --> PUBSUB["Pub/Sub<br/>发布/订阅"]
+    ENQ --> RPC["Request/Response<br/>RPC 远程调用"]
+    ENQ --> SENDRECV["Send/Receive<br/>点对点"]
+    ENQ --> AUTOSUB["AutoSubscriber<br/>自动订阅"]
+    ENQ --> ADV["Advanced Bus<br/>底层访问"]
 
-    PUBSUB --> FEATURES1[类型安全<br/>自动 Exchange/Queue 创建]
-    RPC --> FEATURES2[同步/异步<br/>自动 CorrelationId]
-    SENDRECV --> FEATURES3[指定队列<br/>灵活路由]
-    AUTOSUB --> FEATURES4[Attribute 标记<br/>批量注册]
+    PUBSUB --> FEATURES1["类型安全<br/>自动 Exchange/Queue 创建"]
+    RPC --> FEATURES2["同步/异步<br/>自动 CorrelationId"]
+    SENDRECV --> FEATURES3["指定队列<br/>灵活路由"]
+    AUTOSUB --> FEATURES4["Attribute 标记<br/>批量注册"]
 
     style ENQ fill:#FF6600,color:#fff
     style FEATURES1 fill:#4CAF50,color:#fff
@@ -129,12 +129,12 @@ public class InventoryCheckResponse
 
 ```mermaid
 flowchart TB
-    P[发布者] -->|Publish&lt;T&gt;| EX[Exchange<br/>自动创建: OrderCreatedMessage]
-    EX -->|Binding| Q1[Queue: OrderCreatedMessage<br/>订阅者 A]
-    EX -->|Binding| Q2[Queue: OrderCreatedMessage<br/>订阅者 B]
+    P[发布者] -->|Publish&lt;T&gt;| EX["Exchange<br/>自动创建: OrderCreatedMessage"]
+    EX -->|Binding| Q1["Queue: OrderCreatedMessage<br/>订阅者 A"]
+    EX -->|Binding| Q2["Queue: OrderCreatedMessage<br/>订阅者 B"]
 
-    Q1 --> C1[Consumer A<br/>库存服务]
-    Q2 --> C2[Consumer B<br/>通知服务]
+    Q1 --> C1["Consumer A<br/>库存服务"]
+    Q2 --> C2["Consumer B<br/>通知服务"]
 
     style EX fill:#FF6600,color:#fff
     style Q1 fill:#4CAF50,color:#fff
@@ -307,7 +307,7 @@ Send/Receive 是直接发送到指定队列的模式，不经过 Exchange 路由
 
 ```mermaid
 flowchart LR
-    S[发送者] -->|Send| Q[指定队列<br/>order-processing]
+    S[发送者] -->|Send| Q["指定队列<br/>order-processing"]
     Q --> R[接收者]
 
     style S fill:#FF6600,color:#fff
@@ -653,8 +653,8 @@ flowchart TB
     MSG[消息消费] --> RESULT{处理结果}
     RESULT -->|成功| ACK[ACK 确认]
     RESULT -->|异常| ERROR[DefaultConsumerErrorStrategy]
-    ERROR --> ERROR_Q[错误队列<br/>原队列名_error]
-    ERROR --> EX[Exchange<br/>EasyNetQ-Error-Exchange]
+    ERROR --> ERROR_Q["错误队列<br/>原队列名_error"]
+    ERROR --> EX["Exchange<br/>EasyNetQ-Error-Exchange"]
 
     style ACK fill:#4CAF50,color:#fff
     style ERROR fill:#F44336,color:#fff
@@ -1004,11 +1004,11 @@ flowchart TB
     EX1 --> Q1[inventory-service queue]
     EX1 --> Q2[notification-service queue]
 
-    Q1 --> INV[库存服务<br/>扣减库存]
-    Q2 --> NOT1[通知服务<br/>发送确认邮件]
+    Q1 --> INV["库存服务<br/>扣减库存"]
+    Q2 --> NOT1["通知服务<br/>发送确认邮件"]
 
     INV -->|Publish| EX2[InventoryDeducted Exchange]
-    EX2 --> Q3[notification-service queue<br/>支付完成通知]
+    EX2 --> Q3["notification-service queue<br/>支付完成通知"]
 
     style API fill:#FF6600,color:#fff
     style INV fill:#4CAF50,color:#fff
@@ -1022,12 +1022,12 @@ flowchart TB
     CHOOSE[选择 .NET RabbitMQ 客户端] --> Q1{项目规模?}
 
     Q1 -->|小型/中型项目| Q2{需要 Saga 吗?}
-    Q1 -->|大型/企业级项目| MASS[MassTransit<br/>全功能框架]
+    Q1 -->|大型/企业级项目| MASS["MassTransit<br/>全功能框架"]
 
     Q2 -->|否| Q3{需要零配置简洁 API?}
     Q2 -->|是| MASS
-    Q3 -->|是| ENQ[EasyNetQ<br/>轻量级框架]
-    Q3 -->|否| RAW[RabbitMQ.Client<br/>底层 SDK]
+    Q3 -->|是| ENQ["EasyNetQ<br/>轻量级框架"]
+    Q3 -->|否| RAW["RabbitMQ.Client<br/>底层 SDK"]
 
     style ENQ fill:#FF6600,color:#fff
     style MASS fill:#4CAF50,color:#fff

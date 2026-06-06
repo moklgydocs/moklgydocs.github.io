@@ -27,14 +27,14 @@ Docker 网络由 libnetwork 组件驱动，它实现了 CNM（Container Network 
 
 ```mermaid
 flowchart TD
-    A[libnetwork<br/>CNM 实现] --> B[Sandbox<br/>网络命名空间]
-    A --> C[Endpoint<br/>网络接口]
-    A --> D[Network<br/>网络实例]
+    A["libnetwork<br/>CNM 实现"] --> B["Sandbox<br/>网络命名空间"]
+    A --> C["Endpoint<br/>网络接口"]
+    A --> D["Network<br/>网络实例"]
 
-    B --> B1[容器网络栈<br/>路由表/DNS/iptables]
-    C --> C1[veth pair 一端<br/>连接 Sandbox]
-    C --> C2[veth pair 另一端<br/>连接 Network]
-    D --> D1[bridge/overlay/<br/>macvlan/host]
+    B --> B1["容器网络栈<br/>路由表/DNS/iptables"]
+    C --> C1["veth pair 一端<br/>连接 Sandbox"]
+    C --> C2["veth pair 另一端<br/>连接 Network"]
+    D --> D1["bridge/overlay/<br/>macvlan/host"]
 
     B1 --> E[容器 A]
     C1 --> E
@@ -78,7 +78,7 @@ flowchart TD
 
     D -->|多机| J{使用 Swarm/K8s?}
     J -->|Swarm| K[overlay 模式]
-    J -->|K8s| L[CNI 插件<br/>Calico/Flannel]
+    J -->|K8s| L["CNI 插件<br/>Calico/Flannel"]
     J -->|自定义| M[overlay + macvlan]
 ```
 
@@ -91,15 +91,15 @@ Docker 安装后会在主机上创建一个 `docker0` 网桥，所有默认 brid
 ```mermaid
 flowchart TD
     subgraph 主机网络
-        ETH0[eth0<br/>192.168.1.100]
-        DOCKER0[docker0<br/>172.17.0.1/16]
+        ETH0["eth0<br/>192.168.1.100"]
+        DOCKER0["docker0<br/>172.17.0.1/16"]
     end
 
     subgraph 容器网络
-        VETH1[veth1234<br/>↕]
-        VETH2[veth5678<br/>↕]
-        C1[容器 A<br/>eth0: 172.17.0.2]
-        C2[容器 B<br/>eth0: 172.17.0.3]
+        VETH1["veth1234<br/>↕"]
+        VETH2["veth5678<br/>↕"]
+        C1["容器 A<br/>eth0: 172.17.0.2"]
+        C2["容器 B<br/>eth0: 172.17.0.3"]
     end
 
     ETH0 -->|NAT| DOCKER0
@@ -156,17 +156,17 @@ Docker 使用 iptables 实现容器的网络地址转换（NAT）和端口映射
 ```mermaid
 flowchart LR
     subgraph 外部流量
-        CLIENT[客户端<br/>192.168.1.x]
+        CLIENT["客户端<br/>192.168.1.x"]
     end
 
     subgraph 主机
-        ETH0[eth0<br/>192.168.1.100]
-        IPT[iptables<br/>NAT/Filter]
-        DOCKER0[docker0<br/>172.17.0.1]
+        ETH0["eth0<br/>192.168.1.100"]
+        IPT["iptables<br/>NAT/Filter"]
+        DOCKER0["docker0<br/>172.17.0.1"]
     end
 
     subgraph 容器
-        APP[应用<br/>172.17.0.2:8080]
+        APP["应用<br/>172.17.0.2:8080"]
     end
 
     CLIENT -->|访问 192.168.1.100:80| ETH0
@@ -376,18 +376,18 @@ Host 模式下，容器直接使用主机的网络命名空间，不进行网络
 ```mermaid
 flowchart LR
     subgraph Host 模式
-        A[主机网络栈<br/>eth0: 192.168.1.100]
-        B[容器 A<br/>共享主机网络栈]
-        C[容器 B<br/>共享主机网络栈]
+        A["主机网络栈<br/>eth0: 192.168.1.100"]
+        B["容器 A<br/>共享主机网络栈"]
+        C["容器 B<br/>共享主机网络栈"]
         A --> B
         A --> C
     end
 
     subgraph Bridge 模式对比
-        D[主机网络栈<br/>eth0: 192.168.1.100]
+        D["主机网络栈<br/>eth0: 192.168.1.100"]
         E[docker0: 172.17.0.1]
-        F[容器 C<br/>172.17.0.2]
-        G[容器 D<br/>172.17.0.3]
+        F["容器 C<br/>172.17.0.2"]
+        G["容器 D<br/>172.17.0.3"]
         D -->|NAT| E
         E --> F
         E --> G
@@ -460,11 +460,11 @@ Overlay 网络在多台主机之间创建虚拟网络，使用 VXLAN 隧道封�
 ```mermaid
 flowchart TD
     subgraph 主机 A
-        A1[容器 A1<br/>10.0.0.2]
-        A2[容器 A2<br/>10.0.0.3]
-        A3[docker_gwbridge<br/>172.18.0.1]
-        A4[VXLAN 接口<br/>vxlan0]
-        A5[eth0<br/>192.168.1.100]
+        A1["容器 A1<br/>10.0.0.2"]
+        A2["容器 A2<br/>10.0.0.3"]
+        A3["docker_gwbridge<br/>172.18.0.1"]
+        A4["VXLAN 接口<br/>vxlan0"]
+        A5["eth0<br/>192.168.1.100"]
         A1 --> A4
         A2 --> A4
         A4 --> A5
@@ -472,11 +472,11 @@ flowchart TD
     end
 
     subgraph 主机 B
-        B1[容器 B1<br/>10.0.0.4]
-        B2[容器 B2<br/>10.0.0.5]
-        B3[docker_gwbridge<br/>172.19.0.1]
-        B4[VXLAN 接口<br/>vxlan0]
-        B5[eth0<br/>192.168.1.101]
+        B1["容器 B1<br/>10.0.0.4"]
+        B2["容器 B2<br/>10.0.0.5"]
+        B3["docker_gwbridge<br/>172.19.0.1"]
+        B4["VXLAN 接口<br/>vxlan0"]
+        B5["eth0<br/>192.168.1.101"]
         B1 --> B4
         B2 --> B4
         B4 --> B5
@@ -491,10 +491,10 @@ flowchart TD
 ```mermaid
 flowchart LR
     subgraph 数据包封装
-        A[原始数据包<br/>源: 10.0.0.2<br/>目的: 10.0.0.4] --> B[VXLAN Header<br/>VNI: 256]
-        B --> C[UDP Header<br/>端口: 4789]
-        C --> D[外层 IP<br/>源: 192.168.1.100<br/>目的: 192.168.1.101]
-        D --> E[外层 Ethernet<br/>源 MAC → 目的 MAC]
+        A["原始数据包<br/>源: 10.0.0.2<br/>目的: 10.0.0.4"] --> B["VXLAN Header<br/>VNI: 256"]
+        B --> C["UDP Header<br/>端口: 4789"]
+        C --> D["外层 IP<br/>源: 192.168.1.100<br/>目的: 192.168.1.101"]
+        D --> E["外层 Ethernet<br/>源 MAC → 目的 MAC"]
     end
 ```
 
@@ -639,15 +639,15 @@ Macvlan 允许容器直接使用物理网络接口，拥有独立的 MAC 地址�
 ```mermaid
 flowchart TD
     subgraph 主机
-        ETH0[eth0<br/>物理网卡<br/>192.168.1.100]
-        ROUTER[路由器<br/>192.168.1.1]
+        ETH0["eth0<br/>物理网卡<br/>192.168.1.100"]
+        ROUTER["路由器<br/>192.168.1.1"]
     end
 
     subgraph Macvlan 网络
-        MV[macvlan 接口<br/>父接口: eth0]
-        C1[容器 A<br/>192.168.1.101<br/>独立 MAC]
-        C2[容器 B<br/>192.168.1.102<br/>独立 MAC]
-        C3[容器 C<br/>192.168.1.103<br/>独立 MAC]
+        MV["macvlan 接口<br/>父接口: eth0"]
+        C1["容器 A<br/>192.168.1.101<br/>独立 MAC"]
+        C2["容器 B<br/>192.168.1.102<br/>独立 MAC"]
+        C3["容器 C<br/>192.168.1.103<br/>独立 MAC"]
     end
 
     ROUTER --> ETH0
@@ -664,18 +664,18 @@ flowchart TD
 ```mermaid
 flowchart LR
     subgraph 物理网络 192.168.1.0/24
-        R[路由器<br/>192.168.1.1]
+        R["路由器<br/>192.168.1.1"]
         S[交换机]
     end
 
     subgraph 主机
-        ETH0[eth0<br/>192.168.1.100]
-        MACVLAN[macvlan0<br/>无 IP]
+        ETH0["eth0<br/>192.168.1.100"]
+        MACVLAN["macvlan0<br/>无 IP"]
     end
 
     subgraph 容器
-        C1[容器 A<br/>MAC: 02:42:xx:xx:01<br/>IP: 192.168.1.101]
-        C2[容器 B<br/>MAC: 02:42:xx:xx:02<br/>IP: 192.168.1.102]
+        C1["容器 A<br/>MAC: 02:42:xx:xx:01<br/>IP: 192.168.1.101"]
+        C2["容器 B<br/>MAC: 02:42:xx:xx:02<br/>IP: 192.168.1.102"]
     end
 
     R --> S
@@ -923,13 +923,13 @@ sysctl -w net.netfilter.nf_conntrack_tcp_timeout_established=7200
 ```mermaid
 flowchart TD
     A[网络问题] --> B{容器能 ping 通网关吗?}
-    B -->|否| C[检查网络配置<br/>IP/子网/网关]
+    B -->|否| C["检查网络配置<br/>IP/子网/网关"]
     B -->|是| D{容器能 ping 通同网络容器吗?}
-    D -->|否| E[检查 DNS/网络连通性<br/>veth pair/iptables]
+    D -->|否| E["检查 DNS/网络连通性<br/>veth pair/iptables"]
     D -->|是| F{容器能访问外网吗?}
-    F -->|否| G[检查 NAT/MASQUERADE<br/>FORWARD 规则]
+    F -->|否| G["检查 NAT/MASQUERADE<br/>FORWARD 规则"]
     F -->|是| H{外部能访问容器吗?}
-    H -->|否| I[检查端口映射<br/>DNAT 规则/firewall]
+    H -->|否| I["检查端口映射<br/>DNAT 规则/firewall"]
     H -->|是| J[✅ 网络正常]
 ```
 
@@ -1196,7 +1196,7 @@ Calico 是最流行的 CNI 插件之一，使用 BGP 协议实现 Pod 间通信�
 ```mermaid
 flowchart TD
     subgraph 节点 A
-        PA1[Pod A<br/>10.244.1.2]
+        PA1["Pod A<br/>10.244.1.2"]
         CA1[Calico Agent]
         BA1[BIRD BGP Daemon]
         PA1 --> CA1
@@ -1204,7 +1204,7 @@ flowchart TD
     end
 
     subgraph 节点 B
-        PA2[Pod B<br/>10.244.2.3]
+        PA2["Pod B<br/>10.244.2.3"]
         CA2[Calico Agent]
         BA2[BIRD BGP Daemon]
         PA2 --> CA2
@@ -1230,18 +1230,18 @@ Flannel 是 CoreOS 开发的简单 CNI 插件，为每个节点分配子网，�
 flowchart TD
     subgraph 节点 A
         FA1[Flannel Agent]
-        PA1[Pod A<br/>10.244.1.2]
+        PA1["Pod A<br/>10.244.1.2"]
         PA1 --> FA1
     end
 
     subgraph 节点 B
         FA2[Flannel Agent]
-        PA2[Pod B<br/>10.244.2.3]
+        PA2["Pod B<br/>10.244.2.3"]
         PA2 --> FA2
     end
 
     subgraph etcd
-        ETCD[etcd<br/>子网分配表]
+        ETCD["etcd<br/>子网分配表"]
     end
 
     FA1 -->|读写子网信息| ETCD
@@ -1356,8 +1356,8 @@ flowchart TD
     subgraph Swarm 集群
         subgraph Manager
             M1[Manager 节点]
-            MS1[Service A<br/>replicas: 2]
-            MS2[Service B<br/>replicas: 3]
+            MS1["Service A<br/>replicas: 2"]
+            MS2["Service B<br/>replicas: 3"]
         end
 
         subgraph Worker 1
@@ -1377,7 +1377,7 @@ flowchart TD
     end
 
     subgraph VIP 负载均衡
-        VIP[Virtual IP<br/>10.0.0.2:8080]
+        VIP["Virtual IP<br/>10.0.0.2:8080"]
     end
 
     CLIENT[客户端] -->|访问 VIP| VIP
@@ -1541,10 +1541,10 @@ volumes:
 
 ```mermaid
 flowchart TD
-    CLIENT[👤 客户端] -->|:80/:443| GW[Nginx Gateway<br/>公共网络]
-    GW -->|api-net| API[API Server ×2<br/>10.1.0.0/16]
-    API -->|backend| DB[(PostgreSQL<br/>10.2.0.0/16)]
-    API -->|backend| REDIS[(Redis<br/>10.2.0.0/16)]
+    CLIENT[👤 客户端] -->|:80/:443| GW["Nginx Gateway<br/>公共网络"]
+    GW -->|api-net| API["API Server ×2<br/>10.1.0.0/16"]
+    API -->|backend| DB["(PostgreSQL<br/>10.2.0.0/16)"]
+    API -->|backend| REDIS["(Redis<br/>10.2.0.0/16)"]
     WORKER[Worker] -->|backend| DB
     WORKER -->|backend| REDIS
 

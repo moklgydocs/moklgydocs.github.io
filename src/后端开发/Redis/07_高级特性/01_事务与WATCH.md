@@ -435,8 +435,8 @@ flowchart TD
     H --> I
     I --> J{脚本是否超时?}
     J -->|否| K[返回执行结果]
-    J -->|是| L[返回 BUSY 错误<br/>其他命令被阻塞]
-    L --> M[需 SCRIPT KILL 或<br/>SHUTDOWN NOSAVE]
+    J -->|是| L["返回 BUSY 错误<br/>其他命令被阻塞"]
+    L --> M["需 SCRIPT KILL 或<br/>SHUTDOWN NOSAVE"]
 ```
 
 ### 4.4 Lua 脚本中调用 Redis

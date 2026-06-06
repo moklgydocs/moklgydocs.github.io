@@ -24,15 +24,15 @@ Nginx 采用经典的 **Master-Worker** 多进程架构，这是其高并发高�
 ```mermaid
 graph TB
     subgraph Nginx进程架构
-        M[Master Process<br/>PID: 1000<br/>root用户运行]
+        M["Master Process<br/>PID: 1000<br/>root用户运行"]
 
-        M --> W1[Worker Process #1<br/>PID: 1001<br/>nginx用户运行]
-        M --> W2[Worker Process #2<br/>PID: 1002<br/>nginx用户运行]
-        M --> W3[Worker Process #3<br/>PID: 1003<br/>nginx用户运行]
-        M --> W4[Worker Process #4<br/>PID: 1004<br/>nginx用户运行]
+        M --> W1["Worker Process #1<br/>PID: 1001<br/>nginx用户运行"]
+        M --> W2["Worker Process #2<br/>PID: 1002<br/>nginx用户运行"]
+        M --> W3["Worker Process #3<br/>PID: 1003<br/>nginx用户运行"]
+        M --> W4["Worker Process #4<br/>PID: 1004<br/>nginx用户运行"]
 
-        M --> CL[Cache Loader<br/>PID: 1005<br/>缓存元数据加载]
-        M --> CM[Cache Manager<br/>PID: 1006<br/>缓存过期管理]
+        M --> CL["Cache Loader<br/>PID: 1005<br/>缓存元数据加载"]
+        M --> CM["Cache Manager<br/>PID: 1006<br/>缓存过期管理"]
     end
 
     subgraph 客户端连接
@@ -218,20 +218,20 @@ Nginx 事件驱动模型（单线程事件循环）：
 
 ```mermaid
 flowchart TB
-    START[Worker 启动] --> INIT[初始化事件引擎<br/>epoll_create]
-    INIT --> REG[注册监听端口<br/>epoll_ctl ADD]
-    REG --> LOOP[epoll_wait<br/>等待事件]
+    START[Worker 启动] --> INIT["初始化事件引擎<br/>epoll_create"]
+    INIT --> REG["注册监听端口<br/>epoll_ctl ADD"]
+    REG --> LOOP["epoll_wait<br/>等待事件"]
 
     LOOP --> EVT{事件类型?}
 
     EVT -->|新连接| ACCEPT[accept 新连接]
-    ACCEPT --> REG_R[注册读事件<br/>epoll_ctl ADD]
+    ACCEPT --> REG_R["注册读事件<br/>epoll_ctl ADD"]
     REG_R --> LOOP
 
     EVT -->|数据可读| READ[读取请求数据]
-    READ --> PROC[处理请求<br/>解析/路由/代理]
+    READ --> PROC["处理请求<br/>解析/路由/代理"]
     PROC --> REG_W{需要写响应?}
-    REG_W -->|是| REG_WRITE[注册写事件<br/>epoll_ctl ADD]
+    REG_W -->|是| REG_WRITE["注册写事件<br/>epoll_ctl ADD"]
     REG_WRITE --> LOOP
     REG_W -->|否| LOOP
 
@@ -241,7 +241,7 @@ flowchart TB
     DONE -->|是| CHECK{Keep-Alive?}
     CHECK -->|是| REG_R2[重新注册读事件]
     REG_R2 --> LOOP
-    CHECK -->|否| CLOSE[关闭连接<br/>epoll_ctl DEL]
+    CHECK -->|否| CLOSE["关闭连接<br/>epoll_ctl DEL"]
     CLOSE --> LOOP
 
     EVT -->|超时/错误| TIMEOUT[处理超时/错误]
@@ -1086,21 +1086,21 @@ void *ngx_palloc_large(ngx_pool_t *pool, size_t size) {
 ```mermaid
 graph LR
     subgraph 请求级内存池
-        R1[请求到达] --> R2[创建内存池<br/>ngx_create_pool]
-        R2 --> R3[处理请求<br/>ngx_palloc 分配内存]
-        R3 --> R4[请求完成<br/>ngx_destroy_pool 释放全部]
+        R1[请求到达] --> R2["创建内存池<br/>ngx_create_pool"]
+        R2 --> R3["处理请求<br/>ngx_palloc 分配内存"]
+        R3 --> R4["请求完成<br/>ngx_destroy_pool 释放全部"]
     end
 
     subgraph 连接级内存池
         C1[连接建立] --> C2[创建内存池]
-        C2 --> C3[处理多个请求<br/>复用连接]
-        C3 --> C4[连接关闭<br/>释放内存池]
+        C2 --> C3["处理多个请求<br/>复用连接"]
+        C3 --> C4["连接关闭<br/>释放内存池"]
     end
 
     subgraph 进程级内存池
         P1[Worker 启动] --> P2[创建主内存池]
-        P2 --> P3[运行期间分配<br/>配置/模块数据]
-        P3 --> P4[Worker 退出<br/>释放内存池]
+        P2 --> P3["运行期间分配<br/>配置/模块数据"]
+        P3 --> P4["Worker 退出<br/>释放内存池"]
     end
 ```
 
@@ -1216,7 +1216,7 @@ location /video/ {
 graph TB
     subgraph Worker进程
         EL[事件循环] --> |阻塞操作| TQ[任务队列]
-        TQ --> TP[线程池<br/>threads=32]
+        TQ --> TP["线程池<br/>threads=32"]
         TP --> T1[线程1]
         TP --> T2[线程2]
         TP --> T3[线程3]

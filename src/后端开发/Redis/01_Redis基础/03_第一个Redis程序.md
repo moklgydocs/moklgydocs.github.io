@@ -185,9 +185,9 @@ String 是 Redis 最基础的数据类型，可以存储字符串、整数、浮
 flowchart TB
     subgraph String类型
         STR[字符串<br/>"Hello, Redis!"]
-        INT[整数<br/>42]
-        FLOAT[浮点数<br/>3.14]
-        BIN[二进制数据<br/>图片/序列化对象]
+        INT["整数<br/>42"]
+        FLOAT["浮点数<br/>3.14"]
+        BIN["二进制数据<br/>图片/序列化对象"]
     end
 
     STR --> SET[SET/GET]
@@ -518,14 +518,14 @@ LRANGE logs 0 -1  # 1) "log5"  2) "log4"  3) "log3"
 ```mermaid
 flowchart TB
     subgraph 消息队列
-        PRODUCER[生产者<br/>LPUSH] --> QUEUE[Queue<br/>List]
-        QUEUE --> CONSUMER[消费者<br/>BRPOP]
+        PRODUCER["生产者<br/>LPUSH"] --> QUEUE["Queue<br/>List"]
+        QUEUE --> CONSUMER["消费者<br/>BRPOP"]
     end
 
     subgraph 最新列表
         NEW[新文章/动态] --> LPUSH2[LPUSH timeline]
-        LPUSH2 --> LTRIM2[LTRIM 0 99<br/>保留最新100条]
-        LTRIM2 --> READ[LRANGE 0 -1<br/>读取时间线]
+        LPUSH2 --> LTRIM2["LTRIM 0 99<br/>保留最新100条"]
+        LTRIM2 --> READ["LRANGE 0 -1<br/>读取时间线"]
     end
 
     subgraph 栈结构
@@ -662,8 +662,8 @@ flowchart TB
     end
 
     subgraph 双重编码
-        HT[Hashtable<br/>O(1) 查找分数]
-        SL[Skiplist<br/>O(logN) 范围查询]
+        HT["Hashtable<br/>O(1) 查找分数"]
+        SL["Skiplist<br/>O(logN) 范围查询"]
     end
 
     M1 --> HT

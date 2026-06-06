@@ -25,17 +25,17 @@ PostgreSQL 是一个多进程架构的数据库系统。启动后，你会看到
 ```mermaid
 graph TB
     subgraph "PostgreSQL 进程架构"
-        PM[postmaster<br/>主进程 PID 1]
-        PM --> BW[background writer<br/>后台写进程]
-        PM --> CK[checkpointer<br/>检查点进程]
-        PM --> WAL[WAL writer<br/>预写日志写进程]
-        PM --> AV[autovacuum launcher<br/>自动清理调度]
-        PM --> AVW[autovacuum worker<br/>自动清理工作进程]
-        PM --> SC[stats collector<br/>统计信息收集]
-        PM --> LR[logical replication<br/>逻辑复制]
-        PM --> BP1[backend process<br/>客户端1后端进程]
-        PM --> BP2[backend process<br/>客户端2后端进程]
-        PM --> BP3[backend process<br/>客户端N后端进程]
+        PM["postmaster<br/>主进程 PID 1"]
+        PM --> BW["background writer<br/>后台写进程"]
+        PM --> CK["checkpointer<br/>检查点进程"]
+        PM --> WAL["WAL writer<br/>预写日志写进程"]
+        PM --> AV["autovacuum launcher<br/>自动清理调度"]
+        PM --> AVW["autovacuum worker<br/>自动清理工作进程"]
+        PM --> SC["stats collector<br/>统计信息收集"]
+        PM --> LR["logical replication<br/>逻辑复制"]
+        PM --> BP1["backend process<br/>客户端1后端进程"]
+        PM --> BP2["backend process<br/>客户端2后端进程"]
+        PM --> BP3["backend process<br/>客户端N后端进程"]
     end
 
     style PM fill:#e74c3c,color:#fff
@@ -103,11 +103,11 @@ PostgreSQL 启动时向操作系统申请一块共享内存，所有后端进程
 ```mermaid
 graph TB
     subgraph "Shared Memory 布局"
-        SB[shared_buffers<br/>数据页缓存<br/>默认 128MB]
-        WB[WAL buffers<br/>WAL 记录缓存<br/>默认 -1 自动计算]
-        CB[CLOG buffers<br/>事务提交状态<br/>commit log]
-        LB[Lock space<br/>锁表空间]
-        MB[其他结构<br/>进程间通信等]
+        SB["shared_buffers<br/>数据页缓存<br/>默认 128MB"]
+        WB["WAL buffers<br/>WAL 记录缓存<br/>默认 -1 自动计算"]
+        CB["CLOG buffers<br/>事务提交状态<br/>commit log"]
+        LB["Lock space<br/>锁表空间"]
+        MB["其他结构<br/>进程间通信等"]
     end
 
     SB --- |"8KB 页面"| DP1[数据页1]
@@ -157,11 +157,11 @@ WHERE name IN ('shared_buffers', 'wal_buffers', 'huge_pages');
 flowchart TD
     A[客户端发送 SQL] --> B[postmaster 监听端口]
     B --> C[fork 后端进程]
-    C --> D[Parser 语法解析<br/>生成 Parse Tree]
-    D --> E[Analyzer 语义分析<br/>生成 Query Tree]
-    E --> F[Rewriter 规则改写<br/>处理 RULE/VIEW]
-    F --> G[Planner 查询规划<br/>生成执行计划]
-    G --> H[Executor 执行器<br/>访问存储]
+    C --> D["Parser 语法解析<br/>生成 Parse Tree"]
+    D --> E["Analyzer 语义分析<br/>生成 Query Tree"]
+    E --> F["Rewriter 规则改写<br/>处理 RULE/VIEW"]
+    F --> G["Planner 查询规划<br/>生成执行计划"]
+    G --> H["Executor 执行器<br/>访问存储"]
     H --> I[返回结果集]
 
     style A fill:#e74c3c,color:#fff
@@ -268,15 +268,15 @@ LIMIT 10;
 graph TB
     subgraph "Supabase 架构"
         Client[客户端应用]
-        Client --> PB[PgBouncer<br/>连接池]
-        PB --> PG[PostgreSQL<br/>核心数据库]
-        Client --> PR[PostgREST<br/>自动 REST API]
+        Client --> PB["PgBouncer<br/>连接池"]
+        PB --> PG["PostgreSQL<br/>核心数据库"]
+        Client --> PR["PostgREST<br/>自动 REST API"]
         PR --> PB
-        Client --> GT[GoTrue<br/>认证服务]
+        Client --> GT["GoTrue<br/>认证服务"]
         GT --> PG
-        Client --> RT[Realtime<br/>WebSocket 推送]
+        Client --> RT["Realtime<br/>WebSocket 推送"]
         RT --> PG
-        Client --> ST[Storage<br/>对象存储]
+        Client --> ST["Storage<br/>对象存储"]
         ST --> PG
     end
 

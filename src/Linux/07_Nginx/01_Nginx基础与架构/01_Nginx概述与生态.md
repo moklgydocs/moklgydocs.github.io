@@ -235,7 +235,7 @@ func handleConnection(conn net.Conn) {
 
 ```mermaid
 graph LR
-    START[Web服务器选型] --> Q1{是否需要反向代理<br/>或负载均衡?}
+    START[Web服务器选型] --> Q1{"是否需要反向代理<br/>或负载均衡?"}
     Q1 -->|是| Q2{并发量级?}
     Q1 -->|否| Q3{是否WordPress?}
     Q2 -->|10K+| NGINX[选择 Nginx]
@@ -973,7 +973,7 @@ graph TB
     end
 
     subgraph API网关
-        GW[Nginx/OpenResty<br/>认证/限流/路由]
+        GW["Nginx/OpenResty<br/>认证/限流/路由"]
     end
 
     subgraph 后端服务

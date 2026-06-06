@@ -21,10 +21,10 @@ IoT 不是单一岗位，而是横跨硬件、嵌入式、通信、后端、云�
 
 ```mermaid
 flowchart TB
-    ENTRY[入门阶段<br/>L1-L2] --> EMB[嵌入式开发<br/>C/Rust/MCU]
-    ENTRY --> EDGE[边缘开发<br/>.NET/Python/网关]
-    ENTRY --> CLOUD[云 IoT 开发<br/>.NET/Azure/AWS]
-    ENTRY --> ARCH[IoT 架构师<br/>全栈 + 安全]
+    ENTRY["入门阶段<br/>L1-L2"] --> EMB["嵌入式开发<br/>C/Rust/MCU"]
+    ENTRY --> EDGE["边缘开发<br/>.NET/Python/网关"]
+    ENTRY --> CLOUD["云 IoT 开发<br/>.NET/Azure/AWS"]
+    ENTRY --> ARCH["IoT 架构师<br/>全栈 + 安全"]
 
     EMB --> EMB_S["嵌入式专家<br/>L4-L5<br/>实时系统/RTOS/FPGA"]
     EDGE --> EDGE_S["边缘专家<br/>L4-L5<br/>协议栈/边缘AI/网关架构"]
@@ -222,10 +222,10 @@ IoT 架构师比纯软件架构师更稀缺，因为需要**跨域知识**：既
 
 ```mermaid
 flowchart LR
-    I[IoT 数据] --> E[边缘推理<br/>ML.NET/ONNX]
-    E --> D[实时决策<br/>毫秒级]
-    I --> C[云端训练<br/>大模型]
-    C --> M[模型下发<br/>OTA]
+    I[IoT 数据] --> E["边缘推理<br/>ML.NET/ONNX"]
+    E --> D["实时决策<br/>毫秒级"]
+    I --> C["云端训练<br/>大模型"]
+    C --> M["模型下发<br/>OTA"]
     M --> E
 
     style I fill:#4CAF50,color:#fff

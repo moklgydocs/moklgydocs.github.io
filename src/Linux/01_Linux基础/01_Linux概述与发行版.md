@@ -87,11 +87,11 @@ flowchart TD
     B --> C[个人使用]
     B --> D[修改代码]
     B --> E[分发软件]
-    C --> C1[完全自由<br/>无任何限制]
-    D --> D1[自由修改<br/>无需告知作者]
+    C --> C1["完全自由<br/>无任何限制"]
+    D --> D1["自由修改<br/>无需告知作者"]
     E --> E1{是否分发源码？}
     E1 -->|是| E2[✅ 符合 GPL]
-    E1 -->|否| E3[❌ 违反 GPL<br/>必须同时提供源码]
+    E1 -->|否| E3["❌ 违反 GPL<br/>必须同时提供源码"]
 
     style E3 fill:#ff6b6b,color:#fff
     style E2 fill:#51cf66,color:#fff
@@ -313,13 +313,13 @@ CentOS 曾是 RHEL 的免费重建版，但在 2020 年 Red Hat 宣布了重大�
 ```mermaid
 flowchart LR
     subgraph 2020之前
-        A[RHEL 发布] --> B[CentOS 重建<br/>完全兼容]
+        A[RHEL 发布] --> B["CentOS 重建<br/>完全兼容"]
     end
 
     subgraph 2020之后
-        C[Fedora] --> D[CentOS Stream<br/>RHEL 上游]
+        C[Fedora] --> D["CentOS Stream<br/>RHEL 上游"]
         D --> E[RHEL]
-        E --> F[Rocky Linux<br/>AlmaLinux<br/>免费重建]
+        E --> F["Rocky Linux<br/>AlmaLinux<br/>免费重建"]
     end
 
     style D fill:#f59e0b,color:#000
@@ -477,17 +477,17 @@ flowchart TD
     Q1 -->|服务器| Q2{企业级支持？}
     Q2 -->|需要| RHEL[RHEL / SLES]
     Q2 -->|不需要| Q3{追求稳定还是新特性？}
-    Q3 -->|稳定| DEBIAN_SRV[Debian Stable<br/>Ubuntu LTS<br/>Rocky/AlmaLinux]
-    Q3 -->|新特性| FEDORA_SRV[Fedora Server<br/>Debian Testing]
+    Q3 -->|稳定| DEBIAN_SRV["Debian Stable<br/>Ubuntu LTS<br/>Rocky/AlmaLinux"]
+    Q3 -->|新特性| FEDORA_SRV["Fedora Server<br/>Debian Testing"]
 
     Q1 -->|桌面| Q4{技术水平？}
-    Q4 -->|新手| UBUNTU_DESK[Ubuntu<br/>Linux Mint<br/>Pop!_OS]
-    Q4 -->|中级| FEDORA_DESK[Fedora Workstation<br/>openSUSE Tumbleweed]
-    Q4 -->|高级| ARCH_DESK[Arch Linux<br/>Gentoo]
+    Q4 -->|新手| UBUNTU_DESK["Ubuntu<br/>Linux Mint<br/>Pop!_OS"]
+    Q4 -->|中级| FEDORA_DESK["Fedora Workstation<br/>openSUSE Tumbleweed"]
+    Q4 -->|高级| ARCH_DESK["Arch Linux<br/>Gentoo"]
 
-    Q1 -->|容器| ALPINE[Alpine Linux<br/>Debian Slim]
-    Q1 -->|安全测试| KALI[Kali Linux<br/>Parrot OS]
-    Q1 -->|嵌入式| RASP[ Raspberry Pi OS<br/>Alpine<br/>Buildroot]
+    Q1 -->|容器| ALPINE["Alpine Linux<br/>Debian Slim"]
+    Q1 -->|安全测试| KALI["Kali Linux<br/>Parrot OS"]
+    Q1 -->|嵌入式| RASP[" Raspberry Pi OS<br/>Alpine<br/>Buildroot"]
 
     style RHEL fill:#ef4444,color:#fff
     style DEBIAN_SRV fill:#a855f7,color:#fff
@@ -542,7 +542,7 @@ flowchart TB
 
     subgraph WSL2["WSL2 虚拟机"]
         KERNEL2[Linux 内核]
-        DISTRO[发行版<br/>Ubuntu/Debian/...]
+        DISTRO["发行版<br/>Ubuntu/Debian/..."]
         APP[Linux 应用]
     end
 
@@ -552,9 +552,9 @@ flowchart TB
     DISTRO --> APP
 
     subgraph 互通特性
-        FS[文件系统互通<br/>/mnt/c ↔ C:\]
-        NET[网络互通<br/>localhost 共享]
-        ENV[环境变量互通<br/>WSLENV]
+        FS["文件系统互通<br/>/mnt/c ↔ C:\"]
+        NET["网络互通<br/>localhost 共享"]
+        ENV["环境变量互通<br/>WSLENV"]
     end
 
     style KERNEL2 fill:#ffd43b,color:#000
@@ -715,7 +715,7 @@ flowchart LR
     subgraph 资源建议
         CPU[2-4 核]
         RAM[4-8 GB]
-        DISK[50-100 GB<br/>动态分配]
+        DISK["50-100 GB<br/>动态分配"]
         NET[NAT 模式]
     end
 ```
@@ -956,26 +956,26 @@ sudo dnf install -y \
 ```mermaid
 flowchart TD
     START[Linux 入门] --> A[选择发行版并安装]
-    A --> B[命令行基础<br/>文件/目录/权限]
+    A --> B["命令行基础<br/>文件/目录/权限"]
     B --> C[用户与权限管理]
     C --> D[软件包管理]
     D --> E[网络基础配置]
     E --> F[Shell 脚本编程]
 
     F --> G{方向选择}
-    G --> H[运维方向<br/>系统管理/自动化]
-    G --> I[开发方向<br/>环境搭建/CI-CD]
-    G --> J[安全方向<br/>加固/审计]
+    G --> H["运维方向<br/>系统管理/自动化"]
+    G --> I["开发方向<br/>环境搭建/CI-CD"]
+    G --> J["安全方向<br/>加固/审计"]
 
-    H --> K[服务部署与管理<br/>Nginx/MySQL/Redis]
-    I --> L[容器与云原生<br/>Docker/K8s]
-    J --> M[安全工具链<br/>渗透/防御]
+    H --> K["服务部署与管理<br/>Nginx/MySQL/Redis"]
+    I --> L["容器与云原生<br/>Docker/K8s"]
+    J --> M["安全工具链<br/>渗透/防御"]
 
     K --> N[监控与日志]
     L --> O[微服务架构]
     M --> P[应急响应]
 
-    N --> Q[Linux 内核<br/>深入理解]
+    N --> Q["Linux 内核<br/>深入理解"]
     O --> Q
     P --> Q
 

@@ -27,14 +27,14 @@ flowchart TB
     end
 
     subgraph Supabase 服务层
-        AUTH[GoTrue<br/>认证服务<br/>JWT + Row Level Security]
-        REST[PostgREST<br/>自动 REST API<br/>CRUD → SQL]
-        RT[Realtime<br/>WebSocket 订阅<br/>LISTEN/NOTIFY]
-        STG[Storage<br/>S3 兼容存储<br/>大文件 + 签名 URL]
+        AUTH["GoTrue<br/>认证服务<br/>JWT + Row Level Security"]
+        REST["PostgREST<br/>自动 REST API<br/>CRUD → SQL"]
+        RT["Realtime<br/>WebSocket 订阅<br/>LISTEN/NOTIFY"]
+        STG["Storage<br/>S3 兼容存储<br/>大文件 + 签名 URL"]
     end
 
     subgraph PostgreSQL 核心
-        PG[(PostgreSQL<br/>数据层<br/>RLS / 触发器 / JSONB)]
+        PG["(PostgreSQL<br/>数据层<br/>RLS / 触发器 / JSONB)"]
     end
 
     SDK --> AUTH

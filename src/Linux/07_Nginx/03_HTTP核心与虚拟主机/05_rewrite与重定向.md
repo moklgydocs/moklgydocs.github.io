@@ -67,8 +67,8 @@ rewrite ^/user/(\d+)/post/(\d+)$ /posts?user=$1&post=$2 last;
 flowchart TD
     A[请求URI] --> B[执行server块rewrite]
     B --> C{URI是否被重写?}
-    C -->|否| D[Find Config Phase<br/>匹配location]
-    C -->|是 redirect/permanent| E[返回302/301<br/>客户端重定向]
+    C -->|否| D["Find Config Phase<br/>匹配location"]
+    C -->|是 redirect/permanent| E["返回302/301<br/>客户端重定向"]
     C -->|是 last| F[跳回Find Config Phase]
     C -->|是 break| D
 
@@ -177,12 +177,12 @@ if (-x $request_filename) { ... }      # 可执行文件
 
 ```mermaid
 flowchart TD
-    A[进入if块] --> B{if块中是否有<br/>content handler?}
+    A[进入if块] --> B{"if块中是否有<br/>content handler?"}
     B -->|有<br/>return/proxy_pass等| C[创建新的内部location]
-    C --> D[if块中的配置<br/>覆盖外层location配置]
-    D --> E[if条件为真时<br/>使用if块配置]
-    B -->|无<br/>只有set/rewrite等| F[指令合并到<br/>外层location]
-    F --> G[if块和外层配置<br/>共同生效]
+    C --> D["if块中的配置<br/>覆盖外层location配置"]
+    D --> E["if条件为真时<br/>使用if块配置"]
+    B -->|无<br/>只有set/rewrite等| F["指令合并到<br/>外层location"]
+    F --> G["if块和外层配置<br/>共同生效"]
 
     style C fill:#ffcdd2
     style D fill:#ffcdd2
@@ -476,11 +476,11 @@ server {
 flowchart TD
     A[rewrite 指令] --> B{需要客户端感知吗?}
     B -->|是| C{永久还是临时?}
-    C -->|永久| D[permanent<br/>返回301]
-    C -->|临时| E[redirect<br/>返回302]
+    C -->|永久| D["permanent<br/>返回301"]
+    C -->|临时| E["redirect<br/>返回302"]
     B -->|否| F{需要重新匹配location吗?}
-    F -->|是| G[last<br/>跳回Find Config]
-    F -->|否| H[break<br/>在当前location继续]
+    F -->|是| G["last<br/>跳回Find Config"]
+    F -->|否| H["break<br/>在当前location继续"]
 
     style D fill:#ffcdd2
     style E fill:#fff3e0
@@ -848,21 +848,21 @@ rewrite 和 location 的交互是 Nginx 配置中最容易出错的地方。
 
 ```mermaid
 flowchart TD
-    A[请求到达] --> B[Server Rewrite Phase<br/>执行server块内的rewrite]
+    A[请求到达] --> B["Server Rewrite Phase<br/>执行server块内的rewrite"]
     B --> C{URI被重写?}
-    C -->|是 last| D[Find Config Phase<br/>重新匹配location]
+    C -->|是 last| D["Find Config Phase<br/>重新匹配location"]
     C -->|是 break| D
     C -->|否| D
     C -->|redirect/permanent| E[返回302/301]
 
-    D --> F[Location Rewrite Phase<br/>执行location块内的rewrite]
+    D --> F["Location Rewrite Phase<br/>执行location块内的rewrite"]
     F --> G{URI被重写?}
     G -->|是 last| D
-    G -->|是 break| H[继续当前location<br/>后续Phase]
+    G -->|是 break| H["继续当前location<br/>后续Phase"]
     G -->|否| H
     G -->|redirect/permanent| E
 
-    H --> I[Content Phase<br/>proxy_pass等]
+    H --> I["Content Phase<br/>proxy_pass等"]
 
     style D fill:#bbdefb
     style E fill:#ffcdd2

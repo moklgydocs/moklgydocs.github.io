@@ -484,10 +484,10 @@ TLS_AES_128_GCM_SHA256
 
 ```mermaid
 flowchart TB
-    CS[密码套件 Cipher Suite] --> KE[密钥交换算法<br/>Key Exchange]
-    CS --> AUTH[认证算法<br/>Authentication]
-    CS --> ENC[对称加密算法<br/>Bulk Cipher]
-    CS --> MAC[消息认证码<br/>MAC/PRF]
+    CS[密码套件 Cipher Suite] --> KE["密钥交换算法<br/>Key Exchange"]
+    CS --> AUTH["认证算法<br/>Authentication"]
+    CS --> ENC["对称加密算法<br/>Bulk Cipher"]
+    CS --> MAC["消息认证码<br/>MAC/PRF"]
 
     KE --> KE1[RSA - 非前向保密]
     KE --> KE2[DHE - 前向保密]
@@ -714,7 +714,7 @@ TLS 握手中，服务器发送证书后，客户端需要验证证书的合法�
 
 ```mermaid
 flowchart TB
-    Root[根证书 Root CA<br/>自签名, 预装在浏览器/OS中] --> Int1[中间证书 Intermediate CA 1]
+    Root["根证书 Root CA<br/>自签名, 预装在浏览器/OS中"] --> Int1[中间证书 Intermediate CA 1]
     Root --> Int2[中间证书 Intermediate CA 2]
     Int1 --> EE1[终端证书 example.com]
     Int1 --> EE2[终端证书 api.example.com]

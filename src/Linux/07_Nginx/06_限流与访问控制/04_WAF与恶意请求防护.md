@@ -34,11 +34,11 @@ flowchart TB
     end
 
     subgraph Security["安全防线"]
-        DNS[DNS 防护<br/>DNSSEC / DNS清洗]
+        DNS["DNS 防护<br/>DNSSEC / DNS清洗"]
         CDN[CDN / DDoS 清洗]
-        FW[网络防火墙<br/>L3/L4 过滤]
-        WAF[WAF<br/>L7 应用层防护]
-        APP[应用层防护<br/>认证/授权/加密]
+        FW["网络防火墙<br/>L3/L4 过滤"]
+        WAF["WAF<br/>L7 应用层防护"]
+        APP["应用层防护<br/>认证/授权/加密"]
     end
 
     subgraph Backend["后端服务"]
@@ -289,25 +289,25 @@ OWASP ModSecurity Core Rule Set（CRS）是业界最广泛使用的 WAF 规则�
 flowchart TB
     subgraph CRS["OWASP CRS v4 规则集"]
         subgraph Base["基础规则 (900*)"]
-            Init[初始化配置<br/>900000-900999]
-            Scanner[扫描器检测<br/>913100-913999]
-            Enforce[强制策略<br/>900100-900999]
+            Init["初始化配置<br/>900000-900999"]
+            Scanner["扫描器检测<br/>913100-913999"]
+            Enforce["强制策略<br/>900100-900999"]
         end
 
         subgraph Request["请求检测 (91* - 94*)"]
-            Protocol[协议强制<br/>920000-920999]
-            RFI[远程文件包含<br/>930000-930999]
-            LFI[本地文件包含<br/>931000-931999]
-            RCE[远程代码执行<br/>932000-932999]
-            Session[会话固定<br/>933000-933999]
-            Injection[SQL注入<br/>942000-942999]
-            XSS[XSS攻击<br/>941000-941999]
-            Upload[文件上传<br/>934000-934999]
+            Protocol["协议强制<br/>920000-920999"]
+            RFI["远程文件包含<br/>930000-930999"]
+            LFI["本地文件包含<br/>931000-931999"]
+            RCE["远程代码执行<br/>932000-932999"]
+            Session["会话固定<br/>933000-933999"]
+            Injection["SQL注入<br/>942000-942999"]
+            XSS["XSS攻击<br/>941000-941999"]
+            Upload["文件上传<br/>934000-934999"]
         end
 
         subgraph Response["响应检测 (95* - 97*)"]
-            DataLeak[信息泄露<br/>950000-950999]
-            AppError[应用错误<br/>951000-951999]
+            DataLeak["信息泄露<br/>950000-950999"]
+            AppError["应用错误<br/>951000-951999"]
         end
     end
 
@@ -487,20 +487,20 @@ SecAction \
 ```mermaid
 flowchart TB
     subgraph SQLi["SQL 注入攻击类型"]
-        Classic[经典注入<br/>1' OR '1'='1]
-        Union[联合查询注入<br/>UNION SELECT]
-        Blind[盲注<br/>1' AND SLEEP 5--]
-        Error[报错注入<br/>extractvalue]
-        Stacked[堆叠查询<br/>; DROP TABLE]
-        Second[二阶注入<br/>存储后触发]
+        Classic["经典注入<br/>1' OR '1'='1"]
+        Union["联合查询注入<br/>UNION SELECT"]
+        Blind["盲注<br/>1' AND SLEEP 5--"]
+        Error["报错注入<br/>extractvalue"]
+        Stacked["堆叠查询<br/>; DROP TABLE"]
+        Second["二阶注入<br/>存储后触发"]
     end
 
     subgraph Detect["CRS 检测策略"]
-        Pattern[SQL 关键字模式<br/>SELECT/INSERT/UPDATE/DELETE]
-        Operator[SQL 运算符<br/>OR 1=1 / AND 1=1]
-        Function[SQL 函数<br/>SLEEP/BENCHMARK/LOAD_FILE]
-        Comment[注释符<br/>-- / # / /**/]
-        Encode[编码绕过检测<br/>URL编码/Unicode/十六进制]
+        Pattern["SQL 关键字模式<br/>SELECT/INSERT/UPDATE/DELETE"]
+        Operator["SQL 运算符<br/>OR 1=1 / AND 1=1"]
+        Function["SQL 函数<br/>SLEEP/BENCHMARK/LOAD_FILE"]
+        Comment["注释符<br/>-- / # / /**/"]
+        Encode["编码绕过检测<br/>URL编码/Unicode/十六进制"]
     end
 
     SQLi --> Detect
@@ -773,22 +773,22 @@ SecRule ARGS \
 
 ```mermaid
 flowchart TB
-    Upload[文件上传请求] --> TypeCheck{Content-Type<br/>检查}
-    TypeCheck --> |合法类型| ExtCheck{文件扩展名<br/>检查}
+    Upload[文件上传请求] --> TypeCheck{"Content-Type<br/>检查"}
+    TypeCheck --> |合法类型| ExtCheck{"文件扩展名<br/>检查"}
     TypeCheck --> |非法类型| Block1[拦截]
 
-    ExtCheck --> |合法扩展名| SizeCheck{文件大小<br/>检查}
-    ExtCheck --> |危险扩展名| Block2[拦截<br/>.php/.jsp/.py等]
-    ExtCheck --> |双扩展名| Block3[拦截<br/>shell.php.jpg]
+    ExtCheck --> |合法扩展名| SizeCheck{"文件大小<br/>检查"}
+    ExtCheck --> |危险扩展名| Block2["拦截<br/>.php/.jsp/.py等"]
+    ExtCheck --> |双扩展名| Block3["拦截<br/>shell.php.jpg"]
 
-    SizeCheck --> |大小合规| ContentCheck{文件内容<br/>检查}
-    SizeCheck --> |超限| Block4[拦截<br/>文件过大]
+    SizeCheck --> |大小合规| ContentCheck{"文件内容<br/>检查"}
+    SizeCheck --> |超限| Block4["拦截<br/>文件过大"]
 
-    ContentCheck --> |内容安全| Store[安全存储<br/>随机文件名]
-    ContentCheck --> |含恶意代码| Block5[拦截<br/>WebShell]
+    ContentCheck --> |内容安全| Store["安全存储<br/>随机文件名"]
+    ContentCheck --> |含恶意代码| Block5["拦截<br/>WebShell"]
 
-    Store --> Separate[存储到<br/>非 Web 目录]
-    Separate --> Serve[通过 Nginx<br/>静态文件服务]
+    Store --> Separate["存储到<br/>非 Web 目录"]
+    Separate --> Serve["通过 Nginx<br/>静态文件服务"]
 
     style Block1 fill:#ffcdd2
     style Block2 fill:#ffcdd2
@@ -1203,29 +1203,29 @@ server {
 ```mermaid
 flowchart TB
     subgraph Attack["DDoS 攻击类型"]
-        L3[网络层攻击<br/>SYN Flood / UDP Flood]
-        L4[传输层攻击<br/>TCP 连接耗尽]
-        L7a[应用层攻击<br/>HTTP Flood]
-        L7b[应用层攻击<br/>Slowloris]
-        L7c[应用层攻击<br/>CC 攻击]
+        L3["网络层攻击<br/>SYN Flood / UDP Flood"]
+        L4["传输层攻击<br/>TCP 连接耗尽"]
+        L7a["应用层攻击<br/>HTTP Flood"]
+        L7b["应用层攻击<br/>Slowloris"]
+        L7c["应用层攻击<br/>CC 攻击"]
     end
 
     subgraph Defense["Nginx 防护体系"]
         subgraph L4Defense["连接层防护"]
-            LimitConn[limit_conn<br/>连接数限制]
-            Timeout[client_body_timeout<br/>超时控制]
+            LimitConn["limit_conn<br/>连接数限制"]
+            Timeout["client_body_timeout<br/>超时控制"]
         end
 
         subgraph L7Defense["应用层防护"]
-            LimitReq[limit_req<br/>请求速率限制]
-            LimitBody[client_max_body_size<br/>请求体限制]
-            LimitMethods[limit_except<br/>方法限制]
+            LimitReq["limit_req<br/>请求速率限制"]
+            LimitBody["client_max_body_size<br/>请求体限制"]
+            LimitMethods["limit_except<br/>方法限制"]
         end
 
         subgraph Advanced["高级防护"]
-            GeoIP[GeoIP2<br/>地理位置过滤]
-            Cookie[JS Challenge<br/>浏览器验证]
-            RateMap[map+变量<br/>动态限流]
+            GeoIP["GeoIP2<br/>地理位置过滤"]
+            Cookie["JS Challenge<br/>浏览器验证"]
+            RateMap["map+变量<br/>动态限流"]
         end
     end
 
@@ -1675,13 +1675,13 @@ flowchart TB
     Check --> |否| TruePositive[真实攻击处理]
 
     subgraph FalsePositive["误报处理流程"]
-        FP1[1. 记录误报详情<br/>规则ID/URL/参数]
-        FP2[2. 分析误报原因<br/>业务逻辑需要/规则过于严格]
+        FP1["1. 记录误报详情<br/>规则ID/URL/参数"]
+        FP2["2. 分析误报原因<br/>业务逻辑需要/规则过于严格"]
         FP3[3. 选择处理方式]
-        FP3a[A. 添加白名单<br/>针对特定URL/参数]
-        FP3b[B. 调整规则<br/>修改正则/阈值]
-        FP3c[C. 禁用规则<br/>特定ID]
-        FP3d[D. 提高评分阈值<br/>降低敏感度]
+        FP3a["A. 添加白名单<br/>针对特定URL/参数"]
+        FP3b["B. 调整规则<br/>修改正则/阈值"]
+        FP3c["C. 禁用规则<br/>特定ID"]
+        FP3d["D. 提高评分阈值<br/>降低敏感度"]
     end
 
     subgraph TruePositive["真实攻击处理"]
@@ -1692,7 +1692,7 @@ flowchart TB
         TP5[5. 增强防护规则]
     end
 
-    FalsePositive --> Review[定期审查<br/>误报规则]
+    FalsePositive --> Review["定期审查<br/>误报规则"]
     TruePositive --> Review
 
     style Check fill:#fff9c4

@@ -33,12 +33,12 @@ flowchart TB
 
     subgraph 异步
         A2[用户请求] --> MQ2[消息队列]
-        MQ2 --> B2[非关键路径<br/>异步处理]
+        MQ2 --> B2["非关键路径<br/>异步处理"]
     end
 
     subgraph 削峰
-        A3[瞬时高并发] --> MQ3[消息队列<br/>缓冲]
-        MQ3 --> B3[消费者<br/>按速率处理]
+        A3[瞬时高并发] --> MQ3["消息队列<br/>缓冲"]
+        MQ3 --> B3["消费者<br/>按速率处理"]
     end
 
     style MQ1 fill:#FF9800,color:#fff
@@ -73,13 +73,13 @@ AMQP（Advanced Message Queuing Protocol）是应用层协议规范，RabbitMQ �
 
 ```mermaid
 flowchart LR
-    P[Publisher] -->|1. 发布| EX[Exchange<br/>交换机]
-    EX -->|2. 路由| Q1[Queue<br/>队列1]
-    EX -->|2. 路由| Q2[Queue<br/>队列2]
-    Q1 -->|3. 消费| C1[Consumer<br/>消费者1]
-    Q2 -->|3. 消费| C2[Consumer<br/>消费者2]
+    P[Publisher] -->|1. 发布| EX["Exchange<br/>交换机"]
+    EX -->|2. 路由| Q1["Queue<br/>队列1"]
+    EX -->|2. 路由| Q2["Queue<br/>队列2"]
+    Q1 -->|3. 消费| C1["Consumer<br/>消费者1"]
+    Q2 -->|3. 消费| C2["Consumer<br/>消费者2"]
 
-    B[Binding<br/>绑定规则] -.-> EX
+    B["Binding<br/>绑定规则"] -.-> EX
 
     style EX fill:#FF9800,color:#fff
     style Q1 fill:#42A5F5,color:#fff
@@ -143,10 +143,10 @@ flowchart TB
 
 ```mermaid
 flowchart TB
-    P[Producer] --> D[Direct<br/>精确匹配]
-    P --> F[Fanout<br/>广播]
-    P --> T[Topic<br/>通配符匹配]
-    P --> H[Headers<br/>头部匹配]
+    P[Producer] --> D["Direct<br/>精确匹配"]
+    P --> F["Fanout<br/>广播"]
+    P --> T["Topic<br/>通配符匹配"]
+    P --> H["Headers<br/>头部匹配"]
 
     D --> Q1[Queue]
     F --> Q2[Queue1]
@@ -187,10 +187,10 @@ Binding 是 Exchange 和 Queue 之间的关联规则：
 
 ```mermaid
 flowchart LR
-    P[1. Producer<br/>创建消息] -->|BasicPublish| EX[2. Exchange<br/>路由分发]
-    EX -->|路由规则| Q[3. Queue<br/>存储等待]
-    Q -->|BasicDeliver| C[4. Consumer<br/>消费处理]
-    C -->|BasicAck| DEL[5. 消息删除<br/>从队列移除]
+    P["1. Producer<br/>创建消息"] -->|BasicPublish| EX["2. Exchange<br/>路由分发"]
+    EX -->|路由规则| Q["3. Queue<br/>存储等待"]
+    Q -->|BasicDeliver| C["4. Consumer<br/>消费处理"]
+    C -->|BasicAck| DEL["5. 消息删除<br/>从队列移除"]
 
     style P fill:#66BB6A,color:#fff
     style EX fill:#FF9800,color:#fff
@@ -210,9 +210,9 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph TCP连接——Connection
-        CH1[Channel 1<br/>发布消息]
-        CH2[Channel 2<br/>消费队列A]
-        CH3[Channel 3<br/>消费队列B]
+        CH1["Channel 1<br/>发布消息"]
+        CH2["Channel 2<br/>消费队列A"]
+        CH3["Channel 3<br/>消费队列B"]
     end
 
     subgraph 应用
@@ -372,15 +372,15 @@ public async Task HandleAsync(OrderCreatedEvent @event)
 ```mermaid
 flowchart TB
     subgraph 消息丢失的三个环节
-        L1[1. 生产端丢失<br/>网络故障，消息未到Broker]
-        L2[2. Broker端丢失<br/>Broker宕机，内存消息未持久化]
-        L3[3. 消费端丢失<br/>自动ACK后消费者崩溃]
+        L1["1. 生产端丢失<br/>网络故障，消息未到Broker"]
+        L2["2. Broker端丢失<br/>Broker宕机，内存消息未持久化"]
+        L3["3. 消费端丢失<br/>自动ACK后消费者崩溃"]
     end
 
     subgraph 保障方案
-        S1[Publisher Confirm<br/>确认消息已到达]
-        S2[消息持久化<br/>durable + delivery_mode=2<br/>仲裁队列]
-        S3[手动ACK<br/>处理完才确认]
+        S1["Publisher Confirm<br/>确认消息已到达"]
+        S2["消息持久化<br/>durable + delivery_mode=2<br/>仲裁队列"]
+        S3["手动ACK<br/>处理完才确认"]
     end
 
     L1 --> S1
@@ -412,9 +412,9 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    Q[业务队列<br/>x-dead-letter-exchange<br/>x-dead-letter-routing-key] -->|消息成为死信| DLX[Dead Letter<br/>Exchange]
+    Q["业务队列<br/>x-dead-letter-exchange<br/>x-dead-letter-routing-key"] -->|消息成为死信| DLX["Dead Letter<br/>Exchange"]
     DLX --> DLQ[死信队列]
-    DLQ --> C[死信消费者<br/>告警/人工处理]
+    DLQ --> C["死信消费者<br/>告警/人工处理"]
 
     style DLX fill:#EF5350,color:#fff
     style DLQ fill:#FFA726,color:#fff
@@ -441,7 +441,7 @@ channel.QueueDeclare("order-queue", durable: true, exclusive: false,
 
 ```mermaid
 flowchart LR
-    P[Producer] -->|消息+TTL| Q[延迟队列<br/>无消费者<br/>TTL=30min]
+    P[Producer] -->|消息+TTL| Q["延迟队列<br/>无消费者<br/>TTL=30min"]
     Q -->|TTL过期→死信| DLX[DLX]
     DLX --> Q2[业务队列]
     Q2 --> C[Consumer]
@@ -560,7 +560,7 @@ flowchart LR
     end
 
     subgraph prefetch=0
-        R3[RabbitMQ] -->|无限| C3[Consumer<br/>可能内存溢出]
+        R3[RabbitMQ] -->|无限| C3["Consumer<br/>可能内存溢出"]
     end
 ```
 
@@ -588,9 +588,9 @@ channel.BasicQos(prefetchSize: 0, prefetchCount: 10, global: false);
 ```mermaid
 flowchart TB
     subgraph RabbitMQ 集群
-        N1[Node A<br/>Disc Node<br/>存储元数据+消息]
-        N2[Node B<br/>Disc Node<br/>存储元数据+消息]
-        N3[Node C<br/>RAM Node<br/>仅存元数据]
+        N1["Node A<br/>Disc Node<br/>存储元数据+消息"]
+        N2["Node B<br/>Disc Node<br/>存储元数据+消息"]
+        N3["Node C<br/>RAM Node<br/>仅存元数据"]
     end
 
     N1 <-->|Erlang Cookie| N2
@@ -652,8 +652,8 @@ flowchart LR
     end
 
     subgraph 网络分区
-        A2[Node A<br/>多数派] <-.->|断开| B2[Node B<br/>少数派<br/>自停]
-        A2 <--> C2[Node C<br/>多数派]
+        A2["Node A<br/>多数派"] <-.->|断开| B2["Node B<br/>少数派<br/>自停"]
+        A2 <--> C2["Node C<br/>多数派"]
     end
 
     style B2 fill:#EF5350,color:#fff
@@ -696,21 +696,21 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph 生产者
-        P[Producer<br/>Publisher Confirm]
+        P["Producer<br/>Publisher Confirm"]
     end
 
     subgraph 负载均衡
-        LB[HAProxy / Nginx<br/>TCP 负载均衡]
+        LB["HAProxy / Nginx<br/>TCP 负载均衡"]
     end
 
     subgraph RabbitMQ 集群
-        N1[Node 1<br/>Disc]
-        N2[Node 2<br/>Disc]
-        N3[Node 3<br/>Disc]
+        N1["Node 1<br/>Disc"]
+        N2["Node 2<br/>Disc"]
+        N3["Node 3<br/>Disc"]
     end
 
     subgraph 仲裁队列
-        QQ[Quorum Queue<br/>3 副本]
+        QQ["Quorum Queue<br/>3 副本"]
     end
 
     subgraph 消费者
@@ -853,11 +853,11 @@ public async Task HandleAsync(OrderCreatedEvent @event)
 ```mermaid
 flowchart TB
     subgraph CAP 核心
-        OUTBOX[事务性 Outbox<br/>发消息与数据库操作原子性]
-        RETRY[自动重试<br/>指数退避]
-        DASH[Dashboard<br/>消息状态管理]
-        MULTI[多存储<br/>SQL Server / PostgreSQL / MySQL]
-        BROKER[多 Broker<br/>RabbitMQ / Kafka / Azure SB]
+        OUTBOX["事务性 Outbox<br/>发消息与数据库操作原子性"]
+        RETRY["自动重试<br/>指数退避"]
+        DASH["Dashboard<br/>消息状态管理"]
+        MULTI["多存储<br/>SQL Server / PostgreSQL / MySQL"]
+        BROKER["多 Broker<br/>RabbitMQ / Kafka / Azure SB"]
     end
 
     style OUTBOX fill:#66BB6A,color:#fff

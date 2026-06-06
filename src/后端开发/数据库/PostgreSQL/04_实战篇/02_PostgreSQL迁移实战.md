@@ -336,12 +336,12 @@ mysql -e "SELECT * FROM orders" -B mydb | \
 
 ```mermaid
 flowchart LR
-    A[1. 全量导出<br/>MySQL → PG] --> B[2. 开启增量同步<br/>Binlog → PG]
-    B --> C[3. 追平延迟<br/>持续同步]
+    A["1. 全量导出<br/>MySQL → PG"] --> B["2. 开启增量同步<br/>Binlog → PG"]
+    B --> C["3. 追平延迟<br/>持续同步"]
     C --> D{延迟 < 1秒?}
     D -->|否| C
-    D -->|是| E[4. 切换流量<br/>MySQL → PG]
-    E --> F[5. 验证确认<br/>关闭 MySQL]
+    D -->|是| E["4. 切换流量<br/>MySQL → PG"]
+    E --> F["5. 验证确认<br/>关闭 MySQL"]
 ```
 
 增量同步工具：

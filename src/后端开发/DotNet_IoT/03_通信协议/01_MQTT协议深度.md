@@ -23,13 +23,13 @@ MQTT 是 IoT 通信的事实标准——轻量、可靠、支持弱网环境。�
 
 ```mermaid
 flowchart TB
-    P1[发布者<br/>温度传感器] -->|Publish<br/>sensors/temp| B[Broker<br/>EMQX/Mosquitto]
-    P2[发布者<br/>湿度传感器] -->|Publish<br/>sensors/humidity| B
-    P3[发布者<br/>GPS 设备] -->|Publish<br/>location/gps| B
+    P1["发布者<br/>温度传感器"] -->|Publish<br/>sensors/temp| B["Broker<br/>EMQX/Mosquitto"]
+    P2["发布者<br/>湿度传感器"] -->|Publish<br/>sensors/humidity| B
+    P3["发布者<br/>GPS 设备"] -->|Publish<br/>location/gps| B
 
-    B -->|Subscribe<br/>sensors/#| S1[订阅者<br/>仪表盘]
-    B -->|Subscribe<br/>sensors/temp| S2[订阅者<br/>告警服务]
-    B -->|Subscribe<br/>location/+| S3[订阅者<br/>地图服务]
+    B -->|Subscribe<br/>sensors/#| S1["订阅者<br/>仪表盘"]
+    B -->|Subscribe<br/>sensors/temp| S2["订阅者<br/>告警服务"]
+    B -->|Subscribe<br/>location/+| S3["订阅者<br/>地图服务"]
 
     style B fill:#FF9800,color:#fff
     style P1 fill:#4CAF50,color:#fff

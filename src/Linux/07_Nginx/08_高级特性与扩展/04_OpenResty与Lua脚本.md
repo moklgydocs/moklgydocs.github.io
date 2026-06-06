@@ -124,21 +124,21 @@ resty -V
 
 ```mermaid
 flowchart TD
-    A[客户端请求] --> B[ssl_certificate_by_lua<br/>SSL证书动态选择]
-    B --> C[set_by_lua<br/>变量赋值]
-    C --> D[rewrite_by_lua<br/>URL重写/跳转]
-    D --> E[access_by_lua<br/>访问控制/认证]
+    A[客户端请求] --> B["ssl_certificate_by_lua<br/>SSL证书动态选择"]
+    B --> C["set_by_lua<br/>变量赋值"]
+    C --> D["rewrite_by_lua<br/>URL重写/跳转"]
+    D --> E["access_by_lua<br/>访问控制/认证"]
     E --> F{content_by_lua?}
-    F -->|是| G[content_by_lua<br/>生成响应内容]
+    F -->|是| G["content_by_lua<br/>生成响应内容"]
     F -->|否| H[proxy_pass/其他handler]
-    G --> I[header_filter_by_lua<br/>修改响应头]
+    G --> I["header_filter_by_lua<br/>修改响应头"]
     H --> I
-    I --> J[body_filter_by_lua<br/>修改响应体]
-    J --> K[log_by_lua<br/>日志/统计]
+    I --> J["body_filter_by_lua<br/>修改响应体"]
+    J --> K["log_by_lua<br/>日志/统计"]
     K --> L[返回响应]
 
-    M[Nginx启动] --> N[init_by_lua<br/>全局初始化]
-    N --> O[init_worker_by_lua<br/>Worker初始化]
+    M[Nginx启动] --> N["init_by_lua<br/>全局初始化"]
+    N --> O["init_worker_by_lua<br/>Worker初始化"]
 
     style G fill:#c8e6c9
     style E fill:#fff9c4
@@ -423,7 +423,7 @@ local greeting = my_module.hello("Nginx")
 ```mermaid
 flowchart TD
     subgraph 共享内存区 lua_shared_dict
-        SM[共享内存<br/>所有Worker可见]
+        SM["共享内存<br/>所有Worker可见"]
     end
 
     W1[Worker-1] -->|读写| SM

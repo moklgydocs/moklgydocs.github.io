@@ -35,9 +35,9 @@ flowchart TD
             EH1[消息路由]
             EH2[离线存储]
         end
-        M1[.NET 模块 A<br/>温度过滤]
-        M2[模块 B<br/>ML 推理]
-        M3[模块 C<br/>MQTT 网关]
+        M1[".NET 模块 A<br/>温度过滤"]
+        M2["模块 B<br/>ML 推理"]
+        M3["模块 C<br/>MQTT 网关"]
     end
 
     IOTHUB <-->|双向通信| RUNTIME
@@ -369,9 +369,9 @@ record SensorData(string DeviceId, double Temperature, double Humidity);
 
 ```mermaid
 flowchart LR
-    A[SensorModule<br/>sensorOutput] -->|Route 1| B[TemperatureFilter<br/>sensorInput]
+    A["SensorModule<br/>sensorOutput"] -->|Route 1| B["TemperatureFilter<br/>sensorInput"]
     B -->|Route 2| C[alertOutput → $upstream]
-    A -->|Route 3| D[$upstream<br/>原始数据也上传]
+    A -->|Route 3| D["$upstream<br/>原始数据也上传"]
 ```
 
 路由语法（类 SQL）：

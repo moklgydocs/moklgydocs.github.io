@@ -20,9 +20,9 @@ tag:
 
 ```mermaid
 flowchart LR
-    A[IPC<br/>进程间通信] --> B[RPC<br/>远程过程调用]
-    B --> C[Message Queue<br/>消息队列]
-    C --> D[Stream<br/>事件流]
+    A["IPC<br/>进程间通信"] --> B["RPC<br/>远程过程调用"]
+    B --> C["Message Queue<br/>消息队列"]
+    C --> D["Stream<br/>事件流"]
 
     style A fill:#FFE0B2,color:#333
     style B fill:#FFCC80,color:#333
@@ -91,15 +91,15 @@ sequenceDiagram
 ```mermaid
 flowchart LR
     subgraph 流量洪峰
-        R1[请求1] --> MQ[消息队列<br/>缓冲区]
+        R1[请求1] --> MQ["消息队列<br/>缓冲区"]
         R2[请求2] --> MQ
         R3[请求3] --> MQ
         R4[请求4] --> MQ
         R5[请求5] --> MQ
     end
 
-    MQ --> C1[消费者<br/>按自身速率处理]
-    MQ --> C2[消费者<br/>按自身速率处理]
+    MQ --> C1["消费者<br/>按自身速率处理"]
+    MQ --> C2["消费者<br/>按自身速率处理"]
 
     style MQ fill:#FF9800,color:#fff
 ```

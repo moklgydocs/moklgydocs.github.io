@@ -24,16 +24,16 @@ Redis（**Re**mote **Di**ctionary **S**erver，远程字典服务）是一个开
 ```mermaid
 flowchart TB
     subgraph Redis核心定位
-        DB[数据库<br/>持久化存储]
-        Cache[缓存<br/>高速读写]
-        MQ[消息队列<br/>发布订阅]
+        DB["数据库<br/>持久化存储"]
+        Cache["缓存<br/>高速读写"]
+        MQ["消息队列<br/>发布订阅"]
     end
 
     subgraph 核心能力
-        MEM[内存存储<br/>微秒级延迟]
-        DS[数据结构<br/>String/Hash/List/Set/ZSet]
-        PERSIST[持久化<br/>RDB/AOF]
-        DIST[分布式<br/>主从/哨兵/集群]
+        MEM["内存存储<br/>微秒级延迟"]
+        DS["数据结构<br/>String/Hash/List/Set/ZSet"]
+        PERSIST["持久化<br/>RDB/AOF"]
+        DIST["分布式<br/>主从/哨兵/集群"]
     end
 
     DB --- MEM
@@ -114,13 +114,13 @@ Salvatore Sanfilippo 是一位极具传奇色彩的开发者。他以一己之�
 flowchart TB
     subgraph 客户端
         C1[redis-cli]
-        C2[Redis 客户端库<br/>Java/C#/Python/Go]
-        C3[RedisInsight<br/>可视化管理]
+        C2["Redis 客户端库<br/>Java/C#/Python/Go"]
+        C3["RedisInsight<br/>可视化管理"]
     end
 
     subgraph Redis服务端
         subgraph 网络层
-            EP[epoll 多路复用<br/>I/O 事件驱动]
+            EP["epoll 多路复用<br/>I/O 事件驱动"]
         end
 
         subgraph 命令处理
@@ -129,7 +129,7 @@ flowchart TB
         end
 
         subgraph 数据存储
-            HT[全局哈希表<br/>dict]
+            HT["全局哈希表<br/>dict"]
             subgraph 数据结构
                 STR[String]
                 HASH[Hash]
@@ -141,8 +141,8 @@ flowchart TB
         end
 
         subgraph 持久化
-            RDB[RDB 快照<br/>fork + COW]
-            AOF[AOF 日志<br/>write/append]
+            RDB["RDB 快照<br/>fork + COW"]
+            AOF["AOF 日志<br/>write/append"]
         end
     end
 
@@ -172,11 +172,11 @@ Redis 的性能神话并非来自单一技术，而是多个设计的协同：
 
 ```mermaid
 flowchart LR
-    A[纯内存操作<br/>纳秒级访问] --> D[10万+ QPS]
-    B[单线程模型<br/>无锁无切换] --> D
-    C[I/O 多路复用<br/>epoll 事件驱动] --> D
-    E[高效数据结构<br/>SDS/ziplist/skiplist] --> D
-    F[协议简洁<br/>RESP 简单高效] --> D
+    A["纯内存操作<br/>纳秒级访问"] --> D[10万+ QPS]
+    B["单线程模型<br/>无锁无切换"] --> D
+    C["I/O 多路复用<br/>epoll 事件驱动"] --> D
+    E["高效数据结构<br/>SDS/ziplist/skiplist"] --> D
+    F["协议简洁<br/>RESP 简单高效"] --> D
 
     style D fill:#DC382D,color:#fff
 ```
@@ -539,9 +539,9 @@ EXPIRE session:abc123 1800  # 刷新过期时间
 ```mermaid
 flowchart TB
     subgraph ZSet排行实现
-        ZADD[ZADD leaderboard 9500 Alice<br/>ZADD leaderboard 8800 Bob<br/>ZADD leaderboard 9200 Carol]
-        ZRANGE[ZRANGE leaderboard 0 -1 REV WITHSCORES<br/>返回：Alice(9500) Carol(9200) Bob(8800)]
-        ZRANK[ZRANK leaderboard Bob<br/>返回：2（第3名，从0开始）]
+        ZADD["ZADD leaderboard 9500 Alice<br/>ZADD leaderboard 8800 Bob<br/>ZADD leaderboard 9200 Carol"]
+        ZRANGE["ZRANGE leaderboard 0 -1 REV WITHSCORES<br/>返回：Alice(9500) Carol(9200) Bob(8800)"]
+        ZRANK["ZRANK leaderboard Bob<br/>返回：2（第3名，从0开始）"]
     end
 
     ZADD --> ZRANGE
@@ -590,8 +590,8 @@ flowchart TB
 
     subgraph Stream模式
         P2[生产者 XADD] --> STREAM[stream 消息流]
-        STREAM --> CG1[消费者组1<br/>XREADGROUP]
-        STREAM --> CG2[消费者组2<br/>XREADGROUP]
+        STREAM --> CG1["消费者组1<br/>XREADGROUP"]
+        STREAM --> CG2["消费者组2<br/>XREADGROUP"]
     end
 
     subgraph Pub/Sub模式
@@ -698,13 +698,13 @@ Redis Stack 是 Redis 官方推出的一站式解决方案，将核心 Redis 与
 ```mermaid
 flowchart TB
     subgraph Redis Stack
-        CORE[Redis Core<br/>键值存储引擎]
+        CORE["Redis Core<br/>键值存储引擎"]
 
         subgraph 模块
-            SEARCH[RediSearch<br/>全文搜索]
-            JSON[RedisJSON<br/>JSON 文档存储]
-            TIMESERIES[RedisTimeSeries<br/>时序数据]
-            BLOOM[RedisBloom<br/>概率数据结构]
+            SEARCH["RediSearch<br/>全文搜索"]
+            JSON["RedisJSON<br/>JSON 文档存储"]
+            TIMESERIES["RedisTimeSeries<br/>时序数据"]
+            BLOOM["RedisBloom<br/>概率数据结构"]
         end
     end
 
@@ -714,9 +714,9 @@ flowchart TB
     CORE --- BLOOM
 
     subgraph 应用场景
-        ECOM[电商搜索<br/>+ 商品推荐]
-        IOT[物联网监控<br/>+ 设备数据]
-        SOCIAL[社交图谱<br/>+ 好友推荐]
+        ECOM["电商搜索<br/>+ 商品推荐"]
+        IOT["物联网监控<br/>+ 设备数据"]
+        SOCIAL["社交图谱<br/>+ 好友推荐"]
     end
 
     SEARCH --> ECOM
@@ -797,16 +797,16 @@ Redis 拥有覆盖所有主流语言的客户端库：
 ```mermaid
 flowchart TB
     subgraph 客户端生态
-        JAVA[Java<br/>Jedis / Lettuce / Redisson]
-        CSHARP[C# / .NET<br/>StackExchange.Redis / CSRedis]
-        PYTHON[Python<br/>redis-py]
-        GO[Go<br/>go-redis]
-        NODE[Node.js<br/>ioredis]
-        PHP[PHP<br/>predis / phpredis]
+        JAVA["Java<br/>Jedis / Lettuce / Redisson"]
+        CSHARP["C# / .NET<br/>StackExchange.Redis / CSRedis"]
+        PYTHON["Python<br/>redis-py"]
+        GO["Go<br/>go-redis"]
+        NODE["Node.js<br/>ioredis"]
+        PHP["PHP<br/>predis / phpredis"]
     end
 
     subgraph 协议层
-        RESP[RESP 协议<br/>REdis Serialization Protocol]
+        RESP["RESP 协议<br/>REdis Serialization Protocol"]
     end
 
     JAVA --> RESP
@@ -908,15 +908,15 @@ flowchart TB
     end
 
     subgraph 客户端层
-        JAVA[Java<br/>Jedis/Lettuce/Redisson]
-        DOTNET[.NET<br/>StackExchange.Redis]
-        PYTHON[Python<br/>redis-py]
-        GO[Go<br/>go-redis]
+        JAVA["Java<br/>Jedis/Lettuce/Redisson"]
+        DOTNET[".NET<br/>StackExchange.Redis"]
+        PYTHON["Python<br/>redis-py"]
+        GO["Go<br/>go-redis"]
     end
 
     subgraph Redis服务层
         subgraph 单机
-            STANDALONE[Standalone<br/>单机模式]
+            STANDALONE["Standalone<br/>单机模式"]
         end
 
         subgraph 高可用
@@ -925,7 +925,7 @@ flowchart TB
         end
 
         subgraph 分布式
-            CLUSTER[Redis Cluster<br/>分片集群]
+            CLUSTER["Redis Cluster<br/>分片集群"]
         end
     end
 
@@ -936,9 +936,9 @@ flowchart TB
     end
 
     subgraph 生态层
-        STACK[Redis Stack<br/>Search/JSON/TS/Bloom]
-        INSIGHT[RedisInsight<br/>可视化管理]
-        CLOUD[Redis Cloud<br/>云服务]
+        STACK["Redis Stack<br/>Search/JSON/TS/Bloom"]
+        INSIGHT["RedisInsight<br/>可视化管理"]
+        CLOUD["Redis Cloud<br/>云服务"]
     end
 
     WEB --> JAVA

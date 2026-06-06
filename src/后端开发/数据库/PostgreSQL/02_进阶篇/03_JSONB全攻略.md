@@ -285,17 +285,17 @@ WHERE name = 'AirPods Pro';
 ```mermaid
 graph TB
     subgraph "PostgreSQL + JSONB"
-        PG_R[关系模型 + 文档存储<br/>JOIN + 嵌套查询]
-        PG_I[GIN 索引<br/>@> 包含查询]
-        PG_A[ACID 事务<br/>完整隔离级别]
-        PG_S[SQL 标准<br/>jsonb_path_query]
+        PG_R["关系模型 + 文档存储<br/>JOIN + 嵌套查询"]
+        PG_I["GIN 索引<br/>@> 包含查询"]
+        PG_A["ACID 事务<br/>完整隔离级别"]
+        PG_S["SQL 标准<br/>jsonb_path_query"]
     end
 
     subgraph "MongoDB"
-        MG_D[纯文档模型<br/>BSON 存储]
-        MG_I2[多类型索引<br/>文本/地理/向量]
-        MG_A2[多文档事务 4.0+<br/>性能损耗大]
-        MG_Q[MQL 查询<br/>聚合管道]
+        MG_D["纯文档模型<br/>BSON 存储"]
+        MG_I2["多类型索引<br/>文本/地理/向量"]
+        MG_A2["多文档事务 4.0+<br/>性能损耗大"]
+        MG_Q["MQL 查询<br/>聚合管道"]
     end
 
     style PG_R fill:#3498db,color:#fff

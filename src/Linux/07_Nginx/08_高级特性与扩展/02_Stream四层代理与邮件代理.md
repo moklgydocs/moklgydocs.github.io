@@ -400,14 +400,14 @@ stream {
 ```mermaid
 flowchart TD
     A[客户端连接 Nginx] --> B{协议类型?}
-    B -->|MySQL| C[proxy_pass mysql_cluster<br/>least_conn 负载均衡]
-    B -->|Redis| D[proxy_pass redis_cluster<br/>least_conn 负载均衡]
+    B -->|MySQL| C["proxy_pass mysql_cluster<br/>least_conn 负载均衡"]
+    B -->|Redis| D["proxy_pass redis_cluster<br/>least_conn 负载均衡"]
     B -->|PostgreSQL| E[proxy_pass pg_cluster]
 
     C --> F{健康检查}
     F -->|通过| G[建立到上游的TCP连接]
     F -->|失败| H[尝试下一个上游]
-    G --> I[双向数据转发<br/>客户端↔上游]
+    G --> I["双向数据转发<br/>客户端↔上游"]
 
     D --> F
     E --> F

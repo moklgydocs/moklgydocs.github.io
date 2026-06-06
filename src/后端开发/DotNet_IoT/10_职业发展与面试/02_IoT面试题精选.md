@@ -301,10 +301,10 @@ await client.PublishStringAsync("sensors/device01/telemetry",
 
 ```mermaid
 flowchart LR
-    A[协议转换<br/>Modbus→MQTT] --> B[数据过滤<br/>只传变化/聚合]
-    B --> C[本地决策<br/>断网时自治控制]
-    C --> D[安全隔离<br/>TLS 终结/证书管理]
-    D --> E[数据缓冲<br/>断网本地存储]
+    A["协议转换<br/>Modbus→MQTT"] --> B["数据过滤<br/>只传变化/聚合"]
+    B --> C["本地决策<br/>断网时自治控制"]
+    C --> D["安全隔离<br/>TLS 终结/证书管理"]
+    D --> E["数据缓冲<br/>断网本地存储"]
 ```
 
 五大职责：**协议转换**、**数据过滤**、**本地决策**、**安全隔离**、**数据缓冲**。
@@ -348,7 +348,7 @@ flowchart TB
     R1 |状态变更| --> T3[设备注册表]
     R1 |OTA 状态| --> T4[OTA 管理服务]
 
-    R1 --> CUSTOM[自定义路由<br/>基于消息头/Body]
+    R1 --> CUSTOM["自定义路由<br/>基于消息头/Body"]
 ```
 
 路由策略：

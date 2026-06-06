@@ -27,10 +27,10 @@ Docker Compose 是 Docker 官方的容器编排工具，用于定义和管理多
 ```mermaid
 flowchart LR
     A[docker-compose.yml] --> B[docker compose up]
-    B --> C[Service A<br/>Web API]
-    B --> D[Service B<br/>Database]
-    B --> E[Service C<br/>Cache]
-    B --> F[Service D<br/>Message Queue]
+    B --> C["Service A<br/>Web API"]
+    B --> D["Service B<br/>Database"]
+    B --> E["Service C<br/>Cache"]
+    B --> F["Service D<br/>Message Queue"]
     C <-->|Network| D
     C <-->|Network| E
     C <-->|Network| F
@@ -567,13 +567,13 @@ networks:
 ```mermaid
 flowchart LR
     subgraph frontend [Frontend 网络]
-        WEB[nginx<br/>:80]
-        API[API Server<br/>:8080]
+        WEB["nginx<br/>:80"]
+        API["API Server<br/>:8080"]
     end
     subgraph backend [Backend 网络（内部）]
         API
-        DB[(PostgreSQL<br/>:5432)]
-        REDIS[(Redis<br/>:6379)]
+        DB["(PostgreSQL<br/>:5432)"]
+        REDIS["(Redis<br/>:6379)"]
     end
     CLIENT[👤 用户] -->|:80| WEB
     WEB -->|proxy_pass| API

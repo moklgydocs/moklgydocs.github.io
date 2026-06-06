@@ -242,8 +242,8 @@ Console.ReadLine();
 
 ```mermaid
 flowchart LR
-    A[按钮按下] --> B[硬件抖动<br/>5-50ms]
-    B --> C[软件去抖<br/>忽略短脉冲]
+    A[按钮按下] --> B["硬件抖动<br/>5-50ms"]
+    B --> C["软件去抖<br/>忽略短脉冲"]
     C --> D[确认状态]
 
     style B fill:#FF5722,color:#fff

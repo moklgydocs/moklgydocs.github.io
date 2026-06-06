@@ -52,12 +52,12 @@ LIMIT 5;
 flowchart TD
     START[取一行 tuple] --> XMAX{xmax = 0?}
     XMAX --> |"是"| V1{xmin 可见?}
-    XMAX --> |"否"| V2{xmax 所在事务<br/>已提交?}
+    XMAX --> |"否"| V2{"xmax 所在事务<br/>已提交?"}
 
     V1 --> |"是"| VISIBLE[✅ 行可见]
-    V1 --> |"否"| HIDDEN1[❌ 行不可见<br/>插入事务未提交]
+    V1 --> |"否"| HIDDEN1["❌ 行不可见<br/>插入事务未提交"]
 
-    V2 --> |"是（已提交）"| HIDDEN2[❌ 行不可见<br/>已被删除]
+    V2 --> |"是（已提交）"| HIDDEN2["❌ 行不可见<br/>已被删除"]
     V2 --> |"否（未提交/回滚）"| V3{xmin 可见?}
 
     V3 --> |"是"| VISIBLE
@@ -160,13 +160,13 @@ SHOW autovacuum_freeze_max_age;    -- 默认 2 亿，超过此年龄强制 autov
 
 ```mermaid
 graph TB
-    RC[READ COMMITTED<br/>读已提交<br/>PG 默认级别]
-    RR[REPEATABLE READ<br/>可重复读<br/>PG 无幻读问题]
-    SER[SERIALIZABLE<br/>可串行化<br/>SSI 实现]
+    RC["READ COMMITTED<br/>读已提交<br/>PG 默认级别"]
+    RR["REPEATABLE READ<br/>可重复读<br/>PG 无幻读问题"]
+    SER["SERIALIZABLE<br/>可串行化<br/>SSI 实现"]
 
-    RC --> |"每条语句<br/>获取新快照"| RC_DESC[看到其他已提交事务<br/>的最新变更]
-    RR --> |"事务开始时<br/>获取一个快照"| RR_DESC[事务内看到的数据<br/>始终一致]
-    SER --> |"SSI 检测<br/>串行化冲突"| SER_DESC[检测到冲突时<br/>抛出异常回滚]
+    RC --> |"每条语句<br/>获取新快照"| RC_DESC["看到其他已提交事务<br/>的最新变更"]
+    RR --> |"事务开始时<br/>获取一个快照"| RR_DESC["事务内看到的数据<br/>始终一致"]
+    SER --> |"SSI 检测<br/>串行化冲突"| SER_DESC["检测到冲突时<br/>抛出异常回滚"]
 
     style RC fill:#3498db,color:#fff
     style RR fill:#2ecc71,color:#fff
@@ -263,17 +263,17 @@ COMMIT;
 ```mermaid
 graph LR
     subgraph "PostgreSQL MVCC"
-        PG_T[表存储多版本<br/>tuple 直接存在数据页]
-        PG_U[无 Undo Log<br/>旧版本在数据页中]
-        PG_V[Vacuum 清理旧版本<br/>手动/自动]
-        PG_R[回滚 = 标记 xmax<br/>旧 tuple 留在原处]
+        PG_T["表存储多版本<br/>tuple 直接存在数据页"]
+        PG_U["无 Undo Log<br/>旧版本在数据页中"]
+        PG_V["Vacuum 清理旧版本<br/>手动/自动"]
+        PG_R["回滚 = 标记 xmax<br/>旧 tuple 留在原处"]
     end
 
     subgraph "MySQL InnoDB MVCC"
         MY_T[数据页只存最新版本]
-        MY_U[Undo Log 链<br/>串起历史版本]
-        MY_V[Purge 线程清理<br/>Undo Log]
-        MY_R[回滚 = 沿 Undo Log<br/>反向恢复]
+        MY_U["Undo Log 链<br/>串起历史版本"]
+        MY_V["Purge 线程清理<br/>Undo Log"]
+        MY_R["回滚 = 沿 Undo Log<br/>反向恢复"]
     end
 
     style PG_T fill:#3498db,color:#fff

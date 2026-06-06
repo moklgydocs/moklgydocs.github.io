@@ -48,13 +48,13 @@ Redis 的高性能是三个因素叠加的结果：**纯内存操作、单线程
 
 ```mermaid
 flowchart TB
-    A[Redis 为什么快] --> B[内存操作<br/>纳秒级访问]
-    A --> C[单线程模型<br/>无锁/无上下文切换]
-    A --> D[I/O 多路复用<br/>epoll 事件驱动]
+    A[Redis 为什么快] --> B["内存操作<br/>纳秒级访问"]
+    A --> C["单线程模型<br/>无锁/无上下文切换"]
+    A --> D["I/O 多路复用<br/>epoll 事件驱动"]
 
-    B --> B1[数据全在内存<br/>避免磁盘IO]
-    C --> C1[无竞争无死锁<br/>无线程切换开销]
-    D --> D1[单线程处理万级连接<br/>Reactor模式]
+    B --> B1["数据全在内存<br/>避免磁盘IO"]
+    C --> C1["无竞争无死锁<br/>无线程切换开销"]
+    D --> D1["单线程处理万级连接<br/>Reactor模式"]
 
     style A fill:#e74c3c,color:#fff
     style B fill:#3498db,color:#fff
@@ -206,18 +206,18 @@ flowchart TB
     A[Redis 数据类型] --> B[5大基础类型]
     A --> C[6大扩展类型]
 
-    B --> B1[String<br/>字符串/数字/位图]
-    B --> B2[Hash<br/>字段-值映射]
-    B --> B3[List<br/>有序链表]
-    B --> B4[Set<br/>无序集合]
-    B --> B5[ZSet<br/>有序集合]
+    B --> B1["String<br/>字符串/数字/位图"]
+    B --> B2["Hash<br/>字段-值映射"]
+    B --> B3["List<br/>有序链表"]
+    B --> B4["Set<br/>无序集合"]
+    B --> B5["ZSet<br/>有序集合"]
 
-    C --> C1[HyperLogLog<br/>基数估算]
-    C --> C2[Bitmap<br/>位操作]
-    C --> C3[Stream<br/>消息流]
-    C --> C4[GEO<br/>地理位置]
-    C --> C5[Bitfield<br/>位域操作]
-    C --> C6[Module类型<br/>JSON/Search等]
+    C --> C1["HyperLogLog<br/>基数估算"]
+    C --> C2["Bitmap<br/>位操作"]
+    C --> C3["Stream<br/>消息流"]
+    C --> C4["GEO<br/>地理位置"]
+    C --> C5["Bitfield<br/>位域操作"]
+    C --> C6["Module类型<br/>JSON/Search等"]
 
     style B fill:#3498db,color:#fff
     style C fill:#9b59b6,color:#fff
@@ -255,10 +255,10 @@ String 有三种内部编码，Redis 根据值的内容和长度自动选择：
 ```mermaid
 flowchart TB
     A[SET key value] --> B{值是整数?}
-    B -->|是| C[int 编码<br/>ptr 直接存数值]
+    B -->|是| C["int 编码<br/>ptr 直接存数值"]
     B -->|否| D{长度 ≤ 44?}
-    D -->|是| E[embstr 编码<br/>一次 malloc 分配<br/>SDS与Object连续内存]
-    D -->|否| F[raw 编码<br/>两次 malloc 分配<br/>SDS与Object分离]
+    D -->|是| E["embstr 编码<br/>一次 malloc 分配<br/>SDS与Object连续内存"]
+    D -->|否| F["raw 编码<br/>两次 malloc 分配<br/>SDS与Object分离"]
 
     style C fill:#27ae60,color:#fff
     style E fill:#3498db,color:#fff
@@ -302,8 +302,8 @@ ZSet 底层使用 **跳表（skiplist）+ 哈希表** 的组合：
 ```mermaid
 flowchart LR
     subgraph ZSet内部结构
-        HT[Hashtable<br/>member → score<br/>O1查score]
-        SL[Skiplist<br/>按score排序<br/>OlogN范围查询]
+        HT["Hashtable<br/>member → score<br/>O1查score"]
+        SL["Skiplist<br/>按score排序<br/>OlogN范围查询"]
     end
     HT -.->|互补| SL
 ```
@@ -354,9 +354,9 @@ Hash 有两种编码：
 
 ```mermaid
 flowchart TB
-    A[HSET key field value] --> B{field数 ≤ 128<br/>且 value ≤ 64B?}
-    B -->|是| C[listpack 编码<br/>连续内存/紧凑存储]
-    B -->|否| D[hashtable 编码<br/>链地址法哈希表]
+    A[HSET key field value] --> B{"field数 ≤ 128<br/>且 value ≤ 64B?"}
+    B -->|是| C["listpack 编码<br/>连续内存/紧凑存储"]
+    B -->|否| D["hashtable 编码<br/>链地址法哈希表"]
 
     C -->|field数 > 128<br/>或 value > 64B| D
     D -->|不能回退| D
@@ -461,11 +461,11 @@ struct __attribute__((__packed__)) sdshdr8 {
 flowchart LR
     subgraph C字符串
         C1["'R','e','d','i','s','\\0'"]
-        C2[无长度字段<br/>靠\\0判断结束]
+        C2["无长度字段<br/>靠\\0判断结束"]
     end
     subgraph SDS
         S1["len=5 | alloc=7 | flags | 'R','e','d','i','s','\\0',' '"]
-        S2[O1取长度<br/>二进制安全<br/>预分配空间]
+        S2["O1取长度<br/>二进制安全<br/>预分配空间"]
     end
 
     style C2 fill:#e74c3c,color:#fff
@@ -584,13 +584,13 @@ BigKey 指的是**值过大**或**元素过多**的 key，会导致内存不均�
 
 ```mermaid
 flowchart TB
-    A[BigKey 问题] --> B[内存不均<br/>集群槽位倾斜]
-    A --> C[阻塞<br/>DEL/序列化耗时长]
-    A --> D[网络拥塞<br/>大Value传输慢]
+    A[BigKey 问题] --> B["内存不均<br/>集群槽位倾斜"]
+    A --> C["阻塞<br/>DEL/序列化耗时长"]
+    A --> D["网络拥塞<br/>大Value传输慢"]
 
     subgraph 判断标准
         E[String > 10KB]
-        F[Hash/List/Set/ZSet<br/>元素 > 5000]
+        F["Hash/List/Set/ZSet<br/>元素 > 5000"]
     end
 
     A --> E
@@ -655,16 +655,16 @@ UNLINK bigkey_hash
 
 ```mermaid
 flowchart TB
-    A[双写一致性方案] --> B[Cache Aside<br/>旁路缓存]
+    A[双写一致性方案] --> B["Cache Aside<br/>旁路缓存"]
     A --> C[延迟双删]
-    A --> D[订阅 binlog<br/>Canal]
+    A --> D["订阅 binlog<br/>Canal"]
 
     B --> B1[读: 先缓存→未命中读DB→回写缓存]
     B --> B2[写: 先更新DB→再删缓存]
 
-    C --> C1[写: 先删缓存→更新DB<br/>→ 延迟N毫秒→再删缓存]
+    C --> C1["写: 先删缓存→更新DB<br/>→ 延迟N毫秒→再删缓存"]
 
-    D --> D1[写: 只更新DB<br/>Canal监听binlog→删缓存]
+    D --> D1["写: 只更新DB<br/>Canal监听binlog→删缓存"]
 
     style D fill:#27ae60,color:#fff
 ```
@@ -720,16 +720,16 @@ Redis 采用 **惰性删除 + 定期删除** 双重策略：
 
 ```mermaid
 flowchart LR
-    A[过期键删除策略] --> B[惰性删除<br/>Lazy Expiration]
-    A --> C[定期删除<br/>Periodic Expiration]
+    A[过期键删除策略] --> B["惰性删除<br/>Lazy Expiration"]
+    A --> C["定期删除<br/>Periodic Expiration"]
 
-    B --> B1[访问 key 时检查<br/>过期则删除]
-    C --> C1[每100ms随机抽查<br/>过期则删除]
+    B --> B1["访问 key 时检查<br/>过期则删除"]
+    C --> C1["每100ms随机抽查<br/>过期则删除"]
 
-    B -->|优点| B2[CPU友好<br/>只访问时处理]
-    B -->|缺点| B3[内存浪费<br/>过期不访问不删]
+    B -->|优点| B2["CPU友好<br/>只访问时处理"]
+    B -->|缺点| B3["内存浪费<br/>过期不访问不删"]
     C -->|优点| C2[限制过期键占用内存]
-    C -->|缺点| C3[可能漏删<br/>随机抽样有概率遗漏]
+    C -->|缺点| C3["可能漏删<br/>随机抽样有概率遗漏"]
 
     style B fill:#3498db,color:#fff
     style C fill:#2ecc71,color:#fff
@@ -788,13 +788,13 @@ void activeExpireCycle(int type) {
 flowchart TB
     A[maxmemory 达到上限] --> B{选择淘汰策略}
 
-    B --> C[缓存场景<br/>allkeys-lru / allkeys-lfu]
-    B --> D[混合场景<br/>volatile-lru]
-    B --> E[不丢失数据<br/>noeviction]
+    B --> C["缓存场景<br/>allkeys-lru / allkeys-lfu"]
+    B --> D["混合场景<br/>volatile-lru"]
+    B --> E["不丢失数据<br/>noeviction"]
 
-    C --> C1[LRU: 最近最少使用<br/>近似LRU 随机采样16个<br/>淘汰最久未访问]
-    D --> D1[只淘汰带TTL的key<br/>永久key不受影响]
-    E --> E1[写入直接报错<br/>需手动扩容或清理]
+    C --> C1["LRU: 最近最少使用<br/>近似LRU 随机采样16个<br/>淘汰最久未访问"]
+    D --> D1["只淘汰带TTL的key<br/>永久key不受影响"]
+    E --> E1["写入直接报错<br/>需手动扩容或清理"]
 
     style C fill:#27ae60,color:#fff
     style D fill:#f39c12,color:#fff
@@ -850,7 +850,7 @@ flowchart TB
     subgraph RDB
         R1[BGSAVE fork 子进程]
         R1 --> R2[子进程写二进制快照]
-        R2 --> R3[压缩紧凑<br/>恢复快]
+        R2 --> R3["压缩紧凑<br/>恢复快"]
         R3 --> R4[可能丢失数分钟数据]
     end
 
@@ -858,7 +858,7 @@ flowchart TB
         A1[每个写命令追加]
         A1 --> A2[AOF 缓冲区]
         A2 --> A3[fsync 到磁盘]
-        A3 --> A4[最多丢1秒数据<br/>文件大/恢复慢]
+        A3 --> A4["最多丢1秒数据<br/>文件大/恢复慢"]
     end
 
     style RDB fill:#3498db,color:#fff
@@ -964,10 +964,10 @@ fork 之后主进程继续接收写命令，这些**增量命令**必须被保�
 ```mermaid
 flowchart TB
     subgraph 纯AOF重写
-        A1[全部为AOF命令<br/>文件大/恢复慢]
+        A1["全部为AOF命令<br/>文件大/恢复慢"]
     end
     subgraph 混合持久化
-        B1[RDB格式数据<br/>紧凑/加载快] --> B2[AOF增量命令<br/>重放少/安全]
+        B1["RDB格式数据<br/>紧凑/加载快"] --> B2["AOF增量命令<br/>重放少/安全"]
     end
 
     style B1 fill:#3498db,color:#fff
@@ -1172,15 +1172,15 @@ sequenceDiagram
 
 ```mermaid
 flowchart TB
-    A[复制风暴场景] --> B[主节点重启<br/>runid 变化]
-    A --> C[网络抖动<br/>多从断线重连]
-    A --> D[repl_backlog 不足<br/>所有从节点需全量同步]
+    A[复制风暴场景] --> B["主节点重启<br/>runid 变化"]
+    A --> C["网络抖动<br/>多从断线重连"]
+    A --> D["repl_backlog 不足<br/>所有从节点需全量同步"]
 
-    B --> E[所有从节点同时 BGSAVE<br/>主节点 fork N 次]
+    B --> E["所有从节点同时 BGSAVE<br/>主节点 fork N 次"]
     C --> E
     D --> E
 
-    E --> F[主节点 CPU 飙升<br/>内存压力剧增<br/>网络带宽打满]
+    E --> F["主节点 CPU 飙升<br/>内存压力剧增<br/>网络带宽打满"]
 
     style F fill:#e74c3c,color:#fff
 ```
@@ -1276,8 +1276,8 @@ flowchart TB
     C --> D[EXEC]
 
     D --> E{执行结果}
-    E --> F[语法错误<br/>所有命令不执行]
-    E --> G[运行时错误<br/>错误命令跳过<br/>其他命令继续执行]
+    E --> F["语法错误<br/>所有命令不执行"]
+    E --> G["运行时错误<br/>错误命令跳过<br/>其他命令继续执行"]
 
     style F fill:#e74c3c,color:#fff
     style G fill:#f39c12,color:#fff
@@ -1451,9 +1451,9 @@ flowchart TB
 
     subgraph Stream
         S1[XADD stream * field value]
-        S1 --> S2[Consumer Group1<br/>CG1-C1 消费 msg1]
-        S1 --> S3[Consumer Group2<br/>CG2-C1 消费 msg1]
-        S1 --> S4[离线消费者<br/>重连后从 last_id 继续]
+        S1 --> S2["Consumer Group1<br/>CG1-C1 消费 msg1"]
+        S1 --> S3["Consumer Group2<br/>CG2-C1 消费 msg1"]
+        S1 --> S4["离线消费者<br/>重连后从 last_id 继续"]
     end
 
     style P4 fill:#e74c3c,color:#fff
@@ -1526,11 +1526,11 @@ uint8_t lfuDecay(uint8_t counter) {
 ```mermaid
 flowchart LR
     A[key 被访问] --> B{LFU 计数器}
-    B --> C[对数概率增长<br/>越热越难继续增长]
+    B --> C["对数概率增长<br/>越热越难继续增长"]
     B --> D[重置衰减时间]
 
     E[定时扫描] --> F[检查衰减时间]
-    F --> G[超过 decay-time<br/>计数器减半]
+    F --> G["超过 decay-time<br/>计数器减半"]
 ```
 
 ::: important 为什么用对数计数器？
@@ -1600,9 +1600,9 @@ LRU/LFU 需要每个 key 独立维护访问时间和频率。如果多个 key �
 
 ```mermaid
 flowchart TB
-    A[缓存三大问题] --> B[缓存穿透<br/>查询不存在的数据]
-    A --> C[缓存击穿<br/>热点key过期]
-    A --> D[缓存雪崩<br/>大量key同时过期]
+    A[缓存三大问题] --> B["缓存穿透<br/>查询不存在的数据"]
+    A --> C["缓存击穿<br/>热点key过期"]
+    A --> D["缓存雪崩<br/>大量key同时过期"]
 
     B --> B1[绕过缓存直击DB]
     C --> C1[瞬间大量请求压垮DB]
@@ -1679,14 +1679,14 @@ SET key2 value EX 3600+random(0,300)
 ```mermaid
 flowchart TB
     Client[客户端] --> LB[负载均衡]
-    LB --> GW[应用网关<br/>本地缓存 L1]
+    LB --> GW["应用网关<br/>本地缓存 L1"]
 
-    GW --> RC[Redis Cluster<br/>分布式缓存 L2]
+    GW --> RC["Redis Cluster<br/>分布式缓存 L2"]
 
     subgraph Redis Cluster
-        M1[Master1<br/>0-5460]
-        M2[Master2<br/>5461-10922]
-        M3[Master3<br/>10923-16383]
+        M1["Master1<br/>0-5460"]
+        M2["Master2<br/>5461-10922"]
+        M3["Master3<br/>10923-16383"]
         S1[Slave1]
         S2[Slave2]
         S3[Slave3]
@@ -1741,12 +1741,12 @@ flowchart TB
 
 ```mermaid
 flowchart LR
-    A[请求] --> B{L1 本地缓存<br/>MemoryCache}
-    B -->|命中| C[返回<br/>~0.01ms]
+    A[请求] --> B{"L1 本地缓存<br/>MemoryCache"}
+    B -->|命中| C["返回<br/>~0.01ms"]
     B -->|未命中| D{L2 Redis 缓存}
-    D -->|命中| E[写入L1 + 返回<br/>~1ms]
+    D -->|命中| E["写入L1 + 返回<br/>~1ms"]
     D -->|未命中| F{L3 数据库}
-    F -->|命中| G[写入L2+L1 + 返回<br/>~10ms]
+    F -->|命中| G["写入L2+L1 + 返回<br/>~10ms"]
     F -->|未命中| H[返回空/错误]
 
     style B fill:#27ae60,color:#fff
@@ -1826,9 +1826,9 @@ flowchart TB
     A --> C[ZooKeeper]
     A --> D[etcd]
 
-    B --> B1[简单高效<br/>AP型<br/>可能不一致]
-    C --> C1[强一致<br/>CP型<br/>性能较低]
-    D --> D1[强一致+租约<br/>CP型<br/>K8s生态]
+    B --> B1["简单高效<br/>AP型<br/>可能不一致"]
+    C --> C1["强一致<br/>CP型<br/>性能较低"]
+    D --> D1["强一致+租约<br/>CP型<br/>K8s生态"]
 
     style B fill:#e74c3c,color:#fff
     style C fill:#3498db,color:#fff
@@ -1909,7 +1909,7 @@ flowchart TB
     B --> C[向每个实例请求加锁]
     C --> D{获得锁的实例数 ≥ 3?}
     D -->|是| E{锁有效时间 > 0?}
-    D -->|否| F[加锁失败<br/>释放所有实例的锁]
+    D -->|否| F["加锁失败<br/>释放所有实例的锁"]
     E -->|是| G[加锁成功]
     E -->|否| F
 
@@ -1957,10 +1957,10 @@ flowchart TB
     A --> D[令牌桶]
     A --> E[漏桶]
 
-    B --> B1[INCR + EXPIRE<br/>简单但有临界问题]
-    C --> C1[ZSet 时间窗口<br/>精确但内存开销大]
-    D --> D1[令牌桶算法<br/>允许突发流量]
-    E --> E1[漏桶算法<br/>匀速处理]
+    B --> B1["INCR + EXPIRE<br/>简单但有临界问题"]
+    C --> C1["ZSet 时间窗口<br/>精确但内存开销大"]
+    D --> D1["令牌桶算法<br/>允许突发流量"]
+    E --> E1["漏桶算法<br/>匀速处理"]
 ```
 
 **1. 固定窗口计数器**：
@@ -2061,13 +2061,13 @@ flowchart TB
     A --> D[集群倾斜]
 
     E[发现方式] --> E1[redis-cli --hotkeys]
-    E --> E2[MONITOR 命令<br/>生产慎用]
+    E --> E2["MONITOR 命令<br/>生产慎用"]
     E --> E3[代理层统计]
     E --> E4[业务日志分析]
 
-    F[解决方案] --> F1[本地缓存<br/>减少 Redis 访问]
-    F --> F2[读写分离<br/>分散读压力]
-    F --> F3[Key 打散<br/>加随机后缀分片]
+    F[解决方案] --> F1["本地缓存<br/>减少 Redis 访问"]
+    F --> F2["读写分离<br/>分散读压力"]
+    F --> F3["Key 打散<br/>加随机后缀分片"]
     F --> F4[Proxy 分流]
 
     style A fill:#e74c3c,color:#fff
@@ -2181,15 +2181,15 @@ flowchart TB
     A --> C[服务层高可用]
     A --> D[架构层高可用]
 
-    B --> B1[主从复制<br/>数据冗余]
-    B --> B2[AOF 持久化<br/>数据不丢]
+    B --> B1["主从复制<br/>数据冗余"]
+    B --> B2["AOF 持久化<br/>数据不丢"]
 
-    C --> C1[哨兵/Sentinel<br/>自动故障转移]
-    C --> C2[健康检查<br/>及时发现故障]
+    C --> C1["哨兵/Sentinel<br/>自动故障转移"]
+    C --> C2["健康检查<br/>及时发现故障"]
 
-    D --> D1[Cluster 分片<br/>故障隔离]
-    D --> D2[多机房部署<br/>容灾]
-    D --> D3[客户端重试<br/>优雅降级]
+    D --> D1["Cluster 分片<br/>故障隔离"]
+    D --> D2["多机房部署<br/>容灾"]
+    D --> D3["客户端重试<br/>优雅降级"]
 
     style A fill:#e74c3c,color:#fff
     style B fill:#3498db,color:#fff
@@ -2251,12 +2251,12 @@ flowchart TB
     A --> F[配置中心]
     A --> G[限流器]
 
-    B --> B1[服务间共享缓存<br/>减少DB压力]
-    C --> C1[防止并发重复操作<br/>分布式互斥]
-    D --> D1[JWT 黑名单<br/>用户会话管理]
-    E --> E1[事件通知<br/>Stream 消息]
-    F --> F1[动态配置<br/>开关/特性标志]
-    G --> G1[API 限流<br/>服务降级]
+    B --> B1["服务间共享缓存<br/>减少DB压力"]
+    C --> C1["防止并发重复操作<br/>分布式互斥"]
+    D --> D1["JWT 黑名单<br/>用户会话管理"]
+    E --> E1["事件通知<br/>Stream 消息"]
+    F --> F1["动态配置<br/>开关/特性标志"]
+    G --> G1["API 限流<br/>服务降级"]
 
     style A fill:#e74c3c,color:#fff
 ```
@@ -2413,9 +2413,9 @@ flowchart TB
     C --> D[分析慢命令类型]
 
     D --> E{命令类型}
-    E --> F[KEYS/SMEMBERS<br/>全量扫描命令]
-    E --> G[BIGKEY 操作<br/>DEL大Hash等]
-    E --> H[复杂度高的命令<br/>ZRANGEBYSCORE大范围]
+    E --> F["KEYS/SMEMBERS<br/>全量扫描命令"]
+    E --> G["BIGKEY 操作<br/>DEL大Hash等"]
+    E --> H["复杂度高的命令<br/>ZRANGEBYSCORE大范围"]
 
     F --> I[替换为 SCAN]
     G --> J[拆分/UNLINK]
@@ -2478,12 +2478,12 @@ flowchart TB
     A --> C[数据结构优化]
     A --> D[配置优化]
 
-    B --> B1[利用 listpack/ziplist<br/>小数据量紧凑存储]
-    B --> B2[int 编码存整数<br/>embstr 存短字符串]
+    B --> B1["利用 listpack/ziplist<br/>小数据量紧凑存储"]
+    B --> B2["int 编码存整数<br/>embstr 存短字符串"]
 
-    C --> C1[Hash 替代 String<br/>存储对象属性]
-    C --> C2[BitMap 替代 Set<br/>存储布尔标记]
-    C --> C3[HyperLogLog 替代 Set<br/>存储去重计数]
+    C --> C1["Hash 替代 String<br/>存储对象属性"]
+    C --> C2["BitMap 替代 Set<br/>存储布尔标记"]
+    C --> C3["HyperLogLog 替代 Set<br/>存储去重计数"]
 
     D --> D1[调整 maxmemory-samples]
     D --> D2[开启 lazyfree]
@@ -2626,10 +2626,10 @@ flowchart TB
     A --> D[集群路由]
     A --> E[异步死锁]
 
-    B --> B1[同步调用阻塞<br/>线程池耗尽]
-    C --> C1[ConnectionMultiplexer<br/>必须单例]
-    D --> D1[MOVED 重定向<br/>自动处理]
-    E --> E1[Task.Wait / .Result<br/>可能导致死锁]
+    B --> B1["同步调用阻塞<br/>线程池耗尽"]
+    C --> C1["ConnectionMultiplexer<br/>必须单例"]
+    D --> D1["MOVED 重定向<br/>自动处理"]
+    E --> E1["Task.Wait / .Result<br/>可能导致死锁"]
 
     style B fill:#e74c3c,color:#fff
     style E fill:#f39c12,color:#fff
@@ -2755,12 +2755,12 @@ Pipeline 中的命令仍然是逐个执行的，中间可能穿插其他客户�
 
 ```mermaid
 flowchart TB
-    A[Redis 连接池] --> B[StackExchange.Redis<br/>单连接多路复用]
-    A --> C[CSRedis<br/>连接池]
-    A --> D[Lettuce Java<br/>连接池]
+    A[Redis 连接池] --> B["StackExchange.Redis<br/>单连接多路复用"]
+    A --> C["CSRedis<br/>连接池"]
+    A --> D["Lettuce Java<br/>连接池"]
 
-    B --> B1[1个物理连接<br/>管道并发<br/>无需池化]
-    C --> C1[N个物理连接<br/>轮询分配<br/>高并发场景]
+    B --> B1["1个物理连接<br/>管道并发<br/>无需池化"]
+    C --> C1["N个物理连接<br/>轮询分配<br/>高并发场景"]
 
     style B fill:#3498db,color:#fff
     style C fill:#2ecc71,color:#fff
@@ -2819,11 +2819,11 @@ var csredis = new CSRedis.CSRedisClient(
 
 ```mermaid
 flowchart TB
-    A[生产部署架构] --> B[主从 + 哨兵<br/>中小规模]
-    A --> C[Redis Cluster<br/>大规模]
+    A[生产部署架构] --> B["主从 + 哨兵<br/>中小规模"]
+    A --> C["Redis Cluster<br/>大规模"]
 
-    B --> B1[1主2从 + 3哨兵<br/>最小高可用单元]
-    C --> C1[3主3从<br/>最小Cluster单元]
+    B --> B1["1主2从 + 3哨兵<br/>最小高可用单元"]
+    C --> C1["3主3从<br/>最小Cluster单元"]
 
     subgraph 安全配置
         S1[requirepass]
@@ -2926,13 +2926,13 @@ sysctl net.ipv4.tcp_keepalive_time=600
 
 ```mermaid
 flowchart TB
-    A[数据迁移方案] --> B[在线迁移<br/>不停服]
-    A --> C[离线迁移<br/>停服窗口]
+    A[数据迁移方案] --> B["在线迁移<br/>不停服"]
+    A --> C["离线迁移<br/>停服窗口"]
 
-    B --> B1[Redis-shake<br/>阿里开源]
-    B --> B2[migrate工具<br/>单 key 迁移]
+    B --> B1["Redis-shake<br/>阿里开源"]
+    B --> B2["migrate工具<br/>单 key 迁移"]
 
-    C --> C1[RDB 文件拷贝<br/>跨集群]
+    C --> C1["RDB 文件拷贝<br/>跨集群"]
     C --> C2[AOF 重放]
 
     style B fill:#27ae60,color:#fff
@@ -2998,13 +2998,13 @@ filter_db = ""
 
 ```mermaid
 flowchart TB
-    A[key 过期但内存未释放] --> B[惰性删除<br/>未访问不删]
-    A --> C[从节点<br/>等待主节点DEL]
-    A --> D[大Hash中的field<br/>不触发整体过期]
+    A[key 过期但内存未释放] --> B["惰性删除<br/>未访问不删"]
+    A --> C["从节点<br/>等待主节点DEL"]
+    A --> D["大Hash中的field<br/>不触发整体过期"]
 
     B --> B1[等访问时才检查并删除]
-    C --> C1[从节点不主动删除过期key<br/>等待主节点同步DEL命令]
-    D --> D1[HSET中的field<br/>不单独过期]
+    C --> C1["从节点不主动删除过期key<br/>等待主节点同步DEL命令"]
+    D --> D1["HSET中的field<br/>不单独过期"]
 
     style A fill:#e74c3c,color:#fff
 ```

@@ -21,11 +21,11 @@ tag:
 
 ```mermaid
 flowchart TB
-    MSG[消息] --> D1[消费者 NACK/REJECT<br/>且 requeue=false]
+    MSG[消息] --> D1["消费者 NACK/REJECT<br/>且 requeue=false"]
     MSG --> D2[消息 TTL 过期]
-    MSG --> D3[队列达到最大长度<br/>溢出策略为默认]
+    MSG --> D3["队列达到最大长度<br/>溢出策略为默认"]
 
-    D1 & D2 & D3 --> DLX[死信交换机<br/>DLX]
+    D1 & D2 & D3 --> DLX["死信交换机<br/>DLX"]
     DLX --> DLQ[死信队列]
 
     style D1 fill:#F44336,color:#fff
@@ -48,15 +48,15 @@ DLX 本质上就是一个**普通的交换机**，只是被指定为某个队列
 ```mermaid
 flowchart LR
     subgraph "正常流程"
-        P[生产者] --> E[业务交换机<br/>order.exchange]
-        E --> Q[业务队列<br/>order.queue<br/>x-dead-letter-exchange=dlx.exchange]
+        P[生产者] --> E["业务交换机<br/>order.exchange"]
+        E --> Q["业务队列<br/>order.queue<br/>x-dead-letter-exchange=dlx.exchange"]
         Q --> C[消费者]
     end
 
     subgraph "死信流程"
-        Q -->|NACK/TTL/溢出| DLX[死信交换机<br/>dlx.exchange]
-        DLX --> DLQ[死信队列<br/>dlx.order.queue]
-        DLQ --> DC[死信消费者<br/>告警/人工处理]
+        Q -->|NACK/TTL/溢出| DLX["死信交换机<br/>dlx.exchange"]
+        DLX --> DLQ["死信队列<br/>dlx.order.queue"]
+        DLQ --> DC["死信消费者<br/>告警/人工处理"]
     end
 
     style Q fill:#FF9800,color:#fff
@@ -155,11 +155,11 @@ channel.BasicConsume("dlx.order.queue", autoAck: false, consumer: dlxConsumer);
 
 ```mermaid
 flowchart TB
-    TTL[TTL 设置] --> Q[队列级 TTL<br/>x-message-ttl]
-    TTL --> M[消息级 TTL<br/>expiration 属性]
+    TTL[TTL 设置] --> Q["队列级 TTL<br/>x-message-ttl"]
+    TTL --> M["消息级 TTL<br/>expiration 属性"]
 
-    Q --> QC[所有消息统一过期<br/>过期消息从队列头部删除]
-    M --> MC[每条消息独立过期<br/>过期消息可能仍在队列中间]
+    Q --> QC["所有消息统一过期<br/>过期消息从队列头部删除"]
+    M --> MC["每条消息独立过期<br/>过期消息可能仍在队列中间"]
 
     style Q fill:#4CAF50,color:#fff
     style M fill:#2196F3,color:#fff
@@ -243,9 +243,9 @@ channel.QueueDeclare("limited.queue", durable: true, exclusive: false, autoDelet
 flowchart TB
     FULL[队列已满] --> S{溢出策略?}
 
-    S -->|drop-head| A[丢弃最老消息<br/>旧消息进 DLX]
-    S -->|reject-publish| B[拒绝新消息<br/>生产者收到 NACK]
-    S -->|reject-publish-dlx| C[拒绝新消息<br/>新消息进 DLX]
+    S -->|drop-head| A["丢弃最老消息<br/>旧消息进 DLX"]
+    S -->|reject-publish| B["拒绝新消息<br/>生产者收到 NACK"]
+    S -->|reject-publish-dlx| C["拒绝新消息<br/>新消息进 DLX"]
 
     style A fill:#FF9800,color:#fff
     style B fill:#F44336,color:#fff
@@ -345,15 +345,15 @@ channel.QueueDeclare("delay.5m.queue", durable: true, exclusive: false, autoDele
 flowchart LR
     subgraph "重试流程"
         Q1[业务队列] -->|处理失败| DLX1[DLX]
-        DLX1 --> R1[重试队列1<br/>TTL=5s]
+        DLX1 --> R1["重试队列1<br/>TTL=5s"]
         R1 -->|5s后| Q1
 
         Q1 -->|再次失败| DLX1
-        DLX1 --> R2[重试队列2<br/>TTL=30s]
+        DLX1 --> R2["重试队列2<br/>TTL=30s"]
         R2 -->|30s后| Q1
 
         Q1 -->|仍然失败| DLX1
-        DLX1 --> R3[重试队列3<br/>TTL=120s]
+        DLX1 --> R3["重试队列3<br/>TTL=120s"]
         R3 -->|120s后| Q1
 
         Q1 -->|超过重试次数| DLX2[死信交换机]

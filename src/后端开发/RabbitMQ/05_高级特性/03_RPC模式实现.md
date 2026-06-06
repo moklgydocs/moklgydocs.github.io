@@ -272,7 +272,7 @@ catch (TimeoutException)
 ```mermaid
 flowchart TB
     subgraph Shared["方案一：共享回调队列 ✅ 推荐"]
-        C1[客户端] -->|所有请求| RQ1[共享回调队列<br/>exclusive, auto-delete]
+        C1[客户端] -->|所有请求| RQ1["共享回调队列<br/>exclusive, auto-delete"]
         RQ1 -->|CorrelationId 匹配| C1
     end
 

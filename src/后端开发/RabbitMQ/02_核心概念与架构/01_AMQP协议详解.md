@@ -24,9 +24,9 @@ flowchart TB
         APP[业务应用]
     end
     subgraph "协议层"
-        AMQP[AMQP 0-9-1<br/>消息队列协议]
-        HTTP[HTTP/1.1<br/>Web 协议]
-        MQTT[MQTT v5<br/>物联网协议]
+        AMQP["AMQP 0-9-1<br/>消息队列协议"]
+        HTTP["HTTP/1.1<br/>Web 协议"]
+        MQTT["MQTT v5<br/>物联网协议"]
     end
     subgraph "传输层"
         TCP[TCP]
@@ -62,7 +62,7 @@ flowchart TB
 ```mermaid
 flowchart LR
     subgraph "AMQP 帧"
-        T[类型<br/>1 byte] --> CH[通道号<br/>2 bytes] --> SZ[大小<br/>4 bytes] --> PL[负载<br/>N bytes] --> END[结束标志<br/>0xCE]
+        T["类型<br/>1 byte"] --> CH["通道号<br/>2 bytes"] --> SZ["大小<br/>4 bytes"] --> PL["负载<br/>N bytes"] --> END["结束标志<br/>0xCE"]
     end
 
     style T fill:#4CAF50,color:#fff
@@ -85,13 +85,13 @@ flowchart LR
 ```mermaid
 flowchart TB
     subgraph "完整消息传输"
-        M[Method 帧<br/>方法调用/响应] --> H[Header 帧<br/>消息属性 + body 大小]
-        H --> B1[Body 帧<br/>消息体片段 1]
-        B1 --> B2[Body 帧<br/>消息体片段 2]
+        M["Method 帧<br/>方法调用/响应"] --> H["Header 帧<br/>消息属性 + body 大小"]
+        H --> B1["Body 帧<br/>消息体片段 1"]
+        B1 --> B2["Body 帧<br/>消息体片段 2"]
     end
 
     subgraph "心跳帧"
-        HB[Heartbeat 帧<br/>保持连接活跃<br/>通道号 = 0]
+        HB["Heartbeat 帧<br/>保持连接活跃<br/>通道号 = 0"]
     end
 
     style M fill:#4CAF50,color:#fff
@@ -188,12 +188,12 @@ sequenceDiagram
 ```mermaid
 flowchart TB
     subgraph "单个 TCP 连接"
-        CH1[通道 1<br/>订单消息]
-        CH2[通道 2<br/>支付消息]
-        CH3[通道 3<br/>通知消息]
+        CH1["通道 1<br/>订单消息"]
+        CH2["通道 2<br/>支付消息"]
+        CH3["通道 3<br/>通知消息"]
     end
 
-    TCP[TCP 连接<br/>端口 5672]
+    TCP["TCP 连接<br/>端口 5672"]
 
     CH1 --> TCP
     CH2 --> TCP
@@ -291,7 +291,7 @@ channel.ChannelShutdown += (sender, args) =>
 ```mermaid
 flowchart LR
     A[.NET 应用] -->|AMQP| B[TCP 5672]
-    B --> C[Wireshark<br/>amqp 过滤器]
+    B --> C["Wireshark<br/>amqp 过滤器"]
 
     style C fill:#4CAF50,color:#fff
 ```

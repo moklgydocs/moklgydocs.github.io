@@ -31,7 +31,7 @@ Nginx 提供多种安装方式，各有优劣，选择合适的方式是部署�
 graph TB
     START[选择安装方式] --> Q1{是否生产环境?}
     Q1 -->|否| Q2{是否使用Docker?}
-    Q1 -->|是| Q3{是否需要第三方模块<br/>或特殊编译参数?}
+    Q1 -->|是| Q3{"是否需要第三方模块<br/>或特殊编译参数?"}
 
     Q2 -->|是| DOCKER[Docker安装]
     Q2 -->|否| PKG[包管理器安装]
@@ -237,12 +237,12 @@ sudo systemctl is-enabled nginx
 graph TB
     A[准备编译环境] --> B[下载源码]
     B --> C[解压源码]
-    C --> D[配置编译参数<br/>./configure]
+    C --> D["配置编译参数<br/>./configure"]
     D --> E{配置是否成功?}
     E -->|否| F[解决依赖问题]
     F --> D
-    E -->|是| G[编译<br/>make]
-    G --> H[安装<br/>make install]
+    E -->|是| G["编译<br/>make"]
+    G --> H["安装<br/>make install"]
     H --> I[创建systemd服务]
     I --> J[验证安装]
 
@@ -758,17 +758,17 @@ http {
 ```mermaid
 graph LR
     subgraph Nginx版本生命周期
-        ML1[1.27.0<br/>Mainline] --> ML2[1.27.1]
+        ML1["1.27.0<br/>Mainline"] --> ML2[1.27.1]
         ML2 --> ML3[1.27.2]
         ML3 --> ML4[1.27.3]
-        ML4 --> S1[1.28.0<br/>Stable]
-        S1 --> S2[1.28.1<br/>Bug Fix]
-        S2 --> S3[1.28.2<br/>Security Fix]
+        ML4 --> S1["1.28.0<br/>Stable"]
+        S1 --> S2["1.28.1<br/>Bug Fix"]
+        S2 --> S3["1.28.2<br/>Security Fix"]
     end
 
     subgraph 同时维护
-        OLD[1.26.x<br/>旧Stable<br/>安全修复]
-        NEW[1.28.x<br/>新Stable<br/>Bug+安全修复]
+        OLD["1.26.x<br/>旧Stable<br/>安全修复"]
+        NEW["1.28.x<br/>新Stable<br/>Bug+安全修复"]
     end
 ```
 
@@ -944,15 +944,15 @@ sudo kill -9 $(pgrep -P $(cat /var/run/nginx.pid) nginx)
 ```mermaid
 graph TB
     subgraph 静态编译
-        S1[./configure<br/>--add-module] --> S2[make]
-        S2 --> S3[模块编译进<br/>nginx二进制]
-        S3 --> S4[无法单独卸载<br/>升级需重新编译]
+        S1["./configure<br/>--add-module"] --> S2[make]
+        S2 --> S3["模块编译进<br/>nginx二进制"]
+        S3 --> S4["无法单独卸载<br/>升级需重新编译"]
     end
 
     subgraph 动态编译
-        D1[./configure<br/>--add-dynamic-module] --> D2[make]
+        D1["./configure<br/>--add-dynamic-module"] --> D2[make]
         D2 --> D3[生成.so文件]
-        D3 --> D4[load_module加载<br/>可独立管理]
+        D3 --> D4["load_module加载<br/>可独立管理"]
     end
 
     style S3 fill:#FF9800,color:#fff

@@ -21,15 +21,15 @@ TLS 是 IoT 通信安全的基石，X.509 证书是设备身份的核心载体�
 
 ```mermaid
 flowchart TD
-    ROOT[Root CA<br/>自签名根证书<br/>离线保存] --> INT1[Intermediate CA 1<br/>中间证书<br/>用于签发设备证书]
-    ROOT --> INT2[Intermediate CA 2<br/>备用中间证书]
+    ROOT["Root CA<br/>自签名根证书<br/>离线保存"] --> INT1["Intermediate CA 1<br/>中间证书<br/>用于签发设备证书"]
+    ROOT --> INT2["Intermediate CA 2<br/>备用中间证书"]
     
-    INT1 --> D1[Device Certificate<br/>设备 thermostat-01]
-    INT1 --> D2[Device Certificate<br/>设备 gateway-01]
-    INT1 --> D3[Device Certificate<br/>设备 sensor-02]
-    INT2 --> D4[Device Certificate<br/>Server Certificate<br/>MQTT Broker]
+    INT1 --> D1["Device Certificate<br/>设备 thermostat-01"]
+    INT1 --> D2["Device Certificate<br/>设备 gateway-01"]
+    INT1 --> D3["Device Certificate<br/>设备 sensor-02"]
+    INT2 --> D4["Device Certificate<br/>Server Certificate<br/>MQTT Broker"]
 
-    ROOT -.->|信任锚| VERIFIER[验证方<br/>只需 Root CA 公钥]
+    ROOT -.->|信任锚| VERIFIER["验证方<br/>只需 Root CA 公钥"]
 
     style ROOT fill:#ffcdd2
     style INT1 fill:#fff9c4

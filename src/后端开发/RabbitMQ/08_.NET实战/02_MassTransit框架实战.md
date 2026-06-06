@@ -394,10 +394,10 @@ MassTransit 提供丰富的中间件（Filter）管道，可以在消息处理�
 
 ```mermaid
 flowchart LR
-    MSG[消息] --> RETRY[Retry Filter<br/>重试策略]
-    RETRY --> OUTBOX[Outbox Filter<br/>保证一致性]
-    OUTBOX --> LOG[Logging Filter<br/>日志记录]
-    LOG --> CONSUMER[Consumer<br/>业务处理]
+    MSG[消息] --> RETRY["Retry Filter<br/>重试策略"]
+    RETRY --> OUTBOX["Outbox Filter<br/>保证一致性"]
+    OUTBOX --> LOG["Logging Filter<br/>日志记录"]
+    LOG --> CONSUMER["Consumer<br/>业务处理"]
 
     style RETRY fill:#FF6600,color:#fff
     style OUTBOX fill:#2196F3,color:#fff
@@ -524,13 +524,13 @@ await _sendEndpointProvider.Send<OrderCancelCommand>(
 ```mermaid
 flowchart TB
     subgraph Publish["Publish（广播）"]
-        P[发布者] -->|OrderCreated| EX[Exchange<br/>自动创建]
-        EX --> C1[Consumer A<br/>IConsumer&lt;OrderCreated&gt;]
-        EX --> C2[Consumer B<br/>IConsumer&lt;OrderCreated&gt;]
+        P[发布者] -->|OrderCreated| EX["Exchange<br/>自动创建"]
+        EX --> C1["Consumer A<br/>IConsumer&lt;OrderCreated&gt;"]
+        EX --> C2["Consumer B<br/>IConsumer&lt;OrderCreated&gt;"]
     end
 
     subgraph Send["Send（点对点）"]
-        S[发送者] -->|OrderCancelCommand| Q[指定队列<br/>order-cancel]
+        S[发送者] -->|OrderCancelCommand| Q["指定队列<br/>order-cancel"]
         Q --> C3[唯一 Consumer]
     end
 

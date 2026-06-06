@@ -46,10 +46,10 @@ SISMEMBER myset a       # 判断元素是否存在
 
 ```mermaid
 flowchart LR
-    A[Redis 数据类型] --> B[List<br/>有序可重复]
-    A --> C[Set<br/>无序唯一]
-    A --> D[ZSet<br/>有序唯一带分数]
-    A --> E[Hash<br/>键值对]
+    A[Redis 数据类型] --> B["List<br/>有序可重复"]
+    A --> C["Set<br/>无序唯一"]
+    A --> D["ZSet<br/>有序唯一带分数"]
+    A --> E["Hash<br/>键值对"]
 
     C --> F["✅ 集合运算<br/>✅ 去重<br/>✅ 快速判重"]
     B --> G["✅ 队列/栈<br/>✅ 消息列表"]
@@ -83,7 +83,7 @@ flowchart TD
     G -->|是| H[转换为 hashtable]
     G -->|否| E
 
-    H --> I[❌ 不可逆<br/>不会再转回 intset]
+    H --> I["❌ 不可逆<br/>不会再转回 intset"]
 ```
 
 ::: important 编码转换条件
@@ -178,11 +178,11 @@ intset 中的元素始终按**从小到大**排列。这不是 Set 类型本身�
 ```mermaid
 flowchart TD
     A[新元素加入 intset] --> B{元素值能否用当前 encoding 表示?}
-    B -->|能| C[二分查找插入位置<br/>移动元素腾出空间<br/>O(N) 操作]
+    B -->|能| C["二分查找插入位置<br/>移动元素腾出空间<br/>O(N) 操作"]
     B -->|不能| D[编码升级]
-    D --> E[确定新 encoding<br/>INT16 → INT32 → INT64]
-    E --> F[重新分配内存<br/>新大小 = header + length × 新元素大小]
-    F --> G[从后往前移动旧元素<br/>扩展每个元素到新大小]
+    D --> E["确定新 encoding<br/>INT16 → INT32 → INT64"]
+    E --> F["重新分配内存<br/>新大小 = header + length × 新元素大小"]
+    F --> G["从后往前移动旧元素<br/>扩展每个元素到新大小"]
     G --> H[插入新元素]
     H --> I[更新 encoding 和 length]
 ```
@@ -415,7 +415,7 @@ Redis 对交集运算做了优化，核心策略是**先遍历最小集合**：
 
 ```mermaid
 flowchart TD
-    A[SINTER A B C] --> B[找出元素最少的集合<br/>假设是 A]
+    A[SINTER A B C] --> B["找出元素最少的集合<br/>假设是 A"]
     B --> C[遍历 A 的每个元素]
     C --> D{元素在 B 中?}
     D -->|否| E[跳过]
@@ -687,9 +687,9 @@ SDIFF tag:java:users tag:redis:users
 
 ```mermaid
 flowchart TD
-    U1[user:1001<br/>java, redis, mysql]
-    U2[user:1002<br/>python, redis, mongodb]
-    U3[user:1003<br/>java, kafka]
+    U1["user:1001<br/>java, redis, mysql"]
+    U2["user:1002<br/>python, redis, mongodb"]
+    U3["user:1003<br/>java, kafka"]
 
     T1[tag:java:users → 1001, 1003]
     T2[tag:redis:users → 1001, 1002]
@@ -905,7 +905,7 @@ sequenceDiagram
 ```mermaid
 flowchart TD
     A[SINTER A B C] --> B[获取三个集合的 SCARD]
-    B --> C[按 cardinality 排序<br/>假设 |A| < |B| < |C|]
+    B --> C["按 cardinality 排序<br/>假设 |A| < |B| < |C|"]
     C --> D[创建空结果集 result]
     D --> E[遍历 A 的每个元素 e]
     E --> F{SISMEMBER B e?}

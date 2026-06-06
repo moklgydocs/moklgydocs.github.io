@@ -838,10 +838,10 @@ public class LogicalExpiryCacheService
 ```mermaid
 flowchart TD
     A[请求到达] --> B{缓存存在?}
-    B -->|否| C[同步加载DB<br/>写入缓存<br/>返回数据]
+    B -->|否| C["同步加载DB<br/>写入缓存<br/>返回数据"]
     B -->|是| D{逻辑过期?}
     D -->|未过期| E[直接返回 ✅]
-    D -->|已过期| F[异步刷新缓存<br/>返回旧数据 ⚠️]
+    D -->|已过期| F["异步刷新缓存<br/>返回旧数据 ⚠️"]
 
     style E fill:#0a0,stroke:#070,color:#fff
     style F fill:#fa0,stroke:#c80,color:#fff
@@ -942,12 +942,12 @@ public class RandomExpiryCacheService
 
 ```mermaid
 flowchart TD
-    A[客户端请求] --> B{L1 本地缓存<br/>MemoryCache}
+    A[客户端请求] --> B{"L1 本地缓存<br/>MemoryCache"}
     B -->|命中| C[返回 ✅ ~0.001ms]
-    B -->|未命中| D{L2 Redis<br/>分布式缓存}
-    D -->|命中| E[回写L1<br/>返回 ✅ ~0.1ms]
+    B -->|未命中| D{"L2 Redis<br/>分布式缓存"}
+    D -->|命中| E["回写L1<br/>返回 ✅ ~0.1ms"]
     D -->|未命中| F{L3 数据库}
-    F -->|命中| G[回写L1+L2<br/>返回 ✅ ~5ms]
+    F -->|命中| G["回写L1+L2<br/>返回 ✅ ~5ms"]
     F -->|未命中| H[返回空]
 
     style B fill:#0a0,stroke:#070,color:#fff
@@ -1880,7 +1880,7 @@ flowchart TD
     I -->|成功| K[Double-Check缓存]
     K -->|命中| L[释放锁 返回 ✅]
     K -->|未命中| M[查询数据库]
-    M --> N[写入L1+L2<br/>随机过期时间]
+    M --> N["写入L1+L2<br/>随机过期时间"]
     N --> O[释放锁 返回 ✅]
 
     G -.->|Redis不可用| P[熔断降级]

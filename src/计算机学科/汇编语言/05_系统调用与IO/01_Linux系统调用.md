@@ -21,7 +21,7 @@ tag:
 flowchart TB
     subgraph 用户态
         A[应用程序]
-        B[ libc 函数<br/>printf/read/write]
+        B[" libc 函数<br/>printf/read/write"]
     end
     subgraph 系统调用接口
         C["int 0x80 / syscall"]

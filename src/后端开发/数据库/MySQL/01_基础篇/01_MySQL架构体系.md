@@ -60,13 +60,13 @@ Server 层是 MySQL 的"大脑"，负责连接管理、SQL 解析、查询优化
 
 ```mermaid
 flowchart LR
-    A[客户端] -->|发送 SQL| B[连接器<br/>Connector]
-    B --> C{查询缓存<br/>Query Cache}
+    A[客户端] -->|发送 SQL| B["连接器<br/>Connector"]
+    B --> C{"查询缓存<br/>Query Cache"}
     C -->|命中| D[直接返回结果]
-    C -->|未命中| E[解析器<br/>Parser]
-    E --> F[优化器<br/>Optimizer]
-    F --> G[执行器<br/>Executor]
-    G -->|调用存储引擎 API| H[存储引擎<br/>Storage Engine]
+    C -->|未命中| E["解析器<br/>Parser"]
+    E --> F["优化器<br/>Optimizer"]
+    F --> G["执行器<br/>Executor"]
+    G -->|调用存储引擎 API| H["存储引擎<br/>Storage Engine"]
     H -->|返回行数据| G
     G -->|结果集| A
 
@@ -125,8 +125,8 @@ flowchart LR
     A["SELECT * FROM users WHERE id = 1"] --> B[词法分析]
     B --> C["识别关键字：<br/>SELECT, FROM, WHERE<br/>识别表名：users<br/>识别列名：id"]
     C --> D[语法分析]
-    D --> E[生成语法树<br/>AST]
-    E --> F[预处理器<br/>检查表/列是否存在<br/>权限验证]
+    D --> E["生成语法树<br/>AST"]
+    E --> F["预处理器<br/>检查表/列是否存在<br/>权限验证"]
 ```
 
 ```sql

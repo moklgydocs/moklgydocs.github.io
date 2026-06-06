@@ -396,9 +396,9 @@ Nginx 配置的加载顺序决定了同名指令的覆盖关系：
 flowchart TB
     A[1. nginx.conf main 上下文] --> B[2. nginx.conf events 块]
     A --> C[3. nginx.conf http 块]
-    C --> D[4. conf.d/*.conf<br/>按字母序加载]
-    D --> E[5. upstream/*.conf<br/>按字母序加载]
-    E --> F[6. sites-enabled/*<br/>按字母序加载]
+    C --> D["4. conf.d/*.conf<br/>按字母序加载"]
+    D --> E["5. upstream/*.conf<br/>按字母序加载"]
+    E --> F["6. sites-enabled/*<br/>按字母序加载"]
     F --> G[7. server 块匹配]
     G --> H[8. location 块匹配]
     H --> I[9. if 块（如存在）]
@@ -621,11 +621,11 @@ server {
 
 ```mermaid
 flowchart TB
-    REQ[请求URI] --> EXACT{精确匹配<br/>= /path ?}
+    REQ[请求URI] --> EXACT{"精确匹配<br/>= /path ?"}
     EXACT -->|匹配| R1[使用精确匹配的location]
-    EXACT -->|不匹配| PREFIX{前缀匹配<br/>^~ /path ?}
-    PREFIX -->|匹配| R2[使用前缀匹配的location<br/>不再检查正则]
-    PREFIX -->|不匹配| REGEX{正则匹配<br/>~ / ~* ?}
+    EXACT -->|不匹配| PREFIX{"前缀匹配<br/>^~ /path ?"}
+    PREFIX -->|匹配| R2["使用前缀匹配的location<br/>不再检查正则"]
+    PREFIX -->|不匹配| REGEX{"正则匹配<br/>~ / ~* ?"}
     REGEX -->|匹配| R3[使用第一个匹配的正则location]
     REGEX -->|不匹配| LONGEST[使用最长普通前缀匹配]
 

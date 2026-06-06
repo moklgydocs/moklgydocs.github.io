@@ -23,7 +23,7 @@ tag:
 flowchart LR
     D[传感器设备] -->|MQTT| B[EMQX]
     B --> T[Telegraf]
-    T --> DB[时序数据库<br/>InfluxDB/TimescaleDB]
+    T --> DB["时序数据库<br/>InfluxDB/TimescaleDB"]
     DB --> G[Grafana]
     G --> U[用户浏览器]
 

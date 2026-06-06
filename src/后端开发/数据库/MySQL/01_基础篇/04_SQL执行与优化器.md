@@ -21,13 +21,13 @@ SQL 从文本到结果集，要经过解析、预处理、优化和执行四个�
 
 ```mermaid
 flowchart LR
-    A["SQL 文本"] --> B[词法分析<br/>Lexer]
-    B --> C[语法分析<br/>Parser]
+    A["SQL 文本"] --> B["词法分析<br/>Lexer"]
+    B --> C["语法分析<br/>Parser"]
     C --> D[语法树 AST]
-    D --> E[预处理器<br/>Preprocessor]
-    E --> F[优化器<br/>Optimizer]
+    D --> E["预处理器<br/>Preprocessor"]
+    E --> F["优化器<br/>Optimizer"]
     F --> G[执行计划]
-    G --> H[执行器<br/>Executor]
+    G --> H["执行器<br/>Executor"]
     H --> I["调用存储引擎 API"]
     I --> J[结果集]
 ```

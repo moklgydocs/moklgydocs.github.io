@@ -152,9 +152,9 @@ flowchart LR
 
 ```mermaid
 flowchart TD
-    A[客户端发送写命令] --> B[1. 命令追加<br/>append到aof_buf]
-    B --> C[2. 文件写入<br/>write到系统内核缓冲区]
-    C --> D[3. 文件同步<br/>fsync到磁盘]
+    A[客户端发送写命令] --> B["1. 命令追加<br/>append到aof_buf"]
+    B --> C["2. 文件写入<br/>write到系统内核缓冲区"]
+    C --> D["3. 文件同步<br/>fsync到磁盘"]
 
     subgraph 内存中
         B
@@ -545,9 +545,9 @@ auto-aof-rewrite-min-size 64mb     # AOF文件至少64MB才触发重写
 
 ```mermaid
 flowchart TD
-    A[Redis周期性检查] --> B{AOF文件大小<br/>>= auto-aof-rewrite-min-size?}
+    A[Redis周期性检查] --> B{"AOF文件大小<br/>>= auto-aof-rewrite-min-size?"}
     B -->|否| A
-    B -->|是| C{增长百分比<br/>>= auto-aof-rewrite-percentage?}
+    B -->|是| C{"增长百分比<br/>>= auto-aof-rewrite-percentage?"}
     C -->|否| A
     C -->|是| D[执行BGREWRITEAOF]
 
@@ -585,13 +585,13 @@ flowchart TD
 
     subgraph 主进程并行工作
         I[继续处理客户端请求]
-        J[新写命令追加到<br/>1. 原有AOF缓冲区<br/>2. AOF重写缓冲区]
+        J["新写命令追加到<br/>1. 原有AOF缓冲区<br/>2. AOF重写缓冲区"]
     end
 
     H --> K[子进程完成]
     K --> L[子进程发送信号通知主进程]
-    L --> M[主进程：将AOF重写缓冲区<br/>追加到新AOF文件]
-    M --> N[主进程：原子rename<br/>新AOF替代旧AOF]
+    L --> M["主进程：将AOF重写缓冲区<br/>追加到新AOF文件"]
+    M --> N["主进程：原子rename<br/>新AOF替代旧AOF"]
     N --> O[重写完成]
 
     style A fill:#e74c3c,color:#fff
@@ -802,10 +802,10 @@ flowchart TD
     C --> D[将命令追加到 aof_rewrite_buf]
     D --> E{aof_rewrite_buf 是否需要写入文件?}
 
-    E -->|"缓冲区大小超过阈值"| F[write到临时文件<br/>释放内存中的缓冲区]
+    E -->|"缓冲区大小超过阈值"| F["write到临时文件<br/>释放内存中的缓冲区"]
     E -->|"未超过阈值"| G[继续暂存在内存中]
 
-    F --> H[下一次beforeSleep时<br/>继续检查]
+    F --> H["下一次beforeSleep时<br/>继续检查"]
     G --> H
 
     style A fill:#e74c3c,color:#fff
@@ -981,9 +981,9 @@ flowchart TD
     A[发现AOF损坏] --> B[1. 备份原始AOF文件]
     B --> C[2. 使用redis-check-aof检查]
     C --> D{损坏位置在哪?}
-    D -->|文件末尾| E[截断末尾<br/>丢失最少数据]
-    D -->|文件中间| F[截断中间<br/>丢失较多数据]
-    D -->|文件开头| G[严重损坏<br/>考虑使用RDB恢复]
+    D -->|文件末尾| E["截断末尾<br/>丢失最少数据"]
+    D -->|文件中间| F["截断中间<br/>丢失较多数据"]
+    D -->|文件开头| G["严重损坏<br/>考虑使用RDB恢复"]
 
     E --> H[3. redis-check-aof --fix]
     F --> H
@@ -1031,8 +1031,8 @@ redis-server /etc/redis/redis.conf
 flowchart TD
     subgraph "Redis 7之前：单一AOF"
         A1[原AOF文件] --> B1[子进程生成新AOF]
-        B1 --> C1[重写缓冲区<br/>（内存中累积）]
-        C1 --> D1[主进程追加缓冲区到新AOF<br/>⚠️ 可能阻塞主进程!]
+        B1 --> C1["重写缓冲区<br/>（内存中累积）"]
+        C1 --> D1["主进程追加缓冲区到新AOF<br/>⚠️ 可能阻塞主进程!"]
         D1 --> E1[rename新AOF替代旧AOF]
     end
 
@@ -1224,8 +1224,8 @@ no-appendfsync-on-rewrite no   # 默认值
 ```mermaid
 flowchart TD
     A[AOF重写期间] --> B{no-appendfsync-on-rewrite?}
-    B -->|no| C[继续fsync<br/>可能造成磁盘I/O竞争<br/>主线程延迟增大]
-    B -->|yes| D[暂停fsync<br/>数据仅存在page cache<br/>重写期间宕机可能丢失数据]
+    B -->|no| C["继续fsync<br/>可能造成磁盘I/O竞争<br/>主线程延迟增大"]
+    B -->|yes| D["暂停fsync<br/>数据仅存在page cache<br/>重写期间宕机可能丢失数据"]
 
     style C fill:#f39c12,color:#fff
     style D fill:#e74c3c,color:#fff

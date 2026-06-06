@@ -184,9 +184,9 @@ save 60 10000   # 60秒（1分钟）内有至少10000次修改
 
 ```mermaid
 flowchart TD
-    A[Redis 每100ms执行一次<br/>serverCron] --> B{距离上次save<br/>是否满足秒数条件?}
+    A["Redis 每100ms执行一次<br/>serverCron"] --> B{"距离上次save<br/>是否满足秒数条件?"}
     B -->|否| A
-    B -->|是| C{dirty计数器<br/>是否满足次数条件?}
+    B -->|是| C{"dirty计数器<br/>是否满足次数条件?"}
     C -->|否| A
     C -->|是| D[执行BGSAVE]
     D --> E[重置dirty计数器]
@@ -341,12 +341,12 @@ int main() {
 
 ```mermaid
 flowchart TD
-    A[Redis主进程<br/>PID=1000<br/>占用4GB内存] -->|"fork()"| B{创建子进程}
+    A["Redis主进程<br/>PID=1000<br/>占用4GB内存"] -->|"fork()"| B{创建子进程}
     B --> C[子进程 PID=1001]
-    B --> D[主进程 PID=1000<br/>继续服务]
+    B --> D["主进程 PID=1000<br/>继续服务"]
 
-    C --> E[共享父进程的<br/>内存页表]
-    D --> F[共享同一份<br/>物理内存页]
+    C --> E["共享父进程的<br/>内存页表"]
+    D --> F["共享同一份<br/>物理内存页"]
 
     style A fill:#e74c3c,color:#fff
     style C fill:#3498db,color:#fff
@@ -399,7 +399,7 @@ COW 是 fork 后的内存管理策略。其核心思想是：**只有当某个�
 flowchart TD
     subgraph fork后初始状态
         direction LR
-        P1[主进程页表] --- M1[物理内存页A<br/>物理内存页B<br/>物理内存页C]
+        P1[主进程页表] --- M1["物理内存页A<br/>物理内存页B<br/>物理内存页C"]
         C1[子进程页表] --- M1
     end
 
@@ -488,13 +488,13 @@ rdb_last_bgsave_cow_size:429496729  # 约400MB的COW开销
 flowchart TD
     A[触发BGSAVE] --> B[主进程执行fork]
     B --> C{fork成功?}
-    C -->|否| D[记录错误日志<br/>返回失败]
+    C -->|否| D["记录错误日志<br/>返回失败"]
     C -->|是| E[子进程开始遍历内存]
 
     E --> F[逐键读取内存数据]
-    F --> G{当前页是否被<br/>主进程修改?}
+    F --> G{"当前页是否被<br/>主进程修改?"}
     G -->|否| H[直接读取共享页]
-    G -->|是| I[读取COW后的<br/>原始页副本]
+    G -->|是| I["读取COW后的<br/>原始页副本"]
     H --> J[写入RDB文件]
     I --> J
 
@@ -502,13 +502,13 @@ flowchart TD
     K -->|否| F
     K -->|是| L[RDB文件写入完成]
 
-    L --> M[子进程发送信号<br/>通知主进程]
-    M --> N[主进程更新统计信息<br/>记录保存时间]
+    L --> M["子进程发送信号<br/>通知主进程"]
+    M --> N["主进程更新统计信息<br/>记录保存时间"]
 
     subgraph 主进程并行执行
         direction TB
         O[继续处理客户端请求]
-        P[写入时触发COW<br/>复制被修改的页]
+        P["写入时触发COW<br/>复制被修改的页"]
     end
 
     style A fill:#e74c3c,color:#fff
@@ -529,11 +529,11 @@ BGSAVE 的执行涉及主进程和子进程的协作，以下是完整的步骤�
 ```mermaid
 flowchart TD
     A[1. 接收BGSAVE命令] --> B[2. 检查前置条件]
-    B --> C{是否已有<br/>BGSAVE/BGREWRITEAOF<br/>在执行?}
-    C -->|是| D[返回错误<br/>ERR Background save already in progress]
+    B --> C{"是否已有<br/>BGSAVE/BGREWRITEAOF<br/>在执行?"}
+    C -->|是| D["返回错误<br/>ERR Background save already in progress"]
     C -->|否| E[3. 主进程执行fork]
     E --> F{fork返回值}
-    F -->|< 0| G[fork失败<br/>记录日志]
+    F -->|< 0| G["fork失败<br/>记录日志"]
     F -->|= 0| H[子进程执行路径]
     F -->|> 0| I[主进程执行路径]
 
@@ -1013,9 +1013,9 @@ flowchart TD
     D -->|否| E[空数据库启动]
     D -->|是| F[加载RDB文件]
     F --> G{校验CRC64}
-    G -->|失败| H[日志报错<br/>拒绝启动]
+    G -->|失败| H["日志报错<br/>拒绝启动"]
     G -->|成功| I[逐键读取并还原到内存]
-    I --> J[加载完成<br/>开始接受请求]
+    I --> J["加载完成<br/>开始接受请求"]
 
     style A fill:#3498db,color:#fff
     style H fill:#e74c3c,color:#fff
@@ -1120,11 +1120,11 @@ stop-writes-on-bgsave-error yes  # 默认值
 ```mermaid
 flowchart TD
     A[BGSAVE 失败] --> B{stop-writes-on-bgsave-error?}
-    B -->|yes| C[停止接受写入<br/>返回 MISCONF 错误]
-    B -->|no| D[继续接受写入<br/>仅记录日志]
+    B -->|yes| C["停止接受写入<br/>返回 MISCONF 错误"]
+    B -->|no| D["继续接受写入<br/>仅记录日志"]
 
     C --> E[运维及时发现问题]
-    D --> F[数据持续丢失<br/>风险增大]
+    D --> F["数据持续丢失<br/>风险增大"]
 
     style A fill:#e74c3c,color:#fff
     style C fill:#f39c12,color:#fff
@@ -1553,10 +1553,10 @@ int serverCron(struct aeEventLoop *eventLoop, long long id, void *clientData) {
 
 ```mermaid
 flowchart LR
-    A[BGSAVE 完成<br/>dirty = 0] --> B[SET key1 val1<br/>dirty = 1]
-    B --> C[HSET hash1 f1 v1<br/>dirty = 2]
-    C --> D[LPUSH list1 a b c<br/>dirty = 5]
-    D --> E[DEL key1<br/>dirty = 6]
+    A["BGSAVE 完成<br/>dirty = 0"] --> B["SET key1 val1<br/>dirty = 1"]
+    B --> C["HSET hash1 f1 v1<br/>dirty = 2"]
+    C --> D["LPUSH list1 a b c<br/>dirty = 5"]
+    D --> E["DEL key1<br/>dirty = 6"]
     E --> F["满足save 60 10000?<br/>dirty=6 < 10000<br/>不触发"]
     F --> G[继续写入...]
 

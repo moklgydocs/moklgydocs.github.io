@@ -1234,9 +1234,9 @@ flowchart TB
     end
 
     subgraph 消息层
-        RS[Redis Stream<br/>实时通知/活动流]
-        RQ[RabbitMQ<br/>任务队列/延迟任务]
-        KF[Kafka<br/>日志收集/大数据]
+        RS["Redis Stream<br/>实时通知/活动流"]
+        RQ["RabbitMQ<br/>任务队列/延迟任务"]
+        KF["Kafka<br/>日志收集/大数据"]
     end
 
     API -->|实时推送| RS

@@ -30,7 +30,7 @@ tag:
 flowchart TB
     subgraph VM["虚拟机架构"]
         HW1[硬件 Infrastructure]
-        HW1 --> H1[Hypervisor<br/>VMware / KVM]
+        HW1 --> H1["Hypervisor<br/>VMware / KVM"]
         H1 --> G1[Guest OS 1]
         H1 --> G2[Guest OS 2]
         H1 --> G3[Guest OS 3]
@@ -43,9 +43,9 @@ flowchart TB
         HW2[硬件 Infrastructure]
         HW2 --> OS[Host OS]
         OS --> DOCKER[Docker Engine]
-        DOCKER --> C1[Container 1<br/>App A + Lib]
-        DOCKER --> C2[Container 2<br/>App B + Lib]
-        DOCKER --> C3[Container 3<br/>App C + Lib]
+        DOCKER --> C1["Container 1<br/>App A + Lib"]
+        DOCKER --> C2["Container 2<br/>App B + Lib"]
+        DOCKER --> C3["Container 3<br/>App C + Lib"]
     end
 
     style H1 fill:#EF5350,color:#fff
@@ -87,20 +87,20 @@ Namespace 负责**"看什么"**（视图隔离），Cgroup 负责**"用什么"**
 ```mermaid
 flowchart LR
     subgraph NS["Namespace — 视图隔离"]
-        PID[PID Namespace<br/>进程号隔离]
-        NET[NET Namespace<br/>网络栈隔离]
-        MNT[MNT Namespace<br/>文件系统隔离]
-        UTS[UTS Namespace<br/>主机名隔离]
-        IPC[IPC Namespace<br/>进程通信隔离]
-        USR[USER Namespace<br/>用户ID隔离]
+        PID["PID Namespace<br/>进程号隔离"]
+        NET["NET Namespace<br/>网络栈隔离"]
+        MNT["MNT Namespace<br/>文件系统隔离"]
+        UTS["UTS Namespace<br/>主机名隔离"]
+        IPC["IPC Namespace<br/>进程通信隔离"]
+        USR["USER Namespace<br/>用户ID隔离"]
     end
 
     subgraph CG["Cgroup — 资源限制"]
-        CPU[cpu<br/>CPU时间片]
-        MEM[memory<br/>内存上限]
-        BLKIO[blkio<br/>磁盘IO]
-        PIDS[pids<br/>进程数上限]
-        NET_CLS[net_cls<br/>网络带宽标记]
+        CPU["cpu<br/>CPU时间片"]
+        MEM["memory<br/>内存上限"]
+        BLKIO["blkio<br/>磁盘IO"]
+        PIDS["pids<br/>进程数上限"]
+        NET_CLS["net_cls<br/>网络带宽标记"]
     end
 
     NS --> |"决定容器能看到什么"| CT[Container]
@@ -329,24 +329,24 @@ Docker 提供五种内置网络驱动：
 ```mermaid
 flowchart TB
     subgraph Bridge["bridge 模式（默认）"]
-        B_DOCKER[docker0 虚拟网桥<br/>172.17.0.0/16]
-        B_DOCKER --> B_C1[Container 1<br/>172.17.0.2]
-        B_DOCKER --> B_C2[Container 2<br/>172.17.0.3]
+        B_DOCKER["docker0 虚拟网桥<br/>172.17.0.0/16"]
+        B_DOCKER --> B_C1["Container 1<br/>172.17.0.2"]
+        B_DOCKER --> B_C2["Container 2<br/>172.17.0.3"]
         B_DOCKER --> |veth pair| B_HOST[宿主机 eth0]
     end
 
     subgraph Host["host 模式"]
-        H_HOST[宿主机网络栈<br/>直接共享]
-        H_HOST --> H_C1[Container 1<br/>共享宿主机IP/端口]
+        H_HOST["宿主机网络栈<br/>直接共享"]
+        H_HOST --> H_C1["Container 1<br/>共享宿主机IP/端口"]
     end
 
     subgraph None["none 模式"]
-        N_C1[Container 1<br/>仅 lo 回环<br/>无外部网络]
+        N_C1["Container 1<br/>仅 lo 回环<br/>无外部网络"]
     end
 
     subgraph Container["container 模式"]
-        CT_C1[Container A<br/>有独立网络栈]
-        CT_C2[Container B<br/>共享 A 的网络栈]
+        CT_C1["Container A<br/>有独立网络栈"]
+        CT_C2["Container B<br/>共享 A 的网络栈"]
     end
 
     subgraph Overlay["overlay 模式"]
@@ -509,7 +509,7 @@ services:
 flowchart LR
     subgraph Wrong["仅 depends_on ❌"]
         W1[t=0s: db 启动] --> W2[t=1s: app 启动]
-        W2 --> W3[t=1s: app 连接 db 失败!<br/>db 还在初始化]
+        W2 --> W3["t=1s: app 连接 db 失败!<br/>db 还在初始化"]
     end
 
     subgraph Right["depends_on + healthcheck ✅"]
@@ -609,9 +609,9 @@ flowchart TB
     subgraph ContainerRead["读文件流程"]
         R1[请求读取 /app/config.yml]
         R1 --> R2{文件在 upperdir?}
-        R2 -->|是| R3[从 upperdir 读取<br/>（修改后的版本）]
+        R2 -->|是| R3["从 upperdir 读取<br/>（修改后的版本）"]
         R2 -->|否| R4{文件在 lowerdir?}
-        R4 -->|是| R5[从 lowerdir 读取<br/>（原始版本）]
+        R4 -->|是| R5["从 lowerdir 读取<br/>（原始版本）"]
         R4 -->|否| R6[文件不存在]
     end
 
@@ -624,8 +624,8 @@ flowchart TB
 
     subgraph Delete["删除文件流程"]
         D1[请求删除 /app/temp.log]
-        D1 --> D2[在 upperdir 创建<br/>whiteout 标记文件]
-        D2 --> D3[lowerdir 原文件仍存在<br/>但被 whiteout 遮挡]
+        D1 --> D2["在 upperdir 创建<br/>whiteout 标记文件"]
+        D2 --> D3["lowerdir 原文件仍存在<br/>但被 whiteout 遮挡"]
     end
 
     style R3 fill:#66BB6A,color:#fff
@@ -770,11 +770,11 @@ Docker 采用经典的 **Client-Server 架构**，客户端（docker CLI）与�
 flowchart LR
     subgraph Client["Docker Client"]
         CLI[docker build/run/pull]
-        API_CL[Docker SDK<br/>Python/Go/Java]
+        API_CL["Docker SDK<br/>Python/Go/Java"]
     end
 
     subgraph Daemon["Docker Daemon (dockerd)"]
-        API_S[REST API Server<br/>/var/run/docker.sock]
+        API_S["REST API Server<br/>/var/run/docker.sock"]
         ENGINE[Docker Engine]
         IMG[Image Management]
         NET_MGR[Network Management]
@@ -853,17 +853,17 @@ Docker 安全是一个纵深防御体系，从镜像构建到运行时全链路�
 flowchart TB
     subgraph Image["镜像安全"]
         I1[使用可信基础镜像]
-        I2[定期扫描漏洞<br/>Trivy/Snyk]
-        I3[签名验证<br/>DCT]
+        I2["定期扫描漏洞<br/>Trivy/Snyk"]
+        I3["签名验证<br/>DCT"]
         I4[非 root 运行]
     end
 
     subgraph Runtime["运行时安全"]
         R1[只读文件系统]
-        R2[限制能力<br/>drop ALL]
+        R2["限制能力<br/>drop ALL"]
         R3[Seccomp 系统调用过滤]
         R4[AppArmor 配置文件]
-        R5[资源限制<br/>CPU/Memory]
+        R5["资源限制<br/>CPU/Memory"]
     end
 
     subgraph Host["宿主机安全"]
@@ -874,7 +874,7 @@ flowchart TB
     end
 
     subgraph Registry["仓库安全"]
-        G1[私有仓库<br/>Harbor]
+        G1["私有仓库<br/>Harbor"]
         G2[镜像签名]
         G3[访问控制 RBAC]
     end
@@ -1000,8 +1000,8 @@ rootless Docker 是以**普通用户身份**运行 Docker Daemon 和容器的模
 ```mermaid
 flowchart TB
     subgraph Rootful["传统模式（rootful）"]
-        R_DAEMON[dockerd<br/>root 权限运行]
-        R_C1[Container 1<br/>root in container<br/>≈ root on host]
+        R_DAEMON["dockerd<br/>root 权限运行"]
+        R_C1["Container 1<br/>root in container<br/>≈ root on host"]
         R_C2[Container 2]
         R_DAEMON --> R_C1
         R_DAEMON --> R_C2
@@ -1009,8 +1009,8 @@ flowchart TB
     end
 
     subgraph Rootless["Rootless 模式"]
-        RL_DAEMON[dockerd<br/>普通用户运行]
-        RL_C1[Container 1<br/>root in container<br/>= 普通用户 on host]
+        RL_DAEMON["dockerd<br/>普通用户运行"]
+        RL_C1["Container 1<br/>root in container<br/>= 普通用户 on host"]
         RL_C2[Container 2]
         RL_DAEMON --> RL_C1
         RL_DAEMON --> RL_C2
@@ -1071,7 +1071,7 @@ Harbor 是企业级 Docker Registry，高可用需要从**数据库、存储、H
 
 ```mermaid
 flowchart TB
-    LB[负载均衡器<br/>HAProxy / Nginx / F5]
+    LB["负载均衡器<br/>HAProxy / Nginx / F5"]
 
     subgraph Harbor1["Harbor 实例 1"]
         H1_CORE[Core]
@@ -1091,9 +1091,9 @@ flowchart TB
     LB --> Harbor2
 
     subgraph Shared["共享存储层"]
-        PG[(PostgreSQL<br/>主从 / Patroni)]
-        REDIS[(Redis<br/>Sentinel)]
-        S3[(S3 / OSS / Ceph<br/>共享对象存储)]
+        PG["(PostgreSQL<br/>主从 / Patroni)"]
+        REDIS["(Redis<br/>Sentinel)"]
+        S3["(S3 / OSS / Ceph<br/>共享对象存储)"]
     end
 
     Harbor1 --> PG
@@ -1171,18 +1171,18 @@ Harbor 实例本身无状态，高可用的关键是**共享数据库 + 共享�
 ```mermaid
 flowchart LR
     subgraph Scan["镜像扫描工具"]
-        T[Trivy<br/>轻量全面<br/>开源免费]
-        S[Snyk<br/>SaaS + CLI<br/>依赖扫描强]
-        C[Clair<br/>Harbor 集成<br/>静态分析]
-        G[Grype<br/>Anchore 生态<br/>SBOM 支持]
+        T["Trivy<br/>轻量全面<br/>开源免费"]
+        S["Snyk<br/>SaaS + CLI<br/>依赖扫描强"]
+        C["Clair<br/>Harbor 集成<br/>静态分析"]
+        G["Grype<br/>Anchore 生态<br/>SBOM 支持"]
     end
 
     subgraph Pipeline["CI/CD 集成"]
-        CI[GitHub Actions<br/>GitLab CI<br/>Jenkins]
+        CI["GitHub Actions<br/>GitLab CI<br/>Jenkins"]
     end
 
     subgraph Registry["仓库集成"]
-        H[Harbor<br/>内置扫描]
+        H["Harbor<br/>内置扫描"]
     end
 
     Scan --> Pipeline
@@ -1255,12 +1255,12 @@ Docker Content Trust（DCT）是 Docker 的**镜像签名和验证机制**，基
 ```mermaid
 flowchart LR
     subgraph Publish["发布流程（签名）"]
-        DEV[开发者] --> |"docker push"| SIGN[Notary 服务<br/>用私钥签名"]
-        SIGN --> REG[(Registry<br/>存储签名元数据)]
+        DEV[开发者] --> |"docker push"| SIGN["Notary 服务<br/>用私钥签名"]
+        SIGN --> REG["(Registry<br/>存储签名元数据)"]
     end
 
     subgraph Pull["拉取流程（验证）"]
-        OPS[运维人员] --> |"docker pull"| VERIFY[Notary 服务<br/>用公钥验证"]
+        OPS[运维人员] --> |"docker pull"| VERIFY["Notary 服务<br/>用公钥验证"]
         VERIFY --> |"签名匹配"| OK[✓ 镜像可信]
         VERIFY --> |"签名不匹配/缺失"| REJECT[✗ 拒绝拉取]
     end
@@ -1388,18 +1388,18 @@ Docker 日志分为**容器标准输出日志**和**容器内文件日志**两�
 flowchart TB
     subgraph Source["日志来源"]
         STDOUT[容器 stdout/stderr]
-        FILE[容器内日志文件<br/>/var/log/app.log]
+        FILE["容器内日志文件<br/>/var/log/app.log"]
     end
 
     subgraph Collection["采集方案"]
-        DL[Docker Logging Driver<br/>json-file / fluentd / loki]
-        FS[Filebeat / Fluent Bit<br/>挂载 Volume 采集]
-        SD[Sidecar<br/>伴生日志容器]
+        DL["Docker Logging Driver<br/>json-file / fluentd / loki"]
+        FS["Filebeat / Fluent Bit<br/>挂载 Volume 采集"]
+        SD["Sidecar<br/>伴生日志容器"]
     end
 
     subgraph Process["处理与存储"]
-        ELK[ELK Stack<br/>Elasticsearch + Logstash + Kibana]
-        LOKI[Grafana Loki<br/>轻量级日志聚合]
+        ELK["ELK Stack<br/>Elasticsearch + Logstash + Kibana"]
+        LOKI["Grafana Loki<br/>轻量级日志聚合"]
     end
 
     STDOUT --> DL
@@ -1749,15 +1749,15 @@ docker manifest push myregistry.com/myapp:latest
 ```mermaid
 flowchart LR
     subgraph Small["小型团队/项目"]
-        SW[Swarm<br/>5 分钟上手<br/>够用就好]
+        SW["Swarm<br/>5 分钟上手<br/>够用就好"]
     end
 
     subgraph Medium["中型团队/项目"]
-        K8S_S[K8s 单集群<br/>功能全面<br/>运维成本中等]
+        K8S_S["K8s 单集群<br/>功能全面<br/>运维成本中等"]
     end
 
     subgraph Large["大型团队/企业"]
-        K8S_M[K8s 多集群<br/>完整云原生栈<br/>专职 SRE 团队]
+        K8S_M["K8s 多集群<br/>完整云原生栈<br/>专职 SRE 团队"]
     end
 
     Small --> |"规模增长"| Medium --> |"继续增长"| Large
@@ -1869,17 +1869,17 @@ Kubernetes 采用 **Control Plane + Worker Node** 的经典主从架构：
 ```mermaid
 flowchart TB
     subgraph CP["Control Plane（控制面）"]
-        API[API Server<br/>集群入口<br/>REST API]
-        ETCD[(etcd<br/>分布式KV存储<br/>集群状态)]
-        SCHED[Scheduler<br/>Pod 调度]
-        CM[Controller Manager<br/>控制器集合<br/>Deployment/ReplicaSet/Node]
-        CC[Cloud Controller<br/>云平台集成]
+        API["API Server<br/>集群入口<br/>REST API"]
+        ETCD["(etcd<br/>分布式KV存储<br/>集群状态)"]
+        SCHED["Scheduler<br/>Pod 调度"]
+        CM["Controller Manager<br/>控制器集合<br/>Deployment/ReplicaSet/Node"]
+        CC["Cloud Controller<br/>云平台集成"]
     end
 
     subgraph WN1["Worker Node 1"]
-        KLET1[kubelet<br/>节点代理<br/>Pod 生命周期]
-        PROXY1[kube-proxy<br/>网络代理<br/>Service 路由]
-        CRI1[CRI Runtime<br/>containerd/CRI-O]
+        KLET1["kubelet<br/>节点代理<br/>Pod 生命周期"]
+        PROXY1["kube-proxy<br/>网络代理<br/>Service 路由"]
+        CRI1["CRI Runtime<br/>containerd/CRI-O"]
         P1[Pod] --> P2[Pod]
     end
 
@@ -2032,17 +2032,17 @@ spec:
 ```mermaid
 flowchart TB
     subgraph Deploy["Deployment — 无状态"]
-        D_SVC[Service<br/>app-service:3306]
-        D_P1[Pod: app-a1b2c<br/>无固定标识]
-        D_P2[Pod: app-d4e5f<br/>无固定标识]
-        D_P3[Pod: app-g7h8i<br/>无固定标识]
+        D_SVC["Service<br/>app-service:3306"]
+        D_P1["Pod: app-a1b2c<br/>无固定标识"]
+        D_P2["Pod: app-d4e5f<br/>无固定标识"]
+        D_P3["Pod: app-g7h8i<br/>无固定标识"]
         D_SVC --> D_P1
         D_SVC --> D_P2
         D_SVC --> D_P3
     end
 
     subgraph STS["StatefulSet — 有状态"]
-        S_SVC[Headless Service<br/>app-hs:3306]
+        S_SVC["Headless Service<br/>app-hs:3306"]
         S_P1["Pod: app-0<br/>PVC: data-app-0<br/>DNS: app-0.app-hs"]
         S_P2["Pod: app-1<br/>PVC: data-app-1<br/>DNS: app-1.app-hs"]
         S_P3["Pod: app-2<br/>PVC: data-app-2<br/>DNS: app-2.app-hs"]
@@ -2242,10 +2242,10 @@ Service 是**四层（TCP/UDP）负载均衡**，Ingress 是**七层（HTTP/HTTP
 
 ```mermaid
 flowchart LR
-    CLIENT[客户端] --> |"https://app.example.com"| ING[Ingress Controller<br/>Nginx/Traefik<br/>七层路由]
+    CLIENT[客户端] --> |"https://app.example.com"| ING["Ingress Controller<br/>Nginx/Traefik<br/>七层路由"]
 
-    ING --> |"Host: api.example.com<br/>Path: /v1"| SVC1[Service: api<br/>ClusterIP]
-    ING --> |"Host: web.example.com"| SVC2[Service: web<br/>ClusterIP]
+    ING --> |"Host: api.example.com<br/>Path: /v1"| SVC1["Service: api<br/>ClusterIP"]
+    ING --> |"Host: web.example.com"| SVC2["Service: web<br/>ClusterIP"]
 
     SVC1 --> P1[Pod: api-xxx]
     SVC1 --> P2[Pod: api-yyy]
@@ -2782,10 +2782,10 @@ flowchart TB
     end
 
     subgraph CNI["CNI 插件实现"]
-        F[Flannel<br/>简单 VXLAN 叠加<br/>适合入门]
-        C[Calico<br/>BGP 路由 + eBPF<br/>支持 NetworkPolicy]
-        W[Cilium<br/>eBPF 数据面<br/>可观测性 + 安全"]
-        O[Others<br/>Weave/Canal/AWS VPC]
+        F["Flannel<br/>简单 VXLAN 叠加<br/>适合入门"]
+        C["Calico<br/>BGP 路由 + eBPF<br/>支持 NetworkPolicy"]
+        W["Cilium<br/>eBPF 数据面<br/>可观测性 + 安全"]
+        O["Others<br/>Weave/Canal/AWS VPC"]
     end
 
     Requirements --> CNI
@@ -2805,10 +2805,10 @@ flowchart TB
 ```mermaid
 flowchart LR
     subgraph Overlay["叠加网络（VXLAN）"]
-        O_POD1[Pod A<br/>10.244.1.5]
-        O_NODE1[Node 1<br/>192.168.1.10]
-        O_NODE2[Node 2<br/>192.168.1.11]
-        O_POD2[Pod B<br/>10.244.2.8]
+        O_POD1["Pod A<br/>10.244.1.5"]
+        O_NODE1["Node 1<br/>192.168.1.10"]
+        O_NODE2["Node 2<br/>192.168.1.11"]
+        O_POD2["Pod B<br/>10.244.2.8"]
 
         O_POD1 --> O_NODE1
         O_NODE1 --> |"VXLAN 封装"| O_NODE2
@@ -2816,10 +2816,10 @@ flowchart LR
     end
 
     subgraph Routing["路由网络（BGP）"]
-        R_POD1[Pod A<br/>10.244.1.5]
-        R_NODE1[Node 1<br/>192.168.1.10]
-        R_NODE2[Node 2<br/>192.168.1.11]
-        R_POD2[Pod B<br/>10.244.2.8]
+        R_POD1["Pod A<br/>10.244.1.5"]
+        R_NODE1["Node 1<br/>192.168.1.10"]
+        R_NODE2["Node 2<br/>192.168.1.11"]
+        R_POD2["Pod B<br/>10.244.2.8"]
 
         R_POD1 --> R_NODE1
         R_NODE1 --> |"BGP 路由<br/>直接转发"| R_NODE2
@@ -3690,18 +3690,18 @@ GitOps 是一种以 **Git 仓库为唯一真实来源** 的持续交付方法论
 ```mermaid
 flowchart LR
     subgraph Git["Git 仓库（唯一真相源）"]
-        MANIFEST[K8s 资源清单<br/>YAML / Helm Chart / Kustomize]
+        MANIFEST["K8s 资源清单<br/>YAML / Helm Chart / Kustomize"]
     end
 
     subgraph CI["CI 流水线"]
         BUILD[构建镜像]
         PUSH[推送镜像]
-        UPDATE[更新 Git 仓库<br/>中的镜像 tag]
+        UPDATE["更新 Git 仓库<br/>中的镜像 tag"]
     end
 
     subgraph CD["CD — 声明式同步"]
-        ARGO[Argo CD<br/>或 Flux CD]
-        SYNC[检测 Git 变更<br/>自动同步到集群]
+        ARGO["Argo CD<br/>或 Flux CD"]
+        SYNC["检测 Git 变更<br/>自动同步到集群"]
     end
 
     subgraph Cluster["K8s 集群"]
@@ -3779,16 +3779,16 @@ K8s 故障排查遵循**从外到内、从上到下**的系统化方法：
 ```mermaid
 flowchart TB
     START[故障现象] --> L1{集群级别?}
-    L1 --> |"是"| C1[检查 Node 状态<br/>kubectl get nodes]
+    L1 --> |"是"| C1["检查 Node 状态<br/>kubectl get nodes"]
     L1 --> |"否"| L2
 
-    C1 --> C2[检查核心组件<br/>API Server / etcd / Scheduler]
+    C1 --> C2["检查核心组件<br/>API Server / etcd / Scheduler"]
     C2 --> L2
 
-    L2{Pod 级别?} --> |"Pending"| P1[调度问题<br/>资源不足/亲和性/污点]
-    L2 --> |"CrashLoop"| P2[应用崩溃<br/>日志/配置/依赖]
+    L2{Pod 级别?} --> |"Pending"| P1["调度问题<br/>资源不足/亲和性/污点"]
+    L2 --> |"CrashLoop"| P2["应用崩溃<br/>日志/配置/依赖"]
     L2 --> |"Running 但异常"| P3[网络/存储问题]
-    L2 --> |"ImagePullBackOff"| P4[镜像问题<br/>权限/网络/Tag]
+    L2 --> |"ImagePullBackOff"| P4["镜像问题<br/>权限/网络/Tag"]
 
     P1 --> D[深入排查]
     P2 --> D
@@ -3796,9 +3796,9 @@ flowchart TB
     P4 --> D
 
     D --> L3{容器级别?}
-    L3 --> |"应用错误"| A1[查看日志<br/>kubectl logs]
-    L3 --> |"资源问题"| A2[查看资源使用<br/>kubectl top]
-    L3 --> |"网络问题"| A3[端口转发/Debug Pod<br/>连通性测试]
+    L3 --> |"应用错误"| A1["查看日志<br/>kubectl logs"]
+    L3 --> |"资源问题"| A2["查看资源使用<br/>kubectl top"]
+    L3 --> |"网络问题"| A3["端口转发/Debug Pod<br/>连通性测试"]
 
     style START fill:#EF5350,color:#fff
     style D fill:#FF9800,color:#fff
@@ -3864,7 +3864,7 @@ CrashLoopBackOff 表示容器启动后反复崩溃，K8s 按**指数退避**策�
 
 ```mermaid
 flowchart TB
-    START[容器启动] --> CRASH[容器退出<br/>exit code ≠ 0]
+    START[容器启动] --> CRASH["容器退出<br/>exit code ≠ 0"]
     CRASH --> RESTART[K8s 重启容器]
     RESTART --> CHECK{再次崩溃?}
     CHECK --> |"是"| BACKOFF["退避等待<br/>10s → 20s → 40s → ..."]

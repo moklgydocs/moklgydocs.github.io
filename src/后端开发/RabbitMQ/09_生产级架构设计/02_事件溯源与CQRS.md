@@ -24,8 +24,8 @@ tag:
 ```mermaid
 flowchart LR
     subgraph 传统CRUD
-        S1[状态1<br/>余额: 1000] -->|覆盖| S2[状态2<br/>余额: 800]
-        S2 -->|覆盖| S3[状态3<br/>余额: 1200]
+        S1["状态1<br/>余额: 1000"] -->|覆盖| S2["状态2<br/>余额: 800"]
+        S2 -->|覆盖| S3["状态3<br/>余额: 1200"]
     end
 
     subgraph 信息丢失
@@ -60,9 +60,9 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    E1[账户已创建<br/>余额: 0] --> E2[已存款 1000<br/>余额: 1000]
-    E2 --> E3[已转账 -200<br/>余额: 800]
-    E3 --> E4[已存款 400<br/>余额: 1200]
+    E1["账户已创建<br/>余额: 0"] --> E2["已存款 1000<br/>余额: 1000"]
+    E2 --> E3["已转账 -200<br/>余额: 800"]
+    E3 --> E4["已存款 400<br/>余额: 1200"]
 
     subgraph 事件流=真相
         E1
@@ -88,11 +88,11 @@ flowchart LR
 
 ```mermaid
 flowchart TB
-    CMD[Command<br/>命令] --> AGG[Aggregate<br/>聚合根]
-    AGG -->|产生事件| ES[(Event Store<br/>事件存储)]
+    CMD["Command<br/>命令"] --> AGG["Aggregate<br/>聚合根"]
+    AGG -->|产生事件| ES["(Event Store<br/>事件存储)"]
     ES -->|发布事件| MQ[RabbitMQ]
-    MQ -->|消费| PROJ[Projection<br/>投影]
-    PROJ --> RM[(Read Model<br/>读模型)]
+    MQ -->|消费| PROJ["Projection<br/>投影"]
+    PROJ --> RM["(Read Model<br/>读模型)"]
 
     subgraph 写端
         CMD
@@ -260,13 +260,13 @@ CQRS（Command Query Responsibility Segregation）将读操作和写操作分离
 ```mermaid
 flowchart TB
     subgraph 传统单一模型
-        CR[CRUD<br/>读写一体] --> DB1[(数据库)]
+        CR["CRUD<br/>读写一体"] --> DB1[(数据库)]
     end
 
     subgraph CQRS 分离模型
-        CMD[Command Model<br/>写模型] --> ES[(Event Store)]
+        CMD["Command Model<br/>写模型"] --> ES[(Event Store)]
         ES -->|事件| MQ[RabbitMQ]
-        MQ --> QRY[Query Model<br/>读模型]
+        MQ --> QRY["Query Model<br/>读模型"]
         QRY --> RDB[(读数据库)]
     end
 
@@ -322,7 +322,7 @@ flowchart LR
     end
 
     subgraph 有快照
-        E1_2[e1] --> E2_2[e2] --> SNAP[快照<br/>@e50<br/>状态快照] --> E51[e51] --> E52[...] --> E100_2[e100] --> S2[当前状态]
+        E1_2[e1] --> E2_2[e2] --> SNAP["快照<br/>@e50<br/>状态快照"] --> E51[e51] --> E52[...] --> E100_2[e100] --> S2[当前状态]
     end
 
     style SNAP fill:#FF9800,color:#fff
@@ -460,9 +460,9 @@ public class BankAccount
 flowchart TB
     ES[(Event Store)] -->|事件流| MQ[RabbitMQ]
 
-    MQ --> P1[投影1: 账户余额<br/>更新 Accounts 表]
-    MQ --> P2[投影2: 交易记录<br/>更新 Transactions 表]
-    MQ --> P3[投影3: 日统计<br/>更新 DailyStats 表]
+    MQ --> P1["投影1: 账户余额<br/>更新 Accounts 表"]
+    MQ --> P2["投影2: 交易记录<br/>更新 Transactions 表"]
+    MQ --> P3["投影3: 日统计<br/>更新 DailyStats 表"]
 
     P1 --> DB1[(SQL Server)]
     P2 --> DB2[(SQL Server)]
@@ -639,8 +639,8 @@ public class ProjectionRebuilder
 flowchart TB
     subgraph Marten
         SESSION[IDocumentSession]
-        SESSION -->|Append| MT_EVENTS[(mt_events<br/>事件表)]
-        SESSION -->|Load| MT_PROJ[(mt_projections<br/>投影表)]
+        SESSION -->|Append| MT_EVENTS["(mt_events<br/>事件表)"]
+        SESSION -->|Load| MT_PROJ["(mt_projections<br/>投影表)"]
     end
 
     subgraph PostgreSQL

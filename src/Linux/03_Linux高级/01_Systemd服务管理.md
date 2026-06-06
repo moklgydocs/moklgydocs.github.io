@@ -274,12 +274,12 @@ graph TD
     A --> F[dbus]
     A --> G[idle]
 
-    B --> B1[ExecStart进程就是主进程<br/>默认值，最常用]
-    C --> C1[ExecStart fork后父进程退出<br/>需配合PIDFile]
-    D --> D1[执行完毕即视为启动完成<br/>配合RemainAfterExit=yes]
-    E --> E1[通过sd_notify通知启动完成<br/>需NotifyAccess]
-    F --> F1[获取D-Bus名称后视为启动完成<br/>配合BusName]
-    G --> G1[所有任务完成后才启动<br/>避免与控制台输出混合]
+    B --> B1["ExecStart进程就是主进程<br/>默认值，最常用"]
+    C --> C1["ExecStart fork后父进程退出<br/>需配合PIDFile"]
+    D --> D1["执行完毕即视为启动完成<br/>配合RemainAfterExit=yes"]
+    E --> E1["通过sd_notify通知启动完成<br/>需NotifyAccess"]
+    F --> F1["获取D-Bus名称后视为启动完成<br/>配合BusName"]
+    G --> G1["所有任务完成后才启动<br/>避免与控制台输出混合"]
 ```
 
 | Type | 启动完成判定 | 适用场景 | 示例 |
@@ -1583,12 +1583,12 @@ graph TD
     A --> D[user.slice]
     A --> E[machine.slice]
 
-    C --> C1[nginx.service<br/>CPUWeight=200]
-    C --> C2[myapp.service<br/>CPUWeight=100]
-    C --> C3[db.slice<br/>CPUWeight=500 MemoryMax=4G]
+    C --> C1["nginx.service<br/>CPUWeight=200"]
+    C --> C2["myapp.service<br/>CPUWeight=100"]
+    C --> C3["db.slice<br/>CPUWeight=500 MemoryMax=4G"]
 
-    C3 --> C3a[postgresql.service<br/>CPUWeight=300]
-    C3 --> C3b[redis.service<br/>CPUWeight=200]
+    C3 --> C3a["postgresql.service<br/>CPUWeight=300"]
+    C3 --> C3b["redis.service<br/>CPUWeight=200"]
 ```
 
 创建自定义 Slice：

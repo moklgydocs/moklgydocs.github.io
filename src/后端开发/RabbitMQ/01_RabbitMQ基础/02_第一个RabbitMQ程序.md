@@ -20,9 +20,9 @@ RabbitMQ 是消息代理（Message Broker），核心模型是：**生产者 →
 
 ```mermaid
 flowchart LR
-    P[生产者<br/>Producer] -->|BasicPublish| Q[队列<br/>Queue]
-    Q -->|BasicDeliver| C[消费者<br/>Consumer]
-    C -->|BasicAck| B[Broker<br/>RabbitMQ]
+    P["生产者<br/>Producer"] -->|BasicPublish| Q["队列<br/>Queue"]
+    Q -->|BasicDeliver| C["消费者<br/>Consumer"]
+    C -->|BasicAck| B["Broker<br/>RabbitMQ"]
 
     style P fill:#4CAF50,color:#fff
     style Q fill:#FF9800,color:#fff

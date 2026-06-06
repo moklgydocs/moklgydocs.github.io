@@ -197,19 +197,19 @@ UnionFS（联合文件系统）是容器镜像分层的基础：
 ```mermaid
 graph TD
     subgraph 容器文件系统
-        A[可写层 Container Layer<br/>容器运行时修改]
-        B[只读层 Image Layer 3<br/>COPY/ADD 指令]
-        C[只读层 Image Layer 2<br/>RUN 指令]
-        D[只读层 Image Layer 1<br/>基础镜像]
+        A["可写层 Container Layer<br/>容器运行时修改"]
+        B["只读层 Image Layer 3<br/>COPY/ADD 指令"]
+        C["只读层 Image Layer 2<br/>RUN 指令"]
+        D["只读层 Image Layer 1<br/>基础镜像"]
     end
 
     A --> B
     B --> C
     C --> D
 
-    E[LowerDir<br/>只读镜像层] --> F[OverlayFS]
-    G[UpperDir<br/>可写容器层] --> F
-    F --> H[MergedDir<br/>合并视图]
+    E["LowerDir<br/>只读镜像层"] --> F[OverlayFS]
+    G["UpperDir<br/>可写容器层"] --> F
+    F --> H["MergedDir<br/>合并视图"]
 
     style A fill:#e74c3c,color:#fff
     style D fill:#3498db,color:#fff
@@ -265,9 +265,9 @@ graph TB
     end
 
     subgraph Docker Host
-        E[Docker Daemon<br/>dockerd]
-        F[Container Runtime<br/>containerd]
-        G[OCI Runtime<br/>runc]
+        E["Docker Daemon<br/>dockerd"]
+        F["Container Runtime<br/>containerd"]
+        G["OCI Runtime<br/>runc"]
         H[Images]
         I[Containers]
         J[Networks]
@@ -276,7 +276,7 @@ graph TB
 
     subgraph Registry
         L[Docker Hub]
-        M[Harbor<br/>私有仓库]
+        M["Harbor<br/>私有仓库"]
     end
 
     A & B & C & D -->|REST API| E
@@ -850,23 +850,23 @@ docker inspect --format '{{json .Mounts}}' myapp | jq
 ```mermaid
 graph TB
     subgraph 宿主机网络
-        A[eth0<br/>物理网卡]
-        B[docker0<br/>网桥 172.17.0.1]
+        A["eth0<br/>物理网卡"]
+        B["docker0<br/>网桥 172.17.0.1"]
     end
 
     subgraph Bridge网络
-        C[veth0] --> D[容器A<br/>172.17.0.2]
-        E[veth1] --> F[容器B<br/>172.17.0.3]
+        C[veth0] --> D["容器A<br/>172.17.0.2"]
+        E[veth1] --> F["容器B<br/>172.17.0.3"]
     end
 
     subgraph Host网络
-        G[容器C<br/>共享宿主网络栈]
+        G["容器C<br/>共享宿主网络栈"]
     end
 
     subgraph 自定义网络
-        H[mybridge<br/>172.18.0.1]
-        I[veth2] --> J[容器D<br/>172.18.0.2]
-        K[veth3] --> L[容器E<br/>172.18.0.3]
+        H["mybridge<br/>172.18.0.1"]
+        I[veth2] --> J["容器D<br/>172.18.0.2"]
+        K[veth3] --> L["容器E<br/>172.18.0.3"]
     end
 
     B --> C & E
@@ -1013,7 +1013,7 @@ graph LR
     end
 
     subgraph Overlay
-        D1[容器A] -->|vxlan| D2[容器B<br/>另一台主机]
+        D1[容器A] -->|vxlan| D2["容器B<br/>另一台主机"]
     end
 
     subgraph Macvlan
@@ -1117,10 +1117,10 @@ Docker Compose 定义和管理多容器应用，使用 YAML 文件声明式配�
 
 ```mermaid
 graph TB
-    A[docker-compose.yml] --> B[frontend<br/>Nginx]
-    A --> C[backend<br/>Node.js]
-    A --> D[database<br/>PostgreSQL]
-    A --> E[cache<br/>Redis]
+    A[docker-compose.yml] --> B["frontend<br/>Nginx"]
+    A --> C["backend<br/>Node.js"]
+    A --> D["database<br/>PostgreSQL"]
+    A --> E["cache<br/>Redis"]
 
     B -->|proxy_pass| C
     C -->|SQL| D

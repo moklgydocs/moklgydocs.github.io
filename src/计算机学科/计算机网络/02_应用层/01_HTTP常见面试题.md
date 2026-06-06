@@ -148,9 +148,9 @@ graph LR
 
 ```mermaid
 graph TB
-    REQ["请求资源"] --> CHECK{强制缓存<br/>是否过期？}
+    REQ["请求资源"] --> CHECK{"强制缓存<br/>是否过期？"}
     CHECK -->|"未过期"| USE["直接使用本地缓存<br/>200 (from cache)"]
-    CHECK -->|"已过期"| NEG{协商缓存<br/>资源是否变化？}
+    CHECK -->|"已过期"| NEG{"协商缓存<br/>资源是否变化？"}
     NEG -->|"未变化"| CACHE["返回 304<br/>使用缓存"]
     NEG -->|"有变化"| NEW["返回 200 + 新资源<br/>+ 新 ETag/Last-Modified"]
 

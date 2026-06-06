@@ -77,8 +77,8 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[创建 ZSet] --> B{元素数量 ≤ zset-max-listpack-entries<br/>且每个元素大小 ≤ zset-max-listpack-value?}
-    B -->|是| C[listpack 编码<br/>Redis 7.0+ 替代 ziplist]
+    A[创建 ZSet] --> B{"元素数量 ≤ zset-max-listpack-entries<br/>且每个元素大小 ≤ zset-max-listpack-value?"}
+    B -->|是| C["listpack 编码<br/>Redis 7.0+ 替代 ziplist"]
     B -->|否| D[skiplist + hashtable 编码]
 
     C --> E[继续添加元素]
@@ -86,7 +86,7 @@ flowchart TD
     F -->|是| G[转换为 skiplist + hashtable]
     F -->|否| C
 
-    G --> H[❌ 不可逆<br/>不会再转回 listpack]
+    G --> H["❌ 不可逆<br/>不会再转回 listpack"]
 ```
 
 ::: important 编码转换条件
@@ -162,8 +162,8 @@ ZSet 的 skiplist 编码**同时使用**了跳表和哈希表，二者各司其�
 ```mermaid
 flowchart LR
     subgraph ZSet 内部
-        A[skiplist<br/>按 score 有序<br/>支持范围查询]
-        B[hashtable<br/>member → score 映射<br/>O(1) 按 member 查找]
+        A["skiplist<br/>按 score 有序<br/>支持范围查询"]
+        B["hashtable<br/>member → score 映射<br/>O(1) 按 member 查找"]
     end
 
     C[ZSCORE key member] --> B

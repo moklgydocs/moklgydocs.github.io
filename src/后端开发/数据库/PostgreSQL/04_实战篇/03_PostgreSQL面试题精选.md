@@ -41,14 +41,14 @@ MVCC（Multi-Version Concurrency Control）让读操作不阻塞写操作、写�
 ```mermaid
 flowchart TB
     subgraph 事务执行
-        T1[事务 A<br/>xmin=100<br/>读取数据] --> |看到| V1[行版本 1<br/>xmin=50, xmax=空]
-        T2[事务 B<br/>xmin=100<br/>更新同一行] --> |创建| V2[行版本 2<br/>xmin=100, xmax=空]
-        T2 --> |标记旧版本| V1b[行版本 1<br/>xmin=50, xmax=100<br/>已被更新]
+        T1["事务 A<br/>xmin=100<br/>读取数据"] --> |看到| V1["行版本 1<br/>xmin=50, xmax=空"]
+        T2["事务 B<br/>xmin=100<br/>更新同一行"] --> |创建| V2["行版本 2<br/>xmin=100, xmax=空"]
+        T2 --> |标记旧版本| V1b["行版本 1<br/>xmin=50, xmax=100<br/>已被更新"]
     end
 
     subgraph 可见性判断
-        R1[事务 A<br/>xmax=100 ≥ xmin=100<br/>不可见版本2<br/>→ 看到版本1] 
-        R2[事务 C<br/>xmin=150 > xmax=100<br/>版本1已死<br/>→ 看到版本2]
+        R1["事务 A<br/>xmax=100 ≥ xmin=100<br/>不可见版本2<br/>→ 看到版本1"] 
+        R2["事务 C<br/>xmin=150 > xmax=100<br/>版本1已死<br/>→ 看到版本2"]
     end
 ```
 
@@ -134,11 +134,11 @@ SELECT * FROM products WHERE attrs->'tags' ? 'electronics';
 
 ```mermaid
 flowchart LR
-    A[客户端写入] --> B[主库<br/>WAL Writer]
-    B --> C[WAL Sender<br/>walsender 进程]
-    C -->|TCP 流| D[备库<br/>WAL Receiver<br/>walreceiver 进程]
+    A[客户端写入] --> B["主库<br/>WAL Writer"]
+    B --> C["WAL Sender<br/>walsender 进程"]
+    C -->|TCP 流| D["备库<br/>WAL Receiver<br/>walreceiver 进程"]
     D --> E[写入本地 WAL]
-    E --> F[Startup 进程<br/>重放 WAL]
+    E --> F["Startup 进程<br/>重放 WAL"]
     F --> G[数据文件]
 
     H[备库只读查询] --> G

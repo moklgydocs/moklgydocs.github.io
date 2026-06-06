@@ -43,7 +43,7 @@ Nginx 在容器化环境中有着广泛的应用：从 Docker 单机部署到 Ku
 graph TB
     subgraph Docker Host
         subgraph Nginx Container
-            NG[Nginx Master<br/>PID 1]
+            NG["Nginx Master<br/>PID 1"]
             WK1[Worker 1]
             WK2[Worker 2]
             NG --> WK1
@@ -51,10 +51,10 @@ graph TB
         end
 
         subgraph Volumes
-            CONF[/etc/nginx<br/>配置文件]
-            LOG[/var/log/nginx<br/>日志]
-            CACHE[/var/cache/nginx<br/>缓存]
-            HTML[/usr/share/nginx/html<br/>静态文件]
+            CONF["/etc/nginx<br/>配置文件"]
+            LOG["/var/log/nginx<br/>日志"]
+            CACHE["/var/cache/nginx<br/>缓存"]
+            HTML["/usr/share/nginx/html<br/>静态文件"]
         end
 
         CONF -.->|挂载| NG
@@ -64,8 +64,8 @@ graph TB
     end
 
     CLIENT[客户端] -->|80/443| NG
-    NG -->|proxy_pass| APP1[应用容器 1<br/>:8080]
-    NG -->|proxy_pass| APP2[应用容器 2<br/>:8081]
+    NG -->|proxy_pass| APP1["应用容器 1<br/>:8080"]
+    NG -->|proxy_pass| APP2["应用容器 2<br/>:8081"]
 
     style NG fill:#e8f5e9
     style CONF fill:#e3f2fd
@@ -486,14 +486,14 @@ docker compose down -v
 ```mermaid
 graph TB
     CLIENT[客户端] --> DNS[DNS 解析]
-    DNS --> LB[云负载均衡器<br/>LoadBalancer Service]
+    DNS --> LB["云负载均衡器<br/>LoadBalancer Service"]
 
     subgraph Kubernetes 集群
-        LB --> ING[Nginx Ingress Controller<br/>DaemonSet / Deployment]
+        LB --> ING["Nginx Ingress Controller<br/>DaemonSet / Deployment"]
 
-        ING --> SVC1[Service: app-api<br/>ClusterIP]
-        ING --> SVC2[Service: app-web<br/>ClusterIP]
-        ING --> SVC3[Service: app-admin<br/>ClusterIP]
+        ING --> SVC1["Service: app-api<br/>ClusterIP"]
+        ING --> SVC2["Service: app-web<br/>ClusterIP"]
+        ING --> SVC3["Service: app-admin<br/>ClusterIP"]
 
         SVC1 --> POD1[Pod: api-xxxx]
         SVC1 --> POD2[Pod: api-yyyy]
@@ -503,9 +503,9 @@ graph TB
     end
 
     subgraph Ingress 规则
-        RULE1[host: api.example.com<br/>path: /]
-        RULE2[host: www.example.com<br/>path: /]
-        RULE3[host: admin.example.com<br/>path: /]
+        RULE1["host: api.example.com<br/>path: /"]
+        RULE2["host: www.example.com<br/>path: /"]
+        RULE3["host: admin.example.com<br/>path: /"]
     end
 
     RULE1 -.-> SVC1

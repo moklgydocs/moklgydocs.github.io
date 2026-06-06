@@ -30,12 +30,12 @@ flowchart TD
     end
 
     subgraph TB["ThingsBoard"]
-        TRANSPORT[传输层<br/>MQTT/HTTP/CoAP]
-        RULE[规则链<br/>Rule Chain]
-        DB[(数据库<br/>PostgreSQL)]
+        TRANSPORT["传输层<br/>MQTT/HTTP/CoAP"]
+        RULE["规则链<br/>Rule Chain"]
+        DB["(数据库<br/>PostgreSQL)"]
         API[REST API]
-        DASH[仪表盘<br/>Dashboard]
-        ALARM[告警<br/>Alarms]
+        DASH["仪表盘<br/>Dashboard"]
+        ALARM["告警<br/>Alarms"]
     end
 
     Devices --> TRANSPORT
@@ -344,10 +344,10 @@ ThingsBoard 的规则链是可视化编排的数据处理管线：
 
 ```mermaid
 flowchart LR
-    A[消息输入] --> B[过滤节点<br/>温度 > 35?]
-    B -->|是| C[告警节点<br/>创建高温告警]
+    A[消息输入] --> B["过滤节点<br/>温度 > 35?"]
+    B -->|是| C["告警节点<br/>创建高温告警"]
     B -->|否| D[保存遥测]
-    C --> E[通知节点<br/>邮件/短信]
+    C --> E["通知节点<br/>邮件/短信"]
     D --> F[仪表盘更新]
 ```
 
@@ -405,8 +405,8 @@ flowchart TD
     Q1 -->|是| Q2{云厂商偏好?}
     Q1 -->|否| Q3{核心需求?}
 
-    Q2 -->|Azure| AZ[Azure IoT Hub<br/>+ IoT Edge]
-    Q2 -->|AWS| AWS[AWS IoT Core<br/>+ Greengrass]
+    Q2 -->|Azure| AZ["Azure IoT Hub<br/>+ IoT Edge"]
+    Q2 -->|AWS| AWS["AWS IoT Core<br/>+ Greengrass"]
 
     Q3 -->|仪表盘+规则| TB[ThingsBoard]
     Q3 -->|千万级MQTT| EMQ[EMQX]

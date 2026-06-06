@@ -22,9 +22,9 @@ GitOps 是一种现代化的持续交付方法，由 Weaveworks 于 2017 年提�
 
 ```mermaid
 graph TB
-    A[声明式<br/>Declarative] --> B[版本控制<br/>Versioned]
-    B --> C[自动同步<br/>Auto-synced]
-    C --> D[可审计<br/>Auditable]
+    A["声明式<br/>Declarative"] --> B["版本控制<br/>Versioned"]
+    B --> C["自动同步<br/>Auto-synced"]
+    C --> D["可审计<br/>Auditable"]
 
     A1[系统配置声明式描述] --> A
     A2[Kubernetes 天然声明式] --> A
@@ -56,7 +56,7 @@ flowchart LR
     subgraph "传统 CI/CD（Push 模式）"
         direction LR
         C1[代码提交] --> C2[CI 构建]
-        C2 --> C3[kubectl apply<br/>需要集群凭证]
+        C2 --> C3["kubectl apply<br/>需要集群凭证"]
         C3 --> C4[K8s 集群]
     end
 
@@ -64,7 +64,7 @@ flowchart LR
         direction LR
         G1[代码提交] --> G2[CI 构建镜像]
         G2 --> G3[更新 Git 配置]
-        G3 --> G4[GitOps 控制器<br/>集群内自动同步]
+        G3 --> G4["GitOps 控制器<br/>集群内自动同步"]
         G4 --> G5[K8s 集群]
     end
 
@@ -91,15 +91,15 @@ flowchart LR
 ```mermaid
 graph TB
     subgraph "Git 仓库"
-        Git1[应用配置<br/>Helm/Kustomize/YAML]
-        Git2[环境配置<br/>values-overlay]
+        Git1["应用配置<br/>Helm/Kustomize/YAML"]
+        Git2["环境配置<br/>values-overlay"]
     end
 
     subgraph "ArgoCD 控制面"
         API[ArgoCD API Server] --> Redis[(Redis Cache)]
-        API --> Repo[Repo Server<br/>Git Clone + 渲染]
-        API --> AppC[Application Controller<br/>核心协调器]
-        CM[ConfigMap/Secret<br/>仓库凭证] --> Repo
+        API --> Repo["Repo Server<br/>Git Clone + 渲染"]
+        API --> AppC["Application Controller<br/>核心协调器"]
+        CM["ConfigMap/Secret<br/>仓库凭证"] --> Repo
     end
 
     subgraph "Kubernetes 集群"
@@ -443,9 +443,9 @@ App of Apps 是 ArgoCD 管理多应用和多环境的推荐模式：
 
 ```mermaid
 graph TD
-    Root[Root Application<br/>apps-of-apps] --> Dev[dev-env<br/>Application]
-    Root --> Staging[staging-env<br/>Application]
-    Root --> Prod[prod-env<br/>Application]
+    Root["Root Application<br/>apps-of-apps"] --> Dev["dev-env<br/>Application"]
+    Root --> Staging["staging-env<br/>Application"]
+    Root --> Prod["prod-env<br/>Application"]
 
     Dev --> DevApp1[myapp-dev]
     Dev --> DevApp2[redis-dev]
@@ -623,7 +623,7 @@ spec:
 
 ```mermaid
 flowchart TD
-    A[开发者提交 PR] --> B[CI 流水线<br/>构建 + 测试]
+    A[开发者提交 PR] --> B["CI 流水线<br/>构建 + 测试"]
     B --> C{测试通过?}
     C -->|否| D[❌ 阻止合并]
     C -->|是| E[代码审查]
@@ -642,7 +642,7 @@ flowchart TD
     N -->|是| O[手动触发同步]
     N -->|否| P[拒绝部署]
 
-    O --> Q[渐进式发布<br/>Argo Rollouts]
+    O --> Q["渐进式发布<br/>Argo Rollouts"]
     Q --> R{指标正常?}
     R -->|是| S[✅ 全量发布]
     R -->|否| T[自动回滚]
@@ -1129,7 +1129,7 @@ spec:
 
 ```mermaid
 flowchart LR
-    Dev[开发者] -->|kubeseal 加密| Sealed[SealedSecret<br/>可安全存入 Git]
+    Dev[开发者] -->|kubeseal 加密| Sealed["SealedSecret<br/>可安全存入 Git"]
     Sealed -->|Git 提交| Git[Git 仓库]
     Git -->|ArgoCD 同步| K8s[Kubernetes 集群]
     K8s -->|控制器解密| Secret[原生 Secret]
@@ -1178,7 +1178,7 @@ spec:
 
 ```mermaid
 flowchart LR
-    ExtStore[外部 Secret 存储<br/>Azure Key Vault/AWS SM/Vault] -->|ESO 控制器| K8s[Kubernetes]
+    ExtStore["外部 Secret 存储<br/>Azure Key Vault/AWS SM/Vault"] -->|ESO 控制器| K8s[Kubernetes]
     K8s -->|创建/同步| Secret[原生 Secret]
     Git[Git 仓库] -->|ESO CRD| K8s
 
@@ -1389,14 +1389,14 @@ flowchart TD
     D --> E[构建 Docker 镜像]
     E --> F[推送镜像到 ACR]
     F --> G[镜像安全扫描]
-    G --> H[更新 GitOps 仓库<br/>镜像标签]
+    G --> H["更新 GitOps 仓库<br/>镜像标签"]
     H --> I[PR 合并到 main]
 
     I --> J[ArgoCD 检测变更]
     J --> K{目标环境}
     K -->|dev| L[自动同步]
     K -->|staging| M[自动同步]
-    K -->|production| N[Argo Rollouts<br/>渐进式发布]
+    K -->|production| N["Argo Rollouts<br/>渐进式发布"]
 
     N --> O[5% 流量]
     O --> P{指标正常?}

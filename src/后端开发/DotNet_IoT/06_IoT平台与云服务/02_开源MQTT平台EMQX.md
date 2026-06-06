@@ -28,10 +28,10 @@ flowchart TD
     end
 
     subgraph EMQX["EMQX 集群"]
-        LB[负载均衡<br/>nginx/haproxy]
-        N1[节点 1<br/>emqx@node1]
-        N2[节点 2<br/>emqx@node2]
-        N3[节点 3<br/>emqx@node3]
+        LB["负载均衡<br/>nginx/haproxy"]
+        N1["节点 1<br/>emqx@node1"]
+        N2["节点 2<br/>emqx@node2"]
+        N3["节点 3<br/>emqx@node3"]
 
         LB --> N1
         LB --> N2
@@ -49,7 +49,7 @@ flowchart TD
         PG[(PostgreSQL)]
         MY[(MySQL)]
         IF[(InfluxDB)]
-        WH[Webhook<br/>外部服务]
+        WH["Webhook<br/>外部服务"]
     end
 
     Devices -->|MQTT/TLS| LB
@@ -266,7 +266,7 @@ EMQX 规则引擎使用 SQL 语法处理消息，实现数据桥接和转换：
 
 ```mermaid
 flowchart LR
-    A[MQTT 消息<br/>devices/+/telemetry] --> B[SQL 规则<br/>SELECT ... FROM ...]
+    A["MQTT 消息<br/>devices/+/telemetry"] --> B["SQL 规则<br/>SELECT ... FROM ..."]
     B --> C{动作}
     C -->|数据桥接| D[(InfluxDB)]
     C -->|数据桥接| E[(MySQL)]

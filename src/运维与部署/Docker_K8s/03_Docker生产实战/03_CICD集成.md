@@ -777,16 +777,16 @@ DOCKER_BUILDKIT=1 docker build -t myapp:v1.0 .
 graph TB
     subgraph "蓝绿部署"
         subgraph "蓝环境（当前版本 v1）"
-            LB1[erp-api-blue<br/>v1.0.0]
+            LB1["erp-api-blue<br/>v1.0.0"]
             DB1[(数据库)]
         end
 
         subgraph "绿环境（新版本 v2）"
-            LG1[erp-api-green<br/>v2.0.0]
+            LG1["erp-api-green<br/>v2.0.0"]
             DB2[(数据库)]
         end
 
-        LB[负载均衡器<br/>Nginx/HAProxy]
+        LB["负载均衡器<br/>Nginx/HAProxy"]
 
         LB -->|当前流量| LB1
         LB -.->|待切换| LG1
@@ -945,12 +945,12 @@ echo "  docker compose stop erp-api-${CURRENT}"
 graph TB
     subgraph "金丝雀发布"
         subgraph "稳定版本 v1"
-            S1[erp-api-v1<br/>90% 流量]
-            S2[erp-api-v1<br/>副本2]
+            S1["erp-api-v1<br/>90% 流量"]
+            S2["erp-api-v1<br/>副本2"]
         end
 
         subgraph "金丝雀版本 v2"
-            C1[erp-api-v2<br/>10% 流量]
+            C1["erp-api-v2<br/>10% 流量"]
         end
 
         LB[Nginx 负载均衡]
@@ -1229,10 +1229,10 @@ graph TB
     end
 
     subgraph "CI 阶段"
-        C[代码检查<br/>dotnet format --verify-no-changes]
-        D[单元测试<br/>dotnet test]
-        E[NuGet 审计<br/>dotnet list package --vulnerable]
-        F[构建镜像<br/>docker buildx build]
+        C["代码检查<br/>dotnet format --verify-no-changes"]
+        D["单元测试<br/>dotnet test"]
+        E["NuGet 审计<br/>dotnet list package --vulnerable"]
+        F["构建镜像<br/>docker buildx build"]
     end
 
     subgraph "安全阶段"
@@ -1245,13 +1245,13 @@ graph TB
         J[推送镜像到 Harbor]
         K[部署 Staging]
         L[集成测试]
-        M[部署 Production<br/>手动审批]
+        M["部署 Production<br/>手动审批"]
     end
 
     subgraph "运维阶段"
         N[健康检查]
         O[监控验证]
-        P[自动回滚<br/>失败时]
+        P["自动回滚<br/>失败时"]
     end
 
     A --> B --> C --> D --> E --> F

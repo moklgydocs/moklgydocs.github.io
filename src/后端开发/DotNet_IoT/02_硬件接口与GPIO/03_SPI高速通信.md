@@ -29,7 +29,7 @@ tag:
 
 ```mermaid
 flowchart LR
-    M[主设备 Master<br/>树莓派]
+    M["主设备 Master<br/>树莓派"]
 
     subgraph SPI_BUS["SPI 总线"]
         MOSI[MOSI]
@@ -37,8 +37,8 @@ flowchart LR
         SCK[SCK]
     end
 
-    S1[从设备1<br/>MCP3008<br/>CS0]
-    S2[从设备2<br/>OLED<br/>CS1]
+    S1["从设备1<br/>MCP3008<br/>CS0"]
+    S2["从设备2<br/>OLED<br/>CS1"]
 
     M --- MOSI
     M --- MISO
