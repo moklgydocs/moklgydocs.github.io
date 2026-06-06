@@ -1,7 +1,8 @@
 ---
 title: 输入输出系统
 icon: fa6-solid:right-to-bracket
-order: 7
+dir:
+  order: 7
 index: false
 category:
   - 计算机学科

@@ -1,7 +1,8 @@
 ---
 title: 文件系统
 icon: fa6-solid:folder-open
-order: 4
+dir:
+  order: 4
 index: false
 category:
   - 计算机学科

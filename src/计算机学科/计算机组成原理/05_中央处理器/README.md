@@ -1,7 +1,8 @@
 ---
 title: 中央处理器
 icon: fa6-solid:microchip
-order: 5
+dir:
+  order: 5
 index: false
 category:
   - 计算机学科

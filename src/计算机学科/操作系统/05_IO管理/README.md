@@ -1,7 +1,8 @@
 ---
 title: IO管理
 icon: fa6-solid:hard-drive
-order: 5
+dir:
+  order: 5
 index: false
 category:
   - 计算机学科

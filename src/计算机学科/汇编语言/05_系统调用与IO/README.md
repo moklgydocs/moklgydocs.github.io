@@ -1,7 +1,8 @@
 ---
 title: 系统调用与IO
 icon: fa6-solid:server
-order: 5
+dir:
+  order: 5
 index: false
 category:
   - 计算机学科

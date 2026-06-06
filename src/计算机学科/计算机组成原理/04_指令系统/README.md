@@ -1,7 +1,8 @@
 ---
 title: 指令系统
 icon: fa6-solid:code
-order: 4
+dir:
+  order: 4
 index: false
 category:
   - 计算机学科

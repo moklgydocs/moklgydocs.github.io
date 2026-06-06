@@ -1,7 +1,8 @@
 ---
 title: 组合逻辑电路
 icon: fa6-solid:microchip
-order: 3
+dir:
+  order: 3
 index: false
 category:
   - 计算机学科

@@ -1,7 +1,8 @@
 ---
 title: 学习心得
 icon: fa6-solid:lightbulb
-order: 6
+dir:
+  order: 6
 index: false
 category:
   - 计算机学科

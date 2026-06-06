@@ -1,7 +1,8 @@
 ---
 title: 位操作与高级运算
 icon: fa6-solid:microchip
-order: 4
+dir:
+  order: 4
 index: false
 category:
   - 计算机学科

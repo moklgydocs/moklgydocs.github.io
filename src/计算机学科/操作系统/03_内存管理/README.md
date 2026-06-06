@@ -1,7 +1,8 @@
 ---
 title: 内存管理
 icon: fa6-solid:memory
-order: 3
+dir:
+  order: 3
 index: false
 category:
   - 计算机学科

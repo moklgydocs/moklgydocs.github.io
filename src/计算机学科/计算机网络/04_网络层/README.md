@@ -1,7 +1,8 @@
 ---
 title: 网络层
 icon: fa6-solid:route
-order: 4
+dir:
+  order: 4
 index: false
 category:
   - 计算机学科

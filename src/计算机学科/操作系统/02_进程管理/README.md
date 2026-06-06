@@ -1,7 +1,8 @@
 ---
 title: 进程管理
 icon: fa6-solid:gear
-order: 2
+dir:
+  order: 2
 index: false
 category:
   - 计算机学科

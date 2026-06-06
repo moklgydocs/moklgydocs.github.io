@@ -1,7 +1,8 @@
 ---
 title: 概述
 icon: fa6-solid:circle-info
-order: 1
+dir:
+  order: 1
 index: false
 category:
   - 计算机学科

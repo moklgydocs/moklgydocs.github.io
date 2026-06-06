@@ -1,7 +1,8 @@
 ---
 title: 数据的表示与运算
 icon: fa6-solid:calculator
-order: 2
+dir:
+  order: 2
 index: false
 category:
   - 计算机学科
