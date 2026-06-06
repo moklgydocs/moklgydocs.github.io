@@ -834,6 +834,20 @@ export default sidebar({
           collapsible: true,
           children: "structure",
         },
+        {
+          text: "计算机组成原理",
+          icon: "fa6-solid:memory",
+          prefix: "计算机组成原理/",
+          collapsible: true,
+          children: "structure",
+        },
+        {
+          text: "数字电路",
+          icon: "fa6-solid:toggle-on",
+          prefix: "数字电路/",
+          collapsible: true,
+          children: "structure",
+        },
       ],
     },
     {

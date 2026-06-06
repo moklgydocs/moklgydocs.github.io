@@ -118,6 +118,16 @@ export default navbar([
         icon: "fa6-solid:desktop",
         link: "操作系统/"
       },
+      {
+        text: "计算机组成原理",
+        icon: "fa6-solid:memory",
+        link: "计算机组成原理/"
+      },
+      {
+        text: "数字电路",
+        icon: "fa6-solid:toggle-on",
+        link: "数字电路/"
+      },
     ]
   },
   {
