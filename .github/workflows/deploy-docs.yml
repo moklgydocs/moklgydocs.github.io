@@ -40,7 +40,7 @@ jobs:
 
       - name: 构建文档
         env:
-          NODE_OPTIONS: --max_old_space_size=12288
+          NODE_OPTIONS: --max_old_space_size=16384
         run: |
           pnpm run docs:build
           touch src/.vuepress/dist/.nojekyll
