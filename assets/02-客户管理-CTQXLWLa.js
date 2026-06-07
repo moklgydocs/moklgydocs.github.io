@@ -1,0 +1,90 @@
+import{E as e,d as t,l as n}from"./runtime-core.esm-bundler-tCF-J6l5.js";import{t as r}from"./app-CK-XCtbm.js";var i=JSON.parse(`{"path":"/%E4%B8%9A%E5%8A%A1%E7%B3%BB%E7%BB%9F/ERP%E4%B8%9A%E5%8A%A1/06-%E9%94%80%E5%94%AE%E6%A8%A1%E5%9D%97/02-%E5%AE%A2%E6%88%B7%E7%AE%A1%E7%90%86.html","title":"客户管理","lang":"zh-CN","frontmatter":{"title":"客户管理","date":"2025-04-18T00:00:00.000Z","author":"Moklgy","category":["ERP业务"],"tag":["ERP","销售"],"order":2},"git":{"createdTime":1776517348000,"updatedTime":1776517348000,"contributors":[{"name":"moklgy","username":"moklgy","email":"moklgy@foxmail.com","commits":1,"url":"https://github.com/moklgy"}]},"readingTime":{"minutes":3.25,"words":975},"filePathRelative":"业务系统/ERP业务/06-销售模块/02-客户管理.md"}`),a={name:`02-客户管理.md`};function o(r,i,a,o,s,c){return e(),n(`div`,null,[...i[0]||=[t(`<h1 id="客户管理" tabindex="-1"><a class="header-anchor" href="#客户管理"><span>客户管理</span></a></h1><h2 id="概述" tabindex="-1"><a class="header-anchor" href="#概述"><span>概述</span></a></h2><p>客户管理是销售模块的基础，负责客户主数据的维护、客户分类分级、信用额度管理。准确的客户数据和有效的信用控制是销售业务顺畅运行的前提。</p><h2 id="一、核心实体" tabindex="-1"><a class="header-anchor" href="#一、核心实体"><span>一、核心实体</span></a></h2><h3 id="_1-1-客户主数据" tabindex="-1"><a class="header-anchor" href="#_1-1-客户主数据"><span>1.1 客户主数据</span></a></h3><div class="language- line-numbers-mode" data-highlighter="shiki" data-ext="" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-"><span class="line"><span>Customer (客户)</span></span>
+<span class="line"><span>├── Id: Guid</span></span>
+<span class="line"><span>├── TenantId: Guid</span></span>
+<span class="line"><span>├── Code: string(30)                   # 客户编码 CUS-{YYYYMM}-{SEQ}</span></span>
+<span class="line"><span>├── Name: string(200)                  # 客户名称</span></span>
+<span class="line"><span>├── ShortName: string(50)              # 简称</span></span>
+<span class="line"><span>├── Category: CustomerCategory         # 分类</span></span>
+<span class="line"><span>├── Level: CustomerLevel               # 等级</span></span>
+<span class="line"><span>├── TaxId: string(30)                  # 统一社会信用代码</span></span>
+<span class="line"><span>├── LegalRepresentative: string(50)</span></span>
+<span class="line"><span>├── IndustryType: string(50)           # 行业类型</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── Address: string(300)               # 注册地址</span></span>
+<span class="line"><span>├── ShippingAddress: string(300)       # 默认收货地址</span></span>
+<span class="line"><span>├── City: string(50)</span></span>
+<span class="line"><span>├── Province: string(50)</span></span>
+<span class="line"><span>├── Country: string(50)</span></span>
+<span class="line"><span>├── PostalCode: string(10)</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── ContactName: string(50)            # 主联系人</span></span>
+<span class="line"><span>├── ContactPhone: string(20)</span></span>
+<span class="line"><span>├── ContactEmail: string(100)</span></span>
+<span class="line"><span>├── Fax: string(20)</span></span>
+<span class="line"><span>├── Website: string(200)</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── BankName: string(100)              # 开户银行</span></span>
+<span class="line"><span>├── BankAccountNo: string(30)</span></span>
+<span class="line"><span>├── BankAccountName: string(200)</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── PaymentTermDays: int               # 账期天数</span></span>
+<span class="line"><span>├── CurrencyCode: string(3)            # 默认交易币种</span></span>
+<span class="line"><span>├── TaxRate: decimal(5,2)              # 默认税率</span></span>
+<span class="line"><span>├── PriceListId: Guid?                 # 适用价目表</span></span>
+<span class="line"><span>├── DiscountRate: decimal(5,2)?        # 默认折扣率</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── CreditLimit: decimal(18,2)         # 信用额度</span></span>
+<span class="line"><span>├── CreditRating: CreditRating         # 信用等级</span></span>
+<span class="line"><span>├── IsBlocked: bool                    # 是否冻结</span></span>
+<span class="line"><span>├── BlockReason: string(500)?</span></span>
+<span class="line"><span>│</span></span>
+<span class="line"><span>├── SalesPersonId: Guid?               # 销售负责人</span></span>
+<span class="line"><span>├── SalesTeam: string(50)?             # 销售团队</span></span>
+<span class="line"><span>├── Status: CustomerStatus</span></span>
+<span class="line"><span>├── Remark: string(500)</span></span>
+<span class="line"><span>├── Contacts: List&lt;CustomerContact&gt;</span></span>
+<span class="line"><span>└── ShippingAddresses: List&lt;ShippingAddress&gt;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>CustomerContact (客户联系人)</span></span>
+<span class="line"><span>├── Id: Guid</span></span>
+<span class="line"><span>├── CustomerId: Guid</span></span>
+<span class="line"><span>├── Name: string(50)</span></span>
+<span class="line"><span>├── Position: string(50)</span></span>
+<span class="line"><span>├── Phone: string(20)</span></span>
+<span class="line"><span>├── Email: string(100)</span></span>
+<span class="line"><span>├── IsPrimary: bool</span></span>
+<span class="line"><span>├── IsDecisionMaker: bool              # 是否决策人</span></span>
+<span class="line"><span>└── Remark: string(200)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>ShippingAddress (收货地址)</span></span>
+<span class="line"><span>├── Id: Guid</span></span>
+<span class="line"><span>├── CustomerId: Guid</span></span>
+<span class="line"><span>├── Name: string(100)                  # 地址名称（如&quot;总部仓库&quot;）</span></span>
+<span class="line"><span>├── ContactName: string(50)</span></span>
+<span class="line"><span>├── Phone: string(20)</span></span>
+<span class="line"><span>├── Province: string(50)</span></span>
+<span class="line"><span>├── City: string(50)</span></span>
+<span class="line"><span>├── District: string(50)</span></span>
+<span class="line"><span>├── DetailAddress: string(300)</span></span>
+<span class="line"><span>├── PostalCode: string(10)</span></span>
+<span class="line"><span>├── IsDefault: bool</span></span>
+<span class="line"><span>└── Remark: string(200)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>枚举:</span></span>
+<span class="line"><span>  CustomerCategory: Enterprise=1(企业), Government=2(政府), </span></span>
+<span class="line"><span>                    Individual=3(个人), Distributor=4(经销商), OEM=5</span></span>
+<span class="line"><span>  CustomerLevel: VIP=1, Key=2, Regular=3, Small=4</span></span>
+<span class="line"><span>  CreditRating: A=1(优), B=2(良), C=3(中), D=4(差), E=5(黑名单)</span></span>
+<span class="line"><span>  CustomerStatus: Active=1, Inactive=2, Blocked=3</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="二、信用管理" tabindex="-1"><a class="header-anchor" href="#二、信用管理"><span>二、信用管理</span></a></h2><h3 id="_2-1-信用额度" tabindex="-1"><a class="header-anchor" href="#_2-1-信用额度"><span>2.1 信用额度</span></a></h3><div class="language- line-numbers-mode" data-highlighter="shiki" data-ext="" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-"><span class="line"><span>可用信用额度 = 信用额度 - 已用额度</span></span>
+<span class="line"><span>已用额度 = 未清应收余额 + 已确认未发货订单金额 + 已发货未开票金额</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_2-2-信用检查时机" tabindex="-1"><a class="header-anchor" href="#_2-2-信用检查时机"><span>2.2 信用检查时机</span></a></h3><table><thead><tr><th>检查点</th><th>条件</th><th>动作</th></tr></thead><tbody><tr><td>创建销售订单</td><td>可用额度 &lt; 订单金额</td><td>阻止创建/提交审批</td></tr><tr><td>订单审批</td><td>可用额度 &lt; 订单金额</td><td>需信用经理审批</td></tr><tr><td>发货前</td><td>可用额度 &lt; 0</td><td>阻止发货</td></tr><tr><td>逾期应收</td><td>逾期金额 &gt; 阈值</td><td>自动冻结客户</td></tr></tbody></table><h3 id="_2-3-信用等级调整规则" tabindex="-1"><a class="header-anchor" href="#_2-3-信用等级调整规则"><span>2.3 信用等级调整规则</span></a></h3><table><thead><tr><th>条件</th><th>动作</th></tr></thead><tbody><tr><td>连续 6 个月无逾期</td><td>提升一级</td></tr><tr><td>单笔逾期超过 60 天</td><td>降低一级</td></tr><tr><td>单笔逾期超过 90 天</td><td>降至 D 级，冻结下单</td></tr><tr><td>发生坏账核销</td><td>降至 E 级（黑名单）</td></tr></tbody></table><h2 id="三、客户分类与价格" tabindex="-1"><a class="header-anchor" href="#三、客户分类与价格"><span>三、客户分类与价格</span></a></h2><table><thead><tr><th>客户等级</th><th>默认折扣</th><th>账期</th><th>信用额度上限</th></tr></thead><tbody><tr><td>VIP</td><td>5%-15%</td><td>60天</td><td>500万</td></tr><tr><td>重要客户</td><td>3%-10%</td><td>45天</td><td>200万</td></tr><tr><td>普通客户</td><td>0%-5%</td><td>30天</td><td>50万</td></tr><tr><td>小型客户</td><td>0%</td><td>预付/15天</td><td>10万</td></tr></tbody></table><h2 id="四、api-接口设计" tabindex="-1"><a class="header-anchor" href="#四、api-接口设计"><span>四、API 接口设计</span></a></h2><table><thead><tr><th>方法</th><th>路径</th><th>说明</th></tr></thead><tbody><tr><td>GET</td><td><code>/api/sales/customers</code></td><td>客户列表</td></tr><tr><td>GET</td><td><code>/api/sales/customers/{id}</code></td><td>客户详情</td></tr><tr><td>POST</td><td><code>/api/sales/customers</code></td><td>新增客户</td></tr><tr><td>PUT</td><td><code>/api/sales/customers/{id}</code></td><td>修改客户</td></tr><tr><td>POST</td><td><code>/api/sales/customers/{id}/block</code></td><td>冻结客户</td></tr><tr><td>POST</td><td><code>/api/sales/customers/{id}/unblock</code></td><td>解冻客户</td></tr><tr><td>GET</td><td><code>/api/sales/customers/{id}/credit</code></td><td>信用详情</td></tr><tr><td>PUT</td><td><code>/api/sales/customers/{id}/credit</code></td><td>更新信用额度</td></tr><tr><td>POST</td><td><code>/api/sales/customers/{id}/credit/check</code></td><td>信用检查</td></tr><tr><td>GET</td><td><code>/api/sales/customers/{id}/orders</code></td><td>客户订单列表</td></tr><tr><td>GET</td><td><code>/api/sales/customers/{id}/statistics</code></td><td>客户统计</td></tr><tr><td>GET</td><td><code>/api/sales/customers/{id}/statement</code></td><td>客户对账单</td></tr></tbody></table><h2 id="五、实体关系图" tabindex="-1"><a class="header-anchor" href="#五、实体关系图"><span>五、实体关系图</span></a></h2><div class="language- line-numbers-mode" data-highlighter="shiki" data-ext="" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-"><span class="line"><span>┌──────────────┐     ┌──────────────────┐</span></span>
+<span class="line"><span>│ Customer     │────▶│ CustomerContact  │</span></span>
+<span class="line"><span>│ 客户          │ 1:N │ 联系人            │</span></span>
+<span class="line"><span>└──────┬───────┘     └──────────────────┘</span></span>
+<span class="line"><span>       │</span></span>
+<span class="line"><span>       ├────▶ ShippingAddress (1:N)</span></span>
+<span class="line"><span>       │</span></span>
+<span class="line"><span>       ├────▶ SalesOrder (1:N)</span></span>
+<span class="line"><span>       │</span></span>
+<span class="line"><span>       ├────▶ Receivable (1:N, AR模块)</span></span>
+<span class="line"><span>       │</span></span>
+<span class="line"><span>       └────▶ CustomerCredit (1:1, AR模块)</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="六、业务规则" tabindex="-1"><a class="header-anchor" href="#六、业务规则"><span>六、业务规则</span></a></h2><table><thead><tr><th>规则</th><th>描述</th></tr></thead><tbody><tr><td>编码唯一</td><td>客户编码全局唯一</td></tr><tr><td>税号唯一</td><td>同一租户内税号不可重复</td></tr><tr><td>冻结限制</td><td>冻结客户不可创建新订单和发货</td></tr><tr><td>信用实时</td><td>信用额度在订单和发货时实时计算</td></tr><tr><td>必填收货地址</td><td>创建订单前至少有一个收货地址</td></tr><tr><td>销售负责人</td><td>每个客户必须分配销售负责人</td></tr><tr><td>合并限制</td><td>客户有未清订单/应收时不可停用</td></tr></tbody></table>`,21)]])}var s=r(a,[[`render`,o]]);export{i as _pageData,s as default};
