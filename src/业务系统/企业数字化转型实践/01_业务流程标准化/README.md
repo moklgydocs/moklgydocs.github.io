@@ -30,8 +30,11 @@ category:
 
 ```mermaid
 flowchart LR
-    A["01 L1-L4流程体系<br/>建立分层框架"] --> B["02 纸面流程与系统流程的断层<br/>发现并弥合差距"]
-    A -.->|"分层是前提<br/>才知道断层在哪"| B
+    A["01 L1-L4流程体系
+建立分层框架"] --> B["02 纸面流程与系统流程的断层
+发现并弥合差距"]
+    A -.->|"分层是前提
+才知道断层在哪"| B
 
     style A fill:#e3f2fd,stroke:#1565c0,color:#000
     style B fill:#fce4ec,stroke:#c62828,color:#000

@@ -83,15 +83,18 @@ graph TB
 
     subgraph "LINQ Provider"
         B[LINQ to Objects]
-        C[LINQ to Entities<br/>EF Core]
+        C[LINQ to Entities
+EF Core]
         D[LINQ to XML]
         E[LINQ to JSON]
         F[自定义 Provider]
     end
 
     subgraph "数据源"
-        G[内存集合<br/>List/Array]
-        H[数据库<br/>SQL Server/MySQL]
+        G[内存集合
+List/Array]
+        H[数据库
+SQL Server/MySQL]
         I[XML文档]
         J[JSON数据]
         K[其他数据源]
@@ -207,14 +210,19 @@ var evens = products.Where(p => p.Price > 100);
 ```mermaid
 graph LR
     subgraph "IEnumerable 路径"
-        A1[Lambda表达式] --> B1[编译为委托<br/>Func&lt;T, bool&gt;]
-        B1 --> C1[本地执行<br/>内存中遍历]
+        A1[Lambda表达式] --> B1[编译为委托
+Func&lt;T, bool&gt;]
+        B1 --> C1[本地执行
+内存中遍历]
     end
 
     subgraph "IQueryable 路径"
-        A2[Lambda表达式] --> B2[编译为表达式树<br/>Expression&lt;Func&lt;T, bool&gt;&gt;]
-        B2 --> C2[Provider翻译<br/>SQL/NOSQL等]
-        C2 --> D2[远程执行<br/>数据库中运行]
+        A2[Lambda表达式] --> B2[编译为表达式树
+Expression&lt;Func&lt;T, bool&gt;&gt;]
+        B2 --> C2[Provider翻译
+SQL/NOSQL等]
+        C2 --> D2[远程执行
+数据库中运行]
     end
 ```
 

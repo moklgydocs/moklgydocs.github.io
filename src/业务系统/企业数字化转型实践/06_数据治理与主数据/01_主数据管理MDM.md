@@ -76,12 +76,18 @@ tag:
 
 ```mermaid
 graph TB
-    M["物料主数据<br/>（唯一真实来源）"]
-    M --> ERP["ERP<br/>财务视图：计价单位/财务分类/财务BOM"]
-    M --> PLM["PLM<br/>设计视图：图号/设计单位/设计BOM"]
-    M --> MES["MES<br/>制造视图：工艺参数/制造BOM/工序"]
-    M --> WMS["WMS<br/>仓储视图：包装单位/库位/批次规则"]
-    M --> SRM["SRM<br/>采购视图：采购类型/供应商/价格"]
+    M["物料主数据
+（唯一真实来源）"]
+    M --> ERP["ERP
+财务视图：计价单位/财务分类/财务BOM"]
+    M --> PLM["PLM
+设计视图：图号/设计单位/设计BOM"]
+    M --> MES["MES
+制造视图：工艺参数/制造BOM/工序"]
+    M --> WMS["WMS
+仓储视图：包装单位/库位/批次规则"]
+    M --> SRM["SRM
+采购视图：采购类型/供应商/价格"]
 
     style M fill:#e3f2fd,stroke:#1565c0,color:#000
     style ERP fill:#e8f5e9,stroke:#2e7d32,color:#000
@@ -191,10 +197,14 @@ graph TB
 
 ```mermaid
 graph LR
-    MDM["MDM 平台<br/>（索引+映射）"]
-    ERP["ERP<br/>客户数据"]
-    CRM["CRM<br/>客户数据"]
-    SRM["SRM<br/>供应商数据"]
+    MDM["MDM 平台
+（索引+映射）"]
+    ERP["ERP
+客户数据"]
+    CRM["CRM
+客户数据"]
+    SRM["SRM
+供应商数据"]
 
     ERP -->|"注册编码+映射"| MDM
     CRM -->|"注册编码+映射"| MDM
@@ -217,7 +227,8 @@ MDM 作为唯一真实来源（Single Source of Truth），各系统从 MDM 同�
 
 ```mermaid
 graph TB
-    MDM["MDM 平台<br/>（唯一真实来源）"]
+    MDM["MDM 平台
+（唯一真实来源）"]
     MDM -->|"同步"| ERP["ERP"]
     MDM -->|"同步"| CRM["CRM"]
     MDM -->|"同步"| SRM["SRM"]
@@ -241,10 +252,14 @@ graph TB
 
 ```mermaid
 graph TB
-    MDM["MDM 平台<br/>（核心字段+映射）"]
-    MDM -->|"核心字段同步"| ERP["ERP<br/>+ 本地扩展字段"]
-    MDM -->|"核心字段同步"| CRM["CRM<br/>+ 本地扩展字段"]
-    MDM -->|"核心字段同步"| SRM["SRM<br/>+ 本地扩展字段"]
+    MDM["MDM 平台
+（核心字段+映射）"]
+    MDM -->|"核心字段同步"| ERP["ERP
++ 本地扩展字段"]
+    MDM -->|"核心字段同步"| CRM["CRM
++ 本地扩展字段"]
+    MDM -->|"核心字段同步"| SRM["SRM
++ 本地扩展字段"]
 
     ERP -->|"核心字段变更申请"| MDM
     CRM -->|"核心字段变更申请"| MDM
@@ -253,7 +268,9 @@ graph TB
         code["编码/名称/分类"]
     end
     subgraph 本地扩展
-        ext["ERP: 财务属性<br/>CRM: 销售属性<br/>SRM: 采购属性"]
+        ext["ERP: 财务属性
+CRM: 销售属性
+SRM: 采购属性"]
     end
 
     style MDM fill:#e3f2fd,stroke:#1565c0,color:#000

@@ -275,10 +275,10 @@ graph TD
     B --> C["N次查询获取导航属性"]
     C --> D["总共 N+1 次数据库往返"]
 
-    E["解决方案"] --> F["Include预加载<br/>1-3次查询"]
-    E --> G["Select投影<br/>1次查询"]
-    E --> H["批量查询<br/>2次查询"]
-    E --> I["AsSplitQuery<br/>拆分避免笛卡尔"]
+    E["解决方案"] --> F["Include预加载\n1-3次查询"]
+    E --> G["Select投影\n1次查询"]
+    E --> H["批量查询\n2次查询"]
+    E --> I["AsSplitQuery\n拆分避免笛卡尔"]
 
     style A fill:#fce4ec
     style E fill:#e8f5e9

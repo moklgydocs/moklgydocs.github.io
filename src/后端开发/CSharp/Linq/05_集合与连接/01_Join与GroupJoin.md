@@ -20,13 +20,17 @@ tag:
 ```mermaid
 graph LR
     subgraph 连接操作
-        J[Join<br/>内连接] --> R1[仅匹配项]
-        GJ[GroupJoin<br/>分组连接] --> R2[一对多分组]
-        LF[GroupJoin + DefaultIfEmpty<br/>左连接] --> R3[保留左侧全部]
+        J[Join
+内连接] --> R1[仅匹配项]
+        GJ[GroupJoin
+分组连接] --> R2[一对多分组]
+        LF[GroupJoin + DefaultIfEmpty
+左连接] --> R3[保留左侧全部]
     end
 
     subgraph 位置合并
-        Z[Zip<br/>按位置合并] --> R4[元素配对]
+        Z[Zip
+按位置合并] --> R4[元素配对]
     end
 
     style J fill:#e1f5fe
@@ -466,12 +470,16 @@ LINQ 的 `Join` 内部使用 Hash Lookup（哈希查找），时间复杂度为 
 
 ```mermaid
 graph TD
-    A["遍历内部序列<br/>构建 HashLookup"] --> B["Key → Values 映射表"]
-    B --> C["遍历外部序列<br/>通过 Key 查找匹配"]
+    A["遍历内部序列
+构建 HashLookup"] --> B["Key → Values 映射表"]
+    B --> C["遍历外部序列
+通过 Key 查找匹配"]
     C --> D["输出匹配对"]
 
-    E["嵌套循环 Join"] --> F["O(n × m)<br/>每对外部元素遍历整个内部序列"]
-    A --> G["O(n + m)<br/>各遍历一次"]
+    E["嵌套循环 Join"] --> F["O(n × m)
+每对外部元素遍历整个内部序列"]
+    A --> G["O(n + m)
+各遍历一次"]
 
     style G fill:#c8e6c9
     style F fill:#ffcdd2
