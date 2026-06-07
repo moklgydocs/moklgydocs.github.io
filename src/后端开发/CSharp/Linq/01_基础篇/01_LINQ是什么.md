@@ -180,7 +180,7 @@ var result = (from p in products
 
 LINQ建立在两个核心接口之上：`IEnumerable<T>` 和 `IQueryable<T>`。
 
-### IEnumerable<T> — LINQ to Objects
+### `IEnumerable<T>` — LINQ to Objects
 
 操作内存中的集合，所有LINQ运算符在 `System.Linq.Enumerable` 静态类中实现。
 
@@ -192,7 +192,7 @@ var evens = numbers.Where(n => n % 2 == 0);
 // 编译后实际调用 Enumerable.Where(numbers, n => n % 2 == 0)
 ```
 
-### IQueryable<T> — 远程数据源
+### `IQueryable<T>` — 远程数据源
 
 操作远程数据源（如数据库），运算符在 `System.Linq.Queryable` 静态类中实现。
 
@@ -228,7 +228,7 @@ SQL/NOSQL等]
 
 ### 关键区别
 
-| 维度 | IEnumerable<T> | IQueryable<T> |
+| 维度 | `IEnumerable<T>` | `IQueryable<T>` |
 |------|----------------|---------------|
 | 命名空间 | System.Linq.Enumerable | System.Linq.Queryable |
 | 参数类型 | `Func<T, bool>` | `Expression<Func<T, bool>>` |

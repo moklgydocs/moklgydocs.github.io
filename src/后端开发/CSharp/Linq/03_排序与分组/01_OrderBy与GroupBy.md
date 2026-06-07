@@ -387,7 +387,7 @@ foreach (var dept in hierarchy)
 | 按Key查找 | 需要遍历或ToDictionary | 直接 `lookup[key]` |
 | 不可变性 | 返回延迟迭代器 | 结果是不可变的 |
 
-### ILookup vs IEnumerable<IGrouping>
+### ILookup vs `IEnumerable<IGrouping>`
 
 ```csharp
 // GroupBy：延迟执行，每次遍历重新分组

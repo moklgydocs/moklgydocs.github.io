@@ -286,7 +286,7 @@ var sum = numbers.Cast<int>().Where(n => n > 2).Sum();
 |------|--------|------|
 | 类型不匹配 | 跳过不匹配的元素 | 抛出InvalidCastException |
 | null处理 | 跳过null | 引用类型保留null |
-| 返回类型 | IEnumerable<T> | IEnumerable<T> |
+| 返回类型 | `IEnumerable<T>` | `IEnumerable<T>` |
 | 使用场景 | 不确定类型一致性时 | 确定所有元素都能转换时 |
 | 安全性 | 安全 | 可能异常 |
 
