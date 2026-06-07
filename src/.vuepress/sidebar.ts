@@ -641,6 +641,43 @@ export default sidebar({
               collapsible: true,
               children: "structure",
             },
+            {
+              text: "中间件开发",
+              icon: "fa6-solid:gear",
+              prefix: "中间件开发/",
+              collapsible: true,
+              children: [
+                "",
+                {
+                  text: "01 · 中间件基础",
+                  icon: "fa6-solid:seedling",
+                  prefix: "01_中间件基础/",
+                  collapsible: true,
+                  children: "structure",
+                },
+                {
+                  text: "02 · 常用中间件实战",
+                  icon: "fa6-solid:code",
+                  prefix: "02_常用中间件实战/",
+                  collapsible: true,
+                  children: "structure",
+                },
+                {
+                  text: "03 · 高级中间件实战",
+                  icon: "fa6-solid:rocket",
+                  prefix: "03_高级中间件实战/",
+                  collapsible: true,
+                  children: "structure",
+                },
+                {
+                  text: "04 · 中间件设计模式",
+                  icon: "fa6-solid:puzzle-piece",
+                  prefix: "04_中间件设计模式/",
+                  collapsible: true,
+                  children: "structure",
+                },
+              ],
+            },
           ],
         },
         // 算法单独显式声明，保证七个模块顺序固定
