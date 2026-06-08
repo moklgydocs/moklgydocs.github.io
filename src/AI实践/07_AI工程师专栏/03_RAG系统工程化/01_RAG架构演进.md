@@ -210,26 +210,38 @@ class HybridRetrievalModule(RAGModule):
         self.k = k
 
     def process(self, ctx: RAGContext) -> RAGContext:
-        all_docs = []
+        # 每个子查询独立检索，保留各路排序信息
+        ranked_lists = []
         for query in ctx.sub_queries:
             vec_docs = self.vector_retriever.invoke(query)
             bm25_docs = self.bm25_retriever.invoke(query)
-            all_docs.extend(vec_docs + bm25_docs)
-        # RRF 融合
-        ctx.retrieved_docs = self._rrf_fusion(all_docs)
+            ranked_lists.extend([vec_docs, bm25_docs])
+        # RRF 融合：传入独立的排序列表
+        ctx.retrieved_docs = self._rrf_fusion(ranked_lists)
         return ctx
 
-    def _rrf_fusion(self, doc_lists, k: int = 60) -> List[dict]:
-        scores = {}
-        for doc in doc_lists:
-            doc_id = doc.page_content[:100]  # 简化的文档 ID
-            if doc_id not in scores:
-                scores[doc_id] = {"doc": doc, "score": 0}
-        for rank, doc in enumerate(doc_lists):
-            doc_id = doc.page_content[:100]
-            scores[doc_id]["score"] += 1.0 / (rank + k)
-        sorted_docs = sorted(scores.values(), key=lambda x: x["score"], reverse=True)
-        return [item["doc"] for item in sorted_docs[:self.k]]
+    @staticmethod
+    def _rrf_fusion(ranked_lists: list[list], k: int = 60) -> list:
+        """RRF 融合：对多个独立排序的结果进行融合
+
+        Args:
+            ranked_lists: 每个查询的独立排序列表（非合并列表）
+            k: RRF 常数，防止排名靠前的文档权重过大
+        """
+        rrf_scores = {}
+
+        for ranked_list in ranked_lists:
+            for rank, doc in enumerate(ranked_list, start=1):
+                doc_key = doc.page_content[:100]  # 简单去重键
+                if doc_key not in rrf_scores:
+                    rrf_scores[doc_key] = {"score": 0, "doc": doc}
+                rrf_scores[doc_key]["score"] += 1.0 / (k + rank)
+
+        # 按融合分数排序
+        sorted_results = sorted(
+            rrf_scores.values(), key=lambda x: x["score"], reverse=True
+        )
+        return [item["doc"] for item in sorted_results]
 
 class RerankModule(RAGModule):
     def __init__(self, reranker_model: str = "BAAI/bge-reranker-v2-m3"):

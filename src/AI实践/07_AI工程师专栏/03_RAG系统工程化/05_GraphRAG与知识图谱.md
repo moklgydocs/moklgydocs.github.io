@@ -337,19 +337,29 @@ class Neo4jKnowledgeGraph:
             session.run(query, name=name, type=entity_type, desc=description, props=props)
 
     def create_relationship(self, source: str, target: str, rel_type: str,
-                            description: str = "", weight: float = 1.0):
-        """创建关系"""
-        # Cypher 关系类型不能含特殊字符，需清洗
-        safe_rel_type = rel_type.replace(" ", "_").replace("-", "_").upper()
-        query = f"""
-        MATCH (s:Entity {{name: $source}})
-        MATCH (t:Entity {{name: $target}})
-        MERGE (s)-[r:{safe_rel_type}]->(t)
-        SET r.description = $desc, r.weight = $weight
-        """
+                            description: str = "", weight: float = 1.0,
+                            properties: dict = None):
+        """创建关系 — 使用参数化查询防止 Cypher 注入"""
+        import re
+        # 白名单验证关系类型（只允许字母数字下划线）
+        if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', rel_type):
+            raise ValueError(f"非法关系类型: {rel_type}")
+
+        query = (
+            f"MATCH (s:Entity {{name: $source}}) "
+            f"MATCH (t:Entity {{name: $target}}) "
+            f"MERGE (s)-[r:`{rel_type}`]->(t) "
+            f"SET r.description = $desc, r.weight = $weight"
+        )
+        params = {"source": source, "target": target,
+                  "desc": description, "weight": weight}
+        if properties:
+            # 属性通过参数传递，不拼接进查询
+            query = query.replace("->(t)", " $props->(t)")
+            params["props"] = properties
+
         with self.driver.session() as session:
-            session.run(query, source=source, target=target,
-                        desc=description, weight=weight)
+            session.run(query, **params)
 
     def build_from_documents(self, documents: list[str], llm):
         """从文档批量构建知识图谱"""

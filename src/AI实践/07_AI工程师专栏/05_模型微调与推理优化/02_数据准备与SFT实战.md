@@ -131,6 +131,46 @@ def has_low_quality_markers(text: str) -> bool:
 
 适用于多轮对话场景。
 
+### Chat Template 格式（推荐）
+
+现代模型（Qwen2、Llama3、ChatGLM4）都有原生的 Chat Template。
+SFT 时应使用模型原生格式而非自定义分隔符，否则微调后模型对齐会变差。
+
+```python
+from transformers import AutoTokenizer
+
+def format_with_chat_template(tokenizer_name: str,
+                                conversations: list[dict]) -> str:
+    """使用模型原生 Chat Template 格式化数据
+
+    推荐做法：让 tokenizer.apply_chat_template 处理格式
+    而非手动拼接 "### Instruction:" 等分隔符
+    """
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
+
+    # 构建对话格式
+    messages = []
+    for conv in conversations:
+        messages.append({"role": "user", "content": conv["instruction"]})
+        messages.append({"role": "assistant", "content": conv["output"]})
+
+    # 使用模型原生模板
+    formatted = tokenizer.apply_chat_template(
+        messages,
+        tokenize=False,
+        add_generation_prompt=False,
+    )
+    return formatted
+
+# 不同模型的 Chat Template 差异
+# Qwen2: <|im_start|>system\n...<|im_end|>\n<|im_start|>user\n...<|im_end|>
+# Llama3: <|begin_of_text|><|start_header_id|>user<|end_header_id|>...
+# ChatGLM4: [Round 1]\n\n问：...\n\n答：...
+```
+
+> ⚠️ 使用自定义格式（如 `### Instruction:`）微调后，推理时也必须用相同格式。
+> 推荐直接使用 `tokenizer.apply_chat_template()` 确保训练和推理格式一致。
+
 ### 格式转换工具
 
 ```python

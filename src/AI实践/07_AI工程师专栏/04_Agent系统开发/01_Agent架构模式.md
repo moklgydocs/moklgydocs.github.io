@@ -259,6 +259,72 @@ class FunctionCallingAgent:
         return "达到最大迭代次数，Agent 终止"
 ```
 
+### 流式响应
+
+生产 Agent 必须支持流式输出，否则用户需等待完整响应（可能 5-30 秒）。
+
+```python
+async def run_streaming(self, user_message: str,
+                         system_prompt: str = "") -> AsyncIterator[str]:
+    """流式 Agent：边生成边返回"""
+    messages = self._build_messages(system_prompt, user_message)
+
+    for iteration in range(self.max_iterations):
+        # 使用 stream=True 获取流式响应
+        stream = await self.client.chat.completions.create(
+            model=self.model,
+            messages=messages,
+            tools=self.tools if self.tools else None,
+            tool_choice="auto",
+            stream=True,
+        )
+
+        tool_calls = []
+        text_content = ""
+        current_tool_call = None
+
+        async for chunk in stream:
+            delta = chunk.choices[0].delta
+
+            # 流式文本输出
+            if delta.content:
+                text_content += delta.content
+                yield delta.content  # 实时返回给用户
+
+            # 收集工具调用
+            if delta.tool_calls:
+                for tc in delta.tool_calls:
+                    if tc.index is not None:
+                        while len(tool_calls) <= tc.index:
+                            tool_calls.append({"id": "", "name": "", "arguments": ""})
+                        if tc.id:
+                            tool_calls[tc.index]["id"] = tc.id
+                        if tc.function:
+                            if tc.function.name:
+                                tool_calls[tc.index]["name"] += tc.function.name
+                            if tc.function.arguments:
+                                tool_calls[tc.index]["arguments"] += tc.function.arguments
+
+        # 如果没有工具调用，Agent 完成
+        if not any(tc["name"] for tc in tool_calls):
+            return
+
+        # 执行工具调用（不流式）
+        messages.append({"role": "assistant", "content": text_content,
+                         "tool_calls": tool_calls})
+        for tc in tool_calls:
+            if not tc["name"]:
+                continue
+            result = await self.tool_implementations[tc["name"]](
+                **json.loads(tc["arguments"])
+            )
+            messages.append({
+                "role": "tool",
+                "tool_call_id": tc["id"],
+                "content": json.dumps(result, ensure_ascii=False),
+            })
+```
+
 ### 注册工具示例
 
 ```python
