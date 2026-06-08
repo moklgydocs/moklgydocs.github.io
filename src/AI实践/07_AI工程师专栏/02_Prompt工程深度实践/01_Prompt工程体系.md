@@ -209,6 +209,124 @@ HALLUCINATION_GUARD = """回答规则：
 """
 ```
 
+## 多模型适配策略
+
+生产环境很少只用一个模型。不同模型在 Prompt 行为上有显著差异：
+
+### 主流模型 Prompt 特性对比
+
+| 特性 | OpenAI GPT-4o | Anthropic Claude | DeepSeek V3 | 开源模型 |
+|------|--------------|-----------------|-------------|---------|
+| System Prompt 遵循度 | 高 | 极高 | 中高 | 低-中 |
+| 结构化输出 | `response_format` | `tool_use` / JSON mode | 部分支持 | 不支持 |
+| Prompt Caching | 自动缓存（50% 折扣） | 显式缓存（90% 折扣） | 不支持 | 不支持 |
+| Function Calling | 原生支持 | `tool_use` content block | 部分支持 | 不支持 |
+| 上下文窗口 | 128K | 200K | 128K | 因模型而异 |
+| 中文能力 | 强 | 强 | 极强 | 取决于训练数据 |
+
+### 跨模型 Prompt 编写原则
+
+1. **System Prompt 是最稳定的行为控制** — 但开源模型遵循度低，需配合 few-shot
+2. **避免依赖模型特定的输出格式** — 不要假设模型一定输出 "```json" 格式，做好防御性解析
+3. **Function Calling 不等于 ReAct** — Claude 的 tool_use 和 GPT 的 function_calling 格式不同
+4. **Prompt Caching 策略差异大** — OpenAI 自动缓存，Claude 需要显式标记缓存边界
+
+### 跨模型 Prompt 模板示例
+
+```python
+from abc import ABC, abstractmethod
+
+class PromptAdapter(ABC):
+    """跨模型 Prompt 适配器
+
+    不同模型对 System Prompt、Function Calling、
+    结构化输出的处理方式不同，需要适配。
+    """
+
+    @abstractmethod
+    def format_system_prompt(self, instruction: str) -> list[dict]:
+        """将系统指令格式化为模型特定的 messages 格式"""
+        pass
+
+    @abstractmethod
+    def format_tools(self, tools: list[dict]) -> any:
+        """将工具定义格式化为模型特定格式"""
+        pass
+
+class OpenAIAdapter(PromptAdapter):
+    def format_system_prompt(self, instruction: str) -> list[dict]:
+        return [{"role": "system", "content": instruction}]
+
+    def format_tools(self, tools: list[dict]) -> list[dict]:
+        return tools  # OpenAI 直接使用 function 格式
+
+class ClaudeAdapter(PromptAdapter):
+    def format_system_prompt(self, instruction: str) -> list[dict]:
+        # Claude 的 system 是 API 参数，不是 message
+        # 在 messages 中不需要 system role
+        return []  # system 在 create() 调用中传入
+
+    def format_tools(self, tools: list[dict]) -> list[dict]:
+        # Claude 使用 input_schema 而非 parameters
+        return [{
+            "name": t["function"]["name"],
+            "description": t["function"]["description"],
+            "input_schema": t["function"]["parameters"],
+        } for t in tools]
+
+class DeepSeekAdapter(PromptAdapter):
+    def format_system_prompt(self, instruction: str) -> list[dict]:
+        # DeepSeek 对 system prompt 遵循度中等
+        # 建议在 system 后追加 few-shot 示例增强遵循
+        return [
+            {"role": "system", "content": instruction},
+            {"role": "user", "content": "请严格遵循以上指令格式输出"},
+            {"role": "assistant", "content": "收到，我会严格按照指定格式输出。"},
+        ]
+```
+
+### Prompt Caching：降低重复查询成本
+
+LLM API 的 Prompt Caching 可以将重复输入的 token 计费降低 50%-90%。
+
+| Provider | 缓存方式 | 折扣 | 适用场景 |
+|----------|---------|------|---------|
+| OpenAI | 自动缓存（最近 5 分钟内相同前缀） | 50% | 长系统 Prompt |
+| Anthropic | 显式缓存标记（`cache_control`） | 90% | RAG 上下文、工具定义 |
+| DeepSeek | 不支持 | - | - |
+
+```python
+# Anthropic Prompt Caching 示例
+# 显式标记缓存边界，比 OpenAI 的自动缓存更可控
+
+import anthropic
+
+client = anthropic.Anthropic()
+
+response = client.messages.create(
+    model="claude-sonnet-4-20250514",
+    max_tokens=1024,
+    system=[
+        {
+            "type": "text",
+            "text": LONG_SYSTEM_PROMPT,  # 长系统指令，标记为缓存
+            "cache_control": {"type": "ephemeral"}
+        }
+    ],
+    tools=[
+        {
+            "name": "search",
+            "description": "搜索知识库",
+            "input_schema": {"type": "object", "properties": {"query": {"type": "string"}}},
+            "cache_control": {"type": "ephemeral"}  # 工具定义也缓存
+        }
+    ],
+    messages=[{"role": "user", "content": "查询..."}],
+)
+# 首次调用：正常计费
+# 后续调用（5分钟内）：system + tools 部分享受 90% 折扣
+```
+
 ## 避坑指南
 
 ### 坑 1：Prompt 越长越好
@@ -222,6 +340,9 @@ HALLUCINATION_GUARD = """回答规则：
 ### 坑 3：忽略 System Prompt
 
 **事实**：System Prompt 是最稳定的行为控制手段。把核心约束放在 System Prompt 里，比放在 User 消息里可靠得多。
+
+> ⚠️ 此结论主要基于 GPT-4 和 Claude。开源模型（如 Llama、Qwen）对 System Prompt 的遵循度
+> 明显低于闭源模型，建议配合 Few-shot 示例增强遵循。
 
 ---
 
