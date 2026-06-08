@@ -256,7 +256,7 @@ class TableProcessor:
         # 去除列名中的空格
         df.columns = df.columns.str.strip()
         # 去除单元格中的前后空格
-        df = df.applymap(lambda x: x.strip() if isinstance(x, str) else x)
+        df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
         return df
 
     def _understand_table(self, df: pd.DataFrame) -> str:
@@ -444,7 +444,7 @@ import numpy as np
 class CLIPEmbedder:
     """CLIP 多模态嵌入器"""
 
-    def __init__(self, model_name: str = "chinese-clip-ViT-B-16"):
+    def __init__(self, model_name: str = "OFA-Sys/chinese-clip-vit-base-patch16"):
         self.model = SentenceTransformer(model_name)
 
     def encode_text(self, text: str) -> np.ndarray:
@@ -598,8 +598,10 @@ class MultiModalRAG:
         # 统一向量化
         for mm_doc in mm_docs:
             if mm_doc.modality == "image":
-                mm_doc.embedding = self.clip_embedder.encode_text(
-                    mm_doc.text_representation
+                # 使用 CLIP 视觉编码器对图片本身编码，而非文本描述
+                image = mm_doc.content  # PIL Image 对象
+                mm_doc.embedding = self.clip_embedder.encode_image(
+                    image
                 ).tolist()
             else:
                 mm_doc.embedding = self.text_embedder.encode(
@@ -624,8 +626,8 @@ class MultiModalRAG:
 
     def query(self, question: str, top_k: int = 5) -> dict:
         """多模态查询"""
-        # 文本检索
-        query_embedding = self.text_embedder.encode(question).tolist()
+        # 文本查询：使用 CLIP 文本编码器以匹配图片的视觉嵌入
+        query_embedding = self.clip_embedder.encode_text(question).tolist()
         results = self.vector_store.search(query_embedding, top_k=top_k)
 
         # 按模态分组
@@ -734,7 +736,7 @@ class MultiModalRAG:
             results.append(MultiModalDocument(
                 doc_id=img["image_id"],
                 modality="image",
-                content=img.get("search_description", ""),
+                content=img.get("image", img.get("search_description", "")),
                 text_representation=img.get("search_description", ""),
                 metadata={"page": img.get("page_number"), "source": doc.get("id")},
             ))
