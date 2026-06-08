@@ -44,7 +44,7 @@ graph TD
     C --> C3[自定义 Pipeline]
 
     D --> D1[Bootstrapped Few-Shot]
-    D --> D2[Bayesian 优化]
+    D --> D2[进化式优化]
     D --> D3[MIPRO 优化器]
 
     style A fill:#e3f2fd,stroke:#1565c0
@@ -252,16 +252,22 @@ print(result.answer)
 print(compiled_qa.prog.demos)  # 查看 Few-Shot 示例
 ```
 
-## Bayesian Prompt 优化
+## 进化式 Prompt 优化
 
-Bayesian Prompt 优化将 Prompt 搜索建模为黑盒函数优化问题，使用贝叶斯方法在 Prompt 空间中高效搜索。
+进化式 Prompt 优化将 Prompt 搜索视为迭代优化问题：每轮在历史最优解附近随机扰动参数，保留表现更好的变体。这是进化策略 / 爬山搜索，而非贝叶斯优化。
 
 ```python
 from dspy.teleprompt import BootstrapFewShotWithRandomSearch
 import numpy as np
 
-class BayesianPromptOptimizer:
-    """基于贝叶斯思想的 Prompt 优化器"""
+class EvolutionaryPromptOptimizer:
+    """进化式 Prompt 优化器
+
+    通过随机扰动 + 选择保留最优解的策略迭代优化 Prompt。
+    这不是贝叶斯优化（贝叶斯优化需要高斯过程 + 采集函数）。
+
+    如需真正的贝叶斯优化，可使用 Optuna 等 TPE 框架。
+    """
 
     def __init__(self, module_class, metric, trainset,
                  num_candidates=20, num_threads=4):
@@ -294,7 +300,7 @@ class BayesianPromptOptimizer:
         }
 
     def optimize(self, num_iterations: int = 10) -> tuple:
-        """执行贝叶斯优化"""
+        """执行进化式优化"""
         best_score = -1
         best_module = None
 
@@ -337,6 +343,28 @@ class BayesianPromptOptimizer:
             display_progress=False,
         )
         return evaluator(module)
+```
+
+### 真正的贝叶斯优化：Optuna TPE
+
+如需基于概率模型的贝叶斯优化（高斯过程 + 采集函数），推荐使用 Optuna 的 TPE（Tree-structured Parzen Estimator）：
+
+```python
+# 真正的贝叶斯优化：使用 Optuna TPE
+# pip install optuna
+# import optuna
+#
+# def objective(trial):
+#     temperature = trial.suggest_float("temperature", 0.0, 1.0)
+#     top_p = trial.suggest_float("top_p", 0.5, 1.0)
+#     prompt_prefix = trial.suggest_categorical(
+#         "prefix", ["请详细分析", "简要概括", "逐步推理"]
+#     )
+#     score = evaluate_prompt(temperature, top_p, prompt_prefix)
+#     return score
+#
+# study = optuna.create_study(direction="maximize")
+# study.optimize(objective, n_trials=50)
 ```
 
 ## 自动化 Prompt 评估与迭代

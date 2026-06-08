@@ -37,6 +37,7 @@ graph LR
 ```python
 import json
 import re
+import hashlib
 from pathlib import Path
 
 def clean_sft_data(input_path: str, output_path: str):
@@ -68,8 +69,10 @@ def clean_sft_data(input_path: str, output_path: str):
             stats["too_long"] += 1
             continue
 
-        # 3. 去重
-        content_hash = hash(instruction + output)
+        # 3. 去重（使用 hashlib 确保跨 session 确定性）
+        content_hash = hashlib.md5(
+            (instruction + output).encode()
+        ).hexdigest()
         if content_hash in seen:
             stats["duplicate"] += 1
             continue
