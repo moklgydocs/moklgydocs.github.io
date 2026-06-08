@@ -785,6 +785,70 @@ sequenceDiagram
 
 ---
 
+## 框架选型
+
+不同框架适合不同的多 Agent 场景。以下是主流框架对比：
+
+| 特性 | LangGraph | CrewAI | AutoGen | OpenAI Swarm |
+|------|-----------|--------|---------|-------------|
+| 开发者 | LangChain | CrewAI | Microsoft | OpenAI |
+| 核心模式 | 状态图（DAG） | 角色团队 | 对话式 | Handoff |
+| 学习曲线 | 中高 | 低 | 中 | 低 |
+| 灵活性 | 极高 | 中 | 中高 | 低 |
+| 生产就绪 | 高 | 中 | 中 | 实验性 |
+| 状态管理 | 内置 | 有限 | 内置 | 无 |
+| 人工介入 | 支持 | 支持 | 支持 | 不支持 |
+| 适用场景 | 复杂工作流 | 角色分工 | 多轮讨论 | 轻量路由 |
+
+### 何时选什么？
+
+- **LangGraph**：复杂工作流、需要精细控制状态流转、需要人工审批节点
+- **CrewAI**：角色分工明确（研究员+写手+审核）、快速原型
+- **AutoGen**：多轮对话式协作、代码生成+讨论+优化循环
+- **OpenAI Swarm**：轻量级路由（客服转接场景）、快速 PoC
+
+### CrewAI 快速示例
+
+```python
+from crewai import Agent, Task, Crew
+
+researcher = Agent(
+    role="研究员",
+    goal="收集和分析信息",
+    backstory="你是一位经验丰富的行业研究员",
+    verbose=True,
+)
+
+writer = Agent(
+    role="写作者",
+    goal="基于研究结果撰写报告",
+    backstory="你是一位专业的技术写作者",
+    verbose=True,
+)
+
+research_task = Task(
+    description="调研 {topic} 的最新发展趋势",
+    agent=researcher,
+    expected_output="包含 3-5 个关键趋势的结构化报告",
+)
+
+write_task = Task(
+    description="基于研究结果撰写分析报告",
+    agent=writer,
+    expected_output="1000 字分析报告",
+)
+
+crew = Crew(
+    agents=[researcher, writer],
+    tasks=[research_task, write_task],
+    verbose=True,
+)
+
+result = crew.kickoff(inputs={"topic": "AI Agent 技术趋势"})
+```
+
+---
+
 ## 生产环境考量
 
 ### 1. 容错与重试
@@ -945,6 +1009,104 @@ class CostController:
         self.spent += cost
         self.call_count += 1
 ```
+
+---
+
+## 多 Agent 测试策略
+
+多 Agent 系统的测试比单 Agent 更难 — 不仅要验证每个 Agent 的行为，
+还要验证 Agent 间的协作逻辑。
+
+### 测试层次
+
+```python
+import pytest
+from unittest.mock import AsyncMock, patch
+
+class TestMultiAgentSystem:
+    """多 Agent 系统的分层测试策略"""
+
+    # ===== 层1：单元测试 — 隔离单个 Agent =====
+
+    @pytest.mark.asyncio
+    async def test_researcher_agent_output_format(self):
+        """测试研究员 Agent 输出格式"""
+        mock_llm = AsyncMock()
+        mock_llm.invoke.return_value = "## 调研结果\n1. 趋势A\n2. 趋势B"
+
+        agent = ResearcherAgent(llm=mock_llm)
+        result = await agent.run("调研 AI 趋势")
+
+        assert "## 调研结果" in result
+        assert len(result) > 50
+
+    # ===== 层2：集成测试 — 测试 Agent 间协作 =====
+
+    @pytest.mark.asyncio
+    async def test_handoff_from_router_to_faq(self):
+        """测试路由→FAQ Agent 的协作"""
+        # Mock Router 返回 "faq" 路由
+        with patch("RouterAgent.route", return_value="faq"):
+            with patch("FAQAgent.answer", return_value="FAQ 回答"):
+                result = await system.handle("常见问题")
+                assert result["agent"] == "faq"
+                assert "FAQ" in result["answer"]
+
+    @pytest.mark.asyncio
+    async def test_escalation_on_high_risk(self):
+        """测试高风险场景自动升级"""
+        with patch("RiskAssessor.assess", return_value={"risk": "high"}):
+            result = await system.handle("高风险查询")
+            assert result["escalated"] is True
+
+    # ===== 层3：回归测试 — 确保 Prompt 变更不破坏行为 =====
+
+    @pytest.mark.asyncio
+    async def test_tool_selection_regression(self):
+        """回归测试：确保工具选择稳定"""
+        test_cases = [
+            ("查询订单状态", "query_order"),
+            ("计算总金额", "calculate"),
+            ("搜索知识库", "search_knowledge"),
+        ]
+
+        for query, expected_tool in test_cases:
+            tool = await router.select_tool(query)
+            assert tool == expected_tool, \
+                f"'{query}' 应选择 {expected_tool}，实际选择了 {tool}"
+
+    # ===== 层4：Mock 策略 — 避免真实 LLM 调用 =====
+
+    @pytest.mark.asyncio
+    async def test_with_mocked_llm(self):
+        """使用 Mock LLM 进行确定性测试"""
+        mock_response = AsyncMock()
+        mock_response.choices = [AsyncMock(
+            message=AsyncMock(
+                content="模拟回答",
+                tool_calls=None,
+            )
+        )]
+
+        with patch("openai.AsyncOpenAI") as mock_client:
+            mock_client.return_value.chat.completions.create \
+                .return_value = mock_response
+
+            result = await agent.run("测试问题")
+            assert result == "模拟回答"
+```
+
+### 测试检查清单
+
+| 测试项 | 方法 | 优先级 |
+|--------|------|--------|
+| 单个 Agent 输出格式 | Mock LLM，验证结构 | 高 |
+| Agent 间路由正确性 | Mock Router，验证目标 Agent | 高 |
+| 错误恢复 | 模拟 LLM 超时/错误，验证降级 | 高 |
+| 工具选择回归 | 固定查询 → 固定工具 | 中 |
+| 循环检测 | 模拟 A→B→A 循环，验证终止 | 高 |
+| 成本控制 | 模拟高频调用，验证限流 | 中 |
+| 端到端 | 真实 LLM + Golden Set | 低（CI 中运行） |
 
 ---
 
