@@ -436,6 +436,22 @@ class OutputValidator:
 
 ### GCG（Greedy Coordinate Gradient）
 
+# GCG (Greedy Coordinate Gradient) 攻击
+# 核心：利用梯度信息指导 adversarial suffix 中每个位置的 token 替换
+# 与随机搜索的区别：GCG 根据梯度选择"最有可能降低损失"的 token 替换
+# 步骤：
+# 1. 计算模型在给定 adversarial suffix 下生成目标字符串的损失
+# 2. 计算损失对 suffix token embedding 的梯度
+# 3. 对每个位置，根据梯度找到 top-k 候选替换 token
+# 4. 批量评估候选，选择损失最低的
+# 5. 重复直到收敛或达到最大迭代次数
+#
+# 计算需求：
+# - GCG 需要对模型权重和 embedding 的白盒访问
+# - 每次迭代需要一次前向 + 反向传播
+# - 典型攻击需要 500-1000 次迭代
+# - GPU 显存需求：与模型推理相同 + 梯度存储开销
+
 GCG通过梯度引导的搜索自动生成对抗性后缀，使模型输出特定目标字符串。
 
 ```python
@@ -451,6 +467,8 @@ class GCGAttacker:
         self.tokenizer = tokenizer
         self.device = device
         self.model.eval()
+        # 保存 embedding 层权重，用于梯度投影
+        self.embed_weights = self.model.get_input_embeddings().weight.to(self.device)
 
     def attack(
         self,
@@ -486,26 +504,28 @@ class GCGAttacker:
         losses_history = []
 
         for iteration in range(num_iterations):
-            # 计算当前后缀的loss
-            current_loss = self._compute_loss(prompt_ids, suffix_ids, target_ids)
+            # 1. 计算当前后缀的 loss（带梯度）
+            current_loss, grad = self._compute_loss_and_grad(
+                prompt_ids, suffix_ids, target_ids
+            )
             losses_history.append(current_loss.item())
 
             if current_loss < best_loss:
                 best_loss = current_loss
                 best_suffix = suffix_ids.clone()
 
-            # 生成候选替换
+            # 2. 利用梯度生成候选替换
             new_suffixes = self._generate_candidates(
-                suffix_ids, prompt_ids, target_ids, batch_size, topk
+                suffix_ids, grad, topk=topk, batch_size=batch_size
             )
 
-            # 评估所有候选
+            # 3. 评估所有候选（无需梯度，提高效率）
             candidate_losses = []
             for candidate in new_suffixes:
-                loss = self._compute_loss(prompt_ids, candidate, target_ids)
+                loss = self._compute_loss_no_grad(prompt_ids, candidate, target_ids)
                 candidate_losses.append(loss.item())
 
-            # 选择最优候选
+            # 4. 选择最优候选
             best_idx = min(range(len(candidate_losses)), key=lambda i: candidate_losses[i])
             suffix_ids = new_suffixes[best_idx].unsqueeze(0)
 
@@ -523,13 +543,57 @@ class GCGAttacker:
             "losses_history": losses_history,
         }
 
-    def _compute_loss(
+    def _compute_loss_and_grad(
+        self,
+        prompt_ids: torch.Tensor,
+        suffix_ids: torch.Tensor,
+        target_ids: torch.Tensor,
+    ) -> tuple[torch.Tensor, torch.Tensor]:
+        """计算对抗损失及其对 suffix embedding 的梯度
+
+        关键：不使用 torch.no_grad()，因为 GCG 的核心就是利用梯度信息
+        """
+        # 获取 suffix 的 embedding，启用梯度追踪
+        suffix_tokens = suffix_ids.squeeze(0)
+        suffix_embeds = self.model.get_input_embeddings()(suffix_tokens)
+        suffix_embeds = suffix_embeds.detach().requires_grad_(True)
+
+        # 拼接输入：prompt_ids 的 embedding + suffix_embeds + target_ids 的 embedding
+        prompt_embeds = self.model.get_input_embeddings()(prompt_ids.squeeze(0))
+        target_embeds = self.model.get_input_embeddings()(target_ids.squeeze(0))
+
+        full_embeds = torch.cat([prompt_embeds, suffix_embeds, target_embeds], dim=0).unsqueeze(0)
+
+        # 前向传播（不使用 no_grad）
+        outputs = self.model(inputs_embeds=full_embeds)
+        logits = outputs.logits
+
+        # 只关注目标位置的 loss
+        target_start = prompt_ids.shape[-1] + suffix_ids.shape[-1] - 1
+        target_logits = logits[:, target_start:target_start + target_ids.shape[-1], :]
+        target_logits = target_logits.squeeze(0)
+
+        loss = torch.nn.functional.cross_entropy(
+            target_logits,
+            target_ids.squeeze(0),
+            reduction="mean",
+        )
+
+        # 反向传播获取梯度
+        loss.backward()
+
+        # 提取对 suffix embedding 的梯度
+        grad = suffix_embeds.grad.clone()
+
+        return loss, grad
+
+    def _compute_loss_no_grad(
         self,
         prompt_ids: torch.Tensor,
         suffix_ids: torch.Tensor,
         target_ids: torch.Tensor,
     ) -> torch.Tensor:
-        """计算对抗损失"""
+        """计算对抗损失（无需梯度，用于候选评估）"""
         full_input = torch.cat([prompt_ids, suffix_ids], dim=-1)
         input_with_target = torch.cat([full_input, target_ids], dim=-1)
 
@@ -537,7 +601,7 @@ class GCGAttacker:
             outputs = self.model(input_with_target)
             logits = outputs.logits
 
-        # 只关注目标位置的loss
+        # 只关注目标位置的 loss
         target_start = full_input.shape[-1] - 1
         target_logits = logits[:, target_start:target_start + target_ids.shape[-1], :]
         target_logits = target_logits.squeeze(0)
@@ -552,23 +616,37 @@ class GCGAttacker:
     def _generate_candidates(
         self,
         suffix_ids: torch.Tensor,
-        prompt_ids: torch.Tensor,
-        target_ids: torch.Tensor,
-        batch_size: int,
-        topk: int,
+        grad: torch.Tensor,
+        top_k: int = 256,
+        batch_size: int = 512,
     ) -> list[torch.Tensor]:
-        """生成候选替换"""
-        candidates = []
-        suffix_length = suffix_ids.shape[-1]
+        """利用梯度信息生成候选替换
 
-        # 计算token重要性（梯度近似）
-        for pos in range(suffix_length):
-            # 随机替换该位置的token
-            for _ in range(batch_size // suffix_length):
-                candidate = suffix_ids.clone()
-                # 从topk中随机选择替换token
-                candidate[0, pos] = torch.randint(0, topk, (1,)).to(self.device)
-                candidates.append(candidate[0])
+        GCG 的核心：对每个位置，根据梯度找到最有可能降低损失的替换 token。
+        这与随机搜索的根本区别在于：随机搜索盲目替换，而 GCG 根据梯度方向选择 token。
+        """
+        candidates = []
+        suffix_tokens = suffix_ids.squeeze(0)
+
+        # 对 suffix 中的每个位置
+        for i in range(len(suffix_tokens)):
+            # 获取该位置的 embedding 梯度
+            pos_grad = grad[i]  # shape: [embed_dim]
+
+            # 将梯度投影到 token 空间：
+            # embed_weights shape: [vocab_size, embed_dim]
+            # pos_grad shape: [embed_dim]
+            # embed_grad[j] = <embed_weights[j], pos_grad>，即 token j 的梯度投影
+            embed_grad = torch.matmul(self.embed_weights, pos_grad)
+
+            # 找到梯度最负的 top-k token（替换后最可能降低损失）
+            _, top_tokens = torch.topk(-embed_grad, top_k)
+
+            # 对每个 top token 生成候选
+            for token in top_tokens[:8]:  # 每个位置限制候选数量
+                new_suffix = suffix_tokens.clone()
+                new_suffix[i] = token
+                candidates.append(new_suffix)
 
         return candidates
 ```
