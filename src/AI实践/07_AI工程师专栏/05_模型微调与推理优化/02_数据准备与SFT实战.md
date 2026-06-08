@@ -252,8 +252,38 @@ def train_sft(config: SFTConfig):
             max_length=config.max_length,
             padding=False,
         )
-        tokenized["labels"] = tokenized["input_ids"].copy()
+
+        # 关键：只对 Response 部分计算 loss，Instruction 部分用 -100 屏蔽
+        # 原因：SFT 的目标是让模型学会"给定指令→生成回答"，而非"预测整个序列"。
+        # 如果不屏蔽 instruction，模型会浪费容量学习预测指令本身，
+        # 导致生成时倾向于复述指令而非产出回答。
+        # -100 是 PyTorch CrossEntropyLoss 的 ignore_index，损失函数会跳过这些位置。
+        #
+        # 示例（假设 "### Response:" 从第 5 个 token 开始）：
+        #   修改前: labels = [ins_tok1, ins_tok2, ins_tok3, ins_tok4, resp_tok1, resp_tok2, ...]
+        #   修改后: labels = [-100,     -100,     -100,     -100,     resp_tok1, resp_tok2, ...]
+        response_token_ids = tokenizer.encode("### Response:\n", add_special_tokens=False)
+
+        new_labels = []
+        for input_ids in tokenized["input_ids"]:
+            labels = [-100] * len(input_ids)  # 先全部置为 -100
+            # 找到 "### Response:\n" 的结束位置
+            resp_start = find_response_start(input_ids, response_token_ids)
+            # 只保留 Response 部分的真实 token id
+            for i in range(resp_start, len(input_ids)):
+                labels[i] = input_ids[i]
+            new_labels.append(labels)
+        tokenized["labels"] = new_labels
         return tokenized
+
+    def find_response_start(input_ids: list[int], response_token_ids: list[int]) -> int:
+        """在 input_ids 中找到 '### Response:\\n' 的结束位置"""
+        resp_len = len(response_token_ids)
+        for i in range(len(input_ids) - resp_len + 1):
+            if input_ids[i:i + resp_len] == response_token_ids:
+                return i + resp_len
+        # 如果找不到分隔符，回退：保留后半部分（保守策略）
+        return len(input_ids) // 2
 
     dataset = dataset.map(
         tokenize_function,
@@ -324,6 +354,7 @@ lora_target: q_proj,k_proj,v_proj,o_proj,gate_proj,up_proj,down_proj
 dataset: my_sft_data
 template: qwen
 cutoff_len: 2048
+train_on_inputs: false  # 关键：不训练指令部分，仅对 Response 计算 loss（与上面脚本的 -100 屏蔽逻辑等价）
 max_samples: 10000
 overwrite_cache: true
 preprocessing_num_workers: 8
