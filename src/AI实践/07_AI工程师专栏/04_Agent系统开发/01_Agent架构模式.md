@@ -1,5 +1,5 @@
 ---
-title: Agent 架构模式：ReAct / Plan-and-Execute / 反思
+title: Agent 架构模式：ReAct / Function Calling / Plan-and-Execute / 反思
 icon: fa6-solid:sitemap
 order: 1
 category:
@@ -8,13 +8,14 @@ category:
 
 # Agent 架构模式
 
-Agent 的核心在于"自主决策"——根据环境反馈选择下一步行动。不同的架构模式决定了 Agent 如何推理、规划和纠错。本文深入分析四种主流架构：ReAct、Plan-and-Execute、Reflection、LATS，并给出 LangGraph 实现代码。
+Agent 的核心在于"自主决策"——根据环境反馈选择下一步行动。不同的架构模式决定了 Agent 如何推理、规划和纠错。本文深入分析五种主流架构：ReAct、Function Calling、Plan-and-Execute、Reflection、LATS，并给出实现代码。
 
 ## 架构模式总览
 
 | 模式 | 核心思想 | 适用场景 | 复杂度 |
 |------|---------|---------|--------|
 | ReAct | 推理与行动交替 | 单步决策、工具调用 | 低 |
+| Function Calling | 原生工具调用 | **生产环境推荐** | 低 |
 | Plan-and-Execute | 先规划后执行 | 多步骤复杂任务 | 中 |
 | Reflection | 自我评估与修正 | 需要质量保证的任务 | 中 |
 | LATS | 树搜索+蒙特卡洛 | 探索空间大的决策 | 高 |
@@ -107,9 +108,28 @@ def search_web(query: str) -> str:
 
 @tool
 def calculator(expression: str) -> str:
-    """计算数学表达式"""
+    """计算数学表达式（仅支持基本算术）"""
+    import ast
+    import operator
+
+    SAFE_OPERATORS = {
+        ast.Add: operator.add, ast.Sub: operator.sub,
+        ast.Mult: operator.mul, ast.Div: operator.truediv,
+        ast.Pow: operator.pow, ast.USub: operator.neg,
+    }
+
     try:
-        return str(eval(expression))
+        tree = ast.parse(expression, mode='eval')
+        def _eval(node):
+            if isinstance(node, ast.Constant):
+                return node.value
+            if isinstance(node, ast.BinOp):
+                return SAFE_OPERATORS[type(node.op)](
+                    _eval(node.left), _eval(node.right))
+            if isinstance(node, ast.UnaryOp):
+                return SAFE_OPERATORS[type(node.op)](_eval(node.operand))
+            raise ValueError(f"不支持的操作: {type(node).__name__}")
+        return str(_eval(tree.body))
     except Exception as e:
         return f"计算错误: {e}"
 
@@ -133,7 +153,232 @@ result = agent.invoke({
 
 ---
 
-## 2. Plan-and-Execute 模式
+## 2. Function Calling 驱动的 Agent
+
+上面的 ReAct 实现虽然用了 LangGraph 的 `bind_tools`，但传统 ReAct 论文的做法是让 LLM 输出 `Action: search(query='...')` 这样的文本，再通过正则解析——这在生产环境中极不可靠。**现代 Agent 应优先使用 Function Calling（OpenAI）或 tool_use（Anthropic）**，让模型直接返回结构化的工具调用请求。
+
+### 为什么 Function Calling 优于文本 ReAct
+
+- **结构化输出**：工具调用以类型化的 JSON 对象返回，无需文本解析
+- **可靠性高**：不存在正则匹配 `Action:` / `Observation:` 格式变化导致的失败
+- **性能更好**：原生工具调用更快，无需解析/校验文本
+- **安全性**：模型只能调用已注册的工具，无法"发明"不存在的工具
+- **并行执行**：模型可在一次响应中返回多个工具调用
+
+### 对比
+
+| 特性 | 文本 ReAct | Function Calling |
+|------|-----------|-----------------|
+| 工具调用格式 | 文本 `Action: name(args)` | 结构化 JSON tool_calls |
+| 解析可靠性 | 低（依赖正则，格式变化即失败） | 高（API 原生返回） |
+| 并行工具调用 | 不支持 | 支持（一次返回多个 tool_call） |
+| 工具发现 | Prompt 中描述 | API 注册 tool schema |
+| 幻觉工具 | 可能调用不存在的工具 | 只能调用注册的工具 |
+| 速率 | 慢（需解析文本） | 快（原生结构化输出） |
+| 模型支持 | 所有模型 | GPT-4/3.5, Claude, Gemini 等 |
+| 适用场景 | 教学/研究 | **生产环境推荐** |
+
+### OpenAI Function Calling 实现
+
+```python
+import json
+from openai import AsyncOpenAI
+from typing import Callable
+
+
+class FunctionCallingAgent:
+    """基于 Function Calling 的现代 Agent 实现
+
+    与 ReAct 的区别：
+    - ReAct: LLM 输出文本 "Action: search(query='...')"，需要正则解析
+    - Function Calling: LLM 返回结构化 tool_calls，直接调用
+    - Function Calling 更可靠、更快、支持并行工具调用
+    """
+
+    def __init__(self, model: str = "gpt-4o"):
+        self.client = AsyncOpenAI()
+        self.model = model
+        self.tools: list[dict] = []
+        self.tool_implementations: dict[str, Callable] = {}
+        self.max_iterations = 10
+
+    def register_tool(self, name: str, description: str,
+                      parameters: dict, implementation: Callable):
+        """注册工具：同时注册 schema 和实现"""
+        self.tools.append({
+            "type": "function",
+            "function": {
+                "name": name,
+                "description": description,
+                "parameters": parameters,
+            }
+        })
+        self.tool_implementations[name] = implementation
+
+    async def run(self, user_message: str, system_prompt: str = "") -> str:
+        """运行 Agent 循环"""
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": user_message})
+
+        for iteration in range(self.max_iterations):
+            # 调用 LLM，启用 tool 支持
+            response = await self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                tools=self.tools if self.tools else None,
+                tool_choice="auto",
+            )
+
+            choice = response.choices[0]
+            assistant_msg = choice.message
+            messages.append(assistant_msg)
+
+            # 如果没有工具调用，说明 Agent 认为任务完成
+            if not assistant_msg.tool_calls:
+                return assistant_msg.content or ""
+
+            # 执行所有工具调用（支持并行）
+            for tool_call in assistant_msg.tool_calls:
+                fn_name = tool_call.function.name
+                fn_args = json.loads(tool_call.function.arguments)
+
+                try:
+                    result = await self.tool_implementations[fn_name](**fn_args)
+                    result_str = json.dumps(result, ensure_ascii=False)
+                except Exception as e:
+                    result_str = json.dumps({"error": str(e)}, ensure_ascii=False)
+
+                messages.append({
+                    "role": "tool",
+                    "tool_call_id": tool_call.id,
+                    "content": result_str,
+                })
+
+        return "达到最大迭代次数，Agent 终止"
+```
+
+### 注册工具示例
+
+```python
+agent = FunctionCallingAgent()
+
+agent.register_tool(
+    name="search_knowledge_base",
+    description="在企业知识库中搜索相关信息",
+    parameters={
+        "type": "object",
+        "properties": {
+            "query": {"type": "string", "description": "搜索关键词"},
+            "top_k": {"type": "integer", "description": "返回结果数", "default": 3}
+        },
+        "required": ["query"]
+    },
+    implementation=search_knowledge_base  # 用户提供的函数
+)
+
+agent.register_tool(
+    name="calculate",
+    description="执行数学计算（仅支持基本算术运算）",
+    parameters={
+        "type": "object",
+        "properties": {
+            "expression": {"type": "string", "description": "数学表达式"}
+        },
+        "required": ["expression"]
+    },
+    implementation=safe_calculate  # 安全的计算函数（非 eval）
+)
+```
+
+其中 `safe_calculate` 使用 AST 解析代替 `eval()`，避免代码注入：
+
+```python
+import ast
+import operator
+
+SAFE_OPERATORS = {
+    ast.Add: operator.add, ast.Sub: operator.sub,
+    ast.Mult: operator.mul, ast.Div: operator.truediv,
+    ast.Pow: operator.pow, ast.USub: operator.neg,
+}
+
+def safe_calculate(expression: str) -> float:
+    """安全的数学计算，仅支持基本算术运算"""
+    try:
+        tree = ast.parse(expression, mode='eval')
+        def _eval(node):
+            if isinstance(node, ast.Constant):
+                return node.value
+            if isinstance(node, ast.BinOp):
+                return SAFE_OPERATORS[type(node.op)](
+                    _eval(node.left), _eval(node.right))
+            if isinstance(node, ast.UnaryOp):
+                return SAFE_OPERATORS[type(node.op)](_eval(node.operand))
+            raise ValueError(f"不支持的操作: {type(node).__name__}")
+        return _eval(tree.body)
+    except Exception as e:
+        return f"计算错误: {e}"
+```
+
+### Anthropic tool_use 实现
+
+Claude 的 `tool_use` 与 OpenAI 类似但格式不同，主要区别：
+
+1. 工具定义用 `input_schema` 而非 `parameters`
+2. 响应中 `tool_use` 是 content block，不是单独字段
+3. `tool_result` 通过 user message 中的 `tool_result` block 传回
+
+```python
+import anthropic
+
+async def run_with_claude(user_message: str, tools: list):
+    client = anthropic.AsyncAnthropic()
+
+    # Claude 工具定义格式
+    claude_tools = [{
+        "name": t["function"]["name"],
+        "description": t["function"]["description"],
+        "input_schema": t["function"]["parameters"],
+    } for t in tools]
+
+    response = await client.messages.create(
+        model="claude-sonnet-4-20250514",
+        max_tokens=4096,
+        tools=claude_tools,
+        messages=[{"role": "user", "content": user_message}],
+    )
+
+    # 处理 tool_use content blocks
+    tool_results = []
+    for block in response.content:
+        if block.type == "tool_use":
+            result = await execute_tool(block.name, block.input)
+            tool_results.append({
+                "type": "tool_result",
+                "tool_use_id": block.id,
+                "content": json.dumps(result, ensure_ascii=False),
+            })
+
+    # 将 tool_result 作为 user message 传回
+    if tool_results:
+        followup = await client.messages.create(
+            model="claude-sonnet-4-20250514",
+            max_tokens=4096,
+            tools=claude_tools,
+            messages=[
+                {"role": "user", "content": user_message},
+                {"role": "assistant", "content": response.content},
+                {"role": "user", "content": tool_results},
+            ],
+        )
+        return followup.content[0].text
+```
+
+---
+
+## 3. Plan-and-Execute 模式
 
 Plan-and-Execute 将规划与执行分离：先由 Planner 生成完整的执行计划，再由 Executor 逐步执行。执行过程中可以根据反馈调整计划。
 
@@ -280,7 +525,7 @@ plan_execute_agent = workflow.compile()
 
 ---
 
-## 3. Reflection 模式
+## 4. Reflection 模式
 
 Reflection 让 Agent 在执行后"反思"结果质量，发现问题并修正。这在需要高质量输出的场景中尤为重要。
 
@@ -399,7 +644,7 @@ print(result["draft"])
 
 ---
 
-## 4. LATS 模式
+## 5. LATS 模式
 
 LATS（Language Agent Tree Search）将 Agent 决策建模为树搜索问题，结合蒙特卡洛树搜索（MCTS）在决策空间中寻找最优路径。
 
@@ -556,7 +801,9 @@ class LATSAgent:
 
 ```mermaid
 flowchart TD
-    START[开始选择] --> Q1{任务是否需要多步骤协调?}
+    START[开始选择] --> Q0{是否为生产环境?}
+    Q0 -->|是| FC[Function Calling: 可靠的结构化工具调用]
+    Q0 -->|否/教学| Q1{任务是否需要多步骤协调?}
     Q1 -->|否| Q2{是否需要质量保证?}
     Q1 -->|是| Q3{步骤间依赖是否复杂?}
     Q2 -->|否| REACT[ReAct: 简单直接]
@@ -571,11 +818,12 @@ flowchart TD
 
 | 场景 | 推荐模式 | 原因 |
 |------|---------|------|
-| 问答 + 工具调用 | ReAct | 单步推理即可，无需规划 |
+| 问答 + 工具调用 | Function Calling | 结构化输出，生产可靠 |
 | 代码生成 | Reflection | 需要自我审查和迭代 |
 | 数据分析流水线 | Plan-and-Execute | 多步骤有依赖 |
 | 游戏/博弈 | LATS | 需要探索决策树 |
 | 文档撰写 | Plan-and-Execute + Reflection | 先规划结构，再迭代质量 |
+| 教学/研究 | ReAct | 推理过程透明可观察 |
 
 ### 组合使用
 
@@ -626,4 +874,4 @@ def build_safe_agent(workflow: StateGraph, config: dict):
     return safe_invoke
 ```
 
-选择架构模式时，从最简单的 ReAct 开始，根据实际需求逐步升级复杂度。过度设计比模式不足更有害。
+选择架构模式时，生产环境优先使用 Function Calling 作为工具调用方式，从最简单的 ReAct 开始，根据实际需求逐步升级复杂度。过度设计比模式不足更有害。
