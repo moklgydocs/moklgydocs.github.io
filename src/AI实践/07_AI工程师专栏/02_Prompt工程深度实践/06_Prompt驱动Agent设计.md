@@ -439,13 +439,30 @@ def evaluate_reasoning_quality(
 
 def assess_logical_continuity(reasoning_chain: str) -> float:
     """评估推理链的逻辑连贯性"""
-    # 简化实现：检查是否有过多的"但是"或自我矛盾
-    contradictions = reasoning_chain.count("但是") + reasoning_chain.count("然而")
-    total_steps = max(reasoning_chain.count("\n"), 1)
-    # 少量转折是正常的，过多则可能逻辑混乱
-    if contradictions / total_steps > 0.5:
+    # 将推理链拆分为步骤
+    steps = [s.strip() for s in reasoning_chain.split("\n") if s.strip()]
+
+    if len(steps) <= 1:
+        return 0.9
+
+    issues = []
+
+    # 检查前后矛盾：先说A后说非A
+    contradiction_pairs = [
+        ("增加", "减少"), ("上升", "下降"),
+        ("正确", "错误"), ("存在", "不存在"),
+        ("需要", "不需要"), ("支持", "反对"),
+    ]
+    for i in range(1, len(steps)):
+        prev, curr = steps[i - 1], steps[i]
+        for pos_word, neg_word in contradiction_pairs:
+            if pos_word in prev and neg_word in curr:
+                issues.append(f"步骤{i}→{i+1}可能存在矛盾: '{pos_word}' vs '{neg_word}'")
+
+    # 少量矛盾说明有实际问题，过多矛盾则逻辑混乱
+    if len(issues) >= 3:
         return 0.3
-    elif contradictions / total_steps > 0.3:
+    elif len(issues) >= 1:
         return 0.6
     else:
         return 0.9

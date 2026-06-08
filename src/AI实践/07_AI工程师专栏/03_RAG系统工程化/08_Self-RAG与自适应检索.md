@@ -620,6 +620,9 @@ def correct_node(state: SelfRAGState) -> dict:
 
     return {"corrections": corrections}
 
+MAX_CORRECTION_ITERATIONS = 3  # 全局最大纠正次数
+
+
 def should_retrieve(state: SelfRAGState) -> str:
     """路由：是否检索"""
     if state.get("need_retrieval"):
@@ -629,8 +632,10 @@ def should_retrieve(state: SelfRAGState) -> str:
 def should_correct(state: SelfRAGState) -> str:
     """路由：是否需要纠正"""
     iteration = state.get("iteration", 0)
-    if iteration >= 3:
-        return "finish"  # 最多纠正 3 次
+
+    # 全局迭代上限，防止无限循环
+    if iteration >= MAX_CORRECTION_ITERATIONS:
+        return "finish"
 
     if not state.get("doc_relevant"):
         return "correct"
@@ -689,10 +694,20 @@ def build_self_rag_graph():
         "correct": "correct",
     })
 
-    # 纠正后重新进入生成流程
-    graph.add_conditional_edges("correct", lambda s: "retrieve" if not s.get("doc_relevant") else "generate_with_retrieval", {
+    # 纠正后重新进入生成流程（带全局迭代上限）
+    def route_after_correct(state: SelfRAGState) -> str:
+        """纠正后的路由：检查迭代上限后决定去向"""
+        iteration = state.get("iteration", 0)
+        if iteration >= MAX_CORRECTION_ITERATIONS:
+            return "finish"
+        if not state.get("doc_relevant"):
+            return "retrieve"
+        return "generate_with_retrieval"
+
+    graph.add_conditional_edges("correct", route_after_correct, {
         "retrieve": "retrieve",
         "generate_with_retrieval": "generate_with_retrieval",
+        "finish": END,
     })
 
     return graph.compile()

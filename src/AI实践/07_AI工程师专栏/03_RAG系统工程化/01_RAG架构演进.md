@@ -407,6 +407,9 @@ flowchart TD
 
 ```python
 # 增量索引：避免全量重建
+import hashlib
+
+
 class IncrementalIndexer:
     def __init__(self, vectorstore, doc_hash_store):
         self.vectorstore = vectorstore
@@ -415,7 +418,7 @@ class IncrementalIndexer:
     def index_if_new(self, documents):
         new_docs = []
         for doc in documents:
-            doc_hash = hash(doc.page_content)
+            doc_hash = hashlib.md5(doc.page_content.encode()).hexdigest()
             if not self.doc_hash_store.exists(doc_hash):
                 new_docs.append(doc)
                 self.doc_hash_store.save(doc_hash)
