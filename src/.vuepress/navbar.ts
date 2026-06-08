@@ -33,6 +33,11 @@ export default navbar([
         link: "ES6教程/"
       },
       {
+        text: "SaaS 实战",
+        icon: "fa6-solid:building",
+        link: "Saas实战/"
+      },
+      {
         text: "TailwindCSS",
         icon: "fa6-brands:css3-alt",
         link: "TailwindCSS/"
