@@ -158,7 +158,7 @@ class KnowledgeGraph:
     """基于 NetworkX 的知识图谱"""
 
     def __init__(self):
-        self.graph = nx.Graph()
+        self.graph = nx.DiGraph()  # 有向图：关系有方向性（source -> target）
         self.entity_map = {}  # name -> Entity
         self.communities = None
 
@@ -250,11 +250,13 @@ class CommunityDetector:
         self.community_summaries = {}
 
     def detect_communities(self) -> dict:
-        """使用 Louvain 算法检测社区"""
+        """使用 Louvain 算法检测社区 — 转换为无向图后运行"""
         if len(self.kg.graph.edges) == 0:
             return {"num_communities": 0}
 
-        partition = community_louvain.best_partition(self.kg.graph)
+        # Louvain 需要无向图，将有向图转换
+        undirected = self.kg.graph.to_undirected()
+        partition = community_louvain.best_partition(undirected)
         self.kg.communities = defaultdict(list)
         for node, community_id in partition.items():
             self.kg.communities[community_id].append(node)

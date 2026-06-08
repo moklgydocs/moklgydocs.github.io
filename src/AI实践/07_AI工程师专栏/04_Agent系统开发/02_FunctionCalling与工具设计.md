@@ -38,35 +38,58 @@ from typing import Optional
 from langchain_core.tools import tool
 
 
-# 方式一：使用 @tool 装饰器
-@tool
-def search_database(
-    query: str,
-    table_name: str,
-    limit: int = 10,
-) -> str:
-    """在指定数据表中搜索记录。
+# 方式一：使用 @tool 装饰器 — 结构化过滤，无 SQL 注入风险
+@tool(description="Search order database")
+def search_orders(customer_id: str = None, status: str = None,
+                   date_from: str = None, date_to: str = None,
+                   limit: int = 10) -> list[dict]:
+    """Search orders with structured filters — no raw SQL
 
     Args:
-        query: SQL WHERE 条件表达式，例如 "age > 18 AND city = 'Beijing'"
-        table_name: 目标数据表名称
-        limit: 返回记录的最大数量，默认10
-
-    Returns:
-        匹配的记录列表，JSON 格式
+        customer_id: Filter by customer ID
+        status: Order status (pending/shipped/delivered/cancelled)
+        date_from: Start date (YYYY-MM-DD)
+        date_to: End date (YYYY-MM-DD)
+        limit: Max results (default 10)
     """
-    # 实际实现
-    return f"SELECT * FROM {table_name} WHERE {query} LIMIT {limit}"
+    # Build parameterized query from structured filters
+    conditions = []
+    params = []
+
+    if customer_id:
+        conditions.append("customer_id = %s")
+        params.append(customer_id)
+    if status:
+        conditions.append("status = %s")
+        params.append(status)
+    if date_from:
+        conditions.append("created_at >= %s")
+        params.append(date_from)
+    if date_to:
+        conditions.append("created_at <= %s")
+        params.append(date_to)
+
+    where = " AND ".join(conditions) if conditions else "1=1"
+    query = f"SELECT * FROM orders WHERE {where} LIMIT %s"
+    params.append(limit)
+
+    return db.execute(query, params)
 
 
 # 方式二：使用 Pydantic 模型定义参数
 class DatabaseSearchParams(BaseModel):
     """数据库搜索参数"""
-    query: str = Field(
-        description="SQL WHERE 条件表达式，例如 age > 18 AND city = 'Beijing'"
+    customer_id: str = Field(
+        default=None, description="客户ID"
     )
-    table_name: str = Field(
-        description="目标数据表名称，可选值: users, orders, products"
+    status: str = Field(
+        default=None, description="订单状态 (pending/shipped/delivered/cancelled)"
+    )
+    date_from: str = Field(
+        default=None, description="开始日期 (YYYY-MM-DD)"
+    )
+    date_to: str = Field(
+        default=None, description="结束日期 (YYYY-MM-DD)"
     )
     limit: int = Field(
         default=10,
@@ -74,22 +97,35 @@ class DatabaseSearchParams(BaseModel):
         ge=1,
         le=100,
     )
-    offset: int = Field(
-        default=0,
-        description="跳过的记录数量，用于分页",
-        ge=0,
-    )
 
 
 @tool(args_schema=DatabaseSearchParams)
-def search_database_v2(
-    query: str,
-    table_name: str,
+def search_orders_v2(
+    customer_id: str = None,
+    status: str = None,
+    date_from: str = None,
+    date_to: str = None,
     limit: int = 10,
-    offset: int = 0,
-) -> str:
-    """在指定数据表中搜索记录，支持分页查询。"""
-    return f"SELECT * FROM {table_name} WHERE {query} LIMIT {limit} OFFSET {offset}"
+) -> list[dict]:
+    """使用结构化过滤条件搜索订单 — 无 SQL 注入风险"""
+    conditions = []
+    params = []
+    if customer_id:
+        conditions.append("customer_id = %s")
+        params.append(customer_id)
+    if status:
+        conditions.append("status = %s")
+        params.append(status)
+    if date_from:
+        conditions.append("created_at >= %s")
+        params.append(date_from)
+    if date_to:
+        conditions.append("created_at <= %s")
+        params.append(date_to)
+    where = " AND ".join(conditions) if conditions else "1=1"
+    query = f"SELECT * FROM orders WHERE {where} LIMIT %s"
+    params.append(limit)
+    return db.execute(query, params)
 ```
 
 ### 工具描述设计原则
@@ -476,6 +512,127 @@ def execute_update(sql: str) -> str:
     return "update result"
 ```
 
+## 工具结果截断与 Token 预算
+
+### 工具结果截断
+
+生产环境中，工具返回的数据量不可控 — 一次数据库查询可能返回数万 token。
+必须在返回给 LLM 之前截断，否则上下文窗口会被撑爆。
+
+```python
+class ToolResultTruncator:
+    """工具结果截断器"""
+
+    def __init__(self, max_tokens: int = 2000):
+        self.max_tokens = max_tokens
+
+    def truncate(self, result: str, strategy: str = "head_tail") -> dict:
+        """截断工具结果
+
+        Args:
+            result: 原始工具返回
+            strategy: 截断策略
+                - "head_tail": 保留开头+结尾，中间用省略标记
+                - "summary": LLM 摘要（需要额外调用）
+                - "latest": 只保留最新N条（适用于列表结果）
+        """
+        estimated_tokens = len(result) // 3  # 粗估
+
+        if estimated_tokens <= self.max_tokens:
+            return {"content": result, "truncated": False}
+
+        if strategy == "head_tail":
+            # 保留前 60% 和后 40% 的字符
+            keep_chars = self.max_tokens * 3  # 回转字符数
+            head = result[:int(keep_chars * 0.6)]
+            tail = result[-int(keep_chars * 0.4):]
+            truncated = f"{head}\n\n... [已截断，原始 {estimated_tokens} tokens] ...\n\n{tail}"
+            return {"content": truncated, "truncated": True}
+
+        elif strategy == "latest":
+            # 对 JSON 列表结果，只保留最后 N 条
+            import json
+            try:
+                data = json.loads(result)
+                if isinstance(data, list):
+                    max_items = min(len(data), 10)
+                    truncated = json.dumps(data[-max_items:], ensure_ascii=False)
+                    return {
+                        "content": f"显示最近 {max_items} 条（共 {len(data)} 条）:\n{truncated}",
+                        "truncated": True,
+                    }
+            except json.JSONDecodeError:
+                pass
+
+            return {"content": result[:self.max_tokens * 3], "truncated": True}
+
+        return {"content": result[:self.max_tokens * 3], "truncated": True}
+```
+
+### 工具描述 Token 预算
+
+每个工具的 name + description + parameters 都会消耗上下文 token。
+10 个工具可能消耗 2000-5000 tokens — 这在 8K 上下文窗口中是不可忽视的。
+
+```python
+class ToolBudgetManager:
+    """工具 Token 预算管理"""
+
+    def __init__(self, max_description_tokens: int = 3000,
+                 tokenizer_name: str = "cl100k_base"):
+        import tiktoken
+        self.max_tokens = max_description_tokens
+        self.enc = tiktoken.get_encoding(tokenizer_name)
+
+    def count_tool_tokens(self, tool: dict) -> int:
+        """计算单个工具描述的 token 数"""
+        fn = tool["function"]
+        text = f"{fn['name']} {fn['description']}"
+        for prop, schema in fn.get("parameters", {}).get("properties", {}).items():
+            text += f" {prop} {schema.get('description', '')}"
+        return len(self.enc.encode(text))
+
+    def select_tools(self, query: str, all_tools: list[dict],
+                     relevant_tools: list[str] = None) -> list[dict]:
+        """根据查询和 token 预算选择工具
+
+        策略：
+        1. 如果指定了相关工具，优先包含
+        2. 按 token 开销从小到大贪心添加
+        3. 不超过总预算
+        """
+        selected = []
+        total_tokens = 0
+
+        # 1. 优先添加明确相关的工具
+        if relevant_tools:
+            for tool in all_tools:
+                if tool["function"]["name"] in relevant_tools:
+                    tokens = self.count_tool_tokens(tool)
+                    if total_tokens + tokens <= self.max_tokens:
+                        selected.append(tool)
+                        total_tokens += tokens
+
+        # 2. 贪心添加剩余工具（按 token 开销排序）
+        remaining = [t for t in all_tools if t not in selected]
+        remaining.sort(key=self.count_tool_tokens)
+
+        for tool in remaining:
+            tokens = self.count_tool_tokens(tool)
+            if total_tokens + tokens <= self.max_tokens:
+                selected.append(tool)
+                total_tokens += tokens
+
+        return selected
+```
+
+> ⚠️ 关键原则：
+> 1. 工具描述控制在 100 tokens 以内 — 太长的描述浪费上下文且降低选择准确率
+> 2. 只暴露与当前任务相关的工具 — 动态选择比全量暴露好
+> 3. 工具结果必须截断 — 数据库查询、搜索结果等返回量不可控
+> 4. 截断时保留元信息 — "共 1000 条，显示前 10 条" 帮助模型理解数据规模
+```
+
 ## 安全设计
 
 ### 沙箱执行
@@ -606,7 +763,7 @@ class OutputSanitizer:
     """输出敏感信息过滤"""
 
     PATTERNS = {
-        "phone": (r'1[3-9]\d{9}', r'\1****\2'),
+        "phone": (r'(1[3-9]\d)\d{4}(\d{2})', r'\1****\2'),
         "email": (r'([\w.-]+)@([\w.-]+\.\w+)', r'\1***@\2'),
         "id_card": (r'\d{17}[\dXx]', lambda m: m.group()[:3] + "***********" + m.group()[-1]),
         "bank_card": (r'\d{16,19}', lambda m: m.group()[:4] + "****" + m.group()[-4:]),
