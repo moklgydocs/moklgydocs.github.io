@@ -4,98 +4,16 @@
 
 ---
 
-## 开篇引导
+## 前置知识
 
-上一步我们搭建了路由和 HTTP 客户端。现在进入**最核心的 API 层** —— 它是页面和后端之间的桥梁。
-
-在 ASP.NET Core 中，我们习惯定义 `IService` 接口来封装数据访问。在 React 项目中，API 层扮演同样的角色：
-
-```
-ASP.NET Core:                  React:
-IService (接口)                 api/*.ts (对象)
-├── GetListAsync()              ├── list()
-├── GetByIdAsync()              ├── detail()
-├── CreateAsync()               ├── create()
-├── UpdateAsync()               ├── update()
-└── DeleteAsync()               └── delete()
-```
-
-> **关键区别**：ASP.NET Core 的 Service 注入 DI 容器，通过构造函数注入使用；React 的 API 对象是**普通 ES Module 导出**，直接 `import { templatesApi } from "@/api/print/templates"` 使用 —— 更像静态工具类（`static class`）。
-
-> **🤔 导师提问**：既然 React 的 API 对象类似 C# 的 `static class`，那它有没有和 static class 一样的"测试困难"问题？在 ASP.NET Core 中，我们可以用 `Moq` 替换 IService 来做单元测试。在 React 中，如果要 mock `templatesApi.list()` 来测试页面组件，你会用什么方式？（提示：考虑 `vi.mock` 或依赖注入模式）
-
-打印服务有三个 API 模块，对应三个后端 Controller：
-
-```
-api/print/
-├── templates.ts    → PrintTemplatesController（模板生命周期）
-├── datasources.ts  → DataSourcesController（数据源配置）
-└── jobs.ts         → PrintJobsController（渲染任务）
-```
-
-> **🤔 导师提问**：在 ASP.NET Core 中，三个 Controller 三个 Service 是常见分法。但在 React 中，这三个 API 模块是普通 ES Module 导出的对象，没有 DI 容器管理它们的生命周期。想想看：如果 `templatesApi` 需要依赖 `datasourcesApi` 的某些方法（比如导入模板时自动关联数据源），你会如何组织这种跨模块依赖？还能像后端那样通过构造函数注入吗？
+- 打印服务 HTTP 客户端 `printHttp`（上一节已创建）
+- `createHttp` 封装的 `get`/`post`/`put`/`del` 方法返回 `ApiResult<T>`
+- axios 实例的 `instance.post`/`instance.get` 用法（文件上传/下载场景）
+- TypeScript 泛型在 API 函数中的应用
 
 ---
 
-## 概念讲解
-
-### 1. 模板 API — 最复杂的生命周期
-
-模板不是简单的 CRUD，它有一套**状态机**：
-
-```
-        创建                发布                归档
-  [草稿] ────→ [草稿] ────→ [已发布] ────→ [已归档]
-                  │                         ↑
-                  └───── 删除（软删除）───────┘
-```
-
-此外还有**导入导出**操作 —— 模板是 `.frx` 文件，不能像普通 JSON 一样传输：
-
-- **导入**：`multipart/form-data` 上传 .frx 文件
-- **导出**：`responseType: "blob"` 下载 .frx 文件
-
-> **🤔 导师提问**：模板导入用 `multipart/form-data`，导出用 `responseType: "blob"`。回顾一下 ASP.NET Core 中的 `[Consumes("multipart/form-data")]` 和 `File()` 返回值 —— 前后端在文件传输这件事上，协议层是完全对应的。你能说出 `instance.post` 和封装的 `post` 方法在处理文件上传时的关键差异吗？为什么文件上传不能用封装的 `post`？
-
-### 2. 数据源 API — 四种类型，动态字段
-
-数据源支持 JSON / HTTP API / Database / XML 四种类型，每种类型的配置字段完全不同：
-
-```
-            JSON          HTTP API       Database        XML
-          ┌────────┐   ┌──────────┐   ┌───────────┐   ┌──────────┐
-  专属字段 │ Schema │   │ URL      │   │ Provider  │   │ RootElem │
-          │        │   │ Method   │   │ ConnStr   │   │ Schema   │
-          │        │   │ Headers  │   │ Query     │   │          │
-          │        │   │ AuthType │   │           │   │          │
-          └────────┘   └──────────┘   └───────────┘   └──────────┘
-  通用字段 │ name, code, description, type, parameterDefinitions │
-```
-
-> 这意味着**创建/编辑数据源时，表单字段要根据类型动态渲染** —— 我们在步骤 4 的页面中会看到如何处理。
-
-> **🤔 导师提问**：`datasourcesApi` 的 `previewData` 方法返回类型是 `unknown`，因为不同数据源返回结构完全不同。在 ASP.NET Core 中，你会用泛型方法 `Task<T> PreviewData<T>()` 来解决。但前端 API 层为什么没有用泛型？想想看，泛型要求调用方在编译时就知道返回类型 —— 前端在运行时才知道数据源类型，这和后端有什么不同？
-
-### 3. 任务 API — 同步 vs 异步渲染
-
-报表渲染有两种模式，这是打印服务最独特的设计：
-
-```
-同步模式：  前端发请求 ──→ 后端渲染 ──→ 返回 Blob 文件 ──→ 前端下载/预览
-            (适合简单报表，<10s)
-
-异步模式：  前端发请求 ──→ 后端返回 { jobId, status } ──→ 前端轮询状态
-            ──→ 渲染完成 ──→ 站内通知 ──→ 前端下载
-            (适合复杂报表，可能 >30s)
-```
-
-> **ASP.NET Core 类比**：同步模式类似 `await service.RenderAsync()` 直接返回结果；异步模式类似 `Task.Run()` + `IJobQueue`，前端通过 `IHubContext<NotificationHub>` 通知。
-
-> **🤔 导师提问**：`jobsApi.render()` 方法用一个 `async` 参数决定走同步还是异步路径，返回类型也因此不同（Blob vs `{ jobId, status }`）。在 C# 中，这种"一个方法两种返回类型"通常用方法重载或泛型解决。TypeScript 没有运行时方法重载 —— 你觉得当前的设计是否应该拆成 `renderSync()` 和 `renderAsync()` 两个方法？各有什么利弊？
-
----
-
-## 完整代码
+## 代码实现
 
 ### templates.ts
 
@@ -367,7 +285,90 @@ export const jobsApi = {
 
 ---
 
-## 逐行解析
+## 代码讲解
+
+上一步我们搭建了路由和 HTTP 客户端。现在进入**最核心的 API 层** —— 它是页面和后端之间的桥梁。
+
+在 ASP.NET Core 中，我们习惯定义 `IService` 接口来封装数据访问。在 React 项目中，API 层扮演同样的角色：
+
+```
+ASP.NET Core:                  React:
+IService (接口)                 api/*.ts (对象)
+├── GetListAsync()              ├── list()
+├── GetByIdAsync()              ├── detail()
+├── CreateAsync()               ├── create()
+├── UpdateAsync()               ├── update()
+└── DeleteAsync()               └── delete()
+```
+
+> **关键区别**：ASP.NET Core 的 Service 注入 DI 容器，通过构造函数注入使用；React 的 API 对象是**普通 ES Module 导出**，直接 `import { templatesApi } from "@/api/print/templates"` 使用 —— 更像静态工具类（`static class`）。
+
+> **🤔 导师提问**：既然 React 的 API 对象类似 C# 的 `static class`，那它有没有和 static class 一样的"测试困难"问题？在 ASP.NET Core 中，我们可以用 `Moq` 替换 IService 来做单元测试。在 React 中，如果要 mock `templatesApi.list()` 来测试页面组件，你会用什么方式？（提示：考虑 `vi.mock` 或依赖注入模式）
+
+打印服务有三个 API 模块，对应三个后端 Controller：
+
+```
+api/print/
+├── templates.ts    → PrintTemplatesController（模板生命周期）
+├── datasources.ts  → DataSourcesController（数据源配置）
+└── jobs.ts         → PrintJobsController（渲染任务）
+```
+
+> **🤔 导师提问**：在 ASP.NET Core 中，三个 Controller 三个 Service 是常见分法。但在 React 中，这三个 API 模块是普通 ES Module 导出的对象，没有 DI 容器管理它们的生命周期。想想看：如果 `templatesApi` 需要依赖 `datasourcesApi` 的某些方法（比如导入模板时自动关联数据源），你会如何组织这种跨模块依赖？还能像后端那样通过构造函数注入吗？
+
+### 模板 API — 最复杂的生命周期
+
+模板不是简单的 CRUD，它有一套**状态机**：
+
+```
+        创建                发布                归档
+  [草稿] ────→ [草稿] ────→ [已发布] ────→ [已归档]
+                  │                         ↑
+                  └───── 删除（软删除）───────┘
+```
+
+此外还有**导入导出**操作 —— 模板是 `.frx` 文件，不能像普通 JSON 一样传输：
+
+- **导入**：`multipart/form-data` 上传 .frx 文件
+- **导出**：`responseType: "blob"` 下载 .frx 文件
+
+> **🤔 导师提问**：模板导入用 `multipart/form-data`，导出用 `responseType: "blob"`。回顾一下 ASP.NET Core 中的 `[Consumes("multipart/form-data")]` 和 `File()` 返回值 —— 前后端在文件传输这件事上，协议层是完全对应的。你能说出 `instance.post` 和封装的 `post` 方法在处理文件上传时的关键差异吗？为什么文件上传不能用封装的 `post`？
+
+### 数据源 API — 四种类型，动态字段
+
+数据源支持 JSON / HTTP API / Database / XML 四种类型，每种类型的配置字段完全不同：
+
+```
+            JSON          HTTP API       Database        XML
+          ┌────────┐   ┌──────────┐   ┌───────────┐   ┌──────────┐
+  专属字段 │ Schema │   │ URL      │   │ Provider  │   │ RootElem │
+          │        │   │ Method   │   │ ConnStr   │   │ Schema   │
+          │        │   │ Headers  │   │ Query     │   │          │
+          │        │   │ AuthType │   │           │   │          │
+          └────────┘   └──────────┘   └───────────┘   └──────────┘
+  通用字段 │ name, code, description, type, parameterDefinitions │
+```
+
+> 这意味着**创建/编辑数据源时，表单字段要根据类型动态渲染** —— 我们在步骤 4 的页面中会看到如何处理。
+
+> **🤔 导师提问**：`datasourcesApi` 的 `previewData` 方法返回类型是 `unknown`，因为不同数据源返回结构完全不同。在 ASP.NET Core 中，你会用泛型方法 `Task<T> PreviewData<T>()` 来解决。但前端 API 层为什么没有用泛型？想想看，泛型要求调用方在编译时就知道返回类型 —— 前端在运行时才知道数据源类型，这和后端有什么不同？
+
+### 任务 API — 同步 vs 异步渲染
+
+报表渲染有两种模式，这是打印服务最独特的设计：
+
+```
+同步模式：  前端发请求 ──→ 后端渲染 ──→ 返回 Blob 文件 ──→ 前端下载/预览
+            (适合简单报表，<10s)
+
+异步模式：  前端发请求 ──→ 后端返回 { jobId, status } ──→ 前端轮询状态
+            ──→ 渲染完成 ──→ 站内通知 ──→ 前端下载
+            (适合复杂报表，可能 >30s)
+```
+
+> **ASP.NET Core 类比**：同步模式类似 `await service.RenderAsync()` 直接返回结果；异步模式类似 `Task.Run()` + `IJobQueue`，前端通过 `IHubContext<NotificationHub>` 通知。
+
+> **🤔 导师提问**：`jobsApi.render()` 方法用一个 `async` 参数决定走同步还是异步路径，返回类型也因此不同（Blob vs `{ jobId, status }`）。在 C# 中，这种"一个方法两种返回类型"通常用方法重载或泛型解决。TypeScript 没有运行时方法重载 —— 你觉得当前的设计是否应该拆成 `renderSync()` 和 `renderAsync()` 两个方法？各有什么利弊？
 
 ### templates.ts 关键行
 
@@ -394,32 +395,41 @@ export const jobsApi = {
 
 ---
 
-## 进阶思考
+## 踩坑提醒
 
-> **🔍 验证步骤**
->
-> 1. 在浏览器 Console 中执行 `import("@/api/print/templates").then(m => console.log(Object.keys(m.templatesApi)))`，应输出 `['list', 'detail', 'create', 'update', 'delete', 'publish', 'archive', 'import', 'exportFrx']` 共 9 个方法
-> 2. 执行 `import("@/api/print/datasources").then(m => console.log(Object.keys(m.datasourcesApi)))`，应输出 `['list', 'detail', 'create', 'update', 'delete', 'testConnection', 'previewData']` 共 7 个方法
-> 3. 执行 `import("@/api/print/jobs").then(m => console.log(Object.keys(m.jobsApi)))`，应输出 `['list', 'detail', 'render', 'download']` 共 4 个方法
-> 4. 在 Network 面板中筛选 `print-api`，调用 `templatesApi.list()` 后检查请求 URL 是否以 `/print-api/api/print/templates` 开头，确认 `createHttp` 的 baseURL 配置生效
-
-1. **（概念）**：`templatesApi.import()` 为什么使用 `FormData` 而不是直接传 JSON？`Content-Type: multipart/form-data` 和 `application/json` 有什么区别？
-
-2. **（推理）**：`jobsApi.render()` 方法根据 `async` 参数走不同代码路径，返回类型也不同（`ApiResult` vs `AxiosResponse<Blob>`）。如果将来要新增第三种模式（如 SSE 流式渲染），这个方法需要怎么改？是否应该拆成 `renderSync()` 和 `renderAsync()` 两个方法？
-
-3. **（动手）**：`datasourcesApi.previewData()` 的返回类型是 `post<unknown>`。如果要在前端做类型安全的数据预览（比如根据数据源类型推断返回结构），你会如何改造这个 API？提示：考虑泛型 + 条件类型。
+1. **文件上传不能用封装的 `post` 方法**：`templatesApi.import()` 必须用 `instance.post`，因为封装的 `post` 会设置 `Content-Type: application/json`，覆盖 `FormData` 的自动 boundary。
+2. **文件下载需要 `responseType: "blob"`**：`templatesApi.exportFrx()` 必须用 `instance.get` + `responseType: "blob"`，封装的 `get` 期望 JSON 响应。
+3. **`jobsApi.render` 的双返回类型**：同一个 URL，`async=true` 返回 JSON，`async=false` 返回 Blob。如果前端在同步模式下用 `ApiResult<T>` 解包 Blob 响应，会直接报 JSON 解析错误。
+4. **`datasourcesApi.previewData` 返回 `unknown`**：不同数据源返回结构完全不同，不能用固定泛型。调用方需要自行处理返回数据。
 
 ---
 
-## 输出清单
+## 自测题
 
-| 文件 | 说明 |
-|------|------|
-| `src/api/print/http.ts` | 打印服务 HTTP 客户端（步骤 1 已创建） |
-| `src/api/print/templates.ts` | 模板 API（CRUD + 发布/归档 + 导入/导出） |
-| `src/api/print/datasources.ts` | 数据源 API（CRUD + 连接测试 + 数据预览） |
-| `src/api/print/jobs.ts` | 任务 API（列表 + 渲染 + 下载） |
+1. **（概念级）**：`templatesApi.import()` 为什么使用 `FormData` 而不是直接传 JSON？`Content-Type: multipart/form-data` 和 `application/json` 有什么区别？
+
+2. **（推理级）**：`jobsApi.render()` 方法根据 `async` 参数走不同代码路径，返回类型也不同（`ApiResult` vs `AxiosResponse<Blob>`）。如果将来要新增第三种模式（如 SSE 流式渲染），这个方法需要怎么改？是否应该拆成 `renderSync()` 和 `renderAsync()` 两个方法？
+
+3. **（动手级）**：`datasourcesApi.previewData()` 的返回类型是 `post<unknown>`。如果要在前端做类型安全的数据预览（比如根据数据源类型推断返回结构），你会如何改造这个 API？提示：考虑泛型 + 条件类型。
 
 ---
 
-[← 上一节](01-模块概览与路由配置.md) | [下一节 →](03-类型系统定义.md)
+## 验证步骤
+
+1. 在浏览器 Console 中执行 `import("@/api/print/templates").then(m => console.log(Object.keys(m.templatesApi)))`，应输出 `['list', 'detail', 'create', 'update', 'delete', 'publish', 'archive', 'import', 'exportFrx']` 共 9 个方法
+2. 执行 `import("@/api/print/datasources").then(m => console.log(Object.keys(m.datasourcesApi)))`，应输出 `['list', 'detail', 'create', 'update', 'delete', 'testConnection', 'previewData']` 共 7 个方法
+3. 执行 `import("@/api/print/jobs").then(m => console.log(Object.keys(m.jobsApi)))`，应输出 `['list', 'detail', 'render', 'download']` 共 4 个方法
+4. 在 Network 面板中筛选 `print-api`，调用 `templatesApi.list()` 后检查请求 URL 是否以 `/print-api/api/print/templates` 开头，确认 `createHttp` 的 baseURL 配置生效
+
+---
+
+## 输出检查清单
+
+- [ ] `src/api/print/http.ts` — 打印服务 HTTP 客户端（步骤 1 已创建）
+- [ ] `src/api/print/templates.ts` — 模板 API（CRUD + 发布/归档 + 导入/导出）
+- [ ] `src/api/print/datasources.ts` — 数据源 API（CRUD + 连接测试 + 数据预览）
+- [ ] `src/api/print/jobs.ts` — 任务 API（列表 + 渲染 + 下载）
+
+---
+
+[← 上一篇](01-模块概览与路由配置.md) | [下一篇 →](03-类型系统定义.md)

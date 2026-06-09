@@ -7,6 +7,16 @@
 
 ---
 
+## 前置知识
+
+- 第 1 节的 SignalR 基础（HubConnection、断线重连、accessTokenFactory）
+- Zustand 的 `create` + `set`/`get` 用法（含函数式 set）
+- ASP.NET Core Hub 的生命周期（`OnConnectedAsync`/`OnDisconnectedAsync`）
+- React `useEffect` 的 cleanup 机制
+- `URL.createObjectURL` / `revokeObjectURL` 的基本概念
+
+---
+
 ## 一、两文件的职责分工
 
 ```
@@ -570,33 +580,47 @@ initSignalR()               disposeSignalR()
 
 ---
 
-> **🔍 验证步骤**
->
-> 1. 打开浏览器 DevTools → Network → 筛选 WS，登录后应看到到 `/hubs/platform` 的 WebSocket 连接，状态码 101（预期：连接成功建立）
-> 2. 在 Console 中执行 `useNotificationStore.getState().fetchUnreadCount()`，观察返回值中 `unreadCount` 字段（预期：返回当前用户的未读数）
-> 3. 在 Console 中执行 `useNotificationStore.getState().initSignalR()`，然后在 DevTools → Network → WS 中观察是否收到 `ReceiveNotification` 类型的消息帧
-> 4. 断开网络（DevTools → Network → Offline），等待 5-10 秒，Console 应出现 `[SignalR] 正在重连...`；恢复网络后应出现 `[SignalR] 重连成功`（预期：自动重连机制生效）
-> 5. 在 Console 中执行 `useNotificationStore.getState().disposeSignalR()`，观察 WS 连接是否关闭（预期：连接断开，不再收到推送）
+## 踩坑提醒
 
-## 🤔 思考题
+1. **`_handlerRef` 必须放在模块级**：如果放在 store 的 state 里，每次 state 更新都会导致引用变化，`off` 无法移除 `on` 注册的回调，造成监听器泄漏
+2. **`markRead` 的乐观更新没有回滚逻辑**：如果 API 调用失败，前端 `unreadCount` 已经减 1 但后端没有真正标记已读，会导致前后端不一致
+3. **`dataJson` 的解析必须 try-catch**：后端推送的 `data` 字段可能是无效 JSON，直接 `JSON.parse` 会抛异常导致整个 `onNewNotification` 回调崩溃
+4. **`URL.createObjectURL` 必须在 `a.click()` 之后 `revokeObjectURL`**：反过来会导致 Object URL 在下载使用前就被释放，下载失败
+
+---
+
+## 验证步骤
+
+在继续下一节之前，确认以下内容已经正确实现：
+
+1. 打开浏览器 DevTools → Network → 筛选 WS，登录后应看到到 `/hubs/platform` 的 WebSocket 连接，状态码 101（预期：连接成功建立）
+2. 在 Console 中执行 `useNotificationStore.getState().fetchUnreadCount()`，观察返回值中 `unreadCount` 字段（预期：返回当前用户的未读数）
+3. 在 Console 中执行 `useNotificationStore.getState().initSignalR()`，然后在 DevTools → Network → WS 中观察是否收到 `ReceiveNotification` 类型的消息帧
+4. 断开网络（DevTools → Network → Offline），等待 5-10 秒，Console 应出现 `[SignalR] 正在重连...`；恢复网络后应出现 `[SignalR] 重连成功`（预期：自动重连机制生效）
+5. 在 Console 中执行 `useNotificationStore.getState().disposeSignalR()`，观察 WS 连接是否关闭（预期：连接断开，不再收到推送）
+
+---
+
+## 自测题
 
 ### 概念级（理解 Why）
+
 1. 为什么 `_handlerRef` 放在模块级而不是 store 的 state 里？
 2. `downloadJob` 函数中 `a.click()` 之后才 `URL.revokeObjectURL(url)`，如果反过来会怎样？
 
 ### 推理级（推导 What-if）
+
 3. 如果用户同时打开了两个浏览器 Tab，两个 Tab 都会收到 SignalR 推送。`unreadCount` 会双倍吗？怎么解决？
 4. 当前 `markRead` 的乐观更新没有回滚逻辑。假设网络断开时用户标记已读，然后恢复网络，会出现什么不一致？如何修复？
 
 ### 动手级（代码实践）
+
 5. 给 `initSignalR` 添加重连后自动重新注册 handler 的逻辑。提示：利用 `onConnectionStateChange` 监听 `connected` 状态。
 6. 在 `onNewNotification` 中添加去重逻辑：如果 `recentItems` 中已存在相同 ID 的通知，不重复插入。
 
 ---
 
-## ✅ 输出检查清单
-
-完成本节后，你应该能回答：
+## 输出检查清单
 
 - [ ] 能说出 signalr.ts 和 notification-store.ts 的职责边界
 - [ ] 理解 `_handlerRef` 模块级变量的作用和必要性
@@ -607,3 +631,7 @@ initSignalR()               disposeSignalR()
 - [ ] 能解释 `URL.createObjectURL` / `revokeObjectURL` 的内存管理
 - [ ] 掌握 `accessTokenFactory` 必须是函数的原因
 - [ ] 理解 `on/off` 必须使用同一回调引用的规则
+
+---
+
+[← 上一篇](01-实时通信基础.md) | [下一篇 →](03-通知API层.md)

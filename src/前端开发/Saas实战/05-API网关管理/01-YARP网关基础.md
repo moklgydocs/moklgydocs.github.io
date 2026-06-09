@@ -6,6 +6,12 @@
 
 > **这一步解决什么问题？** 到现在为止，我们的前端已经能跟 SSO、权限等后端服务通信了。但请求是怎么从前端到达后端的？本篇要搞清楚 YARP 网关的三层结构（Route → Cluster → Destination），为后续的网关管理界面打基础。
 
+## 前置知识
+
+- 02 篇项目架构：Vite proxy 配置（`server.proxy`）和 `createHttp` 工厂函数的基本用法
+- 03 篇 SSO 单点登录：Bearer Token 认证机制、`useAuthStore` 的 Token 管理逻辑
+- ASP.NET Core 中间件基础：请求管道（Pipeline）、路由匹配（Routing）的概念
+
 ---
 
 ## 核心概念
@@ -344,20 +350,30 @@ export interface GatewayStatus {
 
 ---
 
-> **🔍 验证步骤**
->
-> 1. 登录后访问 `http://localhost:3000/gateway`，确认网关仪表盘正常加载
-> 2. 打开 DevTools → Network，刷新页面，找到 `/gw-api/api/gateway/clusters` 请求
-> 3. 追踪请求路径：浏览器 → Vite proxy（去掉 `/gw-api` 前缀）→ YARP（`http://moklgy.me:10000`）→ 后端服务
-> 4. 检查 Response 的 `ApiResult` 结构：应包含 `code: 0`、`success: true`、`data: [...]`
+## 踩坑提醒
+
+1. **YARP 路由匹配是先到先得**：如果两条路由都能匹配同一个请求，`order` 小的优先。忘记设置 `order` 会导致不可预期的匹配结果。建议给每条路由都显式设置 `order`，不要依赖默认值。
+2. **`changeOrigin: true` 不能省略**：如果不设置，Vite 转发请求时会保留浏览器的 `Host` 头（如 `localhost:5173`），后端可能因为 Host 校验而拒绝请求。同理，Nginx 的 `proxy_set_header Host $proxy_host` 也是这个道理。
+3. **`loadBalancingPolicy` 为 `null` 不等于 `"RoundRobin"`**：YARP 的默认策略是 `PowerOfTwoChoices`，不是 `RoundRobin`。如果误以为 `null` 等于轮询，会导致负载均衡行为与预期不符。
+
+---
+
+## 验证步骤
+
+1. 登录后访问 `http://localhost:3000/gateway`，确认网关仪表盘正常加载
+2. 打开 DevTools → Network，刷新页面，找到 `/gw-api/api/gateway/clusters` 请求
+3. 追踪请求路径：浏览器 → Vite proxy（去掉 `/gw-api` 前缀）→ YARP（`http://moklgy.me:10000`）→ 后端服务
+4. 检查 Response 的 `ApiResult` 结构：应包含 `code: 0`、`success: true`、`data: [...]`
+
+---
 
 ## 🤔 思考题
 
-**Level 1（概念级）**：YARP 的 Route、Cluster、Destination 三者是什么关系？请求从进入到转发经历哪些步骤？
+**概念级**：YARP 的 Route、Cluster、Destination 三者是什么关系？请求从进入到转发经历哪些步骤？
 
-**Level 2（推理级）**：为什么 `ClusterDto` 同时有 `id` 和 `clusterId` 两个字段？如果只用一个会怎样？为什么 `RouteDto.rateLimiterPolicy` 引用的是策略名称而不是 ID？
+**推理级**：为什么 `ClusterDto` 同时有 `id` 和 `clusterId` 两个字段？如果只用一个会怎样？为什么 `RouteDto.rateLimiterPolicy` 引用的是策略名称而不是 ID？
 
-**Level 3（动手级）**：如果要在路由上新增 `matchHeaders` 字段（按请求头匹配），需要改哪些类型定义？前端表单需要做哪些对应修改？
+**动手级**：如果要在路由上新增 `matchHeaders` 字段（按请求头匹配），需要改哪些类型定义？前端表单需要做哪些对应修改？
 
 ---
 

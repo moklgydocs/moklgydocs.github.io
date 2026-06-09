@@ -1,22 +1,20 @@
 # 认证 API 层 — 前端的 HttpClient 工厂模式
 
-## 这一步解决什么问题？
+> **这一步解决什么问题？**
+>
+> 在 ASP.NET Core 里，我们用 `IHttpClientFactory` 创建命名 HttpClient：每个微服务一个命名的 Client，各自配置不同的 BaseAddress、超时、Handler。React 里对应的概念是 **createHttp 工厂函数** + **API 模块对象**。这一步我们实现认证 API 层的两层结构：HTTP 客户端工厂（类似 `IHttpClientFactory`）和 API 模块对象（类似 Service 类），搞清楚前端如何优雅地封装 HTTP 请求。
 
-在 ASP.NET Core 里，我们用 `IHttpClientFactory` 创建命名 HttpClient：每个微服务一个命名的 Client（如 `"AuthServer"`、`"PermCenter"`），各自配置不同的 BaseAddress、超时、Handler。Controller 通过 DI 注入就能直接用。
+---
 
-React 里对应的概念是 **createHttp 工厂函数** + **API 模块对象**。`createHttp("/sso-api")` 创建一个绑定 SSO 服务的 HTTP 客户端，`authApi` 对象把所有认证相关的 API 调用聚在一起——就像 ASP.NET Core 里一个 Service 类封装所有对某个微服务的调用。
+## 前置知识
 
-| ASP.NET Core | React (AdminWeb) |
-|---|---|
-| `IHttpClientFactory.CreateClient("AuthServer")` | `createHttp("/sso-api", { sendTenantId: false })` |
-| `AddHttpClient("AuthServer", c => c.BaseAddress = ...)` | `createHttp` 参数 `basePrefix` 设置 baseURL |
-| `AuthService.LoginAsync(user, pass)` | `authApi.getToken(username, password)` |
-| `DelegatingHandler` 自动注入 Token | Axios 请求拦截器自动注入 `Bearer` |
-| `TokenResponse` DTO | `TokenResponse` interface |
-| `Content-Type: application/json` 默认 | `headers: { "Content-Type": "application/json" }` |
-| `FormUrlEncodedContent` 表单提交 | `postForm()` + `URLSearchParams` |
-
-> 💡 核心类比：`createHttp` ≈ `IHttpClientFactory`，`authApi` ≈ 一个 Service 类。工厂造 Client，Service 用 Client 调 API。
+| 概念 | 你需要知道的 | ASP.NET Core 类比 |
+|------|------------|-----------------|
+| axios 拦截器 | 请求/响应的中间件管道，自动注入 Token、处理错误 | 类似 `DelegatingHandler` 管道 |
+| 工厂模式 | `createHttp()` 创建预配置的 axios 实例 | 类似 `IHttpClientFactory.CreateClient("name")` |
+| Content-Type | `application/json` vs `application/x-www-form-urlencoded` | 类似 `JsonContent` vs `FormUrlEncodedContent` |
+| 泛型参数 | `get<CurrentUser>(url)` 让返回值有类型提示 | 类似 `GetFromJsonAsync<CurrentUser>(url)` |
+| Vite 代理 | 开发时 `/sso-api/*` 转发到后端服务 | 类似 YARP/Ocelot 反向代理 |
 
 ---
 
@@ -225,6 +223,8 @@ const ssoHttp = createHttp("/sso-api", { sendTenantId: false })
 
 💡 SSO 认证中心是跨租户的公共服务。用户还没选租户呢（连登录都没登录），怎么可能发送 `X-Tenant-Id`？
 
+> **🤔 导师提问**：如果 SSO 客户端也默认发送 `X-Tenant-Id`，在登录阶段（用户还没选租户）会发生什么？SSO 服务器会怎么处理这个多余的头？
+
 对比其他 API 模块：
 ```typescript
 // perm/http.ts — 权限中心需要租户头
@@ -297,6 +297,8 @@ getToken(username: string, password: string) {
 ```
 
 💡 OAuth2 规范要求 Token 端点必须使用 `application/x-www-form-urlencoded` 格式。如果发 JSON，服务端会返回 415 Unsupported Media Type。
+
+> **🤔 导师提问**：OAuth2 规范为什么要求 Token 端点用 form 编码而不是 JSON？提示：考虑 Web 浏览器原生 `<form>` 的提交方式和 OAuth2 的设计历史。
 
 `postForm` 内部把对象转为 `URLSearchParams`：
 
@@ -448,6 +450,8 @@ getToken(username: string, password: string) {
 
 💡 `authApi` 只负责发请求和返回数据，**不做任何错误处理**。错误处理的职责在 `useAuth` Hook：
 
+> **🤔 导师提问**：`authApi` 不做错误处理，`useAuth` 做。如果另一个 Hook（如 `useTenantSwitch`）也调用 `authApi.switchTenant()`，它需要自己写错误处理吗？这种"API 层不处理错误"的模式有什么优缺点？
+
 ```typescript
 // use-auth.ts
 try {
@@ -578,37 +582,45 @@ export default defineConfig({
 
 ---
 
-## 🤔 思考题
+## 验证步骤
 
-### 概念级（理解是什么）
-
-1. `authApi` 用对象字面量组织，而 `useAuth` 用自定义 Hook 组织。它们各适合什么场景？如果 `authApi` 也改成 Hook（`useAuthApi()`），会有什么问题？
-
-2. `createHttp` 返回的是 `{ get, post, put, del, postForm, instance }`，而不是直接返回 axios 实例。这个"包装一层"的设计有什么好处？如果直接返回 axios 实例，`authApi` 的代码会怎么变？
-
-### 推理级（为什么这样设计）
-
-3. `switchTenant` 方法里用了 `useAuthStore.getState().accessToken`，而 `getToken` 方法不需要从 store 读任何东西。为什么切换租户需要当前 Token，而登录不需要？
-
-4. `postForm` 返回 `Promise<T>`（原始数据），而 `get/post/put/del` 返回 `Promise<ApiResult<T>>`（包裹后的数据）。如果 `postForm` 也返回 `ApiResult<T>`，`getToken` 的调用方会收到什么数据？能正常工作吗？
-
-5. `http.ts` 导出了 `put` 和 `del`，但 `auth.ts` 没有用到它们。如果 `auth.ts` 写 `import { get, post, postForm } from "./http"`（不导入 put/del），未导入的方法会被打包进最终产物吗？
-
-### 实践级（动手验证）
-
-6. 打开 `src/api/perm/http.ts` 和 `src/api/file/http.ts`，对比它们和 `src/api/auth/http.ts` 的差异。确认 `sendTenantId` 的值不同，思考为什么。
-
-7. 在浏览器中执行登录，然后打开 DevTools → Application → Local Storage，查看 `admin-auth` 的值。找到 `accessToken`，把它粘贴到 jwt.io 解码。观察 payload 中的 claims：`sub`、`role`、`tenant_id`、`scope` 等字段。这些 claims 和 `authApi.getCurrentUser()` 返回的数据有什么区别？
+1. 打开 `src/api/perm/http.ts` 和 `src/api/file/http.ts`，对比它们和 `src/api/auth/http.ts` 的差异。确认 `sendTenantId` 的值不同
+2. 在浏览器中执行登录，打开 DevTools → Application → Local Storage，查看 `admin-auth` 的值
+3. 找到 `accessToken`，粘贴到 jwt.io 解码，观察 payload 中的 `sub`、`role`、`tenant_id` 等字段
+4. 对比 JWT claims 和 `authApi.getCurrentUser()` 返回的数据——哪些字段只在 JWT 中，哪些只在 API 返回中？
 
 ---
 
-## 本步骤产出清单
+## 踩坑提醒
 
-| 文件 | 作用 |
-|---|---|
-| `src/api/auth/http.ts` | SSO HTTP 客户端工厂，12行极简封装 |
-| `src/api/auth/auth.ts` | 认证 API 模块，6个方法覆盖登录全流程 |
-| `src/lib/create-http.ts` | HTTP 客户端基础设施（Token 注入、401 刷新） |
-| `src/stores/auth-store.ts` | Zustand 认证状态仓库（被 switchTenant 读取） |
+1. **`/connect/token` 不走 `/sso-api` 前缀**：OIDC 端点走独立代理规则，加 `/sso-api` 前缀会导致路径变成 `/sso-api/connect/token`，代理匹配不到
+2. **OAuth2 端点必须用 `postForm` 而非 `post`**：OAuth2 规范要求 `application/x-www-form-urlencoded` 格式，发 JSON 会返回 415 错误
+3. **`switchTenant` 用 `useAuthStore.getState()` 读取 Token**：因为 `authApi` 不是 React 组件，不能用 Hook 形式的 `useAuthStore()`
+4. **`postForm` 返回原始数据，`get/post` 返回 `ApiResult<T>`**：调用方需要用不同的方式访问返回数据，`postForm` 直接 `res.access_token`，`get` 需要 `res.data.xxx`
 
-[← 上一节](02-登录页面.md) | [下一节 →](04-useAuth-Hook.md)
+---
+
+## 自测题
+
+**概念级**：`authApi` 用对象字面量组织，而 `useAuth` 用自定义 Hook 组织。它们各适合什么场景？如果 `authApi` 也改成 Hook（`useAuthApi()`），会有什么问题？
+
+**推理级**：`switchTenant` 方法里用了 `useAuthStore.getState().accessToken`，而 `getToken` 方法不需要从 store 读任何东西。为什么切换租户需要当前 Token，而登录不需要？
+
+**动手级**：打开 `src/api/perm/http.ts` 和 `src/api/file/http.ts`，对比它们和 `src/api/auth/http.ts` 的差异。确认 `sendTenantId` 的值不同，思考为什么。
+
+---
+
+## 输出检查清单
+
+读完本节，我们应该能回答：
+
+- [ ] `createHttp` 的 `sendTenantId` 参数作用是什么？SSO 客户端为什么设为 `false`？
+- [ ] `postForm` 和 `post` 的 Content-Type 有什么区别？OAuth2 端点为什么必须用 `postForm`？
+- [ ] `authApi` 为什么用对象字面量而不是类？
+- [ ] `switchTenant` 的自定义 Grant Type `urn:custom:switch_tenant` 的工作流程是什么？
+- [ ] `authApi` 不做错误处理，错误处理的职责在哪里？这种设计有什么好处？
+- [ ] Vite 代理中 `/connect` 和 `/sso-api` 的路由策略有什么不同？
+
+---
+
+[← 上一篇](02-登录页面.md) | [下一篇 →](04-useAuth-Hook.md)

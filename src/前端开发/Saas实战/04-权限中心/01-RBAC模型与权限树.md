@@ -4,6 +4,17 @@
 
 ---
 
+## 前置知识
+
+阅读本文档前，你需要了解：
+
+- **ASP.NET Core 基础**：`[Authorize]` 特性、`ClaimsPrincipal`、`IdentityRole` 的用法
+- **TypeScript 基础**：`interface`、泛型、联合类型
+- **React 基础**：`useState`、`useEffect`、`useCallback` 的基本用法
+- **RESTful API**：GET/POST/PUT/DELETE 的语义差异，特别是 PUT 的幂等性
+
+---
+
 ## 一、ASP.NET Core 类比：为什么我们需要自己的 RBAC？
 
 在 ASP.NET Core 里，我们习惯了这样的模式：
@@ -97,7 +108,7 @@ RBAC（Role-Based Access Control）的核心是 **用户-角色-权限** 三者�
 
 ---
 
-## 三、权限树的渲染算法
+## 三、代码实现：权限树的渲染算法
 
 在 AdminWeb 的权限管理页面，我们面对的是后端返回的**嵌套树结构**，但 UI 表格（AgTable）需要的是**扁平行数据**。这就需要一个"树扁平化"的过程。
 
@@ -497,6 +508,15 @@ export const permissionsApi = {
 
 ---
 
+## 踩坑提醒
+
+1. **权限树递归无终止条件**：如果后端数据出现循环引用（A 的 `children` 包含 B，B 的 `children` 又包含 A），递归将无限进行导致浏览器栈溢出。AdminWeb 信任后端数据无环，仅通过 `expandedIds` 控制渲染深度。如果需要防御性编程，可以在递归时维护 `visitedIds: Set<string>`。
+2. **全量替换后必须重新获取**：在全量替换语义下，前端提交权限后必须重新调用 `fetchGroups()` 从后端拉取最新数据，不能直接读取本地缓存的旧权限列表做 UI 更新，否则显示与实际不一致。
+3. **应用 code 创建后不可修改**：`code` 字段一旦创建就被角色、权限、菜单大量引用，且必须与 AuthServer 的 OAuth2 `client_id` 一致。创建时务必确保填写正确。
+4. **前端权限检查不能替代后端校验**：前端只是隐藏没有权限的按钮，用户仍可通过手动输入 URL 绕过。真正的权限校验必须在后端完成，前端权限检查的价值是提升用户体验（避免展示用户无法使用的功能）。
+
+---
+
 ## 🔍 验证步骤
 
 在继续下一章之前，请确认你已经理解了以下内容：
@@ -519,16 +539,14 @@ export const permissionsApi = {
 3. 全量替换语义下，如果两个管理员同时给同一个角色分配不同的权限集，最终结果是什么？这和 Git 的合并冲突有什么异同？
 4. 为什么 `PermissionDefinitionDto` 的 `children` 字段可以形成递归嵌套，但 `PermissionGroupDto` 下只有一层 `permissions`？这种设计取舍的考量是什么？
 
-### 实操级（动手）
+### 动手级（动手）
 5. 假设你需要给"报表查看"权限加上"只能看本部门数据"的限制，应该用操作权限还是数据权限？请设计权限定义的 `name` 和 `type`。
 6. 如果要求"禁用权限组后，组内所有权限定义也自动禁用"，你会在前端还是后端实现这个逻辑？为什么？
-
-### 实战级（L3 动手）
 7. **打开 AdminWeb 的权限管理页面**（`src/pages/perm/permissions/index.tsx`），找到 `flattenPermissions` 函数。现在请你修改这个函数，增加一个 `maxDepth` 参数，当递归深度超过 `maxDepth` 时停止展开子节点。修改后，在 `flattenTree` 中将 `maxDepth` 设为 3，验证超过 3 层嵌套的权限定义不会被渲染。思考：这种限制在实际业务中是否合理？什么时候需要解除限制？
 
 ---
 
-## 输出清单
+## 输出检查清单
 
 | 文件 | 说明 |
 |------|------|

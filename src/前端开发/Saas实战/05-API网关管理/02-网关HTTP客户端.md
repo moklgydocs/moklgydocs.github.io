@@ -6,6 +6,12 @@
 
 > **这一步解决什么问题？** 上一步我们了解了 YARP 网关的概念和类型定义。现在要动手写代码了——第一步是搭建网关模块的 HTTP 客户端层。网关模块所有 API 调用都基于这个 HTTP 客户端，理解它是理解后续 API 层和页面的前提。
 
+## 前置知识
+
+- 01 篇 YARP 网关基础：三层结构（Route → Cluster → Destination）、Vite proxy 配置
+- 02 篇项目架构：`createHttp` 工厂函数的实现（请求/响应拦截器、Token 注入）
+- 03 篇 SSO 单点登录：`sendTenantId` 参数的作用、SSO 模块为何不带租户头
+
 ---
 
 ## `createHttp` 工厂回顾
@@ -265,19 +271,27 @@ Gateway Admin API (ASP.NET Core)
 
 ---
 
-> **🔍 验证步骤**
->
-> 1. 在 Console 中执行 `gatewayApi.getAll()`，应返回包含 `success: true` 的 `ApiResult`
-> 2. 检查 Network：请求 URL 应为 `/gw-api/api/gateway/clusters`，Header 中应有 `X-Tenant-Id`
-> 3. 对比执行 `ssoApi.getCurrentUser()`，其请求 URL 为 `/sso-api/api/account/current`，Header 中没有 `X-Tenant-Id`——确认 `sendTenantId` 参数生效
+## 踩坑提醒
+
+1. **`reload()` 只对路由和集群生效**：限流策略的变更需要**重启 Gateway 服务**，因为 ASP.NET Core 的 `RateLimiterOptions` 在注册后是只读快照，不支持热更新。运维人员修改限流策略后可能以为点"发布配置"就够了，但实际不会生效。
+2. **开发环境和生产环境代理配置要保持一致**：常见 bug：Vite 配了 `changeOrigin: true` 但 Nginx 忘了 `proxy_set_header Host`，导致本地正常但线上 403。部署前必须对比两套代理配置。
+3. **`post` 和 `postForm` 的返回类型不同**：`post<T>` 返回 `ApiResult<T>`（统一包装），`postForm<T>` 返回 `T`（原始数据）。混用会导致 `res.success` 为 `undefined`。
+
+---
+
+## 验证步骤
+
+1. 在 Console 中执行 `gatewayApi.getAll()`，应返回包含 `success: true` 的 `ApiResult`
+2. 检查 Network：请求 URL 应为 `/gw-api/api/gateway/clusters`，Header 中应有 `X-Tenant-Id`
+3. 对比执行 `ssoApi.getCurrentUser()`，其请求 URL 为 `/sso-api/api/account/current`，Header 中没有 `X-Tenant-Id`——确认 `sendTenantId` 参数生效
 
 ## 🤔 思考题
 
-**Level 1（概念级）**：`createHttp("/gw-api")` 创建的 HTTP 客户端，`get("/api/gateway/clusters")` 实际发出的请求 URL 是什么？经过了哪些中间环节？
+**概念级**：`createHttp("/gw-api")` 创建的 HTTP 客户端，`get("/api/gateway/clusters")` 实际发出的请求 URL 是什么？经过了哪些中间环节？
 
-**Level 2（推理级）**：为什么网关模块用 `sendTenantId: true`（默认值），而 SSO 模块用 `sendTenantId: false`？如果网关模块误设为 `false`会发生什么？
+**推理级**：为什么网关模块用 `sendTenantId: true`（默认值），而 SSO 模块用 `sendTenantId: false`？如果网关模块误设为 `false`会发生什么？
 
-**Level 3（动手级）**：如果要给网关模块加一个 `healthCheck()` 方法（调用 `/api/gateway/health`），返回 `ApiResult<{ status: string; uptime: number }>`，我们会怎么写？提示：在 `gatewayApi` 对象中新增一个方法即可。
+**动手级**：如果要给网关模块加一个 `healthCheck()` 方法（调用 `/api/gateway/health`），返回 `ApiResult<{ status: string; uptime: number }>`，我们会怎么写？提示：在 `gatewayApi` 对象中新增一个方法即可。
 
 参考答案：
 

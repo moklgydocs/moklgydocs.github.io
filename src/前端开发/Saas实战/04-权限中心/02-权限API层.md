@@ -4,6 +4,17 @@
 
 ---
 
+## 前置知识
+
+阅读本文档前，你需要了解：
+
+- **ASP.NET Core HttpClient**：`IHttpClientFactory` 的注册和使用方式
+- **axios 基础**：请求/响应拦截器、`baseURL` 配置
+- **TypeScript 泛型**：`Promise<T>`、`ApiResult<T>` 的用法
+- **Vite 代理配置**：`vite.config.ts` 中 `proxy` 字段的作用
+
+---
+
 ## 一、ASP.NET Core 类比：HttpClient vs createHttp
 
 在 ASP.NET Core 里，你习惯这样调用远程服务：
@@ -422,12 +433,22 @@ const fetchData = async () => {
 
 > **🤔 导师提问**：ASP.NET Core 有全局异常过滤器，可以统一处理 Controller 抛出的异常。前端的 `createHttp` 响应拦截器可以做类似的统一处理（如 401 跳转登录），但业务错误（如"名称已存在"）仍然需要在每个调用点处理。为什么业务错误不适合在拦截器中统一处理？想想 toast 提示的信息应该由谁决定——拦截器还是调用方？
 
-> **🔍 验证步骤**
->
-> 1. 打开浏览器开发者工具（F12），切换到 Console 面板，输入 `await (await fetch('/perm-api/api/apps', { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') } })).json()`，观察返回的 JSON 结构是否为 `ApiResult` 格式（包含 `success`、`code`、`data` 字段）
-> 2. 在 Network 面板中刷新权限中心的任意页面，找到 `/perm-api/` 开头的请求，检查 Request Headers 中是否包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id: xxx`
-> 3. 在 Console 中尝试调用 `import('/src/api/perm/apps.ts').then(m => m.appsApi.getList())`（如果项目支持），观察返回数据的结构是否与 `AppDto[]` 类型匹配
-> 4. 故意访问一个不存在的 API 路径（如 `/perm-api/api/not-exist`），确认 toast 错误提示正常弹出
+---
+
+## 踩坑提醒
+
+1. **非标准响应的自动包裹**：部分后端接口直接返回数据而非标准 `ApiResult` 格式。`createHttp` 的响应拦截器会自动包裹为 `ApiResult`，但如果接口返回的 JSON 恰好包含 `success` 字段（却不是 `ApiResult` 格式），拦截器不会包裹它，可能导致组件拿到的数据结构不符合预期。调试时注意检查 `res.data` 的实际结构。
+2. **请求拦截器中的 Token 过期**：`createHttp` 每次请求时从 `useAuthStore.getState()` 读取 `accessToken`。如果 Token 在页面停留期间过期，请求拦截器仍然会注入过期的 Token，后端返回 401。响应拦截器需要处理 401 自动刷新 Token 的逻辑，否则用户会看到大量错误提示。
+3. **`sendTenantId` 的误用**：SSO 服务的 API 不需要租户 ID，创建 HTTP 实例时必须传 `sendTenantId: false`。如果忘了这个选项，SSO 请求会带上无关的 `X-Tenant-Id` Header，某些网关可能会拒绝请求。
+
+---
+
+## 🔍 验证步骤
+
+1. 打开浏览器开发者工具（F12），切换到 Console 面板，输入 `await (await fetch('/perm-api/api/apps', { headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') } })).json()`，观察返回的 JSON 结构是否为 `ApiResult` 格式（包含 `success`、`code`、`data` 字段）
+2. 在 Network 面板中刷新权限中心的任意页面，找到 `/perm-api/` 开头的请求，检查 Request Headers 中是否包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id: xxx`
+3. 在 Console 中尝试调用 `import('/src/api/perm/apps.ts').then(m => m.appsApi.getList())`（如果项目支持），观察返回数据的结构是否与 `AppDto[]` 类型匹配
+4. 故意访问一个不存在的 API 路径（如 `/perm-api/api/not-exist`），确认 toast 错误提示正常弹出
 
 ---
 
@@ -447,7 +468,7 @@ const fetchData = async () => {
 
 ---
 
-## 输出清单
+## 输出检查清单
 
 | 文件 | 说明 |
 |------|------|

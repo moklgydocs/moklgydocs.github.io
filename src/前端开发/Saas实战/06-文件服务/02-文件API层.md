@@ -4,11 +4,13 @@
 
 ---
 
-## 这一步解决什么问题？
+> **这一步解决什么问题？** 架构搞清楚了，现在要建起前端与后端之间的"管道"。类比 ASP.NET Core 中你在 Controller 里注入 `HttpClient` 调用微服务，这里我们需要一个类型安全的 HTTP 客户端层，封装所有文件服务的 API 调用。⚠️ 文件服务的 API 比之前权限中心和网关都复杂——它涉及**文件上传（二进制流）、分片上传、Blob 下载、预签名 URL**等特殊场景，不能简单用 `get/post/put/del` 四个方法搞定。
 
-架构搞清楚了，现在要建起前端与后端之间的"管道"。类比 ASP.NET Core 中你在 Controller 里注入 `HttpClient` 调用微服务，这里我们需要一个类型安全的 HTTP 客户端层，封装所有文件服务的 API 调用。
+## 前置知识
 
-⚠️ 文件服务的 API 比之前权限中心和网关都复杂——它涉及**文件上传（二进制流）、分片上传、Blob 下载、预签名 URL**等特殊场景，不能简单用 `get/post/put/del` 四个方法搞定。
+- 01 篇文件服务架构：`createHttp("/file-api")` 工厂函数、存储后端概念、配额和访问控制模型
+- ASP.NET Core `IHttpClientFactory` 的命名客户端模式：每个模块一个 HTTP 客户端实例，隔离 baseURL 和拦截器配置
+- axios 拦截器基础：请求拦截（加 Token）、响应拦截（401 刷新）
 
 ---
 
@@ -569,8 +571,7 @@ export async function fetchImageBlobUrl(fileId: string, maxWidth = 1024, maxHeig
 
 ---
 
-> **🔍 验证步骤**
->
+## 验证步骤
 > 1. 在浏览器 DevTools Console 中执行 `import("@/api/file/files").then(m => console.log(Object.keys(m.filesApi)))`，确认打印出所有文件 API 方法名（list、detail、upload、rename 等）
 > 2. 执行 `import("@/api/file/http").then(m => console.log(m.default?.defaults?.baseURL))`，确认输出为 `/file-api`，验证 HTTP 客户端的基础路径配置
 > 3. 在 Network 面板中调用任意 `filesApi` 方法，检查请求头中是否自动携带 `Authorization: Bearer <token>`，验证拦截器是否生效
@@ -578,13 +579,34 @@ export async function fetchImageBlobUrl(fileId: string, maxWidth = 1024, maxHeig
 
 ---
 
+## 踩坑提醒
+
+1. **`instantUpload` 的 404 不是错误**：秒传检测时后端返回 404 表示"未命中"，需要走普通上传，这是正常业务分支。如果不在 API 层拦截 404 转为 `success: false`，上层调用方会进入 `catch` 分支误以为请求失败。
+2. **`upload` 方法必须用 `fileHttpInstance.post`**：封装的 `post()` 方法不支持 `onUploadProgress` 和自定义 `headers`（如 `Content-Type: multipart/form-data`），文件上传场景必须用原始 axios 实例。同理，下载方法需要 `responseType: "blob"`，也只能用 `fileHttpInstance`。
+3. **`normalizePagedResult` 字段映射**：后端用 `total/pageIndex`，前端统一用 `totalCount/page`。如果忘记做映射，分页组件会因为找不到 `totalCount` 而显示总数为 0。
+
+---
+
 ## 🤔 思考题
 
-**Level 1（概念）**：`filesApi.upload` 为什么使用 `fileHttpInstance.post` 而不是封装的 `post()` 方法？
+**概念级**：`filesApi.upload` 为什么使用 `fileHttpInstance.post` 而不是封装的 `post()` 方法？
 
-**Level 2（推理）**：`instantUpload` 方法为什么要把 404 错误"吞掉"并返回一个 `success: false` 的对象，而不是让它正常抛出异常？
+**推理级**：`instantUpload` 方法为什么要把 404 错误"吞掉"并返回一个 `success: false` 的对象，而不是让它正常抛出异常？
 
-**Level 3（动手）**：假设后端新增了一个批量复制文件的接口 `POST /api/files/batch-copy`，接受 `{ fileIds: string[], targetFolderId: string | null }`，返回 `BatchOperationResult`。请在 `filesApi` 中添加这个方法。
+**动手级**：假设后端新增了一个批量复制文件的接口 `POST /api/files/batch-copy`，接受 `{ fileIds: string[], targetFolderId: string | null }`，返回 `BatchOperationResult`。请在 `filesApi` 中添加这个方法。
+
+---
+
+## ✅ 输出检查清单
+
+完成本篇学习后，确认我们能够：
+
+- [ ] 说明文件服务 HTTP 客户端的创建方式和 baseURL 配置
+- [ ] 区分封装方法（`get/post/put/del`）和原始 axios 实例的使用场景
+- [ ] 理解 `normalizePagedResult` 的字段映射逻辑（后端 `total/pageIndex` → 前端 `totalCount/page`）
+- [ ] 知道 `instantUpload` 为什么拦截 404 并转为 `success: false`
+- [ ] 理解 `fetchImageBlobUrl` 中 `dynamic import` 的必要性
+- [ ] 能列出所有 7 个 API 子模块的方法清单
 
 ---
 

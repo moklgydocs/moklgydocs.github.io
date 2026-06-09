@@ -7,6 +7,14 @@
 
 ---
 
+## 前置知识
+
+- 理解 `createHttp` 工厂函数与 axios 实例创建（见模块 03-HTTP客户端封装）
+- 了解 ASP.NET Core 的 `IHttpClientFactory` 命名客户端模式
+- 熟悉上一节（01-SaaS多租户架构）中运营中心的整体架构和 `/ops-api` 前缀
+
+---
+
 ## 一、HTTP 客户端：运营中心的"门户"
 
 ### 1.1 http.ts 的完整实现
@@ -383,22 +391,37 @@ export const workflowApi = {
 | encodeURIComponent | URL 中的邮箱等特殊字符必须编码 |
 | API 路径前缀 | 统一 `/api/tenant-ops/` |
 
-> **🔍 验证步骤**
->
-> 1. 打开浏览器 DevTools 的 Network 面板，在运营中心任意页面操作，观察请求 URL 是否以 `/ops-api/api/tenant-ops/` 开头——这验证了 `createHttp("/ops-api")` + API 路径前缀的组合
-> 2. 在 Console 中输入 `import("@/api/ops/editions").then(m => m.editionsApi.getList())`，观察返回的 `ApiResult` 结构是否包含 `success` 和 `data` 字段——这验证了解构方法 `get<T>` 的统一响应包装
-> 3. 查看 Network 面板中任意请求的 Request Headers，确认包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id`——这验证了请求拦截器的自动注入
-> 4. 在 Console 中调用 `import("@/api/ops/overview").then(m => m.overviewApi.get())`，确认返回的 `PlatformOverviewDto` 包含 5 个统计字段
+---
+
+## 🔧 验证步骤
+
+1. 打开浏览器 DevTools 的 Network 面板，在运营中心任意页面操作，观察请求 URL 是否以 `/ops-api/api/tenant-ops/` 开头——这验证了 `createHttp("/ops-api")` + API 路径前缀的组合
+2. 在 Console 中输入 `import("@/api/ops/editions").then(m => m.editionsApi.getList())`，观察返回的 `ApiResult` 结构是否包含 `success` 和 `data` 字段——这验证了解构方法 `get<T>` 的统一响应包装
+3. 查看 Network 面板中任意请求的 Request Headers，确认包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id`——这验证了请求拦截器的自动注入
+4. 在 Console 中调用 `import("@/api/ops/overview").then(m => m.overviewApi.get())`，确认返回的 `PlatformOverviewDto` 包含 5 个统计字段
 
 ---
 
-## 递进思考
+## ⚠️ 踩坑提醒
 
-**L1 入门**：为什么 `data-exchange.ts` 使用 `opsHttpInstance` 而不是解构的 `get/post`？
+1. **`sendTenantId` 默认为 true**：SSO 等跨服务 API 应设为 `false`。运营中心虽然是跨租户操作，但后端仍然需要 `X-Tenant-Id` 做审计日志记录，所以保持默认。
+2. **`data-exchange.ts` 使用 axios 原始实例**：因为 blob 和 FormData 不兼容统一的 `ApiResult<T>` 包装。导出需要 `responseType: "blob"`，导入需要 `multipart/form-data`。
+3. **suspend/terminate 的 reason 必须包装为对象**：后端接口设计为 `POST body: { reason?: string }`。如果前端直接传 reason 字符串，后端收到的不是对象，会解析失败。
+4. **`encodeURIComponent` 对邮箱等特殊字符必须编码**：邮箱中的 `@` 如果不编码，URL 解析器可能把 `@` 后面的部分当作域名，导致请求路径错误。
 
-**L2 进阶**：`tenantsApi.updateQuota` 的 `{ ...data, tenantId, resourceType }` 为什么要在 body 中重复 tenantId 和 resourceType？后端可能需要两处的哪个值？
+---
 
-**L3 架构**：如果我们要给 `webhooksApi.getEndpoints` 增加分页支持，需要修改哪些地方？提示：考虑返回类型 `WebhookEndpointDto[]` 是否需要改为 `PagedResult<WebhookEndpointDto>`。
+## 🤔 思考题
+
+### 概念级（理解 What）
+1. 为什么 `data-exchange.ts` 使用 `opsHttpInstance` 而不是解构的 `get/post`？
+
+### 推理级（推导 What-if）
+2. `tenantsApi.updateQuota` 的 `{ ...data, tenantId, resourceType }` 为什么要在 body 中重复 tenantId 和 resourceType？后端可能需要两处的哪个值？
+3. 如果我们要给 `webhooksApi.getEndpoints` 增加分页支持，需要修改哪些地方？提示：考虑返回类型 `WebhookEndpointDto[]` 是否需要改为 `PagedResult<WebhookEndpointDto>`。
+
+### 动手级（代码实践）
+4. 画出从浏览器发出 `GET /ops-api/api/tenant-ops/editions` 到后端返回数据的完整请求链路，标明 Vite proxy 的 rewrite 行为。
 
 ---
 

@@ -6,7 +6,15 @@
 
 ---
 
-## 存储策略
+## 前置知识
+
+| 概念 | 你需要知道的 | ASP.NET Core 类比 |
+|------|------------|-----------------|
+| axios 拦截器 | 请求/响应的中间件管道，可修改请求配置或处理响应 | 类似 `DelegatingHandler` 管道 |
+| Zustand persist | 插件，自动将 store 状态同步到 localStorage | 类似 Cookie 认证的持久化机制 |
+| 并发刷新队列 | 多个请求同时 401 时，只刷新一次 Token，其他请求排队等待 | 类似"双重检查锁定"模式 |
+| Blob 响应 | 文件下载时 axios 收到二进制数据，需检测后端是否返回了 JSON 错误 | 类似检查 `Response.ContentType` |
+| ApiResult 自动包裹 | 非标准响应自动包装为 `{ success, code, message, data }` 格式 | 类似统一异常过滤器包装返回值 |
 
 AdminWeb 使用 `localStorage` 存储 token（通过 Zustand persist）：
 
@@ -569,21 +577,33 @@ AdminWeb 当前选择被动刷新，因为 401 刷新的延迟很小（200-500ms
 
 ---
 
-> **🔍 验证步骤**
->
-> 1. 登录后，打开 DevTools → Network，触发任意 API 请求（如刷新用户列表）
-> 2. 检查 Request Headers：应包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id: xxx`
-> 3. 在 Console 中手动将 token 过期：`useAuthStore.getState().setTokens("expired-token", null)`
-> 4. 再次触发 API 请求，观察 Network：应看到 401 响应 → 自动 `/connect/token` 刷新请求 → 原请求重试成功
-> 5. 如果同时触发 3 个 API 请求且 token 已过期，Network 中应只有 1 个刷新请求（并发队列生效）
+## 验证步骤
 
-## 🤔 思考题
+1. 登录后，打开 DevTools → Network，触发任意 API 请求（如刷新用户列表）
+2. 检查 Request Headers：应包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id: xxx`
+3. 在 Console 中手动将 token 过期：`useAuthStore.getState().setTokens("expired-token", null)`
+4. 再次触发 API 请求，观察 Network：应看到 401 响应 → 自动 `/connect/token` 刷新请求 → 原请求重试成功
+5. 如果同时触发 3 个 API 请求且 token 已过期，Network 中应只有 1 个刷新请求（并发队列生效）
 
-**Level 1（概念级）**：请求拦截器中，为什么用 `useAuthStore.getState()` 而不是 `useAuthStore()` 来读取状态？
+---
 
-**Level 2（推理级）**：并发刷新队列中，`processQueue` 的 `resolve` 和 `reject` 是什么时候被创建的？它们是如何在刷新完成后被调用的？如果刷新过程中用户关闭了浏览器，队列中的请求会怎样？
+## 踩坑提醒
 
-**Level 3（动手级）**：在 `createHttp` 中，`_retry` 标志加在 `originalRequest` 上而非用独立变量追踪。如果两个不同的请求同时 401，第二个请求也会检查 `_retry`——这会导致问题吗？为什么？
+1. **刷新 Token 必须用裸 `axios`，不能走 `createHttp` 创建的实例**：`http` 实例带 baseURL 和响应拦截器，刷新请求会触发循环依赖
+2. **`isRefreshing` + `failedQueue` 是闭包变量，每个 HTTP 实例独立**：多个 HTTP 实例可能同时触发刷新，但实际中很少发生
+3. **`persist` 只持久化 state，不持久化 action**：store 中不能有不可序列化的值（如函数、Date 对象、Map/Set），否则 persist 会报错或丢失数据
+4. **`/connect/token` 端点的 401 不应触发刷新**：说明 refresh_token 也已过期，刷新只会无限循环
+5. **`_retry` 标志防止无限刷新循环**：如果刷新后重发请求仍然 401，不会再刷新而是直接跳转登录页
+
+---
+
+## 自测题
+
+**概念级**：请求拦截器中，为什么用 `useAuthStore.getState()` 而不是 `useAuthStore()` 来读取状态？
+
+**推理级**：并发刷新队列中，`processQueue` 的 `resolve` 和 `reject` 是什么时候被创建的？它们是如何在刷新完成后被调用的？如果刷新过程中用户关闭了浏览器，队列中的请求会怎样？
+
+**动手级**：在 `createHttp` 中，`_retry` 标志加在 `originalRequest` 上而非用独立变量追踪。如果两个不同的请求同时 401，第二个请求也会检查 `_retry`——这会导致问题吗？为什么？
 
 ---
 

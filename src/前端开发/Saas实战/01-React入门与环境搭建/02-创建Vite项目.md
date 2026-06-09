@@ -1,8 +1,8 @@
 # 创建 Vite 项目
 
-## 本步目标
-
-用 `pnpm create vite` 从零创建一个 React + TypeScript 项目，理解 Vite 生成的项目结构中每个文件的职责。
+> **这一步解决什么问题？**
+>
+> 用 `pnpm create vite` 从零创建一个 React + TypeScript 项目，理解 Vite 生成的项目结构中每个文件的职责。
 
 ---
 

@@ -1,8 +1,9 @@
 # HTTP 客户端封装
 
-## 本步目标
-
-深入理解 `createHttp` 的核心机制——Token 刷新队列。这是整个前端架构中最复杂的部分，也是最值得花时间理解的部分。同时创建 7 个服务的 HTTP 实例文件。
+> **这一步解决什么问题？**
+> 上一步我们实现了 `createHttp()` 工厂函数，但"7 个服务怎么用"和"Token 刷新队列怎么跑"这两个关键问题还没展开。本文将深入 Token 刷新的并发机制，并为 7 个后端服务分别创建 HTTP 实例文件——这是所有 API 调用的入口。
+>
+> 对于 ASP.NET Core 开发者来说，这就像为每个微服务注册独立的 Typed HttpClient——不同的 BaseAddress、不同的 DelegatingHandler、不同的超时配置，但共享同一套 Token 刷新管道。
 
 ## 前置知识
 
@@ -399,9 +400,15 @@ T5: 请求 E 发出 → 401
 - 刷新请求不走 `basePrefix`（`/connect/token` 不需要加 `/sso-api` 前缀）
 - 刷新请求的 URL 已经在 Vite proxy 中直接配置了（`/connect` → 10001 端口）
 
+> **【易错点】** 刷新请求必须用裸 axios，不能用 http 实例。如果用 `http.post("/connect/token", ...)`，请求会走 `baseURL` 前缀变成 `/sso-api/connect/token`，这不是 Vite proxy 配置的路径——后端会返回 404。
+
 **Step 5f — finally 重置 isRefreshing**
 
 无论刷新成功还是失败，`finally` 块都会重置 `isRefreshing = false`。这确保了后续的 401 请求可以发起新的刷新流程。
+
+> **【性能陷阱】** 不同服务的 HTTP 实例有独立的 `isRefreshing` 和 `failedQueue`（闭包作用域）。如果 SSO 和权限中心同时返回 401，会触发两次独立的刷新请求。但因为 `useAuthStore.getState().setTokens()` 是覆盖式写入，第二次刷新只是重复写入相同的 token，不会出数据一致性问题——只是多了一次网络请求。如果未来服务数量增加，可以考虑将刷新逻辑提取为全局共享的单例。
+
+> **🤔 导师提问**：每个 `createHttp` 实例的 `isRefreshing` 是独立的，这意味着 SSO 和权限中心各刷新一次。有人建议把 `isRefreshing` 和 `failedQueue` 提取为全局变量，只刷新一次。两种方案的 trade-off 是什么？提示：想想 .NET 中 `SemaphoreSlim(1,1)` 是全局共享的还是每个 HttpClient 独立的。
 
 ### 非标准响应包裹
 
@@ -413,6 +420,10 @@ T5: 请求 E 发出 → 401
 响应拦截器的成功分支处理了后两种情况：
 1. 跳过 `/connect/*` 端点
 2. 其他没有 `success` 字段的响应自动包裹为 `ApiResult` 格式
+
+> **【设计取舍】** 自动包裹非标准响应为 `ApiResult` 格式，好处是调用方代码统一（都检查 `res.success`），坏处是隐藏了后端接口不规范的事实。如果后端最终修复了所有接口返回 `ApiResult`，这段包裹逻辑就变成了冗余代码——但留着不会有副作用（已有 `success` 字段的响应不会被二次包裹）。这是一种"防御性编程" vs "暴露问题"的取舍。
+
+> **🤔 导师提问**：如果后端某个旧接口返回 `{ id: 1, name: "test" }` 而不是 `{ success: true, data: { id: 1, name: "test" } }`，响应拦截器会自动包裹。但如果后端又新增了一个接口也返回类似格式，你如何区分"这是需要包裹的旧接口"还是"这是本来就应该是裸数据的新接口"？
 
 ### 打印服务的特殊超时
 
@@ -448,23 +459,40 @@ printHttp.instance.defaults.timeout = 120000
 
 ## 自测题
 
-### 入门题
+### 概念级（理解定义）
 
 1. 7 个服务的 HTTP 实例中，哪个不发送 `X-Tenant-Id`？为什么？
 
 2. 打印服务为什么要把超时设为 120 秒？如果不设会怎样？
 
-### 进阶题
+### 推理级（分析原因）
 
 3. 假设用户 token 过期后，页面同时发出了 3 个 API 请求（权限中心 2 个 + 文件服务 1 个），都返回 401。请描述完整的处理流程——会触发几次 token 刷新？3 个请求最终怎么处理？
 
 4. 响应拦截器中为什么 `/connect/` 端点的响应不包裹为 `ApiResult`？如果包裹了会出什么问题？
 
-### 架构题
+### 动手级（实践验证）
 
 5. 当前设计中，每个 `createHttp` 实例有独立的 `isRefreshing` 和 `failedQueue`。有人建议将它们提取为全局共享变量，这样无论哪个实例触发刷新，所有实例的请求都能排队等待。请分析两种设计的优缺点。
 
 6. 如果后端新增了一个"审计日志服务"（端口 10014），请列出从 Vite proxy 配置到创建 HTTP 实例的完整步骤，并写出 `src/api/audit/http.ts` 的代码。
+
+## 验证步骤
+
+1. 创建 7 个 `src/api/*/http.ts` 文件，确认 TypeScript 无类型错误
+2. 在浏览器 Network 面板中观察：登录后访问任意 API，请求头应包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id: xxx`
+3. 在 Network 面板中触发 Token 过期（等待 access_token 过期或手动删除 store 中的 token），观察是否自动刷新并重发请求
+4. 验证 SSO 请求不包含 `X-Tenant-Id` 头，而权限中心请求包含
+
+## ✅ 输出检查清单
+
+完成本节后，确认以下各项：
+
+- [ ] 能画出 Token 刷新队列的六步流程图
+- [ ] 知道刷新请求必须用裸 axios 而不能用 http 实例的原因
+- [ ] 理解不同服务的 HTTP 实例有独立的 `isRefreshing` 闭包变量
+- [ ] 能说出 7 个服务的 basePrefix、sendTenantId、超时的差异
+- [ ] 理解非标准响应自动包裹为 `ApiResult` 的设计取舍
 
 ## 下一步
 

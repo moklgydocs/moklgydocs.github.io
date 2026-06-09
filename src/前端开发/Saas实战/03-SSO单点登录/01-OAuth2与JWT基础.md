@@ -6,6 +6,18 @@
 
 ---
 
+## 前置知识
+
+| 概念 | 你需要知道的 | ASP.NET Core 类比 |
+|------|------------|-----------------|
+| HTTP 请求头 | 请求中可携带自定义 Header，如 `Authorization: Bearer xxx` | `[Authorize]` 自动附加 Cookie 头 |
+| Base64 编码 | 二进制到文本的编码方式，可逆，非加密 | 类似 `Convert.ToBase64String()` |
+| JSON Web Token | 三段式令牌：Header.Payload.Signature | 类似签名的 `ClaimsPrincipal` |
+| OAuth2 Grant Type | 授权方式（密码模式、授权码模式等） | 类似 `IdentityServer` 的 GrantTypes 配置 |
+| 多租户 | SaaS 系统中不同组织的数据隔离 | 类似按 `TenantId` 切换数据库连接 |
+
+---
+
 ## OAuth2 Resource Owner Password Credentials 流程
 
 OAuth2 定义了多种授权方式（Grant Type），AdminWeb 使用的是 **Resource Owner Password Credentials**（资源所有者密码凭证模式，简称密码模式）：
@@ -388,21 +400,33 @@ const ssoHttp = createHttp("/sso-api", { sendTenantId: false })
 
 ---
 
-> **🔍 验证步骤**
->
-> 1. 打开浏览器 DevTools → Network，访问 `http://localhost:3000`
-> 2. 在登录页输入用户名密码并登录，在 Network 中找到 `/connect/token` 请求
-> 3. 检查 Request Payload：应包含 `grant_type=password`、`client_id=mok-web-app`
-> 4. 检查 Response：应包含 `access_token`（JWT 格式）和 `refresh_token`
-> 5. 复制 `access_token` 的值，粘贴到 `jwt.io` 或在 Console 中执行 `JSON.parse(atob(token.split('.')[1]))`，确认 payload 包含 `sub`、`role`、`tenant_id` 等 claims
+## 验证步骤
 
-## 🤔 思考题
+1. 打开浏览器 DevTools → Network，访问 `http://localhost:3000`
+2. 在登录页输入用户名密码并登录，在 Network 中找到 `/connect/token` 请求
+3. 检查 Request Payload：应包含 `grant_type=password`、`client_id=mok-web-app`
+4. 检查 Response：应包含 `access_token`（JWT 格式）和 `refresh_token`
+5. 复制 `access_token` 的值，粘贴到 `jwt.io` 或在 Console 中执行 `JSON.parse(atob(token.split('.')[1]))`，确认 payload 包含 `sub`、`role`、`tenant_id` 等 claims
 
-**Level 1（概念级）**：JWT 的 Payload 使用 Base64Url 编码而非加密，这意味着什么？我们能否在 JWT 中安全地存储用户密码？
+---
 
-**Level 2（推理级）**：AdminWeb 选择 ROPC 而非 Authorization Code + PKCE。如果未来要将 AdminWeb 开放给第三方应用使用，认证方式需要怎样调整？`switch_tenant` 这个自定义 Grant Type 是否还能继续使用？
+## 踩坑提醒
 
-**Level 3（动手级）**：在浏览器控制台中，用 `atob()` 手动解码一个 JWT Token 的 Payload 部分。验证 JWT 中的 `tenant_id` 和 `exp` 字段。思考：为什么 JWT 使用 Base64Url 而不是普通 Base64？
+1. **JWT Payload 不是加密的**：任何人都能用 `atob()` 解码查看内容，绝对不能在 JWT 中存储密码等敏感信息。JWT 的安全性来自 Signature 防篡改，而非 Payload 保密性
+2. **OAuth2 错误响应不是 ApiResult 格式**：OAuth2 端点返回 `{ error, error_description }`，不是 AdminWeb 业务 API 的 `{ success, code, message, data }`。前端错误处理需要分别适配
+3. **Base64Url ≠ Base64**：解码 JWT 时必须先把 `-` 替换为 `+`、`_` 替换为 `/`，否则 `atob()` 可能报错。这是 `parseJwtPayload()` 中有两行 replace 的原因
+4. **`offline_access` scope 不能省略**：没有这个 scope，SSO 服务器只返回 access_token，不返回 refresh_token，Token 刷新机制将无法工作
+5. **`/connect/*` 路径不加 `/sso-api` 前缀**：OIDC 端点走独立代理规则，加了前缀反而匹配不到
+
+---
+
+## 自测题
+
+**概念级**：JWT 的 Payload 使用 Base64Url 编码而非加密，这意味着什么？我们能否在 JWT 中安全地存储用户密码？
+
+**推理级**：AdminWeb 选择 ROPC 而非 Authorization Code + PKCE。如果未来要将 AdminWeb 开放给第三方应用使用，认证方式需要怎样调整？`switch_tenant` 这个自定义 Grant Type 是否还能继续使用？
+
+**动手级**：在浏览器控制台中，用 `atob()` 手动解码一个 JWT Token 的 Payload 部分。验证 JWT 中的 `tenant_id` 和 `exp` 字段。思考：为什么 JWT 使用 Base64Url 而不是普通 Base64？
 
 ---
 

@@ -6,7 +6,15 @@
 
 ---
 
-## 登录流程的核心
+## 前置知识
+
+| 概念 | 你需要知道的 | ASP.NET Core 类比 |
+|------|------------|-----------------|
+| useCallback | 缓存函数引用，避免子组件不必要的重新渲染 | 无直接类比，类似方法缓存 |
+| Zustand store | 全局状态管理，`useAuthStore()` 在组件中用，`useAuthStore.getState()` 在非组件中用 | 类似 Scoped Service |
+| persist 中间件 | Zustand 插件，自动将 store 同步到 localStorage | 类似 Cookie 认证的持久化 |
+| JWT 解析 | 前端用 `atob()` 解码 Base64Url，提取 Payload 中的 claims | 类似 `ClaimsPrincipal` 的 claims 读取 |
+| OAuth2 错误格式 | `{ error, error_description }`，不是 `ApiResult` 格式 | 类似 `IdentityResult.Errors` vs 自定义 API 错误 |
 
 `useAuth` 是整个 SSO 登录最核心的代码，封装了完整的登录/登出/租户切换逻辑。
 
@@ -486,20 +494,32 @@ const handleSubmit = async (values: LoginFormValues) => {
 
 ---
 
-> **🔍 验证步骤**
->
-> 1. 登录成功后，在 Console 中执行 `useAuthStore.getState()`，检查 `user` 对象是否包含 `id`、`userName`、`displayName`、`roles` 字段
-> 2. 检查 `user.tenantName` 和 `user.tenantIdentifier`——这些来自 JWT payload，不在 API 返回的 `CurrentUser` 中
-> 3. 打开 React DevTools → Components → 找到任意使用 `useAuth` 的组件 → 查看 Hooks，确认 `isAuthenticated` 为 `true`
-> 4. 执行 `useAuthStore.getState().logout()`，确认页面跳转到 `/login`，localStorage 中的 `admin-auth` 被清除
+## 验证步骤
 
-## 🤔 思考题
+1. 登录成功后，在 Console 中执行 `useAuthStore.getState()`，检查 `user` 对象是否包含 `id`、`userName`、`displayName`、`roles` 字段
+2. 检查 `user.tenantName` 和 `user.tenantIdentifier`——这些来自 JWT payload，不在 API 返回的 `CurrentUser` 中
+3. 打开 React DevTools → Components → 找到任意使用 `useAuth` 的组件 → 查看 Hooks，确认 `isAuthenticated` 为 `true`
+4. 执行 `useAuthStore.getState().logout()`，确认页面跳转到 `/login`，localStorage 中的 `admin-auth` 被清除
 
-**Level 1（概念级）**：`parseJwtPayload` 为什么可能返回 `null`？在什么场景下会返回 `null`？
+---
 
-**Level 2（推理级）**：登录流程中 `getCurrentUser` 和 `getMyTenants` 可以并行吗？如果可以，为什么 AdminWeb 当前选择串行？如果不行，为什么？
+## 踩坑提醒
 
-**Level 3（动手级）**：在浏览器控制台中，手动执行 `parseJwtPayload` 的逻辑：取一个 JWT token，用 `atob()` 解码 Payload 部分，验证 `tenant_id` 字段。然后尝试修改一个字符再解码——会抛出异常吗？为什么？
+1. **`parseJwtPayload` 可能返回 `null`**：如果 token 格式不正确（比如没有 `.` 分隔符），函数返回 `null`。后续代码必须用可选链 `payload?.tenant_id` 访问，否则运行时报错
+2. **JWT 中的 `role` 可能是字符串也可能是数组**：OIDC 规范允许 `role` 为单个字符串或字符串数组。如果忘记兼容，单角色用户会导致 `roles.map is not a function` 报错
+3. **`logout` 中的操作顺序不可颠倒**：必须先 `clearAuth` 再 `navigate`，否则跳转了但状态没清，回来还是登录态
+4. **`useCallback` 的依赖数组不能遗漏**：虽然 Zustand store 的 action 引用是稳定的，但遵循 exhaustive-deps 规则是好习惯
+5. **`login` 函数末尾必须 `throw err`**：否则调用方无法知道登录是否成功，可能会在登录失败后执行不应该执行的逻辑
+
+---
+
+## 自测题
+
+**概念级**：`parseJwtPayload` 为什么可能返回 `null`？在什么场景下会返回 `null`？
+
+**推理级**：登录流程中 `getCurrentUser` 和 `getMyTenants` 可以并行吗？如果可以，为什么 AdminWeb 当前选择串行？如果不行，为什么？
+
+**动手级**：在浏览器控制台中，手动执行 `parseJwtPayload` 的逻辑：取一个 JWT token，用 `atob()` 解码 Payload 部分，验证 `tenant_id` 字段。然后尝试修改一个字符再解码——会抛出异常吗？为什么？
 
 ---
 

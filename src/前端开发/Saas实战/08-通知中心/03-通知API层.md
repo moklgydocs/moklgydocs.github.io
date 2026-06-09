@@ -7,6 +7,16 @@
 
 ---
 
+## 前置知识
+
+- 第 1-2 节的 SignalR 连接与通知 Store 概念
+- ASP.NET Core 的 DTO 模式和 `[JsonIgnore]` / `[JsonPropertyName]` 特性
+- TypeScript 泛型与 `as const` 类型推断
+- `createHttp` 工厂函数的用法（第 3 章已封装）
+- JSON 序列化中枚举的 int vs string 格式差异
+
+---
+
 ## 一、文件结构总览
 
 ```
@@ -548,32 +558,44 @@ export interface UpdatePreferenceRequest {
 
 ---
 
-> **🔍 验证步骤**
->
-> 1. 打开 DevTools → Network，刷新页面，筛选 XHR 请求，找到以 `/notify-api/` 开头的请求（预期：所有通知 API 的 baseURL 都是 `/notify-api`）
-> 2. 在 Console 中执行 `import { getUnreadCount } from "@/api/notify/notifications"` 然后调用 `getUnreadCount()`，观察返回数据结构（预期：`{ success: true, data: { unreadCount: N } }`）
-> 3. 在 Console 中执行 `import { getPreferences } from "@/api/notify/preferences"` 然后调用 `getPreferences()`，观察返回数据（预期：`PreferenceDto[]` 数组，每项包含 `channel`、`isEnabled` 字段）
-> 4. 在 Network 面板中点击任意 `/notify-api` 请求，检查 Request Headers（预期：包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id` header）
+## 踩坑提醒
 
-## 🤔 思考题
+1. **后端 `DateTime` 序列化后是 ISO 8601 字符串**：前端不要用 `Date` 类型接收，因为 JSON.parse 不会自动转 Date。用 `string` 接收，需要时 `new Date(str)` 转换
+2. **`dataJson` 是字符串不是对象**：后端存储的是 JSON 字符串，前端使用时必须 `JSON.parse()`，不能直接当对象用
+3. **所有通知 API 的 baseURL 是 `/notify-api`**：不是 `/gw-api`，代理配置和请求前缀必须一致，否则 404
+4. **批量更新偏好用 `UpdatePreferenceRequest[]`**：不是逐条更新，而是一次性提交所有变更，减少网络请求
 
-### 概念级（理解 Why）
-1. 为什么 `NotificationChannel` 用 `const` 对象 + `as const` 而不是 TypeScript `enum`？
+---
+
+## 验证步骤
+
+在继续下一节之前，确认以下内容已经正确实现：
+
+1. 打开 DevTools → Network，刷新页面，筛选 XHR 请求，找到以 `/notify-api/` 开头的请求（预期：所有通知 API 的 baseURL 都是 `/notify-api`）
+2. 在 Console 中执行 `import { getUnreadCount } from "@/api/notify/notifications"` 然后调用 `getUnreadCount()`，观察返回数据结构（预期：`{ success: true, data: { unreadCount: N } }`）
+3. 在 Console 中执行 `import { getPreferences } from "@/api/notify/preferences"` 然后调用 `getPreferences()`，观察返回数据（预期：`PreferenceDto[]` 数组，每项包含 `channel`、`isEnabled` 字段）
+4. 在 Network 面板中点击任意 `/notify-api` 请求，检查 Request Headers（预期：包含 `Authorization: Bearer xxx` 和 `X-Tenant-Id` header）
+
+---
+
+## 自测题
+
+### 概念级（理解 Why）1. 为什么 `NotificationChannel` 用 `const` 对象 + `as const` 而不是 TypeScript `enum`？
 2. `TemplateListDto` 和 `TemplateDetailDto` 为什么要分成两个类型？
 
 ### 推理级（推导 What-if）
+
 3. 如果后端把 `NotificationStatus.Sent` 改名为 `NotificationStatus.Unread`，前端需要改哪些文件？
 4. `dataJson` 为什么是 `string` 而不是 `Record<string, unknown>`？如果改成对象类型有什么好处和坏处？
 
 ### 动手级（代码实践）
+
 5. 给 `notifications.ts` 添加一个 `deleteNotification(id: string)` 函数，使用 `del` 方法，路径为 `/api/notifications/{id}`。
 6. 在 `notification.ts` 中添加一个新的枚举 `NotificationType`（如 `System`、`Business`、`PrintJob`），并确保和后端 `CamelCase` 序列化一致。
 
 ---
 
-## ✅ 输出检查清单
-
-完成本节后，你应该能回答：
+## 输出检查清单
 
 - [ ] 理解 `createHttp("/notify-api")` 的作用和 Vite 代理的关系
 - [ ] 能说出 API 函数的命名规律（get/mark/send + 名词）
@@ -582,3 +604,7 @@ export interface UpdatePreferenceRequest {
 - [ ] 理解 `TemplateListDto` 和 `TemplateDetailDto` 的继承关系
 - [ ] 掌握前后端类型映射的核心规则（枚举 → const 对象，DateTime → string）
 - [ ] 理解批量更新偏好（`UpdatePreferenceRequest[]`）的设计原因
+
+---
+
+[← 上一篇](02-SignalR封装.md) | [下一篇 →](04-通知铃铛.md)

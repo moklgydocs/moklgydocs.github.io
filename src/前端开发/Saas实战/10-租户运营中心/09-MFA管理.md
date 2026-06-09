@@ -7,6 +7,14 @@
 
 ---
 
+## 前置知识
+
+- 了解 TOTP（基于时间的一次性密码）的基本原理
+- 熟悉 ASP.NET Core Identity 的双因素认证机制
+- 了解上一节（08-Webhook管理）中运营中心的 API 调用模式
+
+---
+
 ## 一、MFA API 层
 
 ### 1.1 完整 API 代码
@@ -42,7 +50,7 @@ export const mfaApi = {
 
 【易错点】 `setup` 方法的 `email` 参数通过 query string 传递，且用 `encodeURIComponent` 编码。这是因为邮箱包含 `@` 等特殊字符，直接拼 URL 可能导致请求错误。注意 `tenantId` 也通过 query string 传递（而非 URL 路径），所以这个 API 同时用了路径参数（`userId`）和查询参数（`tenantId`、`email`）。
 
-> **思考**：为什么 `setup` 用 POST 而不是 PUT？因为每次调用 `setup` 都会生成新的 TOTP 密钥，是"创建新资源"而非"更新已有资源"。如果用户已经设置了 MFA，再次 setup 会覆盖旧密钥——这就是为什么操作前需要确认。
+🤔 **导师提问**：为什么 `setup` 用 POST 而不是 PUT？因为每次调用 `setup` 都会生成新的 TOTP 密钥，是"创建新资源"而非"更新已有资源"。如果用户已经设置了 MFA，再次 setup 会覆盖旧密钥——这就是为什么操作前需要确认。
 
 ---
 
@@ -423,7 +431,7 @@ toast.error("查询失败", { description: err instanceof Error ? err.message : 
 
 错误信息包含两部分：固定的中文标题和动态的英文描述。`err instanceof Error` 判断确保 `err.message` 安全访问——非 Error 对象（如字符串、数字）用 `String(err)` 兜底。
 
-> **思考**：为什么 MFA 页面没有用 `useCallback` 包裹处理函数，而概览页用了？因为 MFA 页面没有 `useEffect` 依赖这些函数——它们只在用户点击按钮时调用，不需要缓存引用。`useCallback` 只在函数被用作 `useEffect` 依赖或传给子组件时才有意义。
+🤔 **导师提问**：为什么 MFA 页面没有用 `useCallback` 包裹处理函数，而概览页用了？因为 MFA 页面没有 `useEffect` 依赖这些函数——它们只在用户点击按钮时调用，不需要缓存引用。`useCallback` 只在函数被用作 `useEffect` 依赖或传给子组件时才有意义。
 
 ---
 
@@ -442,58 +450,41 @@ toast.error("查询失败", { description: err instanceof Error ? err.message : 
 
 **本项目选择 TOTP 的原因**：SaaS 平台面向企业客户，安全要求高；TOTP 零运营成本，实现相对简单；用户（运营人员）通常已有 Authenticator App。
 
-> **思考**：如果产品经理要求"支持 SMS 作为第二因素"，你会怎么扩展当前的 MFA 架构？提示：后端需要新增 `SmsMfaProvider`，前端需要新增"发送验证码"和"输入验证码"的 UI 区块。API 路径可以从 `/mfa/users/{userId}/setup` 扩展为 `/mfa/users/{userId}/setup/sms`。
+🤔 **导师提问**：如果产品经理要求"支持 SMS 作为第二因素"，你会怎么扩展当前的 MFA 架构？提示：后端需要新增 `SmsMfaProvider`，前端需要新增"发送验证码"和"输入验证码"的 UI 区块。API 路径可以从 `/mfa/users/{userId}/setup` 扩展为 `/mfa/users/{userId}/setup/sms`。
 
 ---
 
-## 六、验证与自检
+## 🔧 验证步骤
 
-完成 MFA 管理的学习后，用以下步骤验证理解：
-
-1. **打开 MFA 管理页**，确认 4 个卡片区域正常显示
-2. **查询租户 MFA 状态**，输入租户 ID 点击"查询"
-3. **生成 MFA 设置**，填写用户 ID、租户 ID、邮箱，点击"设置"
-4. **验证 QR 码**：用手机 Authenticator App 扫描 QR 码，确认 App 中显示 6 位验证码
-5. **校验验证码**：输入 App 中显示的验证码，确认验证结果
-6. **移除 MFA**：确认需要二次确认，且对话框提示"不可撤销"
+1. 打开 MFA 管理页，确认 4 个卡片区域正常显示
+2. 查询租户 MFA 状态，输入租户 ID 点击"查询"
+3. 生成 MFA 设置，填写用户 ID、租户 ID、邮箱，点击"设置"
+4. 验证 QR 码：用手机 Authenticator App 扫描 QR 码，确认 App 中显示 6 位验证码
+5. 校验验证码：输入 App 中显示的验证码，确认验证结果
+6. 移除 MFA：确认需要二次确认，且对话框提示"不可撤销"
 
 ---
 
-## 七、小结
+## ⚠️ 踩坑提醒
 
-| 功能 | 实现 |
-|------|------|
-| 租户 MFA 状态 | `isEnabled` → Badge 展示 |
-| 用户 MFA 设置 | `setup` → QR 码 + Secret Key + 恢复码 |
-| 验证码校验 | `verify` → 6 位输入 + 结果展示 |
-| 移除 MFA | `remove` → ConfirmDialog 二次确认 |
-| 错误处理 | `toast.error` + `err.message` 动态描述 |
+1. **TOTP Secret 只在设置时返回一次**：前端不应该缓存或持久化这个密钥。如果页面刷新，密钥丢失，需要重新 setup 生成新密钥。
+2. **`encodeURIComponent(email)` 不可省略**：邮箱中的 `@` 如果不编码，URL 解析器可能把 `@` 后面的部分当作域名，导致请求路径错误。
+3. **恢复码是一次性的**：每个恢复码只能用一次，用过后应该从列表中删除。当前前端只是展示恢复码，使用状态由后端管理。
+4. **MFA 页面 14 个 useState**：页面级组件的状态管理——如果状态更多或需要跨组件共享，应该提取为自定义 Hook 或使用 Context。
 
 ---
 
-## ✅ 输出检查清单
+## 🤔 自测题
 
-完成本节学习后，确认以下知识点已掌握：
+### 概念级（理解 What）
+1. MFA 设置时为什么要传 `email` 参数？提示：QR 码中包含 `otpauth://totp/` URI，其中需要标识这是哪个用户的密钥。
 
-- [ ] 能列出 `mfaApi` 的 5 个方法及其用途
-- [ ] 理解 MFA 注册流程（查询→设置→扫码→验证）
-- [ ] 知道 QR 码的 Data URL 渲染方式
-- [ ] 理解 TOTP Secret 的安全处理原则
-- [ ] 知道恢复码的一次性特性
-- [ ] 能解释 TOTP vs SMS vs Email 的设计取舍
-- [ ] 理解为什么 `setup` 的 `email` 参数需要 `encodeURIComponent`
-- [ ] 知道 MFA 移除操作为什么需要 ConfirmDialog 和"不可撤销"提示
+### 推理级（推导 What-if）
+2. 如果用户连续 5 次输入错误的验证码，应该怎么处理？提示：考虑暴力破解防护——锁定一段时间或要求重新 setup。
+
+### 动手级（设计 Why）
+3. 假设我们需要支持"管理员强制重置用户 MFA"，和"用户自助重置 MFA"两种场景。当前 API 是否足够？如果不够，需要新增哪些端点？
 
 ---
 
-## 递进思考
-
-**L1 入门**：MFA 设置时为什么要传 `email` 参数？提示：QR 码中包含 `otpauth://totp/` URI，其中需要标识这是哪个用户的密钥。
-
-**L2 进阶**：如果用户连续 5 次输入错误的验证码，应该怎么处理？提示：考虑暴力破解防护——锁定一段时间或要求重新 setup。
-
-**L3 架构**：假设我们需要支持"管理员强制重置用户 MFA"，和"用户自助重置 MFA"两种场景。当前 API 是否足够？如果不够，需要新增哪些端点？自助重置时如何验证用户身份（避免攻击者冒充用户重置 MFA）？
-
----
-
-[← 上一篇：Webhook管理](08-Webhook管理.md) | [下一篇：数据交换 →](10-数据交换.md)
+[← 上一篇：08-Webhook管理](08-Webhook管理.md) | [下一篇：10-数据交换 →](10-数据交换.md)
