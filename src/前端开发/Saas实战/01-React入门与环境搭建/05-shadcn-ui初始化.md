@@ -87,6 +87,12 @@ export function cn(...inputs: ClassValue[]) {
 
 > **🤔 导师提问**：`cn()` 中 `twMerge(clsx(inputs))` 的顺序能不能反过来？提示：`clsx` 接受的条件值（如 `false`、`undefined`）如果先经过 `twMerge`，后者能正确处理吗？
 
+
+
+### 最好参照官网的教程进行
+
+[Vite - shadcn/ui](https://ui.shadcn.com/docs/installation/vite)
+
 ### 第二步：初始化 shadcn/ui
 
 ```bash

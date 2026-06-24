@@ -1457,6 +1457,13 @@ export default sidebar({
             },
           ],
         },
+        {
+          text: "Microsoft Agent Framework 实战",
+          icon: "fa6-solid:robot",
+          prefix: "AgentFramework/",
+          collapsible: true,
+          children: "structure",
+        },
       ],
     },
     {
