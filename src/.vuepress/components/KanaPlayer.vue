@@ -352,10 +352,11 @@ async function play(item) {
     : item.hira + " / " + item.kata;
   statusText.value = "加载中：" + display + " (" + item.romaji + ")";
   el.src = getAudioUrl(item);
-  el.playbackRate = playbackRate.value;
   el.load();
+  el.playbackRate = playbackRate.value;
   try {
     await el.play();
+    el.playbackRate = playbackRate.value;
     loadingId.value = null;
     playing.value = true;
     statusText.value = "播放中：" + display + " (" + item.romaji + ")";
@@ -391,6 +392,7 @@ function onEnded() {
     return;
   }
   el.currentTime = 0;
+  el.playbackRate = playbackRate.value;
   el.play().catch(() => {});
   statusText.value = "播放中 · 第 " + (repeatIndex.value + 1) + "/" + repeatCount.value + " 次";
 }
