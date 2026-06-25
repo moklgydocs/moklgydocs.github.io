@@ -1737,7 +1737,17 @@ export default sidebar({
           icon: "fa6-solid:book-open",
           prefix: "日语/",
           collapsible: true,
-          children: "structure",
+          children: [
+            {
+              text: "五十音图",
+              icon: "fa6-solid:language",
+              prefix: "",
+              collapsible: true,
+              children: [
+                { text: "五十音图", icon: "fa6-solid:language", link: "五十音图" },
+              ],
+            },
+          ],
         },
       ],
     },
