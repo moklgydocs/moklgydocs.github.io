@@ -47,6 +47,12 @@
           <option v-for="n in 5" :key="n" :value="n">{{ n }} 次</option>
         </select>
       </div>
+      <div class="kana-setting">
+        <span class="setting-label">语速</span>
+        <select v-model.number="playbackRate" class="kana-select">
+          <option v-for="r in [0.75, 1, 1.25, 1.5, 2]" :key="r" :value="r">{{ r }}x</option>
+        </select>
+      </div>
     </section>
 
     <!-- 清音 五十音图表格 -->
@@ -161,7 +167,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
+import { ref, watch, onMounted, onBeforeUnmount } from "vue";
 
 // ── 清音数据（五十音图）──
 const seionRows = [
@@ -315,6 +321,7 @@ const player = ref(null);
 const kanaMode = ref("hiragana");
 const showRomaji = ref(true);
 const repeatCount = ref(1);
+const playbackRate = ref(1);
 const playingId = ref(null);
 const loadingId = ref(null);
 const playing = ref(false);
@@ -325,6 +332,10 @@ const repeatIndex = ref(0);
 function getAudioUrl(item) {
   return "/audio/kana/" + item.romaji + ".mp3";
 }
+
+watch(playbackRate, (v) => {
+  if (player.value) player.value.playbackRate = v;
+});
 
 async function play(item) {
   const el = player.value;
@@ -341,6 +352,7 @@ async function play(item) {
     : item.hira + " / " + item.kata;
   statusText.value = "加载中：" + display + " (" + item.romaji + ")";
   el.src = getAudioUrl(item);
+  el.playbackRate = playbackRate.value;
   el.load();
   try {
     await el.play();
