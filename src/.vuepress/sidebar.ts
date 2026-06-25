@@ -1751,6 +1751,7 @@ export default sidebar({
               children: [
                 "",
                 { text: "基本句型与语序", icon: "fa6-solid:book", link: "基本句型" },
+                { text: "名词分类与数词表达", icon: "fa6-solid:book", link: "名词与数词" },
                 { text: "动词变形总览", icon: "fa6-solid:book", link: "动词变形" },
                 { text: "助词详解", icon: "fa6-solid:book", link: "助词详解" },
                 { text: "形容词变形与活用", icon: "fa6-solid:book", link: "形容词变形" },
