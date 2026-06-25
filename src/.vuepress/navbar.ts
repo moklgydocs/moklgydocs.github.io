@@ -151,6 +151,11 @@ export default navbar([
         link: "英语/语法俱乐部/"
       },
       {
+        text: "英语 · 音标有谱",
+        icon: "fa6-solid:music",
+        link: "英语/音标/"
+      },
+      {
         text: "英语 · Friends 老友记",
         icon: "fa6-solid:tv",
         link: "英语/Friends老友记/"

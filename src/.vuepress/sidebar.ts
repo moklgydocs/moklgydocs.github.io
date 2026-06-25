@@ -1704,6 +1704,13 @@ export default sidebar({
               children: "structure",
             },
             {
+              text: "音标有谱",
+              icon: "fa6-solid:music",
+              prefix: "音标/",
+              collapsible: true,
+              children: "structure",
+            },
+            {
               text: "Friends 老友记",
               icon: "fa6-solid:tv",
               prefix: "Friends老友记/",
