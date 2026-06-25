@@ -4,6 +4,7 @@ import Note from "./components/Note.vue";
 import Tense from "./components/Tense.vue";
 import IpaPlayer from "./components/IpaPlayer.vue";
 import KanaPlayer from "./components/KanaPlayer.vue";
+import VocabTable from "./components/VocabTable.vue";
 
 export default defineClientConfig({
   enhance({ app }) {
@@ -12,5 +13,6 @@ export default defineClientConfig({
     app.component("Tense", Tense);
     app.component("IpaPlayer", IpaPlayer);
     app.component("KanaPlayer", KanaPlayer);
+    app.component("VocabTable", VocabTable);
   },
 });

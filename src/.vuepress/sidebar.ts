@@ -1742,6 +1742,7 @@ export default sidebar({
             "",
             { text: "五十音图", icon: "fa6-solid:language", link: "五十音图" },
             { text: "新标日初级(二)单词", icon: "fa6-solid:book", link: "00.新标日初级(二)单词" },
+            { text: "单词速记表格", icon: "fa6-solid:table", link: "单词速记" },
             {
               text: "语法",
               icon: "fa6-solid:book",
