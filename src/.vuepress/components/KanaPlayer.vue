@@ -5,7 +5,7 @@
       <div class="kana-hero-main">
         <p class="kana-eyebrow">JAPANESE GOJŪON · 五十音</p>
         <h1 class="kana-hero-title">日语五十音图</h1>
-        <p class="kana-hero-lead">点击假名卡片即可播放发音 · 含清音、浊音、半浊音、拗音</p>
+        <p class="kana-hero-lead">点击假名卡片即可播放发音 · 含平假名、片假名、清音、浊音、半浊音、拗音</p>
       </div>
       <div class="kana-hero-panel">
         <div class="kana-summary">
@@ -32,10 +32,13 @@
     <!-- 设置栏 -->
     <section class="kana-settings">
       <div class="kana-setting">
-        <span class="setting-label">显示</span>
-        <button class="kana-chip" :class="{ 'is-active': displayMode === 'kana' }" @click="displayMode = 'kana'">假名</button>
-        <button class="kana-chip" :class="{ 'is-active': displayMode === 'romaji' }" @click="displayMode = 'romaji'">罗马音</button>
-        <button class="kana-chip" :class="{ 'is-active': displayMode === 'both' }" @click="displayMode = 'both'"> Both</button>
+        <span class="setting-label">假名</span>
+        <button class="kana-chip" :class="{ 'is-active': kanaMode === 'hiragana' }" @click="kanaMode = 'hiragana'">平假名</button>
+        <button class="kana-chip" :class="{ 'is-active': kanaMode === 'katakana' }" @click="kanaMode = 'katakana'">片假名</button>
+      </div>
+      <div class="kana-setting">
+        <span class="setting-label">罗马音</span>
+        <button class="kana-chip" :class="{ 'is-active': showRomaji }" @click="showRomaji = !showRomaji">{{ showRomaji ? '显示' : '隐藏' }}</button>
       </div>
       <div class="kana-setting">
         <span class="setting-label">循环</span>
@@ -68,16 +71,14 @@
                   v-if="item"
                   class="kana-card"
                   :class="{
-                    'is-playing': playingId === item.kana,
-                    'is-loading': loadingId === item.kana,
+                    'is-playing': playingId === item.romaji,
+                    'is-loading': loadingId === item.romaji,
                   }"
                   @click="play(item)"
                 >
-                  <span class="kana-card-kana">{{ item.kana }}</span>
-                  <span class="kana-card-romaji">{{ item.romaji }}</span>
-                  <span class="kana-play-icon">
-                    <span class="play-dot"></span>
-                  </span>
+                  <span class="kana-card-kana">{{ kanaMode === 'hiragana' ? item.hira : item.kata }}</span>
+                  <span v-if="showRomaji" class="kana-card-romaji">{{ item.romaji }}</span>
+                  <span class="kana-play-icon"><span class="play-dot"></span></span>
                 </button>
                 <div v-else class="kana-empty"></div>
               </td>
@@ -97,16 +98,16 @@
       <div class="kana-grid">
         <button
           v-for="item in dakuonList"
-          :key="item.kana"
+          :key="item.romaji"
           class="kana-card kana-card--grid"
           :class="{
-            'is-playing': playingId === item.kana,
-            'is-loading': loadingId === item.kana,
+            'is-playing': playingId === item.romaji,
+            'is-loading': loadingId === item.romaji,
           }"
           @click="play(item)"
         >
-          <span class="kana-card-kana">{{ item.kana }}</span>
-          <span class="kana-card-romaji">{{ item.romaji }}</span>
+          <span class="kana-card-kana">{{ kanaMode === 'hiragana' ? item.hira : item.kata }}</span>
+          <span v-if="showRomaji" class="kana-card-romaji">{{ item.romaji }}</span>
           <span class="kana-play-icon"><span class="play-dot"></span></span>
         </button>
       </div>
@@ -122,16 +123,16 @@
       <div class="kana-grid">
         <button
           v-for="item in yoonList"
-          :key="item.kana"
+          :key="item.romaji"
           class="kana-card kana-card--grid"
           :class="{
-            'is-playing': playingId === item.kana,
-            'is-loading': loadingId === item.kana,
+            'is-playing': playingId === item.romaji,
+            'is-loading': loadingId === item.romaji,
           }"
           @click="play(item)"
         >
-          <span class="kana-card-kana">{{ item.kana }}</span>
-          <span class="kana-card-romaji">{{ item.romaji }}</span>
+          <span class="kana-card-kana">{{ kanaMode === 'hiragana' ? item.hira : item.kata }}</span>
+          <span v-if="showRomaji" class="kana-card-romaji">{{ item.romaji }}</span>
           <span class="kana-play-icon"><span class="play-dot"></span></span>
         </button>
       </div>
@@ -139,7 +140,7 @@
 
     <!-- 页脚 -->
     <footer class="kana-footer">
-      <p>发音由 Google Translate TTS 提供 · 本页面仅用于日语学习</p>
+      <p>音频来源：convertjapanese.com · 本页面仅用于日语学习</p>
     </footer>
 
     <audio ref="player" preload="none"></audio>
@@ -147,83 +148,82 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 // ── 清音数据（五十音图）──
-// 按行组织，每行 5 个段（あいうえお），缺失位置用 null
 const seionRows = [
   { row: "あ", items: [
-    { kana: "あ", romaji: "a" },
-    { kana: "い", romaji: "i" },
-    { kana: "う", romaji: "u" },
-    { kana: "え", romaji: "e" },
-    { kana: "お", romaji: "o" },
+    { hira: "あ", kata: "ア", romaji: "a" },
+    { hira: "い", kata: "イ", romaji: "i" },
+    { hira: "う", kata: "ウ", romaji: "u" },
+    { hira: "え", kata: "エ", romaji: "e" },
+    { hira: "お", kata: "オ", romaji: "o" },
   ]},
   { row: "か", items: [
-    { kana: "か", romaji: "ka" },
-    { kana: "き", romaji: "ki" },
-    { kana: "く", romaji: "ku" },
-    { kana: "け", romaji: "ke" },
-    { kana: "こ", romaji: "ko" },
+    { hira: "か", kata: "カ", romaji: "ka" },
+    { hira: "き", kata: "キ", romaji: "ki" },
+    { hira: "く", kata: "ク", romaji: "ku" },
+    { hira: "け", kata: "ケ", romaji: "ke" },
+    { hira: "こ", kata: "コ", romaji: "ko" },
   ]},
   { row: "さ", items: [
-    { kana: "さ", romaji: "sa" },
-    { kana: "し", romaji: "shi" },
-    { kana: "す", romaji: "su" },
-    { kana: "せ", romaji: "se" },
-    { kana: "そ", romaji: "so" },
+    { hira: "さ", kata: "サ", romaji: "sa" },
+    { hira: "し", kata: "シ", romaji: "shi" },
+    { hira: "す", kata: "ス", romaji: "su" },
+    { hira: "せ", kata: "セ", romaji: "se" },
+    { hira: "そ", kata: "ソ", romaji: "so" },
   ]},
   { row: "た", items: [
-    { kana: "た", romaji: "ta" },
-    { kana: "ち", romaji: "chi" },
-    { kana: "つ", romaji: "tsu" },
-    { kana: "て", romaji: "te" },
-    { kana: "と", romaji: "to" },
+    { hira: "た", kata: "タ", romaji: "ta" },
+    { hira: "ち", kata: "チ", romaji: "chi" },
+    { hira: "つ", kata: "ツ", romaji: "tsu" },
+    { hira: "て", kata: "テ", romaji: "te" },
+    { hira: "と", kata: "ト", romaji: "to" },
   ]},
   { row: "な", items: [
-    { kana: "な", romaji: "na" },
-    { kana: "に", romaji: "ni" },
-    { kana: "ぬ", romaji: "nu" },
-    { kana: "ね", romaji: "ne" },
-    { kana: "の", romaji: "no" },
+    { hira: "な", kata: "ナ", romaji: "na" },
+    { hira: "に", kata: "ニ", romaji: "ni" },
+    { hira: "ぬ", kata: "ヌ", romaji: "nu" },
+    { hira: "ね", kata: "ネ", romaji: "ne" },
+    { hira: "の", kata: "ノ", romaji: "no" },
   ]},
   { row: "は", items: [
-    { kana: "は", romaji: "ha" },
-    { kana: "ひ", romaji: "hi" },
-    { kana: "ふ", romaji: "fu" },
-    { kana: "へ", romaji: "he" },
-    { kana: "ほ", romaji: "ho" },
+    { hira: "は", kata: "ハ", romaji: "ha" },
+    { hira: "ひ", kata: "ヒ", romaji: "hi" },
+    { hira: "ふ", kata: "フ", romaji: "fu" },
+    { hira: "へ", kata: "ヘ", romaji: "he" },
+    { hira: "ほ", kata: "ホ", romaji: "ho" },
   ]},
   { row: "ま", items: [
-    { kana: "ま", romaji: "ma" },
-    { kana: "み", romaji: "mi" },
-    { kana: "む", romaji: "mu" },
-    { kana: "め", romaji: "me" },
-    { kana: "も", romaji: "mo" },
+    { hira: "ま", kata: "マ", romaji: "ma" },
+    { hira: "み", kata: "ミ", romaji: "mi" },
+    { hira: "む", kata: "ム", romaji: "mu" },
+    { hira: "め", kata: "メ", romaji: "me" },
+    { hira: "も", kata: "モ", romaji: "mo" },
   ]},
   { row: "や", items: [
-    { kana: "や", romaji: "ya" },
+    { hira: "や", kata: "ヤ", romaji: "ya" },
     null,
-    { kana: "ゆ", romaji: "yu" },
+    { hira: "ゆ", kata: "ユ", romaji: "yu" },
     null,
-    { kana: "よ", romaji: "yo" },
+    { hira: "よ", kata: "ヨ", romaji: "yo" },
   ]},
   { row: "ら", items: [
-    { kana: "ら", romaji: "ra" },
-    { kana: "り", romaji: "ri" },
-    { kana: "る", romaji: "ru" },
-    { kana: "れ", romaji: "re" },
-    { kana: "ろ", romaji: "ro" },
+    { hira: "ら", kata: "ラ", romaji: "ra" },
+    { hira: "り", kata: "リ", romaji: "ri" },
+    { hira: "る", kata: "ル", romaji: "ru" },
+    { hira: "れ", kata: "レ", romaji: "re" },
+    { hira: "ろ", kata: "ロ", romaji: "ro" },
   ]},
   { row: "わ", items: [
-    { kana: "わ", romaji: "wa" },
+    { hira: "わ", kata: "ワ", romaji: "wa" },
     null,
     null,
     null,
-    { kana: "を", romaji: "wo" },
+    { hira: "を", kata: "ヲ", romaji: "wo" },
   ]},
   { row: "ん", items: [
-    { kana: "ん", romaji: "n" },
+    { hira: "ん", kata: "ン", romaji: "n" },
     null,
     null,
     null,
@@ -233,78 +233,74 @@ const seionRows = [
 
 // ── 浊音/半浊音 ──
 const dakuonList = [
-  // が行（浊音）
-  { kana: "が", romaji: "ga" },
-  { kana: "ぎ", romaji: "gi" },
-  { kana: "ぐ", romaji: "gu" },
-  { kana: "げ", romaji: "ge" },
-  { kana: "ご", romaji: "go" },
-  // ざ行（浊音）
-  { kana: "ざ", romaji: "za" },
-  { kana: "じ", romaji: "ji" },
-  { kana: "ず", romaji: "zu" },
-  { kana: "ぜ", romaji: "ze" },
-  { kana: "ぞ", romaji: "zo" },
-  // だ行（浊音）
-  { kana: "だ", romaji: "da" },
-  { kana: "ぢ", romaji: "di" },
-  { kana: "づ", romaji: "du" },
-  { kana: "で", romaji: "de" },
-  { kana: "ど", romaji: "do" },
-  // ば行（浊音）
-  { kana: "ば", romaji: "ba" },
-  { kana: "び", romaji: "bi" },
-  { kana: "ぶ", romaji: "bu" },
-  { kana: "べ", romaji: "be" },
-  { kana: "ぼ", romaji: "bo" },
-  // ぱ行（半浊音）
-  { kana: "ぱ", romaji: "pa" },
-  { kana: "ぴ", romaji: "pi" },
-  { kana: "ぷ", romaji: "pu" },
-  { kana: "ぺ", romaji: "pe" },
-  { kana: "ぽ", romaji: "po" },
+  { hira: "が", kata: "ガ", romaji: "ga" },
+  { hira: "ぎ", kata: "ギ", romaji: "gi" },
+  { hira: "ぐ", kata: "グ", romaji: "gu" },
+  { hira: "げ", kata: "ゲ", romaji: "ge" },
+  { hira: "ご", kata: "ゴ", romaji: "go" },
+  { hira: "ざ", kata: "ザ", romaji: "za" },
+  { hira: "じ", kata: "ジ", romaji: "ji" },
+  { hira: "ず", kata: "ズ", romaji: "zu" },
+  { hira: "ぜ", kata: "ゼ", romaji: "ze" },
+  { hira: "ぞ", kata: "ゾ", romaji: "zo" },
+  { hira: "だ", kata: "ダ", romaji: "da" },
+  { hira: "ぢ", kata: "ヂ", romaji: "di" },
+  { hira: "づ", kata: "ヅ", romaji: "du" },
+  { hira: "で", kata: "デ", romaji: "de" },
+  { hira: "ど", kata: "ド", romaji: "do" },
+  { hira: "ば", kata: "バ", romaji: "ba" },
+  { hira: "び", kata: "ビ", romaji: "bi" },
+  { hira: "ぶ", kata: "ブ", romaji: "bu" },
+  { hira: "べ", kata: "ベ", romaji: "be" },
+  { hira: "ぼ", kata: "ボ", romaji: "bo" },
+  { hira: "ぱ", kata: "パ", romaji: "pa" },
+  { hira: "ぴ", kata: "ピ", romaji: "pi" },
+  { hira: "ぷ", kata: "プ", romaji: "pu" },
+  { hira: "ぺ", kata: "ペ", romaji: "pe" },
+  { hira: "ぽ", kata: "ポ", romaji: "po" },
 ];
 
 // ── 拗音 ──
 const yoonList = [
-  { kana: "きゃ", romaji: "kya" },
-  { kana: "きゅ", romaji: "kyu" },
-  { kana: "きょ", romaji: "kyo" },
-  { kana: "しゃ", romaji: "sha" },
-  { kana: "しゅ", romaji: "shu" },
-  { kana: "しょ", romaji: "sho" },
-  { kana: "ちゃ", romaji: "cha" },
-  { kana: "ちゅ", romaji: "chu" },
-  { kana: "ちょ", romaji: "cho" },
-  { kana: "にゃ", romaji: "nya" },
-  { kana: "にゅ", romaji: "nyu" },
-  { kana: "にょ", romaji: "nyo" },
-  { kana: "ひゃ", romaji: "hya" },
-  { kana: "ひゅ", romaji: "hyu" },
-  { kana: "ひょ", romaji: "hyo" },
-  { kana: "みゃ", romaji: "mya" },
-  { kana: "みゅ", romaji: "myu" },
-  { kana: "みょ", romaji: "myo" },
-  { kana: "りゃ", romaji: "rya" },
-  { kana: "りゅ", romaji: "ryu" },
-  { kana: "りょ", romaji: "ryo" },
-  { kana: "ぎゃ", romaji: "gya" },
-  { kana: "ぎゅ", romaji: "gyu" },
-  { kana: "ぎょ", romaji: "gyo" },
-  { kana: "じゃ", romaji: "ja" },
-  { kana: "じゅ", romaji: "ju" },
-  { kana: "じょ", romaji: "jo" },
-  { kana: "びゃ", romaji: "bya" },
-  { kana: "びゅ", romaji: "byu" },
-  { kana: "びょ", romaji: "byo" },
-  { kana: "ぴゃ", romaji: "pya" },
-  { kana: "ぴゅ", romaji: "pyu" },
-  { kana: "ぴょ", romaji: "pyo" },
+  { hira: "きゃ", kata: "キャ", romaji: "kya" },
+  { hira: "きゅ", kata: "キュ", romaji: "kyu" },
+  { hira: "きょ", kata: "キョ", romaji: "kyo" },
+  { hira: "しゃ", kata: "シャ", romaji: "sha" },
+  { hira: "しゅ", kata: "シュ", romaji: "shu" },
+  { hira: "しょ", kata: "ショ", romaji: "sho" },
+  { hira: "ちゃ", kata: "チャ", romaji: "cha" },
+  { hira: "ちゅ", kata: "チュ", romaji: "chu" },
+  { hira: "ちょ", kata: "チョ", romaji: "cho" },
+  { hira: "にゃ", kata: "ニャ", romaji: "nya" },
+  { hira: "にゅ", kata: "ニュ", romaji: "nyu" },
+  { hira: "にょ", kata: "ニョ", romaji: "nyo" },
+  { hira: "ひゃ", kata: "ヒャ", romaji: "hya" },
+  { hira: "ひゅ", kata: "ヒュ", romaji: "hyu" },
+  { hira: "ひょ", kata: "ヒョ", romaji: "hyo" },
+  { hira: "みゃ", kata: "ミャ", romaji: "mya" },
+  { hira: "みゅ", kata: "ミュ", romaji: "myu" },
+  { hira: "みょ", kata: "ミョ", romaji: "myo" },
+  { hira: "りゃ", kata: "リャ", romaji: "rya" },
+  { hira: "りゅ", kata: "リュ", romaji: "ryu" },
+  { hira: "りょ", kata: "リョ", romaji: "ryo" },
+  { hira: "ぎゃ", kata: "ギャ", romaji: "gya" },
+  { hira: "ぎゅ", kata: "ギュ", romaji: "gyu" },
+  { hira: "ぎょ", kata: "ギョ", romaji: "gyo" },
+  { hira: "じゃ", kata: "ジャ", romaji: "ja" },
+  { hira: "じゅ", kata: "ジュ", romaji: "ju" },
+  { hira: "じょ", kata: "ジョ", romaji: "jo" },
+  { hira: "びゃ", kata: "ビャ", romaji: "bya" },
+  { hira: "びゅ", kata: "ビュ", romaji: "byu" },
+  { hira: "びょ", kata: "ビョ", romaji: "byo" },
+  { hira: "ぴゃ", kata: "ピャ", romaji: "pya" },
+  { hira: "ぴゅ", kata: "ピュ", romaji: "pyu" },
+  { hira: "ぴょ", kata: "ピョ", romaji: "pyo" },
 ];
 
 // ── 状态 ──
 const player = ref(null);
-const displayMode = ref("both");
+const kanaMode = ref("hiragana");
+const showRomaji = ref(true);
 const repeatCount = ref(1);
 const playingId = ref(null);
 const loadingId = ref(null);
@@ -314,33 +310,33 @@ const statusText = ref("点击任意假名卡片即可播放发音");
 const repeatIndex = ref(0);
 
 function getAudioUrl(item) {
-  // Google Translate TTS，日语 ja，用罗马音保证发音准确
-  return "https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=" + encodeURIComponent(item.kana);
+  return "/audio/kana/" + item.romaji + ".mp3";
 }
 
 async function play(item) {
   const el = player.value;
   if (!el) return;
-  if (playingId.value === item.kana) { stopPlay(); return; }
+  if (playingId.value === item.romaji) { stopPlay(); return; }
   el.pause();
-  playingId.value = item.kana;
-  loadingId.value = item.kana;
+  playingId.value = item.romaji;
+  loadingId.value = item.romaji;
   playing.value = false;
   error.value = false;
   repeatIndex.value = 0;
-  statusText.value = "加载中：" + item.kana + " (" + item.romaji + ")";
+  const display = kanaMode.value === "hiragana" ? item.hira : item.kata;
+  statusText.value = "加载中：" + display + " (" + item.romaji + ")";
   el.src = getAudioUrl(item);
   el.load();
   try {
     await el.play();
     loadingId.value = null;
     playing.value = true;
-    statusText.value = "播放中：" + item.kana + " (" + item.romaji + ")";
+    statusText.value = "播放中：" + display + " (" + item.romaji + ")";
   } catch (e) {
     loadingId.value = null;
     playingId.value = null;
     error.value = true;
-    statusText.value = "音频加载失败（可能需要科学上网）";
+    statusText.value = "音频加载失败";
   }
 }
 
@@ -378,7 +374,7 @@ function onError() {
   playing.value = false;
   error.value = true;
   repeatIndex.value = 0;
-  statusText.value = "音频加载失败（Google TTS 可能不可访问）";
+  statusText.value = "音频加载失败";
 }
 
 onMounted(() => {
@@ -596,7 +592,7 @@ onBeforeUnmount(() => {
 }
 .kana-corner { min-width: 3rem; }
 .kana-col-head { width: 18%; }
-.kana-row-head { width: 3rem; }
+.kana-row-head { width: 3rem; font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif; }
 .kana-cell { padding: 0; text-align: center; }
 .kana-empty { min-height: 3.5rem; }
 
