@@ -1756,6 +1756,8 @@ export default sidebar({
                 { text: "助词详解", icon: "fa6-solid:book", link: "助词详解" },
                 { text: "形容词变形与活用", icon: "fa6-solid:book", link: "形容词变形" },
                 { text: "敬语体系", icon: "fa6-solid:book", link: "敬语体系" },
+                { text: "复合动词与补助动词", icon: "fa6-solid:book", link: "复合动词" },
+                { text: "条件假定表达", icon: "fa6-solid:book", link: "条件假定" },
               ],
             },
           ],
