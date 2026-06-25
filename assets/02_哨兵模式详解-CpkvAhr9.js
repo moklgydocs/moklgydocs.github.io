@@ -1,0 +1,835 @@
+import{A as e,E as t,d as n,l as r,p as i,s as a}from"./runtime-core.esm-bundler-BVtXrkU4.js";import{t as o}from"./app-qtPmefSp.js";var s=JSON.parse(`{"path":"/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91/Redis/04_%E5%A4%8D%E5%88%B6%E4%B8%8E%E9%AB%98%E5%8F%AF%E7%94%A8/02_%E5%93%A8%E5%85%B5%E6%A8%A1%E5%BC%8F%E8%AF%A6%E8%A7%A3.html","title":"哨兵模式详解","lang":"zh-CN","frontmatter":{"title":"哨兵模式详解","icon":"fa6-solid:shield-halved","order":2,"category":["Redis"],"tag":["哨兵","Sentinel","故障转移","Raft","高可用"]},"git":{"createdTime":1780586585000,"updatedTime":1780712648000,"contributors":[{"name":"jackie.liu","username":"","email":"moklgy@foxmail.com","commits":2}]},"readingTime":{"minutes":27.77,"words":8331},"filePathRelative":"后端开发/Redis/04_复制与高可用/02_哨兵模式详解.md"}`),c={name:`02_哨兵模式详解.md`};function l(o,s,c,l,u,d){let f=e(`Mermaid`);return t(),r(`div`,null,[s[0]||=n(`<h1 id="哨兵模式详解" tabindex="-1"><a class="header-anchor" href="#哨兵模式详解"><span>哨兵模式详解</span></a></h1><blockquote><p>主从复制解决了数据冗余和读扩展的问题，但主节点仍然是单点 —— 一旦主节点宕机，整个集群失去写入能力，需要人工介入切换。Redis Sentinel（哨兵）就是那个&quot;自动值班员&quot;，它7×24小时监控主从节点，在主节点故障时自动完成故障转移，让高可用真正落地。</p></blockquote><h2 id="_1-为什么需要哨兵" tabindex="-1"><a class="header-anchor" href="#_1-为什么需要哨兵"><span>1. 为什么需要哨兵？</span></a></h2><h3 id="_1-1-主从复制的单点问题" tabindex="-1"><a class="header-anchor" href="#_1-1-主从复制的单点问题"><span>1.1 主从复制的单点问题</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>主从复制架构（无哨兵）：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>              ┌─────────────┐</span></span>
+<span class="line"><span>              │  Master ✅  │</span></span>
+<span class="line"><span>              └──┬──────┬───┘</span></span>
+<span class="line"><span>                 │      │</span></span>
+<span class="line"><span>           ┌─────▼┐  ┌──▼─────┐</span></span>
+<span class="line"><span>           │Slave-A│  │Slave-B │</span></span>
+<span class="line"><span>           └───────┘  └────────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  问题场景：</span></span>
+<span class="line"><span>              ┌─────────────┐</span></span>
+<span class="line"><span>              │  Master ❌  │ ← 宕机！</span></span>
+<span class="line"><span>              └──┬──────┬───┘</span></span>
+<span class="line"><span>                 │      │</span></span>
+<span class="line"><span>           ┌─────▼┐  ┌──▼─────┐</span></span>
+<span class="line"><span>           │Slave-A│  │Slave-B │ ← 从节点仍在运行</span></span>
+<span class="line"><span>           └───────┘  └────────┘</span></span>
+<span class="line"><span>              但无法写入！需要人工介入！</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  人工操作步骤（平均耗时 30分钟+）：</span></span>
+<span class="line"><span>  1. 发现主节点宕机（靠监控告警）</span></span>
+<span class="line"><span>  2. 选择一个从节点升为主节点</span></span>
+<span class="line"><span>  3. 其他从节点指向新主节点</span></span>
+<span class="line"><span>  4. 通知客户端连接新主节点</span></span>
+<span class="line"><span>  5. 修复旧主节点，设为新主节点的从节点</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_1-2-哨兵解决的问题" tabindex="-1"><a class="header-anchor" href="#_1-2-哨兵解决的问题"><span>1.2 哨兵解决的问题</span></a></h3><table><thead><tr><th>问题</th><th>无哨兵</th><th>有哨兵</th></tr></thead><tbody><tr><td>主节点故障检测</td><td>人工发现</td><td>自动检测（秒级）</td></tr><tr><td>故障转移</td><td>人工操作（30分钟+）</td><td>自动完成（10秒内）</td></tr><tr><td>客户端路由</td><td>人工修改配置</td><td>自动通知新主节点</td></tr><tr><td>配置提供</td><td>硬编码主节点地址</td><td>运行时动态获取</td></tr><tr><td>持续监控</td><td>无</td><td>7×24小时监控</td></tr></tbody></table><h3 id="_1-3-哨兵的核心能力" tabindex="-1"><a class="header-anchor" href="#_1-3-哨兵的核心能力"><span>1.3 哨兵的核心能力</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>┌─────────────────────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│                    Redis Sentinel 核心能力                    │</span></span>
+<span class="line"><span>├─────────────────────────────────────────────────────────────┤</span></span>
+<span class="line"><span>│                                                               │</span></span>
+<span class="line"><span>│  1️⃣ 监控（Monitoring）                                        │</span></span>
+<span class="line"><span>│     持续检测主节点、从节点、其他哨兵是否正常工作                │</span></span>
+<span class="line"><span>│                                                               │</span></span>
+<span class="line"><span>│  2️⃣ 通知（Notification）                                      │</span></span>
+<span class="line"><span>│     故障事件通过 API 向管理员或应用程序发送通知                 │</span></span>
+<span class="line"><span>│                                                               │</span></span>
+<span class="line"><span>│  3️⃣ 自动故障转移（Automatic Failover）                        │</span></span>
+<span class="line"><span>│     主节点故障时，自动将从节点升为主节点，并重新配置其他从节点  │</span></span>
+<span class="line"><span>│                                                               │</span></span>
+<span class="line"><span>│  4️⃣ 配置提供者（Configuration Provider）                       │</span></span>
+<span class="line"><span>│     客户端通过哨兵获取当前主节点地址，无需硬编码               │</span></span>
+<span class="line"><span>│                                                               │</span></span>
+<span class="line"><span>└─────────────────────────────────────────────────────────────┘</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_2-sentinel-架构" tabindex="-1"><a class="header-anchor" href="#_2-sentinel-架构"><span>2. Sentinel 架构</span></a></h2><h3 id="_2-1-典型部署架构" tabindex="-1"><a class="header-anchor" href="#_2-1-典型部署架构"><span>2.1 典型部署架构</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>                    ┌──────────────┐</span></span>
+<span class="line"><span>                    │   客户端     │</span></span>
+<span class="line"><span>                    └──┬───────┬───┘</span></span>
+<span class="line"><span>                       │       │</span></span>
+<span class="line"><span>              查询主节点│       │写入数据</span></span>
+<span class="line"><span>                       ▼       ▼</span></span>
+<span class="line"><span>         ┌─────────────────────────────────┐</span></span>
+<span class="line"><span>         │         Sentinel 集群            │</span></span>
+<span class="line"><span>         │  ┌──────┐ ┌──────┐ ┌──────┐    │</span></span>
+<span class="line"><span>         │  │Sent-1│ │Sent-2│ │Sent-3│    │</span></span>
+<span class="line"><span>         │  │:26379│ │:26379│ │:26379│    │</span></span>
+<span class="line"><span>         │  └──┬───┘ └──┬───┘ └──┬───┘    │</span></span>
+<span class="line"><span>         └────┼────────┼────────┼────────┘</span></span>
+<span class="line"><span>              │        │        │</span></span>
+<span class="line"><span>              │  监控   │        │</span></span>
+<span class="line"><span>              ▼        ▼        ▼</span></span>
+<span class="line"><span>     ┌────────────────────────────────────┐</span></span>
+<span class="line"><span>     │         Redis 主从集群              │</span></span>
+<span class="line"><span>     │                                    │</span></span>
+<span class="line"><span>     │        ┌─────────────┐             │</span></span>
+<span class="line"><span>     │        │  Master     │             │</span></span>
+<span class="line"><span>     │        │  :6379      │             │</span></span>
+<span class="line"><span>     │        └──┬──────┬───┘             │</span></span>
+<span class="line"><span>     │           │      │                  │</span></span>
+<span class="line"><span>     │     ┌─────▼┐  ┌──▼─────┐          │</span></span>
+<span class="line"><span>     │     │Slave-A│  │Slave-B │          │</span></span>
+<span class="line"><span>     │     │ :6380 │  │ :6381  │          │</span></span>
+<span class="line"><span>     │     └───────┘  └────────┘          │</span></span>
+<span class="line"><span>     └────────────────────────────────────┘</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_2-2-为什么至少需要3个哨兵" tabindex="-1"><a class="header-anchor" href="#_2-2-为什么至少需要3个哨兵"><span>2.2 为什么至少需要3个哨兵？</span></a></h3><div class="hint-container important"><p class="hint-container-title">哨兵数量的奇数原则</p><p>哨兵集群必须至少部署 <strong>3 个</strong>实例，原因如下：</p><ol><li><strong>故障转移需要多数派同意</strong>：N 个哨兵中至少 <code>quorum</code> 个同意才能执行故障转移</li><li><strong>防止脑裂</strong>：3 个哨兵的多数派是 2，网络分区时只有一侧能获得 2 票</li><li><strong>容错能力</strong>：3 个哨兵可以容忍 1 个故障，5 个可以容忍 2 个</li></ol><table><thead><tr><th>哨兵数量</th><th>多数派</th><th>容忍故障数</th><th>典型场景</th></tr></thead><tbody><tr><td>1</td><td>1</td><td>0</td><td>仅测试</td></tr><tr><td>2</td><td>2</td><td>0</td><td>不推荐（无法容忍任何故障）</td></tr><tr><td>3</td><td>2</td><td>1</td><td>标准生产部署</td></tr><tr><td>5</td><td>3</td><td>2</td><td>核心业务</td></tr><tr><td>7</td><td>4</td><td>3</td><td>极高可用要求</td></tr></tbody></table></div><h3 id="_2-3-sentinel-的通信机制" tabindex="-1"><a class="header-anchor" href="#_2-3-sentinel-的通信机制"><span>2.3 Sentinel 的通信机制</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Sentinel 之间的通信网络（每条线代表双向通信）：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>         ┌──────┐  ──────  ┌──────┐</span></span>
+<span class="line"><span>         │Sent-1│          │Sent-2│</span></span>
+<span class="line"><span>         └──┬───┘  ──────  └──┬───┘</span></span>
+<span class="line"><span>            │  ╲              ╱  │</span></span>
+<span class="line"><span>            │    ╲          ╱    │</span></span>
+<span class="line"><span>            │      ╲      ╱      │</span></span>
+<span class="line"><span>            │        ╲  ╱        │</span></span>
+<span class="line"><span>            │      ──────        │</span></span>
+<span class="line"><span>            │      ╱    ╲        │</span></span>
+<span class="line"><span>            │    ╱        ╲      │</span></span>
+<span class="line"><span>         ┌──▼───┐          ┌──▼───┐</span></span>
+<span class="line"><span>         │Sent-3│  ──────  │Sent-4│</span></span>
+<span class="line"><span>         └──────┘          └──────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>通信方式：Sentinel Pub/Sub（发布订阅）</span></span>
+<span class="line"><span>频道名：__sentinel__:hello</span></span>
+<span class="line"><span>频率：每 2 秒一次</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,16),i(f,{code:`eJxVkN1KAkEYhs+7imE9TfwJCzwI/HcVLKgzkSVsF4XBBRWiM9eS1GJ1KywqAiUxktqOzFzCm9nZn7tomh3DndPved55v0+A4kmxdFStg8P4BsAvkmcO+Eq9XOEhQH0VdV+ZAvB6d0E0z1jLZ0Me63PN6jbN5jdTIEaUjGN4LH+h3kDXZGeM2nfWENsEihEovsowOg3jqfOPUihOoASGPkb2fQtwXI1W4bhwiYdQBPZIsaUbyicIn8wzhtoLmpNr1FPQ/My6eLMWU305NCQVtT8tdeySkkRKYQnXuJ2h1kzXBquVHYuSKUKm8wzSFub0Up/Lbth8OHe2wTwR0kRgcfSVZGrv5qNiyBMaxpJZhnQN/HXtK/iQPnwCnzsVL2E3pH02l6JmhphZx/S7VIdlc8k9pPzo2gs1ss5fTqla/RTyIAKEMoRhTyC0HSr6N4siFKthjyAIawxLmSC/c7wVXGd+ASSI7XY=`}),s[1]||=n(`<h3 id="_2-4-sentinel-发现机制" tabindex="-1"><a class="header-anchor" href="#_2-4-sentinel-发现机制"><span>2.4 Sentinel 发现机制</span></a></h3><p>Sentinel 需要发现三类对象：从节点、其他哨兵、主节点。</p><p><strong>发现从节点</strong>：</p><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Sentinel 通过主节点发现从节点：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>1. Sentinel 连接主节点</span></span>
+<span class="line"><span>2. 执行 INFO replication 命令</span></span>
+<span class="line"><span>3. 从返回信息中获取从节点列表</span></span>
+<span class="line"><span>4. 连接所有从节点</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>INFO replication 返回：</span></span>
+<span class="line"><span>  slave0:ip=10.0.0.2,port=6380,state=online,offset=100,lag=0</span></span>
+<span class="line"><span>  slave1:ip=10.0.0.3,port=6381,state=online,offset=98,lag=1</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><strong>发现其他哨兵</strong>：</p><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Sentinel 通过 Pub/Sub 发现其他哨兵：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>1. 每个 Sentinel 每 2 秒向 __sentinel__:hello 频道发送消息</span></span>
+<span class="line"><span>2. 消息格式：&lt;sentinel_ip&gt;|&lt;sentinel_port&gt;|&lt;run_id&gt;|&lt;epoch&gt;|&lt;master_name&gt;|&lt;master_ip&gt;|&lt;master_port&gt;</span></span>
+<span class="line"><span>3. 其他 Sentinel 订阅该频道，收到消息后建立连接</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p><strong>发现主节点</strong>：</p><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Sentinel 通过配置发现主节点：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>1. sentinel.conf 中配置 sentinel monitor &lt;master-name&gt; &lt;ip&gt; &lt;port&gt; &lt;quorum&gt;</span></span>
+<span class="line"><span>2. Sentinel 连接配置的主节点</span></span>
+<span class="line"><span>3. 如果主节点变更（故障转移），Sentinel 通过 Pub/Sub 更新</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_3-主观下线与客观下线" tabindex="-1"><a class="header-anchor" href="#_3-主观下线与客观下线"><span>3. 主观下线与客观下线</span></a></h2><h3 id="_3-1-监控机制概览" tabindex="-1"><a class="header-anchor" href="#_3-1-监控机制概览"><span>3.1 监控机制概览</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Sentinel 的监控层次：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>         ┌─────────────────────────────────────────┐</span></span>
+<span class="line"><span>         │           Sentinel 监控层次              │</span></span>
+<span class="line"><span>         ├─────────────────────────────────────────┤</span></span>
+<span class="line"><span>         │                                         │</span></span>
+<span class="line"><span>         │  PING 命令（每1秒一次）                  │</span></span>
+<span class="line"><span>         │  ├── 发送给主节点                        │</span></span>
+<span class="line"><span>         │  ├── 发送给从节点                        │</span></span>
+<span class="line"><span>         │  └── 发送给其他哨兵                      │</span></span>
+<span class="line"><span>         │                                         │</span></span>
+<span class="line"><span>         │  INFO 命令（每10秒一次）                 │</span></span>
+<span class="line"><span>         │  ├── 主节点：获取从节点列表              │</span></span>
+<span class="line"><span>         │  └── 从节点：获取主从关系               │</span></span>
+<span class="line"><span>         │                                         │</span></span>
+<span class="line"><span>         │  Pub/Sub（每2秒一次）                    │</span></span>
+<span class="line"><span>         │  └── 发现其他哨兵                       │</span></span>
+<span class="line"><span>         │                                         │</span></span>
+<span class="line"><span>         └─────────────────────────────────────────┘</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_3-2-主观下线-sdown" tabindex="-1"><a class="header-anchor" href="#_3-2-主观下线-sdown"><span>3.2 主观下线（SDOWN）</span></a></h3><p>主观下线是<strong>单个 Sentinel</strong> 对节点的判断：</p><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>主观下线判定逻辑：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Sentinel 向节点发送 PING 命令</span></span>
+<span class="line"><span>         │</span></span>
+<span class="line"><span>         ▼</span></span>
+<span class="line"><span>   收到有效回复？ ──── YES ───► 保持在线状态</span></span>
+<span class="line"><span>         │</span></span>
+<span class="line"><span>        NO（超时或回复错误）</span></span>
+<span class="line"><span>         │</span></span>
+<span class="line"><span>         ▼</span></span>
+<span class="line"><span>   持续超过 sentinel-down-after-milliseconds？</span></span>
+<span class="line"><span>         │</span></span>
+<span class="line"><span>        YES</span></span>
+<span class="line"><span>         │</span></span>
+<span class="line"><span>         ▼</span></span>
+<span class="line"><span>   标记节点为 SDOWN（主观下线）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>有效回复：+PONG, -LOADING, -MASTERDOWN</span></span>
+<span class="line"><span>无效回复：超时无回复, 其他错误回复</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel.conf 配置</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 判定主观下线的超时时间（毫秒）</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> down-after-milliseconds</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 30000</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 含义：如果主节点在 30 秒内没有有效回复 PING，</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#       当前 Sentinel 将其标记为主观下线</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="hint-container tip"><p class="hint-container-title">down-after-milliseconds 的影响</p><p>这个值决定了故障检测的灵敏度：</p><ul><li><strong>太小</strong>（如 5 秒）：网络抖动就可能触发误判</li><li><strong>太大</strong>（如 120 秒）：故障检测太慢，影响可用性</li><li><strong>推荐</strong>：生产环境 10~30 秒</li></ul></div><h3 id="_3-3-客观下线-odown" tabindex="-1"><a class="header-anchor" href="#_3-3-客观下线-odown"><span>3.3 客观下线（ODOWN）</span></a></h3><p>客观下线是<strong>多个 Sentinel</strong> 对主节点的共识判断：</p>`,18),i(f,{code:`eJxtkM1KAlEYhvddxWHaNmQoUVFG6iRB6EIhQlz4NySMDo2KSAYpmr+hLnShEhWSEjkYmJljdTNzzhlX3kLjOJJRZ3c+nvf5fmiGjXrOXFwY2E0rQH4HDsLmC4b9QR9DbgDYuxaHgpRP4uQ7ustIfE8cjoDNZD2xEE5Aknpg+M2XKzA9EIUaWBQBLFUmV4ldN7eut1EW+5GFOgb+EBlwhcI+jvSy0SDpjpEur5cjnMoEBsVrdBB/TI1b2LqRMk/w7QXXUzDbQrWuGjIqIdMFActFlCrNRwQyNW+8UKBqb5IpAf0eOI+wXCSwT1wqcdMsHj+lbHFAyY3/3do6Uyq66TgL+QepnRSHBTz6mo5z6hRzjcUaB4cOAgt9VEzAZkdGcH6A1CPgbg5+plGjD1v1n93wPS/xLVVDKcuYHYTUfpTPh6rpSb0pfTzjtoBeE7hTkDkFDIVjjE/GaT/D7KzSOp1Wu7nmYRmWk380vcSYFwy9vaXRLDPfrAHdLQ==`}),s[2]||=n(`<div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel.conf 配置</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># quorum：判定客观下线需要的最少哨兵同意数</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> monitor</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 127.0.0.1</span><span style="color:#D19A66;"> 6379</span><span style="color:#D19A66;"> 2</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                                              ↑ quorum=2</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 含义：至少 2 个哨兵认为主节点下线，才标记为客观下线</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_3-4-sdown-与-odown-的区别" tabindex="-1"><a class="header-anchor" href="#_3-4-sdown-与-odown-的区别"><span>3.4 SDOWN 与 ODOWN 的区别</span></a></h3><table><thead><tr><th>维度</th><th>SDOWN（主观下线）</th><th>ODOWN（客观下线）</th></tr></thead><tbody><tr><td>判定者</td><td>单个 Sentinel</td><td>多个 Sentinel 共识</td></tr><tr><td>适用对象</td><td>主节点、从节点、其他哨兵</td><td><strong>仅主节点</strong></td></tr><tr><td>判定条件</td><td>单个 Sentinel 的 PING 超时</td><td>quorum 个 Sentinel 同意 SDOWN</td></tr><tr><td>后果</td><td>无（仅记录状态）</td><td>触发故障转移</td></tr><tr><td>可恢复性</td><td>节点恢复后自动取消</td><td>需要故障转移或人工干预</td></tr></tbody></table><div class="hint-container warning"><p class="hint-container-title">只有主节点才有 ODOWN</p><p>从节点和哨兵只有 SDOWN，没有 ODOWN。这是因为：</p><ol><li>从节点下线不影响集群写入，不需要故障转移</li><li>哨兵下线有其他哨兵继续工作</li><li>只有主节点下线才需要触发故障转移</li></ol></div><h3 id="_3-5-sentinel-is-master-down-by-addr-命令" tabindex="-1"><a class="header-anchor" href="#_3-5-sentinel-is-master-down-by-addr-命令"><span>3.5 SENTINEL is-master-down-by-addr 命令</span></a></h3><p>Sentinel 之间通过此命令交换对主节点的判断：</p><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel-1 询问 Sentinel-2：主节点是否下线？</span></span>
+<span class="line"><span style="color:#61AFEF;">SENTINEL</span><span style="color:#98C379;"> is-master-down-by-addr</span><span style="color:#D19A66;"> 127.0.0.1</span><span style="color:#D19A66;"> 6379</span><span style="color:#D19A66;"> 1</span><span style="color:#ABB2BF;"> &lt;</span><span style="color:#98C379;">sentinel1_run_i</span><span style="color:#ABB2BF;">d&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel-2 回复：</span></span>
+<span class="line"><span style="color:#61AFEF;">1</span><span style="color:#ABB2BF;">) 1    </span><span style="color:#7F848E;font-style:italic;"># 1=下线, 0=未下线</span></span>
+<span class="line"><span style="color:#61AFEF;">2</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;*&quot;</span><span style="color:#7F848E;font-style:italic;">  # 当前 Sentinel 的 leader 投票（用于 Raft 选举）</span></span>
+<span class="line"><span style="color:#61AFEF;">3</span><span style="color:#ABB2BF;">) &lt;sentinel2_run_id&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 参数说明：</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># arg1: 主节点 IP</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># arg2: 主节点端口</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># arg3: 当前纪元（epoch）</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># arg4: 请求投票的 Sentinel 的 run_id（选举时使用）</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_4-领导者选举-raft" tabindex="-1"><a class="header-anchor" href="#_4-领导者选举-raft"><span>4. 领导者选举（Raft）</span></a></h2><h3 id="_4-1-为什么需要领导者选举" tabindex="-1"><a class="header-anchor" href="#_4-1-为什么需要领导者选举"><span>4.1 为什么需要领导者选举？</span></a></h3><p>当主节点被标记为 ODOWN 后，需要执行故障转移。但多个 Sentinel 同时执行故障转移会导致混乱：</p><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>没有领导者的后果：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Sentinel-1: 选择 Slave-A 升为主节点</span></span>
+<span class="line"><span>Sentinel-2: 选择 Slave-B 升为主节点</span></span>
+<span class="line"><span>Sentinel-3: 选择 Slave-C 升为主节点</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>结果：出现了 3 个主节点！→ 脑裂！数据不一致！</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><p>因此，必须先选出一个<strong>领导者 Sentinel</strong>，由它来执行故障转移。</p><h3 id="_4-2-raft-选举流程" tabindex="-1"><a class="header-anchor" href="#_4-2-raft-选举流程"><span>4.2 Raft 选举流程</span></a></h3><p>Redis Sentinel 使用简化版的 Raft 协议进行领导者选举：</p>`,14),i(f,{code:`eJyVk81O20AUhfd5irtvncr2LmqzgkWlyixcqcvIjUetJXDSidOqO5oqwkkpSVuFqlWLAAmCAuJvQQxOeBp7PKzyCszYToKBhOCFV985c8/MuSX0oYzMPJoztHdYW0oB+4oatoy8UdRMC1QRtBKoyLQMEy0K4l1ASgDSXUBOAHIqJJSChaDwEWF2wlNVzoDnuLReCSrndHufbK7Qw2PPuYCFuYU3yqC3Stu7fuPH1XLNcy4jA1UUsllVzABd6fjbG5AvY8zOyKFiIf8+SZC1Pfq9ybnuCTddRJqO8A1GyoA6r7x+qcy/AqMkLGklC2FBL3wyhbefBU3XMaTTaXiuijlcNnOGnr0hZrM/VhyppfjoyQGGxLQAIcNCzjaDlAwQimcOMBZHajlWTw4wJKYFCJmZA8jJAKF45ucbi+/vIDlqeE5n1FXwGx36tU/qLc9ZDnb2Bj3br9q+fcz/l78HvdroJYdNq7cYF7h/mCOj2fIwlB51yUmF0/HIj4DFEOYV+PYzcP/zCbqnXBirEp4cG3tKQOz1B3SRPU8+FYvyjTDmO8L86pnnrk+4TxaJrnXZVYEM8f0196MWMO8sKM+kJ+ILie233//FljvuxaD35daOE7s5rg3DSa1Nt1ZJq3r19x/tHwRtN3UNfCPrIA==`}),s[3]||=n(`<h3 id="_4-3-选举规则详解" tabindex="-1"><a class="header-anchor" href="#_4-3-选举规则详解"><span>4.3 选举规则详解</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Raft 选举的核心规则：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>1. 发起选举的条件：</span></span>
+<span class="line"><span>   - 主节点被标记为 ODOWN</span></span>
+<span class="line"><span>   - 当前 Sentinel 尚未投票给其他 Sentinel</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>2. 投票规则：</span></span>
+<span class="line"><span>   - 每个 epoch 每个 Sentinel 只能投一票</span></span>
+<span class="line"><span>   - 先到先得（FIFO）</span></span>
+<span class="line"><span>   - 投票后不能改投</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>3. 当选条件：</span></span>
+<span class="line"><span>   - 获得 &gt; N/2 的票数（N = Sentinel 总数）</span></span>
+<span class="line"><span>   - 3 个 Sentinel 需要至少 2 票</span></span>
+<span class="line"><span>   - 5 个 Sentinel 需要至少 3 票</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>4. 超时重试：</span></span>
+<span class="line"><span>   - 如果没有 Sentinel 获得多数票</span></span>
+<span class="line"><span>   - 等待随机时间后重新选举</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_4-4-纪元-epoch-机制" tabindex="-1"><a class="header-anchor" href="#_4-4-纪元-epoch-机制"><span>4.4 纪元（Epoch）机制</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Epoch（纪元）是 Sentinel 选举和故障转移的核心版本号：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>current_epoch：当前 Sentinel 所知的最新的纪元</span></span>
+<span class="line"><span>                     │</span></span>
+<span class="line"><span>     ┌───────────────┼───────────────┐</span></span>
+<span class="line"><span>     │               │               │</span></span>
+<span class="line"><span>  选举时自增      故障转移时使用    配置传播时使用</span></span>
+<span class="line"><span>     │               │               │</span></span>
+<span class="line"><span>  用于区分        标识故障转移      确保配置</span></span>
+<span class="line"><span>  不同轮次        的唯一性          的新鲜度</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>规则：</span></span>
+<span class="line"><span>1. 每次选举前，current_epoch + 1</span></span>
+<span class="line"><span>2. Sentinel 只对 &gt;= 自己 current_epoch 的请求投票</span></span>
+<span class="line"><span>3. 收到更大 epoch 的配置时，更新自己的 epoch</span></span>
+<span class="line"><span>4. epoch 越大，配置越新</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 查看当前 Sentinel 的 epoch</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> master</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ...</span></span>
+<span class="line"><span style="color:#61AFEF;">22</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;current-epoch&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">23</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;12&quot;</span><span style="color:#7F848E;font-style:italic;">             # 当前纪元</span></span>
+<span class="line"><span style="color:#61AFEF;">24</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;config-epoch&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">25</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;12&quot;</span><span style="color:#7F848E;font-style:italic;">             # 配置纪元</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_5-故障转移流程" tabindex="-1"><a class="header-anchor" href="#_5-故障转移流程"><span>5. 故障转移流程</span></a></h2><h3 id="_5-1-故障转移完整时序图" tabindex="-1"><a class="header-anchor" href="#_5-1-故障转移完整时序图"><span>5.1 故障转移完整时序图</span></a></h3>`,7),i(f,{code:`eJyVVF1v0lAYvt+vOJeaWBdAb8hCAo6ZJVsx1uil6UZdmkDB0s3sjs0hIDCm+1AB5za3LGYOuHATC5M/03PaXu0veE4PBWq3odyQ9Hne93nP836khJeLgjQvTIr8gszHxwD+JXlZEefFJC8pgPMAPgU4QVJESYgxMwIfFWQ3y+tged0En4PgcxFmCT7LpxRBvgXr26im3nYnCVpJYvySwATdaGiAhlzog5iIxQkD1g9Q7qd+0hizSGxCEUBiSZDxU+9Qlh+YH89R/UxrpS87FfQ1jc4KaDtjVmpWBOdhAoFZP3g0zT687OTQhz24WYLq1mUnT3HvCNw3Aif5OY8foL2sUW9ia7SWCrjJyDN2kJ/zXo9b8RgXU0zccpSJJl5JzNwyw0ejtHmU47uZ42V6hej7daN+qLUKutq1n3AtdGX1EVIdfqx33AfgRhGtlclrRzZALeIGmAdvYKNjpDNmOq+1fjtV4MUm/gzoXGKBx/wLBVDiPym08kQhnUeFb2inqbXaxttVffXXkEjQD6bZqQiQhWRMnOcVMSENoaEbUVyg0VjTOk2tvU4TY7WJOXk84LkL0Pp789MhbRzQK2t9jkXw2gRUSxvdd2jnFDvsYvkwq5i31ZmkLCZkUVkmoVAtW5R7FgUelmDuHK6U9eO2mS0P4fd7KRal52J0OJC6Yu8baaPDoVHWwmqVbE/+2Ngv0u0xLr5jdae13EzwaTgyBdgIiLBh3EBYyurqMRbrK/X3ItiLQbmN/y1GI+tVMbMlHGVmSvpFve+js5l2PRNYTUwGrP9kQlYClBbqlQDbqn5SoKYa3V20fjTaj8wp8aP6A5fQv4SAFuPcW8rpP07r7qOVhnNtr6aMnvbX1rRX9C9HgzNIgiivN7JcmH0yzYZnwIKg2NeBXAVyHSQ+LoD4Mv1q14TjbCGjuwWru8O1kbON5xbWmvBz+i8x7CR1z9HMP7KN3dg=`}),s[4]||=a(`h3`,{id:`_5-2-选择新主节点的规则`,tabindex:`-1`},[a(`a`,{class:`header-anchor`,href:`#_5-2-选择新主节点的规则`},[a(`span`,null,`5.2 选择新主节点的规则`)])],-1),s[5]||=a(`p`,null,`Sentinel 选择新主节点时，按照以下优先级依次筛选：`,-1),i(f,{code:`eJxLy8kvT85ILCpRCHHhUgACx2ilZ50Nz+Z0Ptnd96Kr6XnTzqcd018sXKEUq6Cra6fgBJTum/Ry5hKFYBf/cD/9Z9PWPt+1//msFrhypViwOU5g5c5A5T2dCkWpBTmZyYm6BUWZ+UWZJZUKQDOe7uq3SSrSt3u/p+PZ1A1PG/a82Nb1dEP/kz0znrZ2PN+1HMh9uXrG+z2dUAOdwQa6VGOY9Xz2jqcTeuxrwapcQKpq/PxrFFyjlV42dD7rXqmAsHVOA9AGLI6F6Ip0Da5RcAO7+OmS3qcd25429j9fvvtlez+qc/PT0opTS8CmLVkONA3o/Ge960DcdT3Ppm5BONkN7GT3arg5KE51hzvVA+ZUhIUws9FdCtEEdqknNGxL8+IzU9BC9Ona6U9bdwAFEF4GhyvCbZ5gt3nBAwlmDLYgAmsoLqnMSVVwVUjLzMmxUjZJTkwzNdBJzs/JL7JSTktLQ1LjQYQaL5xqAFkULLg=`}),s[6]||=n(`<p><strong>详细规则说明：</strong></p><table><thead><tr><th>优先级</th><th>筛选条件</th><th>说明</th></tr></thead><tbody><tr><td>1</td><td><code>replica-priority</code></td><td>配置的优先级，0 = 永不升主。默认 100</td></tr><tr><td>2</td><td>复制偏移量</td><td>offset 越大，数据越完整</td></tr><tr><td>3</td><td><code>run_id</code></td><td>兜底条件，确保确定性</td></tr></tbody></table><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 设置从节点优先级</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># redis.conf（从节点配置）</span></span>
+<span class="line"><span style="color:#61AFEF;">replica-priority</span><span style="color:#D19A66;"> 100</span><span style="color:#7F848E;font-style:italic;">     # 默认值</span></span>
+<span class="line"><span style="color:#61AFEF;">replica-priority</span><span style="color:#D19A66;"> 50</span><span style="color:#7F848E;font-style:italic;">      # 更高优先级（数值更小）</span></span>
+<span class="line"><span style="color:#61AFEF;">replica-priority</span><span style="color:#D19A66;"> 0</span><span style="color:#7F848E;font-style:italic;">       # 永远不会被选为主节点</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_5-3-故障转移的详细步骤" tabindex="-1"><a class="header-anchor" href="#_5-3-故障转移的详细步骤"><span>5.3 故障转移的详细步骤</span></a></h3><h4 id="步骤一-发送-slaveof-no-one" tabindex="-1"><a class="header-anchor" href="#步骤一-发送-slaveof-no-one"><span>步骤一：发送 SLAVEOF NO ONE</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel Leader 向选中的从节点发送命令</span></span>
+<span class="line"><span style="color:#61AFEF;">SLAVEOF</span><span style="color:#98C379;"> NO</span><span style="color:#98C379;"> ONE</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 从节点日志</span></span>
+<span class="line"><span style="color:#ABB2BF;">*M* Connection with master lost.</span></span>
+<span class="line"><span style="color:#ABB2BF;">*M* Caching the disconnected master state.</span></span>
+<span class="line"><span style="color:#ABB2BF;">*S* Before turning into a master, my master was: 10.0.0.1:6379</span></span>
+<span class="line"><span style="color:#ABB2BF;">*M* Setting myself as master</span></span>
+<span class="line"><span style="color:#ABB2BF;">*M* Discarding previously cached master state.</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="步骤二-等待提升确认" tabindex="-1"><a class="header-anchor" href="#步骤二-等待提升确认"><span>步骤二：等待提升确认</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel 定期向新主节点发送 INFO 命令</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 确认其角色已变为 master</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:6380</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">INFO</span><span style="color:#98C379;"> replication</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Replication</span></span>
+<span class="line"><span style="color:#61AFEF;">role:master</span><span style="color:#7F848E;font-style:italic;">            # ← 已变为 master</span></span>
+<span class="line"><span style="color:#61AFEF;">connected_slaves:0</span><span style="color:#7F848E;font-style:italic;">     # ← 还没有从节点连接</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="步骤三-重新配置其他从节点" tabindex="-1"><a class="header-anchor" href="#步骤三-重新配置其他从节点"><span>步骤三：重新配置其他从节点</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel 向其他从节点发送 SLAVEOF 命令</span></span>
+<span class="line"><span style="color:#61AFEF;">SLAVEOF</span><span style="color:#ABB2BF;"> &lt;</span><span style="color:#98C379;">new-master-i</span><span style="color:#ABB2BF;">p&gt; &lt;</span><span style="color:#98C379;">new-master-por</span><span style="color:#ABB2BF;">t&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 从节点日志</span></span>
+<span class="line"><span style="color:#ABB2BF;">*S* SLAVE OF &lt;new-master-ip&gt;:&lt;new-master-port&gt; enabled (</span><span style="color:#61AFEF;">user</span><span style="color:#98C379;"> request</span><span style="color:#98C379;"> from</span><span style="color:#98C379;"> &#39;ID=...&#39;</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#ABB2BF;">*S* Connecting to MASTER &lt;new-master-ip&gt;:&lt;new-master-port&gt;</span></span>
+<span class="line"><span style="color:#ABB2BF;">*S* MASTER &lt;-&gt; REPLICA sync started</span></span>
+<span class="line"><span style="color:#ABB2BF;">*S* Full resync from master: &lt;new-replid&gt;:0</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="步骤四-更新-sentinel-配置" tabindex="-1"><a class="header-anchor" href="#步骤四-更新-sentinel-配置"><span>步骤四：更新 Sentinel 配置</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel 更新内部配置</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 将 mymaster 的地址从旧主节点更新为新主节点</span></span>
+<span class="line"><span style="color:#61AFEF;">SENTINEL</span><span style="color:#98C379;"> set</span><span style="color:#98C379;"> mymaster</span><span style="color:#ABB2BF;"> &lt;</span><span style="color:#98C379;">new-master-i</span><span style="color:#ABB2BF;">p&gt; &lt;</span><span style="color:#98C379;">new-master-por</span><span style="color:#ABB2BF;">t&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 配置自动持久化到 sentinel.conf</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel.conf 中自动更新：</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel leader-epoch mymaster 12</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel known-replica mymaster &lt;old-master-ip&gt; &lt;old-master-port&gt;</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel known-sentinel mymaster &lt;sentinel-ip&gt; &lt;sentinel-port&gt;</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="步骤五-通知旧主节点" tabindex="-1"><a class="header-anchor" href="#步骤五-通知旧主节点"><span>步骤五：通知旧主节点</span></a></h4><p>如果旧主节点恢复，Sentinel 会将其配置为新主节点的从节点：</p><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 旧主节点恢复后</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel 向旧主节点发送 SLAVEOF 命令</span></span>
+<span class="line"><span style="color:#61AFEF;">SLAVEOF</span><span style="color:#ABB2BF;"> &lt;</span><span style="color:#98C379;">new-master-i</span><span style="color:#ABB2BF;">p&gt; &lt;</span><span style="color:#98C379;">new-master-por</span><span style="color:#ABB2BF;">t&gt;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 旧主节点日志</span></span>
+<span class="line"><span style="color:#ABB2BF;">*S* SLAVE OF &lt;new-master-ip&gt;:&lt;new-master-port&gt; enabled (</span><span style="color:#61AFEF;">user</span><span style="color:#98C379;"> request</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#ABB2BF;">*S* Connecting to MASTER &lt;new-master-ip&gt;:&lt;new-master-port&gt;</span></span>
+<span class="line"><span style="color:#ABB2BF;">*S* MASTER &lt;-&gt; REPLICA sync started</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_5-4-故障转移超时配置" tabindex="-1"><a class="header-anchor" href="#_5-4-故障转移超时配置"><span>5.4 故障转移超时配置</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel.conf</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 故障转移超时时间（毫秒）</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> failover-timeout</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 180000</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 这个超时时间的含义：</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 1. 同一个 Sentinel 对同一个主节点在 failover-timeout 内不会再次触发故障转移</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 2. 从节点升级为主节点后，如果 failover-timeout 内未完成，视为失败</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 3. 默认 3 分钟</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_6-sentinel-配置详解" tabindex="-1"><a class="header-anchor" href="#_6-sentinel-配置详解"><span>6. Sentinel 配置详解</span></a></h2><h3 id="_6-1-最小配置模板" tabindex="-1"><a class="header-anchor" href="#_6-1-最小配置模板"><span>6.1 最小配置模板</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel.conf 最小配置</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 端口</span></span>
+<span class="line"><span style="color:#61AFEF;">port</span><span style="color:#D19A66;"> 26379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 监控主节点</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel monitor &lt;master-name&gt; &lt;ip&gt; &lt;port&gt; &lt;quorum&gt;</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> monitor</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 127.0.0.1</span><span style="color:#D19A66;"> 6379</span><span style="color:#D19A66;"> 2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 主观下线判定时间</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel down-after-milliseconds &lt;master-name&gt; &lt;milliseconds&gt;</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> down-after-milliseconds</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 30000</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 故障转移超时</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel failover-timeout &lt;master-name&gt; &lt;milliseconds&gt;</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> failover-timeout</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 180000</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行同步数量</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel parallel-syncs &lt;master-name&gt; &lt;count&gt;</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> parallel-syncs</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 1</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_6-2-配置参数详解" tabindex="-1"><a class="header-anchor" href="#_6-2-配置参数详解"><span>6.2 配置参数详解</span></a></h3><h4 id="sentinel-monitor" tabindex="-1"><a class="header-anchor" href="#sentinel-monitor"><span>sentinel monitor</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> monitor</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 127.0.0.1</span><span style="color:#D19A66;"> 6379</span><span style="color:#D19A66;"> 2</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                   │          │     │   │</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                   │          │     │   └── quorum（法定人数）</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                   │          │     └────── 主节点端口</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                   │          └──────────── 主节点IP</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                   └─────────────────────── 主节点名称（自定义）</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="hint-container important"><p class="hint-container-title">quorum 参数的含义</p><p><code>quorum</code> 有两层含义：</p><ol><li><strong>判定 ODOWN</strong>：至少 quorum 个 Sentinel 认为 master 下线，才标记为 ODOWN</li><li><strong>授权故障转移</strong>：至少 quorum 个 Sentinel 同意，才能执行故障转移</li></ol><p><strong>注意</strong>：quorum 不是执行故障转移的门槛，而是&quot;保护机制&quot;。即使 quorum=2，3 个 Sentinel 中有 2 个同意，但只有获得 &gt; N/2 = 2 票的 Sentinel 才能成为 Leader 执行故障转移。</p><table><thead><tr><th>配置</th><th>ODOWN 判定</th><th>需要存活的 Sentinel</th></tr></thead><tbody><tr><td>quorum=1</td><td>1个同意即可</td><td>2（N/2+1=2）</td></tr><tr><td>quorum=2</td><td>2个同意</td><td>2（N/2+1=2）</td></tr><tr><td>quorum=3</td><td>3个同意</td><td>2（N/2+1=2）</td></tr></tbody></table></div><h4 id="sentinel-parallel-syncs" tabindex="-1"><a class="header-anchor" href="#sentinel-parallel-syncs"><span>sentinel parallel-syncs</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> parallel-syncs</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 1</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                                │</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#      故障转移后，同时向新主节点发起复制的从节点数量</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>parallel-syncs = 1（推荐）：</span></span>
+<span class="line"><span>  新主节点 ←── Slave-B（先同步）</span></span>
+<span class="line"><span>  新主节点 ←── Slave-C（等 B 同步完成后）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>parallel-syncs = 2：</span></span>
+<span class="line"><span>  新主节点 ←── Slave-B（同时同步）</span></span>
+<span class="line"><span>  新主节点 ←── Slave-C（同时同步）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>为什么推荐 1？</span></span>
+<span class="line"><span>  同时全量同步会给新主节点带来巨大压力：</span></span>
+<span class="line"><span>  - 多次 bgsave</span></span>
+<span class="line"><span>  - 网络带宽占满</span></span>
+<span class="line"><span>  - 新主节点可能无法处理客户端请求</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="sentinel-down-after-milliseconds" tabindex="-1"><a class="header-anchor" href="#sentinel-down-after-milliseconds"><span>sentinel down-after-milliseconds</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> down-after-milliseconds</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 30000</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 30 秒内 PING 无有效回复 → 标记为主观下线</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 注意：</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 1. 这个值对所有主从节点和 Sentinel 之间的检测都生效</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 2. 值越大，误判概率越低，但故障检测越慢</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 3. 值越小，故障检测越快，但误判概率越高</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 4. 生产推荐：10~30 秒</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_6-3-完整配置模板" tabindex="-1"><a class="header-anchor" href="#_6-3-完整配置模板"><span>6.3 完整配置模板</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># ============================================</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Redis Sentinel 完整配置</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ============================================</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 端口</span></span>
+<span class="line"><span style="color:#61AFEF;">port</span><span style="color:#D19A66;"> 26379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 守护进程</span></span>
+<span class="line"><span style="color:#61AFEF;">daemonize</span><span style="color:#98C379;"> yes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># PID 文件</span></span>
+<span class="line"><span style="color:#61AFEF;">pidfile</span><span style="color:#98C379;"> /var/run/redis-sentinel.pid</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 日志文件</span></span>
+<span class="line"><span style="color:#61AFEF;">logfile</span><span style="color:#98C379;"> &quot;/var/log/redis/sentinel.log&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 工作目录</span></span>
+<span class="line"><span style="color:#61AFEF;">dir</span><span style="color:#98C379;"> &quot;/tmp&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ============================================</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 监控配置</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ============================================</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 监控主节点</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> monitor</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 10.0.0.1</span><span style="color:#D19A66;"> 6379</span><span style="color:#D19A66;"> 2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 主观下线超时</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> down-after-milliseconds</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 30000</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 故障转移超时</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> failover-timeout</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 180000</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行同步数</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> parallel-syncs</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 主节点密码</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> auth-pass</span><span style="color:#98C379;"> mymaster</span><span style="color:#98C379;"> your_strong_password</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ============================================</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 通知脚本</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ============================================</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 故障转移时执行的脚本</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> notification-script</span><span style="color:#98C379;"> mymaster</span><span style="color:#98C379;"> /etc/redis/notify.sh</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 客户端重新配置脚本</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> client-reconfig-script</span><span style="color:#98C379;"> mymaster</span><span style="color:#98C379;"> /etc/redis/reconfig.sh</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ============================================</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 其他配置</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ============================================</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 禁止修改 SENTINEL 命令</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel deny-scripts-reconfig yes</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel 日志级别</span></span>
+<span class="line"><span style="color:#61AFEF;">loglevel</span><span style="color:#98C379;"> notice</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_6-4-运行时修改配置" tabindex="-1"><a class="header-anchor" href="#_6-4-运行时修改配置"><span>6.4 运行时修改配置</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 查看主节点信息</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> master</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看从节点列表</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> slaves</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看其他 Sentinel</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> sentinels</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 获取当前主节点地址</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> get-master-addr-by-name</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;">1</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;10.0.0.2&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">2</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;6379&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 修改运行时配置</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> set</span><span style="color:#98C379;"> mymaster</span><span style="color:#98C379;"> down-after-milliseconds</span><span style="color:#D19A66;"> 20000</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 重置主节点（清除所有状态）</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> reset</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 手动触发故障转移</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> failover</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 检查 Sentinel 是否可达</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> ckquorum</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span><span style="color:#D19A66;"> 3</span><span style="color:#98C379;"> usable</span><span style="color:#98C379;"> Sentinels.</span><span style="color:#98C379;"> Quorum</span><span style="color:#98C379;"> and</span><span style="color:#98C379;"> failover</span><span style="color:#98C379;"> authorization</span><span style="color:#98C379;"> can</span><span style="color:#98C379;"> be</span><span style="color:#98C379;"> reached</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_7-脑裂问题" tabindex="-1"><a class="header-anchor" href="#_7-脑裂问题"><span>7. 脑裂问题</span></a></h2><h3 id="_7-1-什么是脑裂" tabindex="-1"><a class="header-anchor" href="#_7-1-什么是脑裂"><span>7.1 什么是脑裂？</span></a></h3><p>脑裂（Split Brain）是指在网络分区的情况下，集群中出现了两个主节点，各自接受写入，导致数据不一致。</p><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>脑裂场景：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>初始状态：</span></span>
+<span class="line"><span>              ┌─────────────┐</span></span>
+<span class="line"><span>              │  Master     │</span></span>
+<span class="line"><span>              │  10.0.0.1   │</span></span>
+<span class="line"><span>              └──┬──────┬───┘</span></span>
+<span class="line"><span>                 │      │</span></span>
+<span class="line"><span>           ┌─────▼┐  ┌──▼─────┐</span></span>
+<span class="line"><span>           │Slave-A│  │Slave-B │</span></span>
+<span class="line"><span>           │10.0.0.2│  │10.0.0.3│</span></span>
+<span class="line"><span>           └───────┘  └────────┘</span></span>
+<span class="line"><span>  ┌────────┐ ┌────────┐ ┌────────┐</span></span>
+<span class="line"><span>  │Sentinel│ │Sentinel│ │Sentinel│</span></span>
+<span class="line"><span>  │  S1    │ │  S2    │ │  S3    │</span></span>
+<span class="line"><span>  └────────┘ └────────┘ └────────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>网络分区后：</span></span>
+<span class="line"><span>    ┌──── 左侧分区 ────┐    ┌──── 右侧分区 ────┐</span></span>
+<span class="line"><span>    │                  │    │                    │</span></span>
+<span class="line"><span>    │  Master ✅      │    │  Slave-A ✅        │</span></span>
+<span class="line"><span>    │  10.0.0.1      │    │  10.0.0.2          │</span></span>
+<span class="line"><span>    │                  │    │  Slave-B ✅        │</span></span>
+<span class="line"><span>    │  Sentinel-S1    │    │  10.0.0.3          │</span></span>
+<span class="line"><span>    │                  │    │                    │</span></span>
+<span class="line"><span>    │                  │    │  Sentinel-S2       │</span></span>
+<span class="line"><span>    │                  │    │  Sentinel-S3       │</span></span>
+<span class="line"><span>    │                  │    │                    │</span></span>
+<span class="line"><span>    │  S1 认为:       │    │  S2+S3 认为:       │</span></span>
+<span class="line"><span>    │  主节点正常     │    │  主节点下线！       │</span></span>
+<span class="line"><span>    │  继续写入       │    │  选举 Slave-A 为主 │</span></span>
+<span class="line"><span>    │                  │    │                    │</span></span>
+<span class="line"><span>    └──────────────────┘    └────────────────────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>    结果：两个主节点！数据不一致！</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_7-2-脑裂的危害" tabindex="-1"><a class="header-anchor" href="#_7-2-脑裂的危害"><span>7.2 脑裂的危害</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>脑裂造成的数据丢失：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>左侧 Master 接受的写入：  SET key1 &quot;left_value&quot;</span></span>
+<span class="line"><span>右侧 New Master 接受的写入：SET key1 &quot;right_value&quot;</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>网络恢复后：</span></span>
+<span class="line"><span>- 旧 Master 被 Sentinel 降级为从节点</span></span>
+<span class="line"><span>- 旧 Master 的数据被 New Master 的数据覆盖</span></span>
+<span class="line"><span>- key1 的值变为 &quot;right_value&quot;，&quot;left_value&quot; 丢失！</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_7-3-防止脑裂的策略" tabindex="-1"><a class="header-anchor" href="#_7-3-防止脑裂的策略"><span>7.3 防止脑裂的策略</span></a></h3><h4 id="策略一-min-replicas-to-write" tabindex="-1"><a class="header-anchor" href="#策略一-min-replicas-to-write"><span>策略一：min-replicas-to-write</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># redis.conf（主节点配置）</span></span>
+<span class="line"><span style="color:#61AFEF;">min-replicas-to-write</span><span style="color:#D19A66;"> 1</span><span style="color:#7F848E;font-style:italic;">     # 至少 1 个从节点在线才接受写入</span></span>
+<span class="line"><span style="color:#61AFEF;">min-replicas-max-lag</span><span style="color:#D19A66;"> 10</span><span style="color:#7F848E;font-style:italic;">     # 从节点最大延迟 10 秒</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 原理：</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 如果网络分区导致主节点与所有从节点断开</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 主节点的 min-replicas-to-write 条件不满足</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 主节点自动拒绝写入 → 防止脑裂期间的数据写入</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="策略二-合理的-quorum-配置" tabindex="-1"><a class="header-anchor" href="#策略二-合理的-quorum-配置"><span>策略二：合理的 quorum 配置</span></a></h4><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 3 个 Sentinel，quorum=2</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel</span><span style="color:#98C379;"> monitor</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 10.0.0.1</span><span style="color:#D19A66;"> 6379</span><span style="color:#D19A66;"> 2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 网络分区时：</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># - 包含 2 个 Sentinel 的分区可以执行故障转移</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># - 包含 1 个 Sentinel 的分区无法执行故障转移</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># → 避免两侧同时故障转移</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h4 id="策略三-物理部署优化" tabindex="-1"><a class="header-anchor" href="#策略三-物理部署优化"><span>策略三：物理部署优化</span></a></h4><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>推荐的部署拓扑（3 机房）：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>机房 A            机房 B            机房 C</span></span>
+<span class="line"><span>┌──────────┐     ┌──────────┐     ┌──────────┐</span></span>
+<span class="line"><span>│ Master    │     │ Slave-A  │     │ Slave-B  │</span></span>
+<span class="line"><span>│ Sentinel-1│     │ Sentinel-2│     │ Sentinel-3│</span></span>
+<span class="line"><span>└──────────┘     └──────────┘     └──────────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>如果机房 A 与 B、C 网络分区：</span></span>
+<span class="line"><span>- 机房 A：1 个 Sentinel，无法获得多数票 → 不触发故障转移</span></span>
+<span class="line"><span>- 机房 B+C：2 个 Sentinel，获得多数票 → 可以触发故障转移</span></span>
+<span class="line"><span>- 机房 A 的 Master 因 min-replicas-to-write 拒绝写入</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>如果只部署 2 个机房：</span></span>
+<span class="line"><span>- 机房 A：2 个 Sentinel + Master</span></span>
+<span class="line"><span>- 机房 B：1 个 Sentinel + Slave</span></span>
+<span class="line"><span>- 分区时，机房 A 的 2 个 Sentinel 仍可获得多数票 → 可能脑裂！</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="hint-container warning"><p class="hint-container-title">脑裂防范的核心原则</p><ol><li><strong>Sentinel 与主节点不要全部署在一个机房</strong></li><li><strong>奇数个 Sentinel</strong>，确保网络分区时只有一侧能获得多数票</li><li><strong>配置 <code>min-replicas-to-write</code></strong>，让孤立的主节点自动拒绝写入</li><li><strong>监控 <code>connected_slaves</code></strong>，异常时立即告警</li></ol></div><h2 id="_8-sentinel-的-tilt-模式" tabindex="-1"><a class="header-anchor" href="#_8-sentinel-的-tilt-模式"><span>8. Sentinel 的 TILT 模式</span></a></h2><h3 id="_8-1-什么是-tilt-模式" tabindex="-1"><a class="header-anchor" href="#_8-1-什么是-tilt-模式"><span>8.1 什么是 TILT 模式？</span></a></h3><p>TILT 是 Sentinel 的自我保护机制，当检测到系统时间异常时，自动进入 TILT 模式：</p><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>TILT 触发条件：</span></span>
+<span class="line"><span>1. 进程被系统暂停（如 SIGSTOP、虚拟机暂停）</span></span>
+<span class="line"><span>2. 系统时钟被大幅调整</span></span>
+<span class="line"><span>3. 进程阻塞（如大量 swap、CPU 争抢）</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>TILT 模式行为：</span></span>
+<span class="line"><span>1. 停止所有故障检测</span></span>
+<span class="line"><span>2. 不执行故障转移</span></span>
+<span class="line"><span>3. 不接受 SENTINEL is-master-down-by-addr 请求</span></span>
+<span class="line"><span>4. 仍响应 PING 和 INFO 命令</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>退出 TILT：</span></span>
+<span class="line"><span>1. 系统时间恢复正常</span></span>
+<span class="line"><span>2. 持续 30 秒无异常</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_8-2-tilt-模式的工作原理" tabindex="-1"><a class="header-anchor" href="#_8-2-tilt-模式的工作原理"><span>8.2 TILT 模式的工作原理</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Sentinel 的定时器每 100ms 执行一次：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>正常情况：</span></span>
+<span class="line"><span>  预期间隔 = 100ms</span></span>
+<span class="line"><span>  实际间隔 ≈ 100ms ± 10ms → 正常</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>异常情况：</span></span>
+<span class="line"><span>  预期间隔 = 100ms</span></span>
+<span class="line"><span>  实际间隔 = 5000ms → 异常！→ 进入 TILT</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>原因：如果进程被暂停 5 秒，</span></span>
+<span class="line"><span>  Sentinel 可能误判节点下线（因为 5 秒没收到 PING）</span></span>
+<span class="line"><span>  但实际上只是自己暂停了，节点可能完全正常</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 查看 Sentinel 是否处于 TILT 模式</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">INFO</span><span style="color:#98C379;"> sentinel</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel_tilt:0</span><span style="color:#7F848E;font-style:italic;">              # 0=正常, 1=TILT 模式</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel_running_scripts:0</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel_scripts_queue_length:0</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel_simulate_failure_flags:0</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_9-sentinel-常用命令" tabindex="-1"><a class="header-anchor" href="#_9-sentinel-常用命令"><span>9. Sentinel 常用命令</span></a></h2><h3 id="_9-1-查询命令" tabindex="-1"><a class="header-anchor" href="#_9-1-查询命令"><span>9.1 查询命令</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 查看所有被监控的主节点</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> masters</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看指定主节点信息</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> master</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;"> 1</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;name&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;"> 2</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;mymaster&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;"> 3</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;ip&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;"> 4</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;10.0.0.1&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;"> 5</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;port&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;"> 6</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;6379&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;"> 7</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;runid&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;"> 8</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;abc123...&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;"> 9</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;flags&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">10</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;master&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">11</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;num-slaves&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">12</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;2&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">13</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;num-other-sentinels&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">14</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;2&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">15</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;quorum&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">16</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;2&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">17</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;current-epoch&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">18</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;12&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看从节点列表</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> slaves</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看其他 Sentinel</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> sentinels</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 获取当前主节点地址</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> get-master-addr-by-name</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;">1</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;10.0.0.1&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">2</span><span style="color:#ABB2BF;">) </span><span style="color:#98C379;">&quot;6379&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 检查 quorum 是否可达</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> ckquorum</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span><span style="color:#D19A66;"> 3</span><span style="color:#98C379;"> usable</span><span style="color:#98C379;"> Sentinels.</span><span style="color:#98C379;"> Quorum</span><span style="color:#98C379;"> and</span><span style="color:#98C379;"> failover</span><span style="color:#98C379;"> authorization</span><span style="color:#98C379;"> can</span><span style="color:#98C379;"> be</span><span style="color:#98C379;"> reached</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看指定主节点的 IP 和端口</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> resolve-ip</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 10.0.0.1</span><span style="color:#D19A66;"> 6379</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_9-2-操作命令" tabindex="-1"><a class="header-anchor" href="#_9-2-操作命令"><span>9.2 操作命令</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 手动触发故障转移</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> failover</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 重置主节点（清除所有状态，重新发现）</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> reset</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 修改运行时配置</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> set</span><span style="color:#98C379;"> mymaster</span><span style="color:#98C379;"> down-after-milliseconds</span><span style="color:#D19A66;"> 20000</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> set</span><span style="color:#98C379;"> mymaster</span><span style="color:#98C379;"> failover-timeout</span><span style="color:#D19A66;"> 120000</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> set</span><span style="color:#98C379;"> mymaster</span><span style="color:#98C379;"> parallel-syncs</span><span style="color:#D19A66;"> 1</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 添加监控的主节点</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> monitor</span><span style="color:#98C379;"> newmaster</span><span style="color:#D19A66;"> 10.0.0.5</span><span style="color:#D19A66;"> 6379</span><span style="color:#D19A66;"> 2</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 移除主节点</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> remove</span><span style="color:#98C379;"> newmaster</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 强制写入当前配置到磁盘</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> flushconfig</span></span>
+<span class="line"><span style="color:#61AFEF;">OK</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 禁止/允许故障转移（调试用）</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> set</span><span style="color:#98C379;"> mymaster</span><span style="color:#98C379;"> failover-timeout</span><span style="color:#D19A66;"> 9223372036854775807</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 设为最大值相当于禁止</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_9-3-故障转移状态查询" tabindex="-1"><a class="header-anchor" href="#_9-3-故障转移状态查询"><span>9.3 故障转移状态查询</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 查看故障转移状态</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">SENTINEL</span><span style="color:#98C379;"> master</span><span style="color:#98C379;"> mymaster</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 关注以下字段：</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># &quot;flags&quot; - 可能的值：master, master_down, s_down, o_down, failover_in_progress</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># &quot;num-slaves&quot; - 从节点数量</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># &quot;num-other-sentinels&quot; - 其他哨兵数量</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看最近一次故障转移信息</span></span>
+<span class="line"><span style="color:#61AFEF;">127.0.0.1:26379</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#98C379;">INFO</span><span style="color:#98C379;"> sentinel</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel_masters:1</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel_tilt:0</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel_running_scripts:0</span></span>
+<span class="line"><span style="color:#61AFEF;">sentinel_scripts_queue_length:0</span></span>
+<span class="line"><span style="color:#61AFEF;">master0:name</span><span style="color:#98C379;">=mymaster,status=ok,address=10.0.0.2:6379,slaves=2,sentinels=3</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_10-sentinel-与客户端" tabindex="-1"><a class="header-anchor" href="#_10-sentinel-与客户端"><span>10. Sentinel 与客户端</span></a></h2><h3 id="_10-1-客户端连接-sentinel-的方式" tabindex="-1"><a class="header-anchor" href="#_10-1-客户端连接-sentinel-的方式"><span>10.1 客户端连接 Sentinel 的方式</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>客户端获取主节点地址的方式：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>方式一：请求-响应模式</span></span>
+<span class="line"><span>┌──────────┐     SENTINEL get-master-addr-by-name      ┌──────────┐</span></span>
+<span class="line"><span>│  客户端  │ ─────────────────────────────────────►    │ Sentinel  │</span></span>
+<span class="line"><span>│          │ ◄─────────────────────────────────────    │          │</span></span>
+<span class="line"><span>└──────────┘     返回主节点 IP:Port                    └──────────┘</span></span>
+<span class="line"><span>     │</span></span>
+<span class="line"><span>     │ 连接主节点</span></span>
+<span class="line"><span>     ▼</span></span>
+<span class="line"><span>┌──────────┐</span></span>
+<span class="line"><span>│  Master  │</span></span>
+<span class="line"><span>└──────────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>方式二：订阅模式</span></span>
+<span class="line"><span>┌──────────┐     SUBSCRIBE +switch-master              ┌──────────┐</span></span>
+<span class="line"><span>│  客户端  │ ◄─────────────────────────────────────    │ Sentinel  │</span></span>
+<span class="line"><span>│          │     故障转移时主动推送新主节点地址         │          │</span></span>
+<span class="line"><span>└──────────┘                                          └──────────┘</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_10-2-客户端实现要点" tabindex="-1"><a class="header-anchor" href="#_10-2-客户端实现要点"><span>10.2 客户端实现要点</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>客户端连接 Sentinel 的实现要点：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>1. 启动时：</span></span>
+<span class="line"><span>   - 连接所有 Sentinel 实例</span></span>
+<span class="line"><span>   - 通过 SENTINEL get-master-addr-by-name 获取主节点地址</span></span>
+<span class="line"><span>   - 连接主节点</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>2. 运行时：</span></span>
+<span class="line"><span>   - 订阅 +switch-master 频道</span></span>
+<span class="line"><span>   - 收到切换通知后，重新获取主节点地址</span></span>
+<span class="line"><span>   - 重新连接新主节点</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>3. 连接断开时：</span></span>
+<span class="line"><span>   - 尝试重新连接 Sentinel</span></span>
+<span class="line"><span>   - 重新获取主节点地址</span></span>
+<span class="line"><span>   - 重试连接</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_10-3-c-客户端示例-stackexchange-redis" tabindex="-1"><a class="header-anchor" href="#_10-3-c-客户端示例-stackexchange-redis"><span>10.3 C# 客户端示例（StackExchange.Redis）</span></a></h3><div class="language-csharp line-numbers-mode" data-highlighter="shiki" data-ext="csharp" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-csharp"><span class="line"><span style="color:#C678DD;">using</span><span style="color:#E5C07B;"> StackExchange</span><span style="color:#ABB2BF;">.</span><span style="color:#E5C07B;">Redis</span><span style="color:#ABB2BF;">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">// Sentinel 连接配置</span></span>
+<span class="line"><span style="color:#E5C07B;">ConfigurationOptions</span><span style="color:#E06C75;"> sentinelConfig</span><span style="color:#56B6C2;"> =</span><span style="color:#ABB2BF;"> new </span><span style="color:#E5C07B;">ConfigurationOptions</span></span>
+<span class="line"><span style="color:#ABB2BF;">{</span></span>
+<span class="line"><span style="color:#E06C75;">    ServiceName</span><span style="color:#56B6C2;"> =</span><span style="color:#98C379;"> &quot;mymaster&quot;</span><span style="color:#ABB2BF;">,  </span><span style="color:#7F848E;font-style:italic;">// Sentinel 监控的主节点名称</span></span>
+<span class="line"><span style="color:#E06C75;">    TieBreaker</span><span style="color:#56B6C2;"> =</span><span style="color:#98C379;"> &quot;&quot;</span><span style="color:#ABB2BF;">,           </span><span style="color:#7F848E;font-style:italic;">// 平局决胜键</span></span>
+<span class="line"><span style="color:#E06C75;">    CommandMap</span><span style="color:#56B6C2;"> =</span><span style="color:#E5C07B;"> CommandMap</span><span style="color:#ABB2BF;">.</span><span style="color:#E5C07B;">Sentinel</span><span style="color:#ABB2BF;">,  </span><span style="color:#7F848E;font-style:italic;">// 使用 Sentinel 命令映射</span></span>
+<span class="line"><span style="color:#E06C75;">    AbortOnConnectFail</span><span style="color:#56B6C2;"> =</span><span style="color:#D19A66;"> false</span></span>
+<span class="line"><span style="color:#ABB2BF;">};</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">// 添加所有 Sentinel 地址</span></span>
+<span class="line"><span style="color:#E5C07B;">sentinelConfig</span><span style="color:#ABB2BF;">.</span><span style="color:#E5C07B;">EndPoints</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">Add</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;10.0.0.1:26379&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"><span style="color:#E5C07B;">sentinelConfig</span><span style="color:#ABB2BF;">.</span><span style="color:#E5C07B;">EndPoints</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">Add</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;10.0.0.2:26379&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"><span style="color:#E5C07B;">sentinelConfig</span><span style="color:#ABB2BF;">.</span><span style="color:#E5C07B;">EndPoints</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">Add</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;10.0.0.3:26379&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">// 连接 Sentinel</span></span>
+<span class="line"><span style="color:#E5C07B;">ConnectionMultiplexer</span><span style="color:#E06C75;"> sentinelConn</span><span style="color:#56B6C2;"> =</span><span style="color:#E5C07B;"> ConnectionMultiplexer</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">Connect</span><span style="color:#ABB2BF;">(</span><span style="color:#E06C75;">sentinelConfig</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">// 获取主节点连接</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">// StackExchange.Redis 自动通过 Sentinel 获取主节点地址</span></span>
+<span class="line"><span style="color:#E5C07B;">IDatabase</span><span style="color:#E06C75;"> db</span><span style="color:#56B6C2;"> =</span><span style="color:#E5C07B;"> sentinelConn</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">GetDatabase</span><span style="color:#ABB2BF;">();</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">// 写操作（自动路由到主节点）</span></span>
+<span class="line"><span style="color:#E5C07B;">db</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">StringSet</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;key&quot;</span><span style="color:#ABB2BF;">, </span><span style="color:#98C379;">&quot;value&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">// 读操作（指定从从节点读取）</span></span>
+<span class="line"><span style="color:#E5C07B;">db</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">StringGet</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;key&quot;</span><span style="color:#ABB2BF;">, </span><span style="color:#E5C07B;">CommandFlags</span><span style="color:#ABB2BF;">.</span><span style="color:#E5C07B;">DemandReplica</span><span style="color:#ABB2BF;">);</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_10-4-java-客户端示例-jedis" tabindex="-1"><a class="header-anchor" href="#_10-4-java-客户端示例-jedis"><span>10.4 Java 客户端示例（Jedis）</span></a></h3><div class="language-java line-numbers-mode" data-highlighter="shiki" data-ext="java" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-java"><span class="line"><span style="color:#C678DD;">import</span><span style="color:#E5C07B;"> redis.clients.jedis.Jedis</span><span style="color:#ABB2BF;">;</span></span>
+<span class="line"><span style="color:#C678DD;">import</span><span style="color:#E5C07B;"> redis.clients.jedis.JedisSentinelPool</span><span style="color:#ABB2BF;">;</span></span>
+<span class="line"><span style="color:#C678DD;">import</span><span style="color:#E5C07B;"> java.util.HashSet</span><span style="color:#ABB2BF;">;</span></span>
+<span class="line"><span style="color:#C678DD;">import</span><span style="color:#E5C07B;"> java.util.Set</span><span style="color:#ABB2BF;">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD;">public</span><span style="color:#C678DD;"> class</span><span style="color:#E5C07B;"> SentinelDemo</span><span style="color:#ABB2BF;"> {</span></span>
+<span class="line"><span style="color:#C678DD;">    public</span><span style="color:#C678DD;"> static</span><span style="color:#C678DD;"> void</span><span style="color:#61AFEF;"> main</span><span style="color:#ABB2BF;">(</span><span style="color:#E5C07B;">String</span><span style="color:#ABB2BF;">[] </span><span style="color:#E06C75;font-style:italic;">args</span><span style="color:#ABB2BF;">)</span><span style="color:#ABB2BF;"> {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">        // 配置 Sentinel 地址</span></span>
+<span class="line"><span style="color:#E5C07B;">        Set</span><span style="color:#ABB2BF;">&lt;</span><span style="color:#E5C07B;">String</span><span style="color:#ABB2BF;">&gt; </span><span style="color:#E06C75;">sentinels</span><span style="color:#56B6C2;"> =</span><span style="color:#C678DD;"> new</span><span style="color:#E5C07B;"> HashSet</span><span style="color:#ABB2BF;">&lt;&gt;();</span></span>
+<span class="line"><span style="color:#E5C07B;">        sentinels</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">add</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;10.0.0.1:26379&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"><span style="color:#E5C07B;">        sentinels</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">add</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;10.0.0.2:26379&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"><span style="color:#E5C07B;">        sentinels</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">add</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;10.0.0.3:26379&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">        // 创建 Sentinel 连接池</span></span>
+<span class="line"><span style="color:#E5C07B;">        JedisSentinelPool</span><span style="color:#E06C75;"> pool</span><span style="color:#56B6C2;"> =</span><span style="color:#C678DD;"> new</span><span style="color:#61AFEF;"> JedisSentinelPool</span><span style="color:#ABB2BF;">(</span></span>
+<span class="line"><span style="color:#98C379;">            &quot;mymaster&quot;</span><span style="color:#ABB2BF;">,    </span><span style="color:#7F848E;font-style:italic;">// 主节点名称</span></span>
+<span class="line"><span style="color:#ABB2BF;">            sentinels,     </span><span style="color:#7F848E;font-style:italic;">// Sentinel 地址集合</span></span>
+<span class="line"><span style="color:#ABB2BF;">            poolConfig,    </span><span style="color:#7F848E;font-style:italic;">// 连接池配置</span></span>
+<span class="line"><span style="color:#D19A66;">            30000</span><span style="color:#ABB2BF;">,         </span><span style="color:#7F848E;font-style:italic;">// 超时时间（毫秒）</span></span>
+<span class="line"><span style="color:#98C379;">            &quot;password&quot;</span><span style="color:#7F848E;font-style:italic;">    // 密码</span></span>
+<span class="line"><span style="color:#ABB2BF;">        );</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">        // 获取连接</span></span>
+<span class="line"><span style="color:#C678DD;">        try</span><span style="color:#ABB2BF;"> (</span><span style="color:#E5C07B;">Jedis</span><span style="color:#E06C75;"> jedis</span><span style="color:#56B6C2;"> =</span><span style="color:#E5C07B;"> pool</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">getResource</span><span style="color:#ABB2BF;">()) {</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">            // 写操作</span></span>
+<span class="line"><span style="color:#E5C07B;">            jedis</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">set</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;key&quot;</span><span style="color:#ABB2BF;">, </span><span style="color:#98C379;">&quot;value&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">            // 读操作</span></span>
+<span class="line"><span style="color:#E5C07B;">            String</span><span style="color:#E06C75;"> value</span><span style="color:#56B6C2;"> =</span><span style="color:#E5C07B;"> jedis</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">get</span><span style="color:#ABB2BF;">(</span><span style="color:#98C379;">&quot;key&quot;</span><span style="color:#ABB2BF;">);</span></span>
+<span class="line"><span style="color:#ABB2BF;">        }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">        // 关闭连接池</span></span>
+<span class="line"><span style="color:#E5C07B;">        pool</span><span style="color:#ABB2BF;">.</span><span style="color:#61AFEF;">close</span><span style="color:#ABB2BF;">();</span></span>
+<span class="line"><span style="color:#ABB2BF;">    }</span></span>
+<span class="line"><span style="color:#ABB2BF;">}</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_11-sentinel-日志分析" tabindex="-1"><a class="header-anchor" href="#_11-sentinel-日志分析"><span>11. Sentinel 日志分析</span></a></h2><h3 id="_11-1-关键日志事件" tabindex="-1"><a class="header-anchor" href="#_11-1-关键日志事件"><span>11.1 关键日志事件</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Sentinel 启动</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:00:00.000</span><span style="color:#7F848E;font-style:italic;"> # Sentinel started using Redis as Sentinel master</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:00:00.001</span><span style="color:#7F848E;font-style:italic;"> # +monitor master mymaster 10.0.0.1 6379 quorum 2</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 发现从节点</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:00:10.000</span><span style="color:#E5C07B;"> *</span><span style="color:#98C379;"> +slave</span><span style="color:#98C379;"> slave</span><span style="color:#98C379;"> 10.0.0.2:6379</span><span style="color:#D19A66;"> 10.0.0.2</span><span style="color:#D19A66;"> 6379</span><span style="color:#98C379;"> @</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 10.0.0.1</span><span style="color:#D19A66;"> 6379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 发现其他 Sentinel</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:00:15.000</span><span style="color:#E5C07B;"> *</span><span style="color:#98C379;"> +sentinel</span><span style="color:#98C379;"> sentinel</span><span style="color:#98C379;"> 10.0.0.3:26379</span><span style="color:#D19A66;"> 10.0.0.3</span><span style="color:#D19A66;"> 26379</span><span style="color:#98C379;"> @</span><span style="color:#98C379;"> mymaster</span><span style="color:#D19A66;"> 10.0.0.1</span><span style="color:#D19A66;"> 6379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 主观下线</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:01:00.000</span><span style="color:#7F848E;font-style:italic;"> # +sdown master mymaster 10.0.0.1 6379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 客观下线</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:01:05.000</span><span style="color:#7F848E;font-style:italic;"> # +odown master mymaster 10.0.0.1 6379 #quorum 2/3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 故障转移开始</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:01:05.001</span><span style="color:#7F848E;font-style:italic;"> # +failover-triggered master mymaster 10.0.0.1 6379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 选择新主节点</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:01:05.002</span><span style="color:#7F848E;font-style:italic;"> # +selected-slave slave 10.0.0.2:6379 10.0.0.2 6379 @ mymaster 10.0.0.1 6379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 从节点升级为主节点</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:01:05.003</span><span style="color:#7F848E;font-style:italic;"> # +failover-state-send-slaveof-noone slave 10.0.0.2:6379 10.0.0.2 6379 @ mymaster 10.0.0.1 6379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 故障转移完成</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:01:10.000</span><span style="color:#7F848E;font-style:italic;"> # +failover-end master mymaster 10.0.0.1 6379</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 切换主节点</span></span>
+<span class="line"><span style="color:#61AFEF;">26379:X</span><span style="color:#D19A66;"> 01</span><span style="color:#98C379;"> Jan</span><span style="color:#D19A66;"> 2026</span><span style="color:#98C379;"> 10:01:10.001</span><span style="color:#7F848E;font-style:italic;"> # +switch-master mymaster 10.0.0.1 6379 10.0.0.2 6379</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_11-2-日志事件类型" tabindex="-1"><a class="header-anchor" href="#_11-2-日志事件类型"><span>11.2 日志事件类型</span></a></h3><table><thead><tr><th>事件</th><th>含义</th></tr></thead><tbody><tr><td><code>+reset-master</code></td><td>主节点被重置</td></tr><tr><td><code>+slave</code></td><td>发现新从节点</td></tr><tr><td><code>+sentinel</code></td><td>发现新哨兵</td></tr><tr><td><code>+sdown</code></td><td>主观下线</td></tr><tr><td><code>-sdown</code></td><td>取消主观下线</td></tr><tr><td><code>+odown</code></td><td>客观下线</td></tr><tr><td><code>-odown</code></td><td>取消客观下线</td></tr><tr><td><code>+failover-triggered</code></td><td>故障转移被触发</td></tr><tr><td><code>+selected-slave</code></td><td>选中从节点升级为主节点</td></tr><tr><td><code>+failover-state-send-slaveof-noone</code></td><td>向选中从节点发送 SLAVEOF NO ONE</td></tr><tr><td><code>+failover-end</code></td><td>故障转移结束</td></tr><tr><td><code>+switch-master</code></td><td>主节点切换完成</td></tr></tbody></table><h2 id="_12-sentinel-监控" tabindex="-1"><a class="header-anchor" href="#_12-sentinel-监控"><span>12. Sentinel 监控</span></a></h2><h3 id="_12-1-关键监控指标" tabindex="-1"><a class="header-anchor" href="#_12-1-关键监控指标"><span>12.1 关键监控指标</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>Sentinel 自身指标：</span></span>
+<span class="line"><span>┌──────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│ 1. sentinel_tilt              TILT 模式状态  │</span></span>
+<span class="line"><span>│ 2. sentinel_running_scripts   运行中脚本数   │</span></span>
+<span class="line"><span>│ 3. masters_count              监控主节点数   │</span></span>
+<span class="line"><span>└──────────────────────────────────────────────┘</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>主节点指标（通过 SENTINEL master 命令获取）：</span></span>
+<span class="line"><span>┌──────────────────────────────────────────────┐</span></span>
+<span class="line"><span>│ 1. flags          节点标志（master/sdown等） │</span></span>
+<span class="line"><span>│ 2. num-slaves     从节点数量                 │</span></span>
+<span class="line"><span>│ 3. num-other-sentinels  其他哨兵数量         │</span></span>
+<span class="line"><span>│ 4. quorum         法定人数                   │</span></span>
+<span class="line"><span>│ 5. current-epoch  当前纪元                   │</span></span>
+<span class="line"><span>│ 6. info-refresh   最后一次 INFO 的时间       │</span></span>
+<span class="line"><span>└──────────────────────────────────────────────┘</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_12-2-健康检查脚本" tabindex="-1"><a class="header-anchor" href="#_12-2-健康检查脚本"><span>12.2 健康检查脚本</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;">#!/bin/bash</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sentinel_health_check.sh</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E06C75;">SENTINEL_HOST</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;127.0.0.1&quot;</span></span>
+<span class="line"><span style="color:#E06C75;">SENTINEL_PORT</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">26379</span></span>
+<span class="line"><span style="color:#E06C75;">MASTER_NAME</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;mymaster&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;=== Sentinel 健康检查 ===&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;时间: $(</span><span style="color:#61AFEF;">date</span><span style="color:#98C379;">)&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 1. 检查 Sentinel 是否可达</span></span>
+<span class="line"><span style="color:#E06C75;">REDIS_CLI</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;redis-cli -h </span><span style="color:#E06C75;">$SENTINEL_HOST</span><span style="color:#98C379;"> -p </span><span style="color:#E06C75;">$SENTINEL_PORT</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#E06C75;">PING_RESULT</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#E06C75;">$REDIS_CLI</span><span style="color:#ABB2BF;"> PING 2&gt;/dev/null)</span></span>
+<span class="line"><span style="color:#C678DD;">if</span><span style="color:#ABB2BF;"> [ </span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;">$PING_RESULT</span><span style="color:#98C379;">&quot;</span><span style="color:#56B6C2;"> =</span><span style="color:#98C379;"> &quot;PONG&quot;</span><span style="color:#ABB2BF;"> ]; </span><span style="color:#C678DD;">then</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;[OK] Sentinel 可达&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">else</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;[CRITICAL] Sentinel 不可达!&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">    exit</span><span style="color:#D19A66;"> 1</span></span>
+<span class="line"><span style="color:#C678DD;">fi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 2. 检查 TILT 模式</span></span>
+<span class="line"><span style="color:#E06C75;">TILT</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#E06C75;">$REDIS_CLI</span><span style="color:#ABB2BF;"> INFO sentinel | </span><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &quot;sentinel_tilt&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">cut</span><span style="color:#D19A66;"> -d:</span><span style="color:#D19A66;"> -f2</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tr</span><span style="color:#D19A66;"> -d</span><span style="color:#98C379;"> &#39;\\r&#39;</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#C678DD;">if</span><span style="color:#ABB2BF;"> [ </span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;">$TILT</span><span style="color:#98C379;">&quot;</span><span style="color:#56B6C2;"> =</span><span style="color:#98C379;"> &quot;0&quot;</span><span style="color:#ABB2BF;"> ]; </span><span style="color:#C678DD;">then</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;[OK] TILT 模式: 未激活&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">else</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;[WARNING] TILT 模式: 已激活!&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">fi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 3. 检查主节点状态</span></span>
+<span class="line"><span style="color:#E06C75;">MASTER_INFO</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#E06C75;">$REDIS_CLI</span><span style="color:#ABB2BF;"> SENTINEL master </span><span style="color:#E06C75;">$MASTER_NAME</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#E06C75;">MASTER_FLAGS</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$MASTER_INFO</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -A1</span><span style="color:#98C379;"> &quot;flags&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tail</span><span style="color:#D19A66;"> -1</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#E06C75;">MASTER_NUM_SLAVES</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$MASTER_INFO</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -A1</span><span style="color:#98C379;"> &quot;num-slaves&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tail</span><span style="color:#D19A66;"> -1</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#E06C75;">MASTER_NUM_SENTINELS</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$MASTER_INFO</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -A1</span><span style="color:#98C379;"> &quot;num-other-sentinels&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tail</span><span style="color:#D19A66;"> -1</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;--- 主节点: </span><span style="color:#E06C75;">$MASTER_NAME</span><span style="color:#98C379;"> ---&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;状态标志: </span><span style="color:#E06C75;">$MASTER_FLAGS</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;从节点数: </span><span style="color:#E06C75;">$MASTER_NUM_SLAVES</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;其他哨兵数: </span><span style="color:#E06C75;">$MASTER_NUM_SENTINELS</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 4. 检查 quorum</span></span>
+<span class="line"><span style="color:#E06C75;">QUORUM_CHECK</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#E06C75;">$REDIS_CLI</span><span style="color:#ABB2BF;"> SENTINEL ckquorum </span><span style="color:#E06C75;">$MASTER_NAME</span><span style="color:#ABB2BF;"> 2&gt;&amp;1)</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;Quorum 检查: </span><span style="color:#E06C75;">$QUORUM_CHECK</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 5. 检查从节点</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;--- 从节点列表 ---&quot;</span></span>
+<span class="line"><span style="color:#E06C75;">$REDIS_CLI</span><span style="color:#ABB2BF;"> SENTINEL slaves </span><span style="color:#E06C75;">$MASTER_NAME</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -E</span><span style="color:#98C379;"> &quot;(ip|port|flags|master-link-status)&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">paste</span><span style="color:#98C379;"> -</span><span style="color:#98C379;"> -</span><span style="color:#98C379;"> -</span><span style="color:#98C379;"> -</span><span style="color:#ABB2BF;"> | </span><span style="color:#C678DD;">while</span><span style="color:#56B6C2;"> read</span><span style="color:#98C379;"> line</span><span style="color:#ABB2BF;">; </span><span style="color:#C678DD;">do</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;  </span><span style="color:#E06C75;">$line</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">done</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_13-常见问题与排查" tabindex="-1"><a class="header-anchor" href="#_13-常见问题与排查"><span>13. 常见问题与排查</span></a></h2><h3 id="_13-1-故障转移未触发" tabindex="-1"><a class="header-anchor" href="#_13-1-故障转移未触发"><span>13.1 故障转移未触发</span></a></h3><p><strong>现象</strong>：主节点已宕机，但 Sentinel 没有触发故障转移。</p><p><strong>排查步骤</strong>：</p><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>排查清单：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>1. 检查 ODOWN 是否达成</span></span>
+<span class="line"><span>   - 多少个 Sentinel 标记了 SDOWN？</span></span>
+<span class="line"><span>   - 是否达到 quorum？</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>2. 检查 Sentinel 数量</span></span>
+<span class="line"><span>   - 是否有足够的 Sentinel 在线？</span></span>
+<span class="line"><span>   - SENTINEL ckquorum 检查</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>3. 检查 failover-timeout</span></span>
+<span class="line"><span>   - 是否在上一次故障转移的 failover-timeout 内？</span></span>
+<span class="line"><span>   - 同一个 Sentinel 在 failover-timeout 内不会再次触发</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>4. 检查 TILT 模式</span></span>
+<span class="line"><span>   - Sentinel 是否处于 TILT 模式？</span></span>
+<span class="line"><span>   - INFO sentinel 查看 sentinel_tilt</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>5. 检查网络</span></span>
+<span class="line"><span>   - Sentinel 与主节点之间的网络是否正常？</span></span>
+<span class="line"><span>   - Sentinel 之间的网络是否正常？</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_13-2-故障转移选择了错误的从节点" tabindex="-1"><a class="header-anchor" href="#_13-2-故障转移选择了错误的从节点"><span>13.2 故障转移选择了错误的从节点</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>原因分析：</span></span>
+<span class="line"><span>1. replica-priority 配置不当</span></span>
+<span class="line"><span>   → 检查各从节点的 replica-priority 配置</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>2. 复制偏移量不准确</span></span>
+<span class="line"><span>   → 检查从节点的 slave_repl_offset</span></span>
+<span class="line"><span>   → 可能是网络延迟导致偏移量更新不及时</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>3. 从节点信息过期</span></span>
+<span class="line"><span>   → 检查 Sentinel 最近一次 INFO 的时间</span></span>
+<span class="line"><span>   → 可能 Sentinel 与从节点的连接有问题</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>解决方案：</span></span>
+<span class="line"><span>1. 为不同从节点设置不同的 replica-priority</span></span>
+<span class="line"><span>2. 确保所有从节点网络稳定</span></span>
+<span class="line"><span>3. 定期检查 SENTINEL slaves 输出</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_13-3-故障转移后客户端连接失败" tabindex="-1"><a class="header-anchor" href="#_13-3-故障转移后客户端连接失败"><span>13.3 故障转移后客户端连接失败</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>原因分析：</span></span>
+<span class="line"><span>1. 客户端缓存了旧的主节点地址</span></span>
+<span class="line"><span>   → 使用 Sentinel 的服务发现机制</span></span>
+<span class="line"><span>   → 订阅 +switch-master 频道</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>2. 新主节点尚未准备好</span></span>
+<span class="line"><span>   → 故障转移有短暂的不可用窗口</span></span>
+<span class="line"><span>   → 客户端需要重试逻辑</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>3. 客户端没有连接 Sentinel</span></span>
+<span class="line"><span>   → 客户端需要通过 Sentinel 获取主节点地址</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>解决方案：</span></span>
+<span class="line"><span>1. 使用支持 Sentinel 的客户端库</span></span>
+<span class="line"><span>2. 实现重试逻辑</span></span>
+<span class="line"><span>3. 订阅切换事件</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_13-4-sentinel-配置不一致" tabindex="-1"><a class="header-anchor" href="#_13-4-sentinel-配置不一致"><span>13.4 Sentinel 配置不一致</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>原因：</span></span>
+<span class="line"><span>1. 部分 Sentinel 的配置文件被手动修改</span></span>
+<span class="line"><span>2. 故障转移后配置未同步</span></span>
+<span class="line"><span>3. Sentinel 重启后读取了旧的配置文件</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>排查：</span></span>
+<span class="line"><span>1. 检查所有 Sentinel 的配置</span></span>
+<span class="line"><span>   127.0.0.1:26379&gt; SENTINEL master mymaster</span></span>
+<span class="line"><span>2. 比较各 Sentinel 的 current_epoch</span></span>
+<span class="line"><span>3. 检查 sentinel.conf 文件内容</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>解决：</span></span>
+<span class="line"><span>1. 执行 SENTINEL flushconfig 强制写入配置</span></span>
+<span class="line"><span>2. 确保所有 Sentinel 配置文件一致</span></span>
+<span class="line"><span>3. 必要时执行 SENTINEL reset</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_14-sentinel-的工作流程总结" tabindex="-1"><a class="header-anchor" href="#_14-sentinel-的工作流程总结"><span>14. Sentinel 的工作流程总结</span></a></h2><h3 id="_14-1-正常运行流程" tabindex="-1"><a class="header-anchor" href="#_14-1-正常运行流程"><span>14.1 正常运行流程</span></a></h3>`,93),i(f,{code:`eJxtkV1P2lAYx+/3KU6625GxaZZtFzNTXoZii7BkWRovENqMpNKMl5gFlqAbAZQVXCIs4sxYpjW4UC+M62CTL9PTnl75FTw9bQGNvXva3/N7/n0eXhA3Eu/imRx47bsH8POSpWJcOpdKcwKATQVun1CrwON5AeZZCla/Q3kH1luaKmnqEG1vGVt/4XBgnO6g0aEuHVGrxDFPGhZYCkl/YKOlDSUHrbZR9+TqX/2OngXS42Mps7SPRhUQya89jOXXAGzsGtIZLF9owxZwkzk9PtLjx8GIb/wZmO3zG3I/AQM40KgDy0dGZ1eXZHjZMyQFEwQJECTIUrrSeGTIX/Fcs7QJIiE66Ehs4hUhHtsEVD+hSg8NTrVRV9+0XBMwZKu8E1eIDjDuuCBhFguWH+jfFNg81g9q+l4Vdg7hry9zHwm1aFHFt/5YEQSmXtBMESyxlHGuoH4XXZStfSXFjbQnzue4jGc9JQipLJcQ08nsnJNpadxoi+yamMM46I8K6p9p6gDEfMwb2g0ZJiGXCzjf+NxOsuVbPrsmPhqvWflptvt3H40mUqbwPi9m8utAU3uTu8FmXf/ccEYwt0bYNRkRmY7MOJEtJkLkKziBfIy3DqJ4I8As1TT10iFWCBFlqTAXT3IZoNdk1K3re2Vz/wD9/23IQ/fvs7kPAoeNPF7n8/v87OzMzJMHCVEQM7ji+Skm6jL8s6de7zRzDQwAW3U=`}),s[7]||=n(`<h3 id="_14-2-故障转移后的状态变化" tabindex="-1"><a class="header-anchor" href="#_14-2-故障转移后的状态变化"><span>14.2 故障转移后的状态变化</span></a></h3><div class="language-text line-numbers-mode" data-highlighter="shiki" data-ext="text" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-text"><span class="line"><span>故障转移前：</span></span>
+<span class="line"><span>  Master(10.0.0.1:6379) ← 宕机</span></span>
+<span class="line"><span>  ├── Slave-A(10.0.0.2:6379)</span></span>
+<span class="line"><span>  └── Slave-B(10.0.0.3:6379)</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>故障转移后：</span></span>
+<span class="line"><span>  New Master = Slave-A(10.0.0.2:6379) ← 升级为主</span></span>
+<span class="line"><span>  └── Slave-B(10.0.0.3:6379) ← 重新指向新主节点</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>  旧 Master(10.0.0.1:6379) ← 恢复后自动变为新主节点的从节点</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>Sentinel 配置变化：</span></span>
+<span class="line"><span>  sentinel monitor mymaster 10.0.0.1 6379 2   ← 旧配置</span></span>
+<span class="line"><span>  ↓</span></span>
+<span class="line"><span>  sentinel monitor mymaster 10.0.0.2 6379 2   ← 新配置</span></span>
+<span class="line"><span>  sentinel known-replica mymaster 10.0.0.1 6379  ← 旧主变为从节点</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_15-总结" tabindex="-1"><a class="header-anchor" href="#_15-总结"><span>15. 总结</span></a></h2><h3 id="_15-1-核心知识图谱" tabindex="-1"><a class="header-anchor" href="#_15-1-核心知识图谱"><span>15.1 核心知识图谱</span></a></h3>`,4),i(f,{code:`eJxtUttOGlEUffcr9qM+8NQvaFJsmtgZo0n72ExkbE8Cc+g42PRNodMZsIAk0guYUK+DRBEv0XEI8DNzLvMXHmEYwPh49lp77bPW3imkJVJKeg5Ax9iYn19RE2gDVlXNQJqaXFgQAAD975JBjud6pFAfFgBYvUJLDrzHGjKwjrTPYT3YqrHGCUjYQOtoTTEQ1kKEWy1SaNKqGdT2ee+cOV1YVFASb6r6uNcssl6blnf9fp1vmbCs402UCGFi3gR7bbrvEfsu5K++kT9K4Ltd7mR9d4d5gxAQ7GLVd1uRDyD2MWnXInj5nfQW+J1J/4y15KEWaR++oHVcm9Uyr/jlzwj+msF6JgW836f2blhdUdYNEUXed/sRTzyJ5cGSqghLkdr0FFrtsJMmKTWI/S+qx9N47Qswr0XM3GgZUwlGoefpzhn93XnKopBl2YeoXVfTSbGHWFpHYk3G96l5RZEk2S4LmcAqTxoy2ieUCJ807/CDXzOzROxLrz/E5UWQZJCl+MSfVRQ/GO3Q75ae/YPWbwU6CXHEG8Jsr+F7Dj/dnvC5dUM6lVfTsY+t/r3mPyr8KAvicmOhu42YgWPfhD113H/fFJdC7UGQa7Le9czN+m6JVAr84nTuEf0mSBw=`}),s[8]||=n(`<h3 id="_15-2-面试高频问题" tabindex="-1"><a class="header-anchor" href="#_15-2-面试高频问题"><span>15.2 面试高频问题</span></a></h3><table><thead><tr><th>问题</th><th>答案要点</th></tr></thead><tbody><tr><td>Sentinel 的作用是什么？</td><td>监控、通知、自动故障转移、配置提供者</td></tr><tr><td>SDOWN 和 ODOWN 的区别？</td><td>SDOWN 是单个 Sentinel 的判断，ODOWN 是多个 Sentinel 的共识；只有主节点才有 ODOWN</td></tr><tr><td>Sentinel 如何选举 Leader？</td><td>简化版 Raft：自增 epoch → 推荐自己 → 请求投票 → 多数票当选</td></tr><tr><td>故障转移如何选择新主节点？</td><td>排除断线节点 → replica-priority → 复制偏移量 → run_id</td></tr><tr><td>quorum 参数的含义？</td><td>判定 ODOWN 需要的最少同意数；也是授权故障转移的最低要求</td></tr><tr><td>如何防止脑裂？</td><td>min-replicas-to-write、奇数 Sentinel 跨机房部署、合理的 quorum</td></tr><tr><td>Sentinel 之间如何通信？</td><td>主节点的 <code>__sentinel__:hello</code> Pub/Sub 频道</td></tr><tr><td>parallel-syncs 为什么建议设为 1？</td><td>避免多个从节点同时全量同步压垮新主节点</td></tr><tr><td>TILT 模式是什么？</td><td>Sentinel 检测到时间异常时的自我保护，停止故障检测和转移</td></tr></tbody></table><h3 id="_15-3-生产环境检查清单" tabindex="-1"><a class="header-anchor" href="#_15-3-生产环境检查清单"><span>15.3 生产环境检查清单</span></a></h3><ul class="task-list-container"><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-0" disabled="disabled"><label class="task-list-item-label" for="task-item-0"> 至少部署 3 个 Sentinel 实例</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-1" disabled="disabled"><label class="task-list-item-label" for="task-item-1"> Sentinel 与 Redis 主从节点不在同一台机器</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-2" disabled="disabled"><label class="task-list-item-label" for="task-item-2"> 跨机房/跨可用区部署 Sentinel</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-3" disabled="disabled"><label class="task-list-item-label" for="task-item-3"><code>down-after-milliseconds</code> 设置合理（10~30 秒）</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-4" disabled="disabled"><label class="task-list-item-label" for="task-item-4"><code>parallel-syncs</code> 设为 1</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-5" disabled="disabled"><label class="task-list-item-label" for="task-item-5"><code>failover-timeout</code> 设置合理（默认 3 分钟）</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-6" disabled="disabled"><label class="task-list-item-label" for="task-item-6"> 配置 <code>min-replicas-to-write</code> 防止脑裂</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-7" disabled="disabled"><label class="task-list-item-label" for="task-item-7"> 配置 <code>sentinel auth-pass</code> 认证</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-8" disabled="disabled"><label class="task-list-item-label" for="task-item-8"> 监控 Sentinel TILT 状态</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-9" disabled="disabled"><label class="task-list-item-label" for="task-item-9"> 监控主节点 <code>num-slaves</code> 和 <code>num-other-sentinels</code></label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-10" disabled="disabled"><label class="task-list-item-label" for="task-item-10"> 客户端使用 Sentinel 服务发现</label></li><li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" id="task-item-11" disabled="disabled"><label class="task-list-item-label" for="task-item-11"> 定期演练故障转移</label></li></ul>`,4)])}var u=o(c,[[`render`,l]]);export{s as _pageData,u as default};
