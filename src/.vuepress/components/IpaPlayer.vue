@@ -518,7 +518,7 @@ async function playLetter(item, fallbackId) {
     await el.play();
     loadingId.value = null;
     playing.value = true;
-    statusText.value = "播放中：" + formatSymbol(item.symbol) + " · " + (item.examples[0] || "");
+    statusText.value = "播放中：" + formatSymbol(item.symbol) + " · " + (item.examples[0]?.w || "");
   } catch (e) {
     loadingId.value = null;
     playingId.value = null;
