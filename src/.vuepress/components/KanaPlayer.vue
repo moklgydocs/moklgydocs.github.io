@@ -35,6 +35,7 @@
         <span class="setting-label">假名</span>
         <button class="kana-chip" :class="{ 'is-active': kanaMode === 'hiragana' }" @click="kanaMode = 'hiragana'">平假名</button>
         <button class="kana-chip" :class="{ 'is-active': kanaMode === 'katakana' }" @click="kanaMode = 'katakana'">片假名</button>
+        <button class="kana-chip" :class="{ 'is-active': kanaMode === 'both' }" @click="kanaMode = 'both'">Both</button>
       </div>
       <div class="kana-setting">
         <span class="setting-label">罗马音</span>
@@ -76,7 +77,11 @@
                   }"
                   @click="play(item)"
                 >
-                  <span class="kana-card-kana">{{ kanaMode === 'hiragana' ? item.hira : item.kata }}</span>
+                  <span class="kana-card-kana">
+                    <template v-if="kanaMode === 'hiragana'">{{ item.hira }}</template>
+                    <template v-else-if="kanaMode === 'katakana'">{{ item.kata }}</template>
+                    <template v-else><span class="kana-hira">{{ item.hira }}</span><span class="kana-kata">{{ item.kata }}</span></template>
+                  </span>
                   <span v-if="showRomaji" class="kana-card-romaji">{{ item.romaji }}</span>
                   <span class="kana-play-icon"><span class="play-dot"></span></span>
                 </button>
@@ -106,7 +111,11 @@
           }"
           @click="play(item)"
         >
-          <span class="kana-card-kana">{{ kanaMode === 'hiragana' ? item.hira : item.kata }}</span>
+          <span class="kana-card-kana">
+                    <template v-if="kanaMode === 'hiragana'">{{ item.hira }}</template>
+                    <template v-else-if="kanaMode === 'katakana'">{{ item.kata }}</template>
+                    <template v-else><span class="kana-hira">{{ item.hira }}</span><span class="kana-kata">{{ item.kata }}</span></template>
+                  </span>
           <span v-if="showRomaji" class="kana-card-romaji">{{ item.romaji }}</span>
           <span class="kana-play-icon"><span class="play-dot"></span></span>
         </button>
@@ -131,7 +140,11 @@
           }"
           @click="play(item)"
         >
-          <span class="kana-card-kana">{{ kanaMode === 'hiragana' ? item.hira : item.kata }}</span>
+          <span class="kana-card-kana">
+                    <template v-if="kanaMode === 'hiragana'">{{ item.hira }}</template>
+                    <template v-else-if="kanaMode === 'katakana'">{{ item.kata }}</template>
+                    <template v-else><span class="kana-hira">{{ item.hira }}</span><span class="kana-kata">{{ item.kata }}</span></template>
+                  </span>
           <span v-if="showRomaji" class="kana-card-romaji">{{ item.romaji }}</span>
           <span class="kana-play-icon"><span class="play-dot"></span></span>
         </button>
@@ -323,7 +336,9 @@ async function play(item) {
   playing.value = false;
   error.value = false;
   repeatIndex.value = 0;
-  const display = kanaMode.value === "hiragana" ? item.hira : item.kata;
+  const display = kanaMode.value === "hiragana" ? item.hira
+    : kanaMode.value === "katakana" ? item.kata
+    : item.hira + " / " + item.kata;
   statusText.value = "加载中：" + display + " (" + item.romaji + ")";
   el.src = getAudioUrl(item);
   el.load();
@@ -632,9 +647,19 @@ onBeforeUnmount(() => {
   line-height: 1.2;
   color: var(--vp-c-text-1, #1f2329);
   font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", "Noto Sans JP", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1rem;
 }
 .kana-card.is-playing .kana-card-kana, .kana-card.is-loading .kana-card-kana {
   color: var(--theme-color, #3eaf7c);
+}
+.kana-hira, .kana-kata { display: inline-block; }
+.kana-kata { font-size: 0.85em; color: var(--vp-c-text-3, #8a919f); }
+.kana-card.is-playing .kana-kata, .kana-card.is-loading .kana-kata {
+  color: var(--theme-color, #3eaf7c);
+  opacity: 0.8;
 }
 .kana-card-romaji {
   font-size: 0.72rem;
