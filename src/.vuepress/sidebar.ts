@@ -1742,6 +1742,18 @@ export default sidebar({
             "",
             { text: "五十音图", icon: "fa6-solid:language", link: "五十音图" },
             { text: "新标日初级(二)单词", icon: "fa6-solid:book", link: "00.新标日初级(二)单词" },
+            {
+              text: "语法",
+              icon: "fa6-solid:book",
+              prefix: "语法/",
+              collapsible: true,
+              sidebarSorter: ["readme", "order", "filename"],
+              children: [
+                "",
+                { text: "基本句型与语序", icon: "fa6-solid:book", link: "基本句型" },
+                { text: "动词变形总览", icon: "fa6-solid:book", link: "动词变形" },
+              ],
+            },
           ],
         },
       ],
