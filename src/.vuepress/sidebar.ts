@@ -1737,7 +1737,12 @@ export default sidebar({
           icon: "fa6-solid:book-open",
           prefix: "日语/",
           collapsible: true,
-          children: "structure",
+          sidebarSorter: ["readme", "order", "filename"],
+          children: [
+            "",
+            { text: "五十音图", icon: "fa6-solid:language", link: "五十音图" },
+            { text: "新标日初级(二)单词", icon: "fa6-solid:book", link: "00.新标日初级(二)单词" },
+          ],
         },
       ],
     },
