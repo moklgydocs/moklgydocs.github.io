@@ -1783,6 +1783,8 @@ export default sidebar({
                 { text: "花咲か爺", icon: "fa6-solid:book", link: "06-花咲か爺" },
                 { text: "猿蟹合戦", icon: "fa6-solid:book", link: "07-猿蟹合戦" },
                 { text: "ねずみの嫁入り", icon: "fa6-solid:book", link: "08-ねずみの嫁入り" },
+                { text: "竹取物語", icon: "fa6-solid:book", link: "09-竹取物語" },
+                { text: "一休さん", icon: "fa6-solid:book", link: "10-一休さん" },
               ],
             },
           ],
