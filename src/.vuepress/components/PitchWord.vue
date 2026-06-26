@@ -6,7 +6,7 @@
       <svg
         class="pw-line"
         :viewBox="`0 0 ${morae.length * 16} 16`"
-        :style="{ width: morae.length * 1.2 + 'em' }"
+        :style="{ width: morae.length * 1.3 + 'em' }"
       >
         <polyline
           :points="points"
@@ -107,11 +107,15 @@ const points = computed(() =>
 }
 .pw-kana {
   display: flex;
+  letter-spacing: 0.05em;
 }
 .pw-mora {
-  width: 1.2em;
+  min-width: 1.2em;
+  flex: 0 0 auto;
   text-align: center;
   font-size: 0.85em;
+  padding: 0 0.05em;
+  box-sizing: border-box;
   color: var(--vp-c-text-2, #4e5969);
 }
 .pw-mora.H {
