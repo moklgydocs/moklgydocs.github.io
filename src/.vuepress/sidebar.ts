@@ -1751,6 +1751,12 @@ export default sidebar({
               sidebarSorter: ["readme", "order", "filename"],
               children: [
                 "",
+                { text: "导论", icon: "fa6-solid:book", link: "01-导论" },
+                { text: "书写系统", icon: "fa6-solid:book", link: "02-书写系统" },
+                { text: "基础语法", icon: "fa6-solid:book", link: "03-基础语法" },
+                { text: "核心语法", icon: "fa6-solid:book", link: "04-核心语法" },
+                { text: "特殊表达", icon: "fa6-solid:book", link: "05-特殊表达" },
+                { text: "高级话题", icon: "fa6-solid:book", link: "06-高级话题" },
                 { text: "基本句型与语序", icon: "fa6-solid:book", link: "基本句型" },
                 { text: "名词分类与数词表达", icon: "fa6-solid:book", link: "名词与数词" },
                 { text: "动词变形总览", icon: "fa6-solid:book", link: "动词变形" },
