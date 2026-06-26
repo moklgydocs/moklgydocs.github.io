@@ -6,6 +6,7 @@ import IpaPlayer from "./components/IpaPlayer.vue";
 import KanaPlayer from "./components/KanaPlayer.vue";
 import VocabTable from "./components/VocabTable.vue";
 import ReadingPassage from "./components/ReadingPassage.vue";
+import VocabList from "./components/VocabList.vue";
 
 export default defineClientConfig({
   enhance({ app }) {
@@ -16,5 +17,6 @@ export default defineClientConfig({
     app.component("KanaPlayer", KanaPlayer);
     app.component("VocabTable", VocabTable);
     app.component("ReadingPassage", ReadingPassage);
+    app.component("VocabList", VocabList);
   },
 });

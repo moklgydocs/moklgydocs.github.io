@@ -58,3 +58,12 @@ const CIRCLED = ['⓪', '①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', 
 export function accentCircle(a: number): string {
   return CIRCLED[a] ?? String(a)
 }
+
+// 词汇表项
+export interface VocabItem {
+  surface: string   // 表层形（漢字交じり）
+  reading: string   // 全假名读法
+  accent: number    // 声调核位置（-1 表示不显示）
+  pos?: string      // 词性（名/动/形/副 等）
+  cn: string        // 中文释义
+}
