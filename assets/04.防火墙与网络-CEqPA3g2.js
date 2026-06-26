@@ -1,0 +1,91 @@
+import{D as e,f as t,u as n}from"./runtime-core.esm-bundler-D3eD_xTR.js";import{t as r}from"./app-C_mnsEHS.js";var i=JSON.parse(`{"path":"/%E8%BF%90%E7%BB%B4%E4%B8%8E%E9%83%A8%E7%BD%B2/Linux%E5%9F%BA%E7%A1%80/04.%E9%98%B2%E7%81%AB%E5%A2%99%E4%B8%8E%E7%BD%91%E7%BB%9C.html","title":"防火墙与网络","lang":"zh-CN","frontmatter":{"title":"防火墙与网络","date":"2025-04-14T00:00:00.000Z","category":["Linux基础"],"tag":["Linux","防火墙","firewalld","网络排查"],"order":4},"git":{"createdTime":1776135420000,"updatedTime":1776135420000,"contributors":[{"name":"jackie.liu","username":"","email":"moklgy@foxmail.com","commits":1}]},"readingTime":{"minutes":2.23,"words":668},"filePathRelative":"运维与部署/Linux基础/04.防火墙与网络.md"}`),a={name:`04.防火墙与网络.md`};function o(r,i,a,o,s,c){return e(),n(`div`,null,[...i[0]||=[t(`<h1 id="防火墙与网络" tabindex="-1"><a class="header-anchor" href="#防火墙与网络"><span>防火墙与网络</span></a></h1><p>应用跑起来了，浏览器访问 404？十有八九是防火墙没开端口。</p><hr><h2 id="firewalld-centos-7-8-默认" tabindex="-1"><a class="header-anchor" href="#firewalld-centos-7-8-默认"><span>firewalld（CentOS 7/8 默认）</span></a></h2><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 查看状态</span></span>
+<span class="line"><span style="color:#61AFEF;">systemctl</span><span style="color:#98C379;"> status</span><span style="color:#98C379;"> firewalld</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --state</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 开放端口</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-port=5000/tcp</span><span style="color:#D19A66;"> --permanent</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-port=80/tcp</span><span style="color:#D19A66;"> --permanent</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-port=443/tcp</span><span style="color:#D19A66;"> --permanent</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 重载使生效</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --reload</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看已开放的端口</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --list-ports</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 移除端口</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --remove-port=5000/tcp</span><span style="color:#D19A66;"> --permanent</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --reload</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 一次性开一段端口</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-port=5000-5010/tcp</span><span style="color:#D19A66;"> --permanent</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 开放服务（比端口号更语义化）</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-service=http</span><span style="color:#D19A66;"> --permanent</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-service=https</span><span style="color:#D19A66;"> --permanent</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="hint-container tip"><p class="hint-container-title">--permanent 参数</p><p>不加 <code>--permanent</code> 只临时生效，重启后失效。加了必须 <code>--reload</code> 才生效。</p></div><h3 id="net-应用常开端口" tabindex="-1"><a class="header-anchor" href="#net-应用常开端口"><span>.NET 应用常开端口</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Kestrel 端口（被 Nginx 代理，通常不需要对外开放）</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 5000, 5001</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 对外只开这几个</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-port=80/tcp</span><span style="color:#D19A66;"> --permanent</span><span style="color:#7F848E;font-style:italic;">     # HTTP</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-port=443/tcp</span><span style="color:#D19A66;"> --permanent</span><span style="color:#7F848E;font-style:italic;">    # HTTPS</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --zone=public</span><span style="color:#D19A66;"> --add-port=22/tcp</span><span style="color:#D19A66;"> --permanent</span><span style="color:#7F848E;font-style:italic;">     # SSH（默认已开）</span></span>
+<span class="line"><span style="color:#61AFEF;">firewall-cmd</span><span style="color:#D19A66;"> --reload</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><hr><h2 id="网络排查命令" tabindex="-1"><a class="header-anchor" href="#网络排查命令"><span>网络排查命令</span></a></h2><h3 id="端口检查" tabindex="-1"><a class="header-anchor" href="#端口检查"><span>端口检查</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 看某个端口谁在监听</span></span>
+<span class="line"><span style="color:#61AFEF;">ss</span><span style="color:#D19A66;"> -tlnp</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> 5000</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 或</span></span>
+<span class="line"><span style="color:#61AFEF;">netstat</span><span style="color:#D19A66;"> -tlnp</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> 5000</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># t=TCP, l=LISTEN, n=数字显示, p=显示进程</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 看所有监听端口</span></span>
+<span class="line"><span style="color:#61AFEF;">ss</span><span style="color:#D19A66;"> -tlnp</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 看某个进程监听了哪些端口</span></span>
+<span class="line"><span style="color:#61AFEF;">ss</span><span style="color:#D19A66;"> -tlnp</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> dotnet</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="连通性测试" tabindex="-1"><a class="header-anchor" href="#连通性测试"><span>连通性测试</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># ping（测网络可达）</span></span>
+<span class="line"><span style="color:#61AFEF;">ping</span><span style="color:#D19A66;"> 192.168.1.100</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># telnet（测端口是否打开）</span></span>
+<span class="line"><span style="color:#61AFEF;">telnet</span><span style="color:#D19A66;"> 192.168.1.100</span><span style="color:#D19A66;"> 5000</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 连上了 = 端口开放</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Connection refused = 端口没监听</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 超时 = 防火墙挡了</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># curl（测 HTTP 接口）</span></span>
+<span class="line"><span style="color:#61AFEF;">curl</span><span style="color:#98C379;"> http://localhost:5000/health</span></span>
+<span class="line"><span style="color:#61AFEF;">curl</span><span style="color:#D19A66;"> -v</span><span style="color:#98C379;"> http://192.168.1.100:5000/api/test</span><span style="color:#7F848E;font-style:italic;">  # -v 看详细过程</span></span>
+<span class="line"><span style="color:#61AFEF;">curl</span><span style="color:#D19A66;"> -o</span><span style="color:#98C379;"> /dev/null</span><span style="color:#D19A66;"> -s</span><span style="color:#D19A66;"> -w</span><span style="color:#98C379;"> &quot;%{http_code}&quot;</span><span style="color:#98C379;"> http://localhost:5000/health</span><span style="color:#7F848E;font-style:italic;">  # 只看状态码</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="dns-排查" tabindex="-1"><a class="header-anchor" href="#dns-排查"><span>DNS 排查</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 域名解析</span></span>
+<span class="line"><span style="color:#61AFEF;">nslookup</span><span style="color:#98C379;"> erp.company.com</span></span>
+<span class="line"><span style="color:#61AFEF;">dig</span><span style="color:#98C379;"> erp.company.com</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 本机 hosts 文件（优先级高于 DNS）</span></span>
+<span class="line"><span style="color:#61AFEF;">cat</span><span style="color:#98C379;"> /etc/hosts</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 127.0.0.1   localhost</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 192.168.1.100 erp.company.com</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="网络接口和路由" tabindex="-1"><a class="header-anchor" href="#网络接口和路由"><span>网络接口和路由</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 查看IP地址</span></span>
+<span class="line"><span style="color:#61AFEF;">ip</span><span style="color:#98C379;"> addr</span><span style="color:#98C379;"> show</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 或 ifconfig（旧）</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看路由表</span></span>
+<span class="line"><span style="color:#61AFEF;">ip</span><span style="color:#98C379;"> route</span><span style="color:#98C379;"> show</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 查看网关</span></span>
+<span class="line"><span style="color:#61AFEF;">ip</span><span style="color:#98C379;"> route</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> default</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><hr><h2 id="排错流程" tabindex="-1"><a class="header-anchor" href="#排错流程"><span>排错流程</span></a></h2><div class="language- line-numbers-mode" data-highlighter="shiki" data-ext="" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-"><span class="line"><span>浏览器访问不了？按这个顺序查：</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>1. 应用跑起来了吗？</span></span>
+<span class="line"><span>   → systemctl status erp-api</span></span>
+<span class="line"><span>   → curl http://localhost:5000/health</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>2. 端口在监听吗？</span></span>
+<span class="line"><span>   → ss -tlnp | grep 5000</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>3. 本机能访问吗？</span></span>
+<span class="line"><span>   → curl http://127.0.0.1:5000/health</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>4. 防火墙开了吗？</span></span>
+<span class="line"><span>   → firewall-cmd --list-ports</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>5. 安全组开了吗？（云服务器）</span></span>
+<span class="line"><span>   → 去云控制台检查安全组规则</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>6. Nginx 配了吗？</span></span>
+<span class="line"><span>   → nginx -t &amp;&amp; curl http://localhost:80</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>7. DNS 解析对吗？</span></span>
+<span class="line"><span>   → nslookup your-domain.com</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><hr><h2 id="速查表" tabindex="-1"><a class="header-anchor" href="#速查表"><span>速查表</span></a></h2><table><thead><tr><th>场景</th><th>命令</th></tr></thead><tbody><tr><td>开放端口</td><td><code>firewall-cmd --add-port=80/tcp --permanent &amp;&amp; firewall-cmd --reload</code></td></tr><tr><td>查已开端口</td><td><code>firewall-cmd --list-ports</code></td></tr><tr><td>看谁在监听</td><td><code>ss -tlnp | grep 端口号</code></td></tr><tr><td>测端口连通</td><td><code>telnet IP 端口</code></td></tr><tr><td>测HTTP接口</td><td><code>curl http://IP:端口/path</code></td></tr><tr><td>看本机IP</td><td><code>ip addr show</code></td></tr><tr><td>DNS解析</td><td><code>nslookup 域名</code></td></tr></tbody></table>`,24)]])}var s=r(a,[[`render`,o]]);export{i as _pageData,s as default};
