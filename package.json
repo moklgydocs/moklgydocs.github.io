@@ -11,6 +11,7 @@
     "docs:update-package": "pnpm dlx vp-update"
   },
   "devDependencies": {
+    "@capacitor/cli": "^6.2.1",
     "@vuepress/bundler-vite": "2.0.0-rc.27",
     "@vuepress/plugin-prismjs": "2.0.0-rc.128",
     "@vuepress/plugin-search": "2.0.0-rc.128",
@@ -23,6 +24,8 @@
     "vuepress-theme-hope": "2.0.0-rc.105"
   },
   "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/core": "^6.2.1",
     "@vuepress/plugin-revealjs": "2.0.0-rc.130",
     "@vuepress/plugin-slimsearch": "2.0.0-rc.130",
     "chart.js": "^4.5.1",

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">异星基站</string>
+    <string name="title_activity_main">异星基站</string>
+    <string name="package_name">io.github.moklgydocs</string>
+    <string name="custom_url_scheme">io.github.moklgydocs</string>
+</resources>

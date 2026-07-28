@@ -1,0 +1,5 @@
+{
+  "appId": "io.github.moklgydocs",
+  "appName": "异星基站",
+  "webDir": "src/.vuepress/dist"
+}

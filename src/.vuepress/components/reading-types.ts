@@ -22,6 +22,8 @@ export interface ReadingPassageData {
   titleCn?: string
   intro?: string
   source?: string
+  // 全文朗读音频 URL（可选）
+  audio?: string
   sentences: ReadingSentenceData[]
 }
 

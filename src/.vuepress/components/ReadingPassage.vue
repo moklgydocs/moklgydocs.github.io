@@ -5,6 +5,10 @@
       <h2 class="rp-title">{{ passage.title }}</h2>
       <p v-if="passage.titleCn" class="rp-title-cn">{{ passage.titleCn }}</p>
       <p v-if="passage.intro" class="rp-intro">{{ passage.intro }}</p>
+      <div v-if="passage.audio" class="rp-audio">
+        <span class="rp-audio-label">全文朗读</span>
+        <audio :src="passage.audio" controls preload="none" class="rp-audio-player"></audio>
+      </div>
     </header>
     <ol class="rp-list">
       <li v-for="(s, i) in passage.sentences" :key="i" class="rp-item">
@@ -53,6 +57,26 @@ defineProps<{ passage: ReadingPassageData; level?: string }>()
   color: var(--vp-c-text-2, #4e5969);
   margin: 0.5rem 0 0;
   line-height: 1.6;
+}
+.rp-audio {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.rp-audio-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--theme-color, #3eaf7c);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.rp-audio-player {
+  height: 2.2rem;
+  max-width: 100%;
+  flex: 1;
+  min-width: 220px;
 }
 .rp-list {
   list-style: none;
