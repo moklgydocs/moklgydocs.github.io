@@ -11,7 +11,7 @@ order: 7
 
 **请慢点说**　｜　**Can-do**：请对方说得慢一些
 
-<audio controls src="/audio/jmy-kaiwa/07.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/07.mp3" title="第7课 ゆっくり話してください" />
 
 ## 今日短剧
 

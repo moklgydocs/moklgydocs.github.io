@@ -11,7 +11,7 @@ order: 37
 
 **FUJISAN O MITARI, OSUSHI O TABETARI SHIMASHITA**（看了富士山，吃了寿司什么的）
 
-<audio controls src="/audio/jmy-nhk/37.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/37.mp3" title="第37课 富士山を見たり、おすしを食べたりしました" />
 
 ## 会话
 

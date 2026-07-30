@@ -11,7 +11,7 @@ order: 40
 
 **ATAMA GA ZUKIZUKI SHIMASU**（头一跳一跳地疼）
 
-<audio controls src="/audio/jmy-nhk/40.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/40.mp3" title="第40课 頭がずきずきします" />
 
 ## 会话
 

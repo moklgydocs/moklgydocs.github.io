@@ -11,7 +11,7 @@ order: 46
 
 **很小 不过很漂亮**　｜　**Can-do**：表达多重感想 2
 
-<audio controls src="/audio/jmy-kaiwa/46.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/46.mp3" title="第46课 小さいけどきれいですね" />
 
 ## 今日短剧
 

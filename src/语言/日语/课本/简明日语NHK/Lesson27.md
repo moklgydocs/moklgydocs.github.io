@@ -11,7 +11,7 @@ order: 27
 
 **DARE GA KEKKON SURU N DESU KA**（谁结婚？）
 
-<audio controls src="/audio/jmy-nhk/27.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/27.mp3" title="第27课 誰が結婚するんですか" />
 
 ## 会话
 

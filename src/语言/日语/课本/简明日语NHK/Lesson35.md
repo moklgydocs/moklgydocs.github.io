@@ -11,7 +11,7 @@ order: 35
 
 **KUREJITTO KÂDO WA TSUKAEMASU KA**（可以用信用卡吗？）
 
-<audio controls src="/audio/jmy-nhk/35.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/35.mp3" title="第35课 クレジットカードは使えますか" />
 
 ## 会话
 

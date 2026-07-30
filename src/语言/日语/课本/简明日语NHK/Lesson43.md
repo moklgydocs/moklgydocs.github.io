@@ -11,7 +11,7 @@ order: 43
 
 **DÔSHITE DESHÔ KA**（为什么呢）
 
-<audio controls src="/audio/jmy-nhk/43.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/43.mp3" title="第43课 どうしてでしょうか" />
 
 ## 会话
 

@@ -11,7 +11,7 @@ order: 2
 
 **KORE WA NAN DESU KA**（这是什么？）
 
-<audio controls src="/audio/jmy-nhk/02.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/02.mp3" title="第2课 これは何ですか" />
 
 ## 会话
 

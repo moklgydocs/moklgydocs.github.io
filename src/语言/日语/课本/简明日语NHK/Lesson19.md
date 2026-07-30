@@ -11,7 +11,7 @@ order: 19
 
 **YOKATTA**（太好了）
 
-<audio controls src="/audio/jmy-nhk/19.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/19.mp3" title="第19课 よかった" />
 
 ## 会话
 

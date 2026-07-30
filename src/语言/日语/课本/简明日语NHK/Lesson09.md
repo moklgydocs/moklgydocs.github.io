@@ -11,7 +11,7 @@ order: 9
 
 **NANJI KARA DESU KA**（从几点开始？）
 
-<audio controls src="/audio/jmy-nhk/09.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/09.mp3" title="第9课 何時からですか" />
 
 ## 会话
 

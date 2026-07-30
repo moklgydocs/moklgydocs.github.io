@@ -11,7 +11,7 @@ order: 13
 
 **SHÔSETSU GA SUKI DESU**（喜欢小说）
 
-<audio controls src="/audio/jmy-nhk/13.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/13.mp3" title="第13课 小説が好きです" />
 
 ## 会话
 

@@ -943,7 +943,7 @@ function reveal(id) {
 }
 
 function getAudioUrl(item) {
-  return "https://translate.google.com/translate_tts?ie=UTF-8&tl=ja&client=tw-ob&q=" + encodeURIComponent(item.kana);
+  return "/audio/words/" + encodeURIComponent(item.kana) + ".mp3";
 }
 
 async function speak(item) {

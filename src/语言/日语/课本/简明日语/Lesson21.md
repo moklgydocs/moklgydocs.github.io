@@ -11,7 +11,7 @@ order: 21
 
 **在钟楼里**　｜　**Can-do**：告诉对方你在哪儿
 
-<audio controls src="/audio/jmy-kaiwa/21.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/21.mp3" title="第21课 時計台の中にいます" />
 
 ## 今日短剧
 

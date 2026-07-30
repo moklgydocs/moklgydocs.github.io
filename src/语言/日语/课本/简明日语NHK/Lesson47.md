@@ -11,7 +11,7 @@ order: 47
 
 **NIHONGO-KYÔSHI NI NARU NO GA YUME DESU**（当日语教师是我的梦想）
 
-<audio controls src="/audio/jmy-nhk/47.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/47.mp3" title="第47课 日本語教師になるのが夢です" />
 
 ## 会话
 

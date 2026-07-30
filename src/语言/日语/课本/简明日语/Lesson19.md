@@ -11,7 +11,7 @@ order: 19
 
 **我想要一副手套**　｜　**Can-do**：告诉店员你要买什么
 
-<audio controls src="/audio/jmy-kaiwa/19.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/19.mp3" title="第19课 手袋が欲しいんですが" />
 
 ## 今日短剧
 

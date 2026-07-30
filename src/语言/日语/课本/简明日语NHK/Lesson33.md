@@ -11,7 +11,7 @@ order: 33
 
 **ANNA-SAN NI AGEMASU**（回头送给你）
 
-<audio controls src="/audio/jmy-nhk/33.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/33.mp3" title="第33课 アンナさんにあげます" />
 
 ## 会话
 

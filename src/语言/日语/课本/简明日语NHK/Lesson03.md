@@ -11,7 +11,7 @@ order: 3
 
 **TOIRE WA DOKO DESU KA**（洗手间在哪儿？）
 
-<audio controls src="/audio/jmy-nhk/03.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/03.mp3" title="第3课 トイレはどこですか" />
 
 ## 会话
 

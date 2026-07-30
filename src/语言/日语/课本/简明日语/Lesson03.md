@@ -11,7 +11,7 @@ order: 3
 
 **来自越南**　｜　**Can-do**：说明自己来自哪里
 
-<audio controls src="/audio/jmy-kaiwa/03.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/03.mp3" title="第3课 ベトナムから来ました" />
 
 ## 今日短剧
 

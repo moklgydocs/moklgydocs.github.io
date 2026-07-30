@@ -11,7 +11,7 @@ order: 26
 
 **这个玉子烧甜甜的 很好吃**　｜　**Can-do**：表达多重感想 1
 
-<audio controls src="/audio/jmy-kaiwa/26.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/26.mp3" title="第26课 この卵焼き、甘くておいしいです" />
 
 ## 今日短剧
 

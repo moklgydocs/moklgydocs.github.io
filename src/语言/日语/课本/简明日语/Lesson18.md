@@ -11,7 +11,7 @@ order: 18
 
 **特别开心**　｜　**Can-do**：就你所经历的事情表达你的感想
 
-<audio controls src="/audio/jmy-kaiwa/18.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/18.mp3" title="第18课 すごく楽しかったです" />
 
 ## 今日短剧
 

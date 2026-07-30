@@ -11,7 +11,7 @@ order: 17
 
 **OSUSUME WA NAN DESU KA**（有没有可以推荐的？）
 
-<audio controls src="/audio/jmy-nhk/17.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/17.mp3" title="第17课 おすすめは何ですか" />
 
 ## 会话
 

@@ -11,7 +11,7 @@ order: 5
 
 **SORE WA WATASHI NO TAKARAMONO DESU**（那是我的宝贝）
 
-<audio controls src="/audio/jmy-nhk/05.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/05.mp3" title="第5课 それは私の宝物です" />
 
 ## 会话
 

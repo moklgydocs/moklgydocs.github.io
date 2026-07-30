@@ -11,7 +11,7 @@ order: 10
 
 **ZEN-IN IMASU KA**（都到齐了吗？）
 
-<audio controls src="/audio/jmy-nhk/10.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/10.mp3" title="第10课 全員いますか" />
 
 ## 会话
 

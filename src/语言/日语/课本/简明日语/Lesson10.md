@@ -11,7 +11,7 @@ order: 10
 
 **这个吹风机多少钱**　｜　**Can-do**：询问价钱
 
-<audio controls src="/audio/jmy-kaiwa/10.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/10.mp3" title="第10课 このドライヤーはいくらですか" />
 
 ## 今日短剧
 

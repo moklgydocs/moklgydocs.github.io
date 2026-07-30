@@ -11,7 +11,7 @@ order: 16
 
 **这座温泉很有名**　｜　**Can-do**：表达感想或做出说明 2
 
-<audio controls src="/audio/jmy-kaiwa/16.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/16.mp3" title="第16课 有名な温泉です" />
 
 ## 今日短剧
 

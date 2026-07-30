@@ -11,7 +11,7 @@ order: 31
 
 **MÔ HACHIJÛNI SAI DESU YO**（已经82岁啦）
 
-<audio controls src="/audio/jmy-nhk/31.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/31.mp3" title="第31课 もう82歳ですよ" />
 
 ## 会话
 

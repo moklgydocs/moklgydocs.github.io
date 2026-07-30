@@ -11,7 +11,7 @@ order: 14
 
 **KOKO NI GOMI O SUTETE MO II DESU KA**（可以把垃圾扔在这儿吗？）
 
-<audio controls src="/audio/jmy-nhk/14.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/14.mp3" title="第14课 ここにゴミを捨ててもいいですか" />
 
 ## 会话
 

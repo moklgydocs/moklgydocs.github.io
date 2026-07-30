@@ -11,7 +11,7 @@ order: 46
 
 **KIKOKU SURU MAE NI, YUKI O MIRU KOTO GA DEKITE SHIAWASE DESU**（回国之前能看到雪，真是太幸运了）
 
-<audio controls src="/audio/jmy-nhk/46.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/46.mp3" title="第46课 帰国する前に、雪を見ることができて幸せです" />
 
 ## 会话
 

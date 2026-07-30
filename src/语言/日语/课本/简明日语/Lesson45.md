@@ -11,7 +11,7 @@ order: 45
 
 **能不能帮我确认一下日语**　｜　**Can-do**：较为郑重地提出请求
 
-<audio controls src="/audio/jmy-kaiwa/45.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/45.mp3" title="第45课 日本語をチェックしてもらえませんか" />
 
 ## 今日短剧
 

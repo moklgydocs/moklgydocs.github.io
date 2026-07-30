@@ -11,7 +11,7 @@ order: 14
 
 **我想去日本看看**　｜　**Can-do**：表达自己的愿望
 
-<audio controls src="/audio/jmy-kaiwa/14.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/14.mp3" title="第14课 日本へ行ってみたいです" />
 
 ## 今日短剧
 

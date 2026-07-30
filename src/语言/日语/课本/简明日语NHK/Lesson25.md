@@ -11,7 +11,7 @@ order: 25
 
 **TSUKUE NO SHITA NI HAIRE**（钻到桌子下面）
 
-<audio controls src="/audio/jmy-nhk/25.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/25.mp3" title="第25课 机の下に入れ" />
 
 ## 会话
 

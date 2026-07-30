@@ -4,11 +4,14 @@
   "version": "2.0.0",
   "license": "MIT",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "docs:build": "vuepress-vite build src",
     "docs:clean-dev": "vuepress-vite dev src --clean-cache",
     "docs:dev": "vuepress-vite dev src",
-    "docs:update-package": "pnpm dlx vp-update"
+    "docs:update-package": "pnpm dlx vp-update",
+    "desktop:start": "electron .",
+    "desktop:build": "electron-builder"
   },
   "devDependencies": {
     "@capacitor/cli": "^6.2.1",
@@ -16,6 +19,8 @@
     "@vuepress/plugin-prismjs": "2.0.0-rc.128",
     "@vuepress/plugin-search": "2.0.0-rc.128",
     "@waline/client": "^3.13.0",
+    "electron": "^43.2.0",
+    "electron-builder": "^26.15.3",
     "mermaid": "^11.14.0",
     "playwright": "1.52.0",
     "sass-embedded": "^1.98.0",

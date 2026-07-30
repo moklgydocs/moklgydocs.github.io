@@ -11,7 +11,7 @@ order: 9
 
 **这是什么**　｜　**Can-do**：询问东西的名称
 
-<audio controls src="/audio/jmy-kaiwa/09.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/09.mp3" title="第9课 これは何ですか" />
 
 ## 今日短剧
 

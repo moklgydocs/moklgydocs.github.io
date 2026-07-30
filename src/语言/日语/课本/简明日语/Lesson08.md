@@ -11,7 +11,7 @@ order: 8
 
 **这是我朋友绫香**　｜　**Can-do**：引荐朋友等
 
-<audio controls src="/audio/jmy-kaiwa/08.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/08.mp3" title="第8课 友達のあやかさんです" />
 
 ## 今日短剧
 

@@ -11,7 +11,7 @@ order: 23
 
 **OKÂSAN NI SHIKARAREMASHITA**（被妈妈骂了）
 
-<audio controls src="/audio/jmy-nhk/23.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/23.mp3" title="第23课 お母さんに叱られました" />
 
 ## 会话
 

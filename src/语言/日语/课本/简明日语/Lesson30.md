@@ -11,7 +11,7 @@ order: 30
 
 **一起唱歌　一起跳舞**　｜　**Can-do**：叙述做过的或将要做的各种事
 
-<audio controls src="/audio/jmy-kaiwa/30.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/30.mp3" title="第30课 一緒に歌ったり、踊ったりしました" />
 
 ## 今日短剧
 

@@ -11,7 +11,7 @@ order: 33
 
 **要等多长时间**　｜　**Can-do**：询问所需时间
 
-<audio controls src="/audio/jmy-kaiwa/33.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/33.mp3" title="第33课 どのくらい待ちますか" />
 
 ## 今日短剧
 

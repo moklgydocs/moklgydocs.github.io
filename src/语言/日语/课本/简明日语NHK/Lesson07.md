@@ -11,7 +11,7 @@ order: 7
 
 **SHÛKURÎMU WA ARIMASU KA**（有奶油泡芙吗？）
 
-<audio controls src="/audio/jmy-nhk/07.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/07.mp3" title="第7课 シュークリームはありますか" />
 
 ## 会话
 

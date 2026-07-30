@@ -11,7 +11,7 @@ order: 29
 
 **CHIKAKU DE MIRU TO, ÔKII DESU NE**（在近处看，好大啊）
 
-<audio controls src="/audio/jmy-nhk/29.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/29.mp3" title="第29课 近くで見ると、大きいですね" />
 
 ## 会话
 

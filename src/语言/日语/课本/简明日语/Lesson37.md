@@ -11,7 +11,7 @@ order: 37
 
 **电视不开机**　｜　**Can-do**：说明不正常情况
 
-<audio controls src="/audio/jmy-kaiwa/37.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/37.mp3" title="第37课 テレビがつかないんですが・・・" />
 
 ## 今日短剧
 

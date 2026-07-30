@@ -11,7 +11,7 @@ order: 41
 
 **能买票吗**　｜　**Can-do**：确认你想做的事能否实现
 
-<audio controls src="/audio/jmy-kaiwa/41.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/41.mp3" title="第41课 チケットを買うことができますか" />
 
 ## 今日短剧
 

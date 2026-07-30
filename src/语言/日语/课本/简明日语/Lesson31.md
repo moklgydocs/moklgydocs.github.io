@@ -11,7 +11,7 @@ order: 31
 
 **一起去 好不好**　｜　**Can-do**：向对方发出邀请的说法 2
 
-<audio controls src="/audio/jmy-kaiwa/31.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/31.mp3" title="第31课 一緒に行きませんか" />
 
 ## 今日短剧
 

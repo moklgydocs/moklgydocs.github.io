@@ -11,7 +11,7 @@ order: 23
 
 **我喜欢这只猫**　｜　**Can-do**：告诉别人你喜欢什么
 
-<audio controls src="/audio/jmy-kaiwa/23.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/23.mp3" title="第23课 私はこの猫が好きです" />
 
 ## 今日短剧
 

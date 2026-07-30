@@ -11,7 +11,7 @@ order: 43
 
 **看上去很不错**　｜　**Can-do**：表达你的视觉印象
 
-<audio controls src="/audio/jmy-kaiwa/43.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/43.mp3" title="第43课 元気そうですね" />
 
 ## 今日短剧
 

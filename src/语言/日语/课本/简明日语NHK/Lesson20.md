@@ -11,7 +11,7 @@ order: 20
 
 **NIHON NO UTA O UTATTA KOTO GA ARIMASU KA**（你唱过日语歌吗？）
 
-<audio controls src="/audio/jmy-nhk/20.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/20.mp3" title="第20课 日本の歌を歌ったことがありますか" />
 
 ## 会话
 

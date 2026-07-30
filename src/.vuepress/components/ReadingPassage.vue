@@ -7,7 +7,7 @@
       <p v-if="passage.intro" class="rp-intro">{{ passage.intro }}</p>
       <div v-if="passage.audio" class="rp-audio">
         <span class="rp-audio-label">全文朗读</span>
-        <audio :src="passage.audio" controls preload="none" class="rp-audio-player"></audio>
+        <StickyAudio :src="passage.audio" :title="passage.title" class="rp-audio-player" />
       </div>
     </header>
     <ol class="rp-list">
@@ -22,6 +22,7 @@
 <script setup lang="ts">
 import type { ReadingPassageData } from './reading-types'
 import ReadingSentence from './ReadingSentence.vue'
+import StickyAudio from './StickyAudio.vue'
 
 defineProps<{ passage: ReadingPassageData; level?: string }>()
 </script>
@@ -73,10 +74,9 @@ defineProps<{ passage: ReadingPassageData; level?: string }>()
   white-space: nowrap;
 }
 .rp-audio-player {
-  height: 2.2rem;
-  max-width: 100%;
   flex: 1;
   min-width: 220px;
+  max-width: 100%;
 }
 .rp-list {
   list-style: none;

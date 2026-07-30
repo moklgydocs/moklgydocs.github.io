@@ -11,7 +11,7 @@ order: 27
 
 **哪个最好吃**　｜　**Can-do**：问对方选哪个好
 
-<audio controls src="/audio/jmy-kaiwa/27.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/27.mp3" title="第27课 どれが一番おいしいですか" />
 
 ## 今日短剧
 

@@ -11,7 +11,7 @@ order: 42
 
 **我打算送给悠辉**　｜　**Can-do**：说明你的意愿或计划
 
-<audio controls src="/audio/jmy-kaiwa/42.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/42.mp3" title="第42课 悠輝さんに渡すつもりです" />
 
 ## 今日短剧
 

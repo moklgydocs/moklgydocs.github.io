@@ -11,7 +11,7 @@ order: 36
 
 **BENKYÔ SHINAKEREBA NARIMASEN**（我得在大学学习）
 
-<audio controls src="/audio/jmy-nhk/36.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/36.mp3" title="第36课 勉強しなければなりません" />
 
 ## 会话
 

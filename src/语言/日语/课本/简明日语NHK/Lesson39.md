@@ -11,7 +11,7 @@ order: 39
 
 **KAZE DA TO OMOIMASU**（我想你是感冒了）
 
-<audio controls src="/audio/jmy-nhk/39.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/39.mp3" title="第39课 かぜだと思います" />
 
 ## 会话
 

@@ -11,7 +11,7 @@ order: 11
 
 **有护身符吗**　｜　**Can-do**：询问是否有你想要的东西
 
-<audio controls src="/audio/jmy-kaiwa/11.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/11.mp3" title="第11课 お守りはありますか" />
 
 ## 今日短剧
 

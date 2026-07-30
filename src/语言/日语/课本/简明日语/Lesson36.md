@@ -11,7 +11,7 @@ order: 36
 
 **浴场从几点到几点开放**　｜　**Can-do**：询问时间
 
-<audio controls src="/audio/jmy-kaiwa/36.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/36.mp3" title="第36课 お風呂は何時から何時までですか" />
 
 ## 今日短剧
 

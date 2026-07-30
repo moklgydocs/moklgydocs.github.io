@@ -11,7 +11,7 @@ order: 25
 
 **嗓子疼**　｜　**Can-do**：身体不适的表达方法
 
-<audio controls src="/audio/jmy-kaiwa/25.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/25.mp3" title="第25课 のどが痛いんです" />
 
 ## 今日短剧
 

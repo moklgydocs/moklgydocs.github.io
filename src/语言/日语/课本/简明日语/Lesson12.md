@@ -11,7 +11,7 @@ order: 12
 
 **这个护身符真可爱**　｜　**Can-do**：表达感想或做出说明 1
 
-<audio controls src="/audio/jmy-kaiwa/12.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/12.mp3" title="第12课 かわいいお守りですね" />
 
 ## 今日短剧
 

@@ -11,7 +11,7 @@ order: 11
 
 **ZEHI KITE KUDASAI**（一定要来哦）
 
-<audio controls src="/audio/jmy-nhk/11.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/11.mp3" title="第11课 ぜひ来てください" />
 
 ## 会话
 

@@ -11,7 +11,7 @@ order: 4
 
 **在大学学日语**　｜　**Can-do**：说明你将要做什么
 
-<audio controls src="/audio/jmy-kaiwa/04.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/04.mp3" title="第4课 大学で日本語を勉強します" />
 
 ## 今日短剧
 

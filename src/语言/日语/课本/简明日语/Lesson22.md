@@ -11,7 +11,7 @@ order: 22
 
 **拍张照片吧**　｜　**Can-do**：向对方发出邀请的说法 1
 
-<audio controls src="/audio/jmy-kaiwa/22.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/22.mp3" title="第22课 写真を撮りましょう" />
 
 ## 今日短剧
 

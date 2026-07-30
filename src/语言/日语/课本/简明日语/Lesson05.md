@@ -11,7 +11,7 @@ order: 5
 
 **听广播学的**　｜　**Can-do**：说明自己是怎样学习日语的
 
-<audio controls src="/audio/jmy-kaiwa/05.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/05.mp3" title="第5课 ラジオで勉強しました" />
 
 ## 今日短剧
 

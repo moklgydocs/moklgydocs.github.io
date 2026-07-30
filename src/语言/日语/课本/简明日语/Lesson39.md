@@ -11,7 +11,7 @@ order: 39
 
 **我把钱包弄丢了**　｜　**Can-do**：说明自己的失误
 
-<audio controls src="/audio/jmy-kaiwa/39.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/39.mp3" title="第39课 財布を落としてしまいました" />
 
 ## 今日短剧
 

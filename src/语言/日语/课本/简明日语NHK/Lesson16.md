@@ -11,7 +11,7 @@ order: 16
 
 **KAIDAN O AGATTE, MIGI NI ITTE KUDASAI**（上了楼梯，往右拐）
 
-<audio controls src="/audio/jmy-nhk/16.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/16.mp3" title="第16课 階段を上がって、右に行ってください" />
 
 ## 会话
 

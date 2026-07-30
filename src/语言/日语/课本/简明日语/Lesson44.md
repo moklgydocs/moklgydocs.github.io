@@ -11,7 +11,7 @@ order: 44
 
 **听说还要举办音乐会**　｜　**Can-do**：把你所听到的事情告诉别人
 
-<audio controls src="/audio/jmy-kaiwa/44.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/44.mp3" title="第44课 またコンサートがあるそうです" />
 
 ## 今日短剧
 

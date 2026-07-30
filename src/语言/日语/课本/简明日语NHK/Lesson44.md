@@ -11,7 +11,7 @@ order: 44
 
 **WAGASHI O TABETE KARA, MACCHA O NOMIMASU**（先吃日式点心，然后喝抹茶）
 
-<audio controls src="/audio/jmy-nhk/44.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/44.mp3" title="第44课 和菓子を食べてから、抹茶を飲みます" />
 
 ## 会话
 

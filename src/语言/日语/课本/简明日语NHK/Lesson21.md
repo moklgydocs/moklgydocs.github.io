@@ -11,7 +11,7 @@ order: 21
 
 **IIE, SOREHODODEMO**（哪里，没那么好）
 
-<audio controls src="/audio/jmy-nhk/21.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/21.mp3" title="第21课 いいえ、それほどでも" />
 
 ## 会话
 

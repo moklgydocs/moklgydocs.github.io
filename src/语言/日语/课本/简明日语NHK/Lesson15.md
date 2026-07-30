@@ -11,7 +11,7 @@ order: 15
 
 **NETE IMASU**（在睡觉）
 
-<audio controls src="/audio/jmy-nhk/15.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/15.mp3" title="第15课 寝ています" />
 
 ## 会话
 

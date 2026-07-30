@@ -11,7 +11,7 @@ order: 38
 
 **KASHIKOMARIMASHITA**（好的）
 
-<audio controls src="/audio/jmy-nhk/38.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/38.mp3" title="第38课 かしこまりました" />
 
 ## 会话
 

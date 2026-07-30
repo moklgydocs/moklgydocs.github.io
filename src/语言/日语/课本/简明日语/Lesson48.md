@@ -11,7 +11,7 @@ order: 48
 
 **毕业以后 我想在日本工作**　｜　**Can-do**：叙述你今后想做的事
 
-<audio controls src="/audio/jmy-kaiwa/48.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/48.mp3" title="第48课 卒業したら、日本で働きたいです" />
 
 ## 今日短剧
 

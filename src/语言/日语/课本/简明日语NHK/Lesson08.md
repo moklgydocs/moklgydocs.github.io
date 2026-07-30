@@ -11,7 +11,7 @@ order: 8
 
 **MÔICHIDO ONEGAI SHIMASU**（请再说一遍）
 
-<audio controls src="/audio/jmy-nhk/08.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/08.mp3" title="第8课 もう一度お願いします" />
 
 ## 会话
 

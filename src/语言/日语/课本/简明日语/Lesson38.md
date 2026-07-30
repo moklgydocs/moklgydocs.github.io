@@ -11,7 +11,7 @@ order: 38
 
 **外面比较好**　｜　**Can-do**：对两个东西进行比较
 
-<audio controls src="/audio/jmy-kaiwa/38.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/38.mp3" title="第38课 外のほうがいいです" />
 
 ## 今日短剧
 

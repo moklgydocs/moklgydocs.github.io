@@ -11,7 +11,7 @@ order: 1
 
 **春奶奶之家在哪儿**　｜　**Can-do**：问路
 
-<audio controls src="/audio/jmy-kaiwa/01.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/01.mp3" title="第1课 はるさんハウスはどこですか" />
 
 ## 今日短剧
 

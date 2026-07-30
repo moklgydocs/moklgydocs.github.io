@@ -11,7 +11,7 @@ order: 47
 
 **怎么弄**　｜　**Can-do**：询问做某事的方法
 
-<audio controls src="/audio/jmy-kaiwa/47.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/47.mp3" title="第47课 どうやってするんですか" />
 
 ## 今日短剧
 

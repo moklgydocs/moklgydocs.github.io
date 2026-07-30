@@ -11,7 +11,7 @@ order: 28
 
 **SHIZUOKA E YÔKOSO**（欢迎来静冈）
 
-<audio controls src="/audio/jmy-nhk/28.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/28.mp3" title="第28课 静岡へようこそ" />
 
 ## 会话
 

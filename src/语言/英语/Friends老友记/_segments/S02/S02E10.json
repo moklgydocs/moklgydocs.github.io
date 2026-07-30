@@ -1,0 +1,1190 @@
+{
+"ep": "S02E10",
+"src": "/audio/episodes/S02/S02E10.mp3",
+"segments": [
+{
+"start": 0.0,
+"duration": 5.04
+},
+{
+"start": 5.04,
+"duration": 4.68
+},
+{
+"start": 9.72,
+"duration": 4.08
+},
+{
+"start": 13.8,
+"duration": 7.8
+},
+{
+"start": 21.6,
+"duration": 10.8
+},
+{
+"start": 32.4,
+"duration": 4.464
+},
+{
+"start": 36.864,
+"duration": 5.448
+},
+{
+"start": 42.312,
+"duration": 3.768
+},
+{
+"start": 46.08,
+"duration": 1.872
+},
+{
+"start": 47.952,
+"duration": 3.144
+},
+{
+"start": 51.096,
+"duration": 1.368
+},
+{
+"start": 52.464,
+"duration": 8.064
+},
+{
+"start": 60.528,
+"duration": 5.376
+},
+{
+"start": 65.904,
+"duration": 7.992
+},
+{
+"start": 73.896,
+"duration": 16.632
+},
+{
+"start": 90.528,
+"duration": 6.552
+},
+{
+"start": 97.08,
+"duration": 2.448
+},
+{
+"start": 99.528,
+"duration": 1.704
+},
+{
+"start": 101.232,
+"duration": 17.616
+},
+{
+"start": 118.848,
+"duration": 0.816
+},
+{
+"start": 119.664,
+"duration": 1.992
+},
+{
+"start": 121.656,
+"duration": 0.792
+},
+{
+"start": 122.448,
+"duration": 2.448
+},
+{
+"start": 124.896,
+"duration": 2.736
+},
+{
+"start": 127.632,
+"duration": 7.728
+},
+{
+"start": 135.36,
+"duration": 1.56
+},
+{
+"start": 136.92,
+"duration": 2.544
+},
+{
+"start": 139.464,
+"duration": 2.784
+},
+{
+"start": 142.248,
+"duration": 1.872
+},
+{
+"start": 144.12,
+"duration": 3.864
+},
+{
+"start": 147.984,
+"duration": 1.848
+},
+{
+"start": 149.832,
+"duration": 12.768
+},
+{
+"start": 162.6,
+"duration": 6.816
+},
+{
+"start": 169.416,
+"duration": 2.112
+},
+{
+"start": 171.528,
+"duration": 5.784
+},
+{
+"start": 177.312,
+"duration": 1.968
+},
+{
+"start": 179.28,
+"duration": 1.776
+},
+{
+"start": 181.056,
+"duration": 1.776
+},
+{
+"start": 182.832,
+"duration": 13.68
+},
+{
+"start": 196.512,
+"duration": 1.584
+},
+{
+"start": 198.096,
+"duration": 5.088
+},
+{
+"start": 203.184,
+"duration": 1.512
+},
+{
+"start": 204.696,
+"duration": 6.864
+},
+{
+"start": 211.56,
+"duration": 2.616
+},
+{
+"start": 214.176,
+"duration": 2.232
+},
+{
+"start": 216.408,
+"duration": 0.744
+},
+{
+"start": 217.152,
+"duration": 1.464
+},
+{
+"start": 218.616,
+"duration": 5.064
+},
+{
+"start": 223.68,
+"duration": 4.848
+},
+{
+"start": 228.528,
+"duration": 1.392
+},
+{
+"start": 229.92,
+"duration": 3.888
+},
+{
+"start": 233.808,
+"duration": 2.592
+},
+{
+"start": 236.4,
+"duration": 7.752
+},
+{
+"start": 244.152,
+"duration": 10.44
+},
+{
+"start": 254.592,
+"duration": 4.056
+},
+{
+"start": 258.648,
+"duration": 10.512
+},
+{
+"start": 269.16,
+"duration": 2.424
+},
+{
+"start": 271.584,
+"duration": 2.256
+},
+{
+"start": 273.84,
+"duration": 1.728
+},
+{
+"start": 275.568,
+"duration": 3.336
+},
+{
+"start": 278.904,
+"duration": 4.488
+},
+{
+"start": 283.392,
+"duration": 1.368
+},
+{
+"start": 284.76,
+"duration": 4.656
+},
+{
+"start": 289.416,
+"duration": 4.512
+},
+{
+"start": 293.928,
+"duration": 4.368
+},
+{
+"start": 298.296,
+"duration": 0.888
+},
+{
+"start": 299.184,
+"duration": 1.536
+},
+{
+"start": 300.72,
+"duration": 5.928
+},
+{
+"start": 306.648,
+"duration": 10.488
+},
+{
+"start": 317.136,
+"duration": 1.584
+},
+{
+"start": 318.72,
+"duration": 5.112
+},
+{
+"start": 323.832,
+"duration": 3.336
+},
+{
+"start": 327.168,
+"duration": 1.992
+},
+{
+"start": 329.16,
+"duration": 1.176
+},
+{
+"start": 330.336,
+"duration": 0.744
+},
+{
+"start": 331.08,
+"duration": 1.488
+},
+{
+"start": 332.568,
+"duration": 0.744
+},
+{
+"start": 333.312,
+"duration": 0.744
+},
+{
+"start": 334.056,
+"duration": 2.064
+},
+{
+"start": 336.12,
+"duration": 1.32
+},
+{
+"start": 337.44,
+"duration": 3.744
+},
+{
+"start": 341.184,
+"duration": 0.864
+},
+{
+"start": 342.048,
+"duration": 4.08
+},
+{
+"start": 346.128,
+"duration": 4.488
+},
+{
+"start": 350.616,
+"duration": 4.824
+},
+{
+"start": 355.44,
+"duration": 4.896
+},
+{
+"start": 360.336,
+"duration": 3.936
+},
+{
+"start": 364.272,
+"duration": 5.208
+},
+{
+"start": 369.48,
+"duration": 1.92
+},
+{
+"start": 371.4,
+"duration": 3.6
+},
+{
+"start": 375.0,
+"duration": 0.72
+},
+{
+"start": 375.72,
+"duration": 1.752
+},
+{
+"start": 377.472,
+"duration": 3.144
+},
+{
+"start": 380.616,
+"duration": 6.0
+},
+{
+"start": 386.616,
+"duration": 4.632
+},
+{
+"start": 391.248,
+"duration": 1.368
+},
+{
+"start": 392.616,
+"duration": 2.832
+},
+{
+"start": 395.448,
+"duration": 1.944
+},
+{
+"start": 397.392,
+"duration": 5.664
+},
+{
+"start": 403.056,
+"duration": 3.264
+},
+{
+"start": 406.32,
+"duration": 1.824
+},
+{
+"start": 408.144,
+"duration": 14.424
+},
+{
+"start": 422.568,
+"duration": 4.704
+},
+{
+"start": 427.272,
+"duration": 5.664
+},
+{
+"start": 432.936,
+"duration": 2.448
+},
+{
+"start": 435.384,
+"duration": 1.584
+},
+{
+"start": 436.968,
+"duration": 2.856
+},
+{
+"start": 439.824,
+"duration": 7.872
+},
+{
+"start": 447.696,
+"duration": 1.728
+},
+{
+"start": 449.424,
+"duration": 12.744
+},
+{
+"start": 462.168,
+"duration": 21.768
+},
+{
+"start": 483.936,
+"duration": 1.08
+},
+{
+"start": 485.016,
+"duration": 1.2
+},
+{
+"start": 486.216,
+"duration": 1.488
+},
+{
+"start": 487.704,
+"duration": 4.656
+},
+{
+"start": 492.36,
+"duration": 0.984
+},
+{
+"start": 493.344,
+"duration": 3.864
+},
+{
+"start": 497.208,
+"duration": 2.568
+},
+{
+"start": 499.776,
+"duration": 1.2
+},
+{
+"start": 500.976,
+"duration": 4.056
+},
+{
+"start": 505.032,
+"duration": 1.128
+},
+{
+"start": 506.16,
+"duration": 9.264
+},
+{
+"start": 515.424,
+"duration": 3.096
+},
+{
+"start": 518.52,
+"duration": 2.904
+},
+{
+"start": 521.424,
+"duration": 2.592
+},
+{
+"start": 524.016,
+"duration": 2.232
+},
+{
+"start": 526.248,
+"duration": 1.2
+},
+{
+"start": 527.448,
+"duration": 2.664
+},
+{
+"start": 530.112,
+"duration": 2.016
+},
+{
+"start": 532.128,
+"duration": 3.36
+},
+{
+"start": 535.488,
+"duration": 8.448
+},
+{
+"start": 543.936,
+"duration": 5.064
+},
+{
+"start": 549.0,
+"duration": 0.768
+},
+{
+"start": 549.768,
+"duration": 3.024
+},
+{
+"start": 552.792,
+"duration": 4.632
+},
+{
+"start": 557.424,
+"duration": 5.64
+},
+{
+"start": 563.064,
+"duration": 2.088
+},
+{
+"start": 565.152,
+"duration": 0.768
+},
+{
+"start": 565.92,
+"duration": 2.76
+},
+{
+"start": 568.68,
+"duration": 1.632
+},
+{
+"start": 570.312,
+"duration": 4.968
+},
+{
+"start": 575.28,
+"duration": 1.992
+},
+{
+"start": 577.272,
+"duration": 5.568
+},
+{
+"start": 582.84,
+"duration": 0.912
+},
+{
+"start": 583.752,
+"duration": 3.024
+},
+{
+"start": 586.776,
+"duration": 1.848
+},
+{
+"start": 588.624,
+"duration": 4.92
+},
+{
+"start": 593.544,
+"duration": 1.536
+},
+{
+"start": 595.08,
+"duration": 8.376
+},
+{
+"start": 603.456,
+"duration": 0.768
+},
+{
+"start": 604.224,
+"duration": 1.44
+},
+{
+"start": 605.664,
+"duration": 3.24
+},
+{
+"start": 608.904,
+"duration": 5.952
+},
+{
+"start": 614.856,
+"duration": 4.776
+},
+{
+"start": 619.632,
+"duration": 1.584
+},
+{
+"start": 621.216,
+"duration": 1.248
+},
+{
+"start": 622.464,
+"duration": 4.776
+},
+{
+"start": 627.24,
+"duration": 4.152
+},
+{
+"start": 631.392,
+"duration": 2.832
+},
+{
+"start": 634.224,
+"duration": 4.44
+},
+{
+"start": 638.664,
+"duration": 1.392
+},
+{
+"start": 640.056,
+"duration": 4.248
+},
+{
+"start": 644.304,
+"duration": 7.944
+},
+{
+"start": 652.248,
+"duration": 0.816
+},
+{
+"start": 653.064,
+"duration": 5.616
+},
+{
+"start": 658.68,
+"duration": 0.72
+},
+{
+"start": 659.4,
+"duration": 4.416
+},
+{
+"start": 663.816,
+"duration": 2.52
+},
+{
+"start": 666.336,
+"duration": 19.368
+},
+{
+"start": 685.704,
+"duration": 1.512
+},
+{
+"start": 687.216,
+"duration": 3.744
+},
+{
+"start": 690.96,
+"duration": 1.344
+},
+{
+"start": 692.304,
+"duration": 0.72
+},
+{
+"start": 693.024,
+"duration": 0.72
+},
+{
+"start": 693.744,
+"duration": 0.72
+},
+{
+"start": 694.464,
+"duration": 0.72
+},
+{
+"start": 695.184,
+"duration": 4.224
+},
+{
+"start": 699.408,
+"duration": 3.264
+},
+{
+"start": 702.672,
+"duration": 1.704
+},
+{
+"start": 704.376,
+"duration": 1.104
+},
+{
+"start": 705.48,
+"duration": 16.032
+},
+{
+"start": 721.512,
+"duration": 1.584
+},
+{
+"start": 723.096,
+"duration": 1.368
+},
+{
+"start": 724.464,
+"duration": 0.744
+},
+{
+"start": 725.208,
+"duration": 1.488
+},
+{
+"start": 726.696,
+"duration": 5.256
+},
+{
+"start": 731.952,
+"duration": 2.952
+},
+{
+"start": 734.904,
+"duration": 1.008
+},
+{
+"start": 735.912,
+"duration": 3.648
+},
+{
+"start": 739.56,
+"duration": 2.976
+},
+{
+"start": 742.536,
+"duration": 9.36
+},
+{
+"start": 751.896,
+"duration": 1.392
+},
+{
+"start": 753.288,
+"duration": 5.304
+},
+{
+"start": 758.592,
+"duration": 4.2
+},
+{
+"start": 762.792,
+"duration": 3.096
+},
+{
+"start": 765.888,
+"duration": 6.24
+},
+{
+"start": 772.128,
+"duration": 1.632
+},
+{
+"start": 773.76,
+"duration": 2.328
+},
+{
+"start": 776.088,
+"duration": 10.872
+},
+{
+"start": 786.96,
+"duration": 11.352
+},
+{
+"start": 798.312,
+"duration": 15.648
+},
+{
+"start": 813.96,
+"duration": 2.088
+},
+{
+"start": 816.048,
+"duration": 4.128
+},
+{
+"start": 820.176,
+"duration": 1.68
+},
+{
+"start": 821.856,
+"duration": 5.328
+},
+{
+"start": 827.184,
+"duration": 3.984
+},
+{
+"start": 831.168,
+"duration": 4.992
+},
+{
+"start": 836.16,
+"duration": 2.232
+},
+{
+"start": 838.392,
+"duration": 4.824
+},
+{
+"start": 843.216,
+"duration": 9.912
+},
+{
+"start": 853.128,
+"duration": 1.224
+},
+{
+"start": 854.352,
+"duration": 4.944
+},
+{
+"start": 859.296,
+"duration": 7.416
+},
+{
+"start": 866.712,
+"duration": 2.304
+},
+{
+"start": 869.016,
+"duration": 0.72
+},
+{
+"start": 869.736,
+"duration": 2.328
+},
+{
+"start": 872.064,
+"duration": 2.712
+},
+{
+"start": 874.776,
+"duration": 3.048
+},
+{
+"start": 877.824,
+"duration": 1.32
+},
+{
+"start": 879.144,
+"duration": 2.592
+},
+{
+"start": 881.736,
+"duration": 7.152
+},
+{
+"start": 888.888,
+"duration": 5.376
+},
+{
+"start": 894.264,
+"duration": 4.248
+},
+{
+"start": 898.512,
+"duration": 4.728
+},
+{
+"start": 903.24,
+"duration": 1.488
+},
+{
+"start": 904.728,
+"duration": 2.28
+},
+{
+"start": 907.008,
+"duration": 1.896
+},
+{
+"start": 908.904,
+"duration": 2.184
+},
+{
+"start": 911.088,
+"duration": 2.808
+},
+{
+"start": 913.896,
+"duration": 11.784
+},
+{
+"start": 925.68,
+"duration": 1.104
+},
+{
+"start": 926.784,
+"duration": 3.0
+},
+{
+"start": 929.784,
+"duration": 1.584
+},
+{
+"start": 931.368,
+"duration": 2.52
+},
+{
+"start": 933.888,
+"duration": 1.44
+},
+{
+"start": 935.328,
+"duration": 0.768
+},
+{
+"start": 936.096,
+"duration": 2.328
+},
+{
+"start": 938.424,
+"duration": 2.664
+},
+{
+"start": 941.088,
+"duration": 4.296
+},
+{
+"start": 945.384,
+"duration": 2.4
+},
+{
+"start": 947.784,
+"duration": 0.744
+},
+{
+"start": 948.528,
+"duration": 1.632
+},
+{
+"start": 950.16,
+"duration": 2.472
+},
+{
+"start": 952.632,
+"duration": 0.744
+},
+{
+"start": 953.376,
+"duration": 0.816
+},
+{
+"start": 954.192,
+"duration": 1.728
+},
+{
+"start": 955.92,
+"duration": 3.624
+},
+{
+"start": 959.544,
+"duration": 1.488
+},
+{
+"start": 961.032,
+"duration": 1.992
+},
+{
+"start": 963.024,
+"duration": 4.392
+},
+{
+"start": 967.416,
+"duration": 8.64
+},
+{
+"start": 976.056,
+"duration": 2.592
+},
+{
+"start": 978.648,
+"duration": 2.856
+},
+{
+"start": 981.504,
+"duration": 1.896
+},
+{
+"start": 983.4,
+"duration": 0.864
+},
+{
+"start": 984.264,
+"duration": 1.992
+},
+{
+"start": 986.256,
+"duration": 2.112
+},
+{
+"start": 988.368,
+"duration": 1.512
+},
+{
+"start": 989.88,
+"duration": 1.104
+},
+{
+"start": 990.984,
+"duration": 1.824
+},
+{
+"start": 992.808,
+"duration": 5.328
+},
+{
+"start": 998.136,
+"duration": 4.824
+},
+{
+"start": 1002.96,
+"duration": 0.936
+},
+{
+"start": 1003.896,
+"duration": 2.904
+},
+{
+"start": 1006.8,
+"duration": 0.864
+},
+{
+"start": 1007.664,
+"duration": 1.032
+},
+{
+"start": 1008.696,
+"duration": 0.912
+},
+{
+"start": 1009.608,
+"duration": 0.984
+},
+{
+"start": 1010.592,
+"duration": 2.184
+},
+{
+"start": 1012.776,
+"duration": 0.816
+},
+{
+"start": 1013.592,
+"duration": 2.688
+},
+{
+"start": 1016.28,
+"duration": 4.8
+},
+{
+"start": 1021.08,
+"duration": 1.488
+},
+{
+"start": 1022.568,
+"duration": 0.744
+},
+{
+"start": 1023.312,
+"duration": 2.208
+},
+{
+"start": 1025.52,
+"duration": 5.4
+},
+{
+"start": 1030.92,
+"duration": 1.296
+},
+{
+"start": 1032.216,
+"duration": 5.784
+},
+{
+"start": 1038.0,
+"duration": 1.656
+},
+{
+"start": 1039.656,
+"duration": 8.328
+},
+{
+"start": 1047.984,
+"duration": 0.888
+},
+{
+"start": 1048.872,
+"duration": 6.432
+},
+{
+"start": 1055.304,
+"duration": 0.864
+},
+{
+"start": 1056.168,
+"duration": 5.232
+},
+{
+"start": 1061.4,
+"duration": 0.768
+},
+{
+"start": 1062.168,
+"duration": 0.888
+},
+{
+"start": 1063.056,
+"duration": 0.768
+},
+{
+"start": 1063.824,
+"duration": 2.52
+},
+{
+"start": 1066.344,
+"duration": 1.392
+},
+{
+"start": 1067.736,
+"duration": 6.144
+},
+{
+"start": 1073.88,
+"duration": 3.456
+},
+{
+"start": 1077.336,
+"duration": 0.72
+},
+{
+"start": 1078.056,
+"duration": 0.744
+},
+{
+"start": 1078.8,
+"duration": 0.744
+},
+{
+"start": 1079.544,
+"duration": 2.256
+},
+{
+"start": 1081.8,
+"duration": 8.64
+}
+]
+}

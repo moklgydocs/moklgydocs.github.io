@@ -11,7 +11,7 @@ order: 40
 
 **因为是第一次 所以被吓到了**　｜　**Can-do**：说明理由
 
-<audio controls src="/audio/jmy-kaiwa/40.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/40.mp3" title="第40课 初めてだったから、びっくりしました" />
 
 ## 今日短剧
 

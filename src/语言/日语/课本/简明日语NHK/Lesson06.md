@@ -11,7 +11,7 @@ order: 6
 
 **DENWABANGÔ WA NANBAN DESU KA**（你的电话号码是多少？）
 
-<audio controls src="/audio/jmy-nhk/06.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/06.mp3" title="第6课 電話番号は何番ですか" />
 
 ## 会话
 

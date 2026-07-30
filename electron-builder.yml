@@ -1,0 +1,18 @@
+appId: io.github.moklgydocs
+productName: 异星基站
+directories:
+  output: release
+files:
+  - electron/**
+  - package.json
+  - src/.vuepress/dist/**
+asar: true
+win:
+  target: nsis
+  icon: src/.vuepress/public/logo.png
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  shortcutName: 异星基站
+  artifactName: ${productName}-Setup-${version}.${ext}

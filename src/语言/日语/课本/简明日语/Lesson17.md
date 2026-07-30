@@ -11,7 +11,7 @@ order: 17
 
 **正在日本旅行**　｜　**Can-do**：告诉别人你现在正在做什么
 
-<audio controls src="/audio/jmy-kaiwa/17.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/17.mp3" title="第17课 日本を旅行しています" />
 
 ## 今日短剧
 

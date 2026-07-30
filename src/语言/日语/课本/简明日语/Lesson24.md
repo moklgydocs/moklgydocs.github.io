@@ -11,7 +11,7 @@ order: 24
 
 **不能吃生鸡蛋**　｜　**Can-do**：告诉对方你不喜欢或不能吃什么
 
-<audio controls src="/audio/jmy-kaiwa/24.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/24.mp3" title="第24课 生卵は食べられません" />
 
 ## 今日短剧
 

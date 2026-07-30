@@ -11,7 +11,7 @@ order: 48
 
 **IROIRO OSEWA NI NARIMASHITA**（谢谢你们的多方关照）
 
-<audio controls src="/audio/jmy-nhk/48.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/48.mp3" title="第48课 いろいろお世話になりました" />
 
 ## 会话
 

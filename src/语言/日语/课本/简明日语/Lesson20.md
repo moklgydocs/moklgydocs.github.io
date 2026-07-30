@@ -11,7 +11,7 @@ order: 20
 
 **请别放山葵**　｜　**Can-do**：请对方不要在你的菜里放某样东西
 
-<audio controls src="/audio/jmy-kaiwa/20.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/20.mp3" title="第20课 わさびは入れないでください" />
 
 ## 今日短剧
 

@@ -11,7 +11,7 @@ order: 22
 
 **OSOKU NARIMASHITA**（我回来晚了）
 
-<audio controls src="/audio/jmy-nhk/22.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/22.mp3" title="第22课 遅くなりました" />
 
 ## 会话
 

@@ -11,7 +11,7 @@ order: 28
 
 **可以拍照吗**　｜　**Can-do**：寻求许可
 
-<audio controls src="/audio/jmy-kaiwa/28.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/28.mp3" title="第28课 写真を撮ってもいいですか" />
 
 ## 今日短剧
 

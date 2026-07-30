@@ -11,7 +11,7 @@ order: 34
 
 **我读过**　｜　**Can-do**：表示经验的说法
 
-<audio controls src="/audio/jmy-kaiwa/34.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/34.mp3" title="第34课 読んだことあります" />
 
 ## 今日短剧
 

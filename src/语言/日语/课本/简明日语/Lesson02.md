@@ -11,7 +11,7 @@ order: 2
 
 **我叫心心 是学生**　｜　**Can-do**：自我介绍　告诉别人你的名字和职业
 
-<audio controls src="/audio/jmy-kaiwa/02.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/02.mp3" title="第2课 タムです。学生です" />
 
 ## 今日短剧
 

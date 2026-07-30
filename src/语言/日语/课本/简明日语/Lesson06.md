@@ -11,7 +11,7 @@ order: 6
 
 **这个电车去池袋吗**　｜　**Can-do**：确认公共交通工具开往何处
 
-<audio controls src="/audio/jmy-kaiwa/06.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/06.mp3" title="第6课 この電車は池袋に行きますか" />
 
 ## 今日短剧
 

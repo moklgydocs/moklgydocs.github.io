@@ -11,7 +11,7 @@ order: 41
 
 **GAKUEN-SAI NI IKU KOTO GA DEKITE, TANOSHIKATTA DESU**（能去学园祭，我感到非常开心）
 
-<audio controls src="/audio/jmy-nhk/41.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/41.mp3" title="第41课 学園祭に行くことができて、楽しかったです" />
 
 ## 会话
 

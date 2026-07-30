@@ -11,7 +11,7 @@ order: 18
 
 **MICHI NI MAYOTTE SHIMAIMASHITA**（我迷路了）
 
-<audio controls src="/audio/jmy-nhk/18.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/18.mp3" title="第18课 道に迷ってしまいました" />
 
 ## 会话
 

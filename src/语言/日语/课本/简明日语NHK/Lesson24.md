@@ -11,7 +11,7 @@ order: 24
 
 **TSUKAWANAIDE KUDASAI**（请不要用）
 
-<audio controls src="/audio/jmy-nhk/24.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/24.mp3" title="第24课 使わないでください" />
 
 ## 会话
 

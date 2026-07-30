@@ -11,7 +11,7 @@ order: 45
 
 **OTANJÔBI OMEDETÔ**（生日快乐）
 
-<audio controls src="/audio/jmy-nhk/45.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/45.mp3" title="第45课 お誕生日おめでとう" />
 
 ## 会话
 

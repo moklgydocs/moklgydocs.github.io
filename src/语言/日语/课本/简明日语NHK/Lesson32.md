@@ -11,7 +11,7 @@ order: 32
 
 **FUTON NO HÔ GA SUKI DESU**（我喜欢睡榻榻米）
 
-<audio controls src="/audio/jmy-nhk/32.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/32.mp3" title="第32课 布団のほうが好きです" />
 
 ## 会话
 

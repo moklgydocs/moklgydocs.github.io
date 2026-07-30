@@ -11,7 +11,7 @@ order: 26
 
 **TSUGI WA GANBARÔ**（下次努力吧）
 
-<audio controls src="/audio/jmy-nhk/26.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/26.mp3" title="第26课 次はがんばろう" />
 
 ## 会话
 

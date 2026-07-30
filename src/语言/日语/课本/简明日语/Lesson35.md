@@ -11,7 +11,7 @@ order: 35
 
 **我想去大涌谷 吃黑鸡蛋**　｜　**Can-do**：依次说明你将要做或已经做的事
 
-<audio controls src="/audio/jmy-kaiwa/35.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/35.mp3" title="第35课 大涌谷に行って、黒たまごが食べたいです" />
 
 ## 今日短剧
 

@@ -11,7 +11,7 @@ order: 15
 
 **麻烦您 去野猿温泉**　｜　**Can-do**：把你的目的地告诉出租车司机
 
-<audio controls src="/audio/jmy-kaiwa/15.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/15.mp3" title="第15课 猿の温泉までお願いします" />
 
 ## 今日短剧
 

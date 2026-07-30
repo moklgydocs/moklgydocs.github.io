@@ -11,7 +11,7 @@ order: 32
 
 **去忍者博物馆怎么走**　｜　**Can-do**：询问如何前往目的地
 
-<audio controls src="/audio/jmy-kaiwa/32.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/32.mp3" title="第32课 忍者博物館まで、どう行ったらいいですか" />
 
 ## 今日短剧
 

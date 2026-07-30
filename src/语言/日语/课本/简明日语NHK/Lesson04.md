@@ -11,7 +11,7 @@ order: 4
 
 **TADAIMA**（我回来了）
 
-<audio controls src="/audio/jmy-nhk/04.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/04.mp3" title="第4课 ただいま" />
 
 ## 会话
 

@@ -11,7 +11,7 @@ order: 1
 
 **WATASHI WA ANNA DESU**（我是安娜）
 
-<audio controls src="/audio/jmy-nhk/01.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/01.mp3" title="第1课 私はアンナです" />
 
 ## 会话
 

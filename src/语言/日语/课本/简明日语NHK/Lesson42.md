@@ -11,7 +11,7 @@ order: 42
 
 **DORE GA ICHIBAN OISHII KANA**（哪个最好吃呢）
 
-<audio controls src="/audio/jmy-nhk/42.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/42.mp3" title="第42课 どれがいちばんおいしいかな" />
 
 ## 会话
 

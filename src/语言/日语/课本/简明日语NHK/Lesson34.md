@@ -11,7 +11,7 @@ order: 34
 
 **YAWARAKAKUTE OISHII DESU**（又软又好吃）
 
-<audio controls src="/audio/jmy-nhk/34.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/34.mp3" title="第34课 やわらかくておいしいです" />
 
 ## 会话
 

@@ -11,7 +11,7 @@ order: 29
 
 **我去听钢琴演奏了**　｜　**Can-do**：表述你做了什么
 
-<audio controls src="/audio/jmy-kaiwa/29.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/29.mp3" title="第29课 ピアノの演奏を聴きに行きました" />
 
 ## 今日短剧
 

@@ -11,7 +11,7 @@ order: 13
 
 **我想看雪**　｜　**Can-do**：告诉别人你想做什么
 
-<audio controls src="/audio/jmy-kaiwa/13.mp3"></audio>
+<StickyAudio src="/audio/jmy-kaiwa/13.mp3" title="第13课 雪が見たいです" />
 
 ## 今日短剧
 

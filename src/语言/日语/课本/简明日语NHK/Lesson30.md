@@ -11,7 +11,7 @@ order: 30
 
 **MÔ SUKOSHI SHASHIN O TORITAI DESU**（我还想再拍会儿照片）
 
-<audio controls src="/audio/jmy-nhk/30.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/30.mp3" title="第30课 もう少し写真を撮りたいです" />
 
 ## 会话
 

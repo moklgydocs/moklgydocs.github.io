@@ -11,7 +11,7 @@ order: 12
 
 **ITSU NIHON NI KIMASHITA KA**（你是什么时候来的日本？）
 
-<audio controls src="/audio/jmy-nhk/12.mp3"></audio>
+<StickyAudio src="/audio/jmy-nhk/12.mp3" title="第12课 いつ日本に来ましたか" />
 
 ## 会话
 
