@@ -74,18 +74,17 @@ const isCurrent = computed(() => sharedSrc.value === segKey.value)
 const isPlaying = sharedPlaying
 
 async function playSegment(el: HTMLAudioElement, absolute: string, start: number) {
-  await new Promise<void>((resolve) => {
-    const onReady = () => {
-      el.currentTime = start
-      resolve()
-    }
-    if (el.src === absolute && el.readyState >= 1) {
-      onReady()
-      return
-    }
-    el.src = absolute
-    el.addEventListener('loadedmetadata', onReady, { once: true })
-  })
+  if (el.src !== absolute) el.src = absolute
+  // 先 play() 触发加载(preload='none' 时浏览器不会主动加载),
+  // metadata 就绪后再跳到片段起点,避免"等 metadata 才 play"的死锁
+  const seek = () => {
+    el.currentTime = start
+  }
+  if (el.readyState >= 1) {
+    seek()
+  } else {
+    el.addEventListener('loadedmetadata', seek, { once: true })
+  }
   await el.play()
 }
 
