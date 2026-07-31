@@ -2,7 +2,7 @@
   <div ref="anchor" class="sa">
     <audio
       ref="audioEl"
-      :src="src"
+      :src="resolvedSrc"
       controls
       preload="none"
       class="sa-player"
@@ -53,7 +53,21 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
-defineProps<{ src: string; title?: string }>()
+const props = defineProps<{ src: string; title?: string }>()
+
+// Capacitor 离线包: 原声数据包(friends-tv)不打进 APK(超 4G 上限),
+// 由用户拷到应用专属外置目录,此处把路径重写到 _capacitor_file_ 路由直读
+const EXTERNAL_PREFIX = '/audio/friends-tv/'
+const EXTERNAL_BASE = '/storage/emulated/0/Android/data/io.github.moklgydocs/files'
+
+const resolvedSrc = computed(() => {
+  if (typeof window === 'undefined') return props.src
+  const cap = (window as unknown as { Capacitor?: { isNativePlatform?: () => boolean; convertFileSrc: (p: string) => string } }).Capacitor
+  if (cap?.isNativePlatform?.() && props.src.startsWith(EXTERNAL_PREFIX)) {
+    return cap.convertFileSrc(EXTERNAL_BASE + props.src)
+  }
+  return props.src
+})
 
 const anchor = ref<HTMLElement | null>(null)
 const audioEl = ref<HTMLAudioElement | null>(null)
