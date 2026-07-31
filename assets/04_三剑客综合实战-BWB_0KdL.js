@@ -1,0 +1,1090 @@
+import{M as e,O as t,c as n,d as r,h as i,m as a,p as o}from"./runtime-core.esm-bundler-jC72uHyJ.js";import{t as s}from"./app-DCPmwgWY.js";var c=JSON.parse(`{"path":"/Linux/04_%E4%B8%89%E5%89%91%E5%AE%A2/04_%E4%B8%89%E5%89%91%E5%AE%A2%E7%BB%BC%E5%90%88%E5%AE%9E%E6%88%98.html","title":"三剑客综合实战","lang":"zh-CN","frontmatter":{"title":"三剑客综合实战","icon":"fa6-solid:layer-group","order":4,"category":["Linux三剑客"],"tag":["grep","sed","awk","日志分析","数据处理","管道"]},"git":{"createdTime":1780586585000,"updatedTime":1780586585000,"contributors":[{"name":"jackie.liu","username":"","email":"moklgy@foxmail.com","commits":1}]},"readingTime":{"minutes":23.82,"words":7147},"filePathRelative":"Linux/04_三剑客/04_三剑客综合实战.md"}`),l={name:`04_三剑客综合实战.md`};function u(s,c,l,u,d,f){let p=e(`Mermaid`);return t(),r(`div`,null,[c[0]||=o(`<h1 id="三剑客综合实战" tabindex="-1"><a class="header-anchor" href="#三剑客综合实战"><span>三剑客综合实战</span></a></h1><p>grep 擅长搜索过滤，sed 擅长流式替换，awk 擅长字段计算——三者组合，构成 Linux 文本处理的&quot;万能瑞士军刀&quot;。本文从管道串联的基础模式出发，通过 Nginx 日志分析、系统安全审计、CSV 数据 ETL、文本报表等实战场景，展示三剑客的协作艺术。</p><h2 id="_1-三剑客协作原理" tabindex="-1"><a class="header-anchor" href="#_1-三剑客协作原理"><span>1. 三剑客协作原理</span></a></h2><h3 id="_1-1-各自的定位" tabindex="-1"><a class="header-anchor" href="#_1-1-各自的定位"><span>1.1 各自的定位</span></a></h3>`,4),i(p,{code:`eJxLy8kvT85ILCpR8AniUgACx2ilp33zny7vfjat/dmcNUqxCrq6dgpO1UpPdu9+2rXw+cbdT+d12yvVcoFVO4Fka5SeTZjzfMsi/Rf725/tXqJUo+AcrZRelFqgFIuiaPb+Z72L9J/sX/dsyk6gIpdopeLUFFQ1L9YtfL5uuv7z3fOBLKAa12ilxPJsoBqwImewW9yilV7sm/y0fdfTnp0vW3tfLOyBmuEClnaHSUMsejqhD+YTsCJXsCIPmCKIhc93T342bw6SNXpgx4C9AzTg+awWqBlAVxNW4gpzDVjJsx2tz7ZMx69kwZ6ne/qf9kxDU+UMcU9xSWVOKtDKtMycHCvlVMM007RUJAkXqERaWppxqgGShCtMwjjVNM2UCwCfb8zB`}),c[1]||=o(`<table><thead><tr><th>工具</th><th>核心能力</th><th>不擅长的</th><th>类比</th></tr></thead><tbody><tr><td><strong>grep</strong></td><td>搜索、过滤、定位</td><td>修改内容、计算</td><td>放大镜</td></tr><tr><td><strong>sed</strong></td><td>替换、删除、插入、格式变换</td><td>字段计算、条件逻辑</td><td>橡皮擦+涂改液</td></tr><tr><td><strong>awk</strong></td><td>字段提取、计算统计、报表生成</td><td>简单替换（不如sed简洁）</td><td>计算器+打印机</td></tr></tbody></table><h3 id="_1-2-管道协作流水线" tabindex="-1"><a class="header-anchor" href="#_1-2-管道协作流水线"><span>1.2 管道协作流水线</span></a></h3>`,2),i(p,{code:`eJxVkE9PwjAYxu98iqUeDUEkGPVgIgwFgZu3wYFAK8QFFGaIdw1GBRb/YaJmGWr0gNMDiWaL7Mus3fwWNqVLtp6a/H593uctklvdar3SVoRdMSLQsykBPNDw2wW5/SJ9A5SFaHRDSElgrw0PSk2iPrrTsWf3iPUCyuxFihlpCXRgjQo/p2Q68n4npD/mQpoJogQq3f1S0zN01xi5lkYvXBCZkKEJrbYSO2o2DmnO4AqbQzyw/np9rmWYtiWBOqzUYgqENGx2jXtmzLGf8Mc91Zi3LQHyYDvWs/f9iWcncb5D1t8h1D7LWI6XI0MVD+8WQ+1y83bz7J1w9jLPzoe25w/zDBX8sY55SSZ6aHiBGUU+3L3RyJlKzl89/Z0LxeDsjnIsQ/rdqCHL6wswjpIIBkCaA4RQAi4FgOiDBEyiZABkOKiuwpXqWuQfP3TIVA==`}),c[2]||=o(`<h3 id="_1-3-选择原则" tabindex="-1"><a class="header-anchor" href="#_1-3-选择原则"><span>1.3 选择原则</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 原则1：搜索过滤 → grep</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> app.log</span><span style="color:#7F848E;font-style:italic;">                           # 最简单最直接</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 原则2：内容替换 → sed</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;s/old_host/new_host/g&#39;</span><span style="color:#98C379;"> config.conf</span><span style="color:#7F848E;font-style:italic;">         # 替换是最自然的表达</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 原则3：字段计算 → awk</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{sum += $3} END {print sum}&#39;</span><span style="color:#98C379;"> data.txt</span><span style="color:#7F848E;font-style:italic;">      # 算术运算只有 awk 能做</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 原则4：组合使用 → 管道</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;2024-01-15&#39;</span><span style="color:#98C379;"> app.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/\\[ERROR\\]//g&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{count[$2]++} END {for(k in count) print k, count[k]}&#39;</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="hint-container tip"><p class="hint-container-title">何时该用单一工具 vs 组合</p><ul><li><strong>单一工具优先</strong>：如果一个工具能完成，不要加管道</li><li><code>grep &#39;pattern&#39; file</code> 优于 <code>cat file | grep &#39;pattern&#39;</code></li><li><code>awk &#39;/pattern/{print $1}&#39; file</code> 优于 <code>grep &#39;pattern&#39; file | awk &#39;{print $1}&#39;</code></li><li><strong>组合使用场景</strong>：各步骤有明确的职责分工时</li><li>过滤 → 清洗 → 统计，每一步变换较大</li></ul></div><h2 id="_2-管道串联技巧" tabindex="-1"><a class="header-anchor" href="#_2-管道串联技巧"><span>2. 管道串联技巧</span></a></h2><h3 id="_2-1-经典管道模式" tabindex="-1"><a class="header-anchor" href="#_2-1-经典管道模式"><span>2.1 经典管道模式</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 模式1：grep 过滤 + awk 统计</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;pattern&#39;</span><span style="color:#98C379;"> file</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{sum += $3} END {print sum}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 模式2：grep 过滤 + sed 清洗 + awk 统计</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> app.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/\\x1b\\[[0-9;]*m//g&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{count[$2]++} END {for(k in count) print count[k], k}&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sort</span><span style="color:#D19A66;"> -rn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 模式3：sed 提取 + grep 过滤 + sort 排序</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#D19A66;"> -n</span><span style="color:#98C379;"> &#39;/START/,/END/p&#39;</span><span style="color:#98C379;"> file</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  grep</span><span style="color:#D19A66;"> -v</span><span style="color:#98C379;"> &#39;^#&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sort</span><span style="color:#D19A66;"> -u</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 模式4：awk 分组 + sort 排序 + head 取 Top N</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{count[$1]++} END {for(k in count) print count[k], k}&#39;</span><span style="color:#98C379;"> file</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sort</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  head</span><span style="color:#D19A66;"> -20</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_2-2-管道性能优化" tabindex="-1"><a class="header-anchor" href="#_2-2-管道性能优化"><span>2.2 管道性能优化</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 优化1：尽早过滤，减少下游数据量</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 慢：先处理所有行再过滤</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{...}&#39;</span><span style="color:#98C379;"> huge.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 快：先过滤再处理</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> huge.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{...}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 优化2：合并可以合并的步骤</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 冗余：grep + grep</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;2024-01&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 合并：</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;2024-01.*ERROR&#39;</span><span style="color:#98C379;"> log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 优化3：用 awk 替代 grep + awk 组合</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 两步</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{sum += $5} END {print sum}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 一步</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;/ERROR/{sum += $5} END {print sum}&#39;</span><span style="color:#98C379;"> log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 优化4：利用 LC_ALL=C 加速</span></span>
+<span class="line"><span style="color:#E06C75;">LC_ALL</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">C</span><span style="color:#61AFEF;"> grep</span><span style="color:#98C379;"> &#39;pattern&#39;</span><span style="color:#98C379;"> huge.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#E06C75;">LC_ALL</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">C</span><span style="color:#61AFEF;"> awk</span><span style="color:#98C379;"> &#39;{...}&#39;</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_2-3-管道中的临时文件-vs-管道" tabindex="-1"><a class="header-anchor" href="#_2-3-管道中的临时文件-vs-管道"><span>2.3 管道中的临时文件 vs 管道</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 临时文件方式（可调试中间结果）</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> app.log</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">/tmp/errors.txt</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;s/\\[ERROR\\] //&#39;</span><span style="color:#98C379;"> /tmp/errors.txt</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">/tmp/clean_errors.txt</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{count[$2]++} END {for(k in count) print k, count[k]}&#39;</span><span style="color:#98C379;"> /tmp/clean_errors.txt</span></span>
+<span class="line"><span style="color:#61AFEF;">rm</span><span style="color:#98C379;"> /tmp/errors.txt</span><span style="color:#98C379;"> /tmp/clean_errors.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 管道方式（更高效，但中间结果不可见）</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> app.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/\\[ERROR\\] //&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{count[$2]++} END {for(k in count) print k, count[k]}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># tee 方式（既输出又保存中间结果）</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> app.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  tee</span><span style="color:#98C379;"> /tmp/errors.txt</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/\\[ERROR\\] //&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  tee</span><span style="color:#98C379;"> /tmp/clean_errors.txt</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{count[$2]++} END {for(k in count) print k, count[k]}&#39;</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_3-nginx-访问日志分析" tabindex="-1"><a class="header-anchor" href="#_3-nginx-访问日志分析"><span>3. Nginx 访问日志分析</span></a></h2><h3 id="_3-1-日志格式说明" tabindex="-1"><a class="header-anchor" href="#_3-1-日志格式说明"><span>3.1 日志格式说明</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Nginx 默认 combined 格式</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># $remote_addr - $remote_user [$time_local] &quot;$request&quot; $status $body_bytes_sent &quot;$http_referer&quot; &quot;$http_user_agent&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 示例日志行</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 192.168.1.100 - - [15/Jan/2024:09:30:00 +0800] &quot;GET /api/users HTTP/1.1&quot; 200 1234 &quot;https://example.com/&quot; &quot;Mozilla/5.0&quot;</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_3-2-pv-uv-统计" tabindex="-1"><a class="header-anchor" href="#_3-2-pv-uv-统计"><span>3.2 PV/UV 统计</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># PV（Page View）——总请求数</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;END {print &quot;PV:&quot;, NR}&#39;</span><span style="color:#98C379;"> access.log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># PV 按天统计</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    date = substr($4, 2, 11)    # 提取 [15/Jan/2024 中的日期</span></span>
+<span class="line"><span style="color:#98C379;">    gsub(/\\//, &quot;-&quot;, date)       # 替换 / 为 -</span></span>
+<span class="line"><span style="color:#98C379;">    pv[date]++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (d in pv) print d, pv[d]</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># UV（Unique Visitor）——独立 IP 数</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{ip[$1]++} END {print &quot;UV:&quot;, length(ip)}&#39;</span><span style="color:#98C379;"> access.log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># UV 按天统计</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    date = substr($4, 2, 11)</span></span>
+<span class="line"><span style="color:#98C379;">    gsub(/\\//, &quot;-&quot;, date)</span></span>
+<span class="line"><span style="color:#98C379;">    uv[date, $1] = 1</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (key in uv) {</span></span>
+<span class="line"><span style="color:#98C379;">        split(key, parts, SUBSEP)</span></span>
+<span class="line"><span style="color:#98C379;">        daily_uv[parts[1]]++</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    for (d in daily_uv) print d, daily_uv[d]</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># PV/UV 合并报表</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    date = substr($4, 2, 11)</span></span>
+<span class="line"><span style="color:#98C379;">    gsub(/\\//, &quot;-&quot;, date)</span></span>
+<span class="line"><span style="color:#98C379;">    pv[date]++</span></span>
+<span class="line"><span style="color:#98C379;">    uv[date, $1] = 1</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (key in uv) {</span></span>
+<span class="line"><span style="color:#98C379;">        split(key, parts, SUBSEP)</span></span>
+<span class="line"><span style="color:#98C379;">        daily_uv[parts[1]]++</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-15s %10s %10s %10s\\n&quot;, &quot;日期&quot;, &quot;PV&quot;, &quot;UV&quot;, &quot;PV/UV&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-15s %10s %10s %10s\\n&quot;, &quot;----&quot;, &quot;--&quot;, &quot;--&quot;, &quot;-----&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (d in pv) {</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%-15s %10d %10d %10.1f\\n&quot;, d, pv[d], daily_uv[d], pv[d]/daily_uv[d]</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_3-3-状态码分析" tabindex="-1"><a class="header-anchor" href="#_3-3-状态码分析"><span>3.3 状态码分析</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 各状态码分布</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{status[$9]++} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (s in status) printf &quot;%6d %s\\n&quot;, status[s], s</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 状态码占比</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    status[$9]++</span></span>
+<span class="line"><span style="color:#98C379;">    total++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-8s %10s %10s\\n&quot;, &quot;状态码&quot;, &quot;数量&quot;, &quot;占比&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (s in status) {</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%-8s %10d %9.2f%%\\n&quot;, s, status[s], status[s]/total*100</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -k2</span><span style="color:#D19A66;"> -rn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 4xx/5xx 错误请求详情</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;$9 &gt;= 400 {</span></span>
+<span class="line"><span style="color:#98C379;">    status[$9]++</span></span>
+<span class="line"><span style="color:#98C379;">    urls[$9, $7]++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (s in status) {</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;\\n=== 状态码 %s (%d次) ===\\n&quot;, s, status[s]</span></span>
+<span class="line"><span style="color:#98C379;">        # 打印该状态码的 Top URL</span></span>
+<span class="line"><span style="color:#98C379;">        for (key in urls) {</span></span>
+<span class="line"><span style="color:#98C379;">            split(key, parts, SUBSEP)</span></span>
+<span class="line"><span style="color:#98C379;">            if (parts[1] == s) {</span></span>
+<span class="line"><span style="color:#98C379;">                printf &quot;  %6d %s\\n&quot;, urls[key], parts[2]</span></span>
+<span class="line"><span style="color:#98C379;">            }</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 5xx 错误趋势（按小时）</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;$9 &gt;= 500 {</span></span>
+<span class="line"><span style="color:#98C379;">    match($4, /\\[([0-9]{2})\\/[A-Za-z]+\\/[0-9]{4}:([0-9]{2}):/, arr)</span></span>
+<span class="line"><span style="color:#98C379;">    hour[arr[2]]++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (h = 0; h &lt; 24; h++) {</span></span>
+<span class="line"><span style="color:#98C379;">        hh = sprintf(&quot;%02d&quot;, h)</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%s:00  %4d  %s\\n&quot;, hh, hour[hh]+0, strftime(&quot;&quot;, hour[hh]+0)</span></span>
+<span class="line"><span style="color:#98C379;">        # 简易柱状图</span></span>
+<span class="line"><span style="color:#98C379;">        count = hour[hh] + 0</span></span>
+<span class="line"><span style="color:#98C379;">        bar = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        for (i = 0; i &lt; count; i++) bar = bar &quot;#&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%s:00  %s\\n&quot;, hh, bar</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_3-4-top-url-分析" tabindex="-1"><a class="header-anchor" href="#_3-4-top-url-分析"><span>3.4 TOP URL 分析</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 请求量 Top 20 URL</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{urls[$7]++} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (u in urls) printf &quot;%6d %s\\n&quot;, urls[u], u</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -20</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 流量 Top 20 URL</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{traffic[$7] += $10} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (u in traffic) printf &quot;%15d %s\\n&quot;, traffic[u], u</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -20</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 各 URL 平均响应大小</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    traffic[$7] += $10</span></span>
+<span class="line"><span style="color:#98C379;">    count[$7]++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-50s %10s %15s %15s\\n&quot;, &quot;URL&quot;, &quot;请求数&quot;, &quot;总流量(B)&quot;, &quot;平均(B)&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (u in count) {</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%-50s %10d %15d %15.0f\\n&quot;, u, count[u], traffic[u], traffic[u]/count[u]</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -k3</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -20</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 静态资源 vs API 请求分布</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    if ($7 ~ /\\.(js|css|jpg|png|gif|ico|svg|woff)/) static++</span></span>
+<span class="line"><span style="color:#98C379;">    else if ($7 ~ /\\/api\\//) api++</span></span>
+<span class="line"><span style="color:#98C379;">    else other++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    total = static + api + other</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;静态资源: %d (%.1f%%)\\n&quot;, static, static/total*100</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;API请求:  %d (%.1f%%)\\n&quot;, api, api/total*100</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;其他:     %d (%.1f%%)\\n&quot;, other, other/total*100</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_3-5-慢请求分析" tabindex="-1"><a class="header-anchor" href="#_3-5-慢请求分析"><span>3.5 慢请求分析</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 需要在 Nginx 配置中添加 $request_time</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># log_format main &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                 &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#                 &#39;&quot;$http_user_agent&quot; $request_time&#39;;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 提取慢请求（&gt;1秒）</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;$NF &gt; 1 {</span></span>
+<span class="line"><span style="color:#98C379;">    slow++</span></span>
+<span class="line"><span style="color:#98C379;">    slow_urls[$7]++</span></span>
+<span class="line"><span style="color:#98C379;">    total_time[$7] += $NF</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;慢请求总数: %d\\n\\n&quot;, slow</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-50s %10s %10s %10s\\n&quot;, &quot;URL&quot;, &quot;次数&quot;, &quot;总耗时(s)&quot;, &quot;平均(s)&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (u in slow_urls) {</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%-50s %10d %10.2f %10.2f\\n&quot;, u, slow_urls[u], total_time[u], total_time[u]/slow_urls[u]</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -30</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 响应时间分布</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    t = $NF + 0</span></span>
+<span class="line"><span style="color:#98C379;">    if (t &lt; 0.1) bucket[&quot;&lt;0.1s&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    else if (t &lt; 0.5) bucket[&quot;0.1-0.5s&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    else if (t &lt; 1.0) bucket[&quot;0.5-1.0s&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    else if (t &lt; 3.0) bucket[&quot;1.0-3.0s&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    else bucket[&quot;&gt;3.0s&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    total++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-12s %8s %8s  %s\\n&quot;, &quot;区间&quot;, &quot;数量&quot;, &quot;占比&quot;, &quot;柱状图&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    split(&quot;&lt;0.1s,0.1-0.5s,0.5-1.0s,1.0-3.0s,&gt;3.0s&quot;, labels, &quot;,&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= 5; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        l = labels[i]</span></span>
+<span class="line"><span style="color:#98C379;">        c = bucket[l] + 0</span></span>
+<span class="line"><span style="color:#98C379;">        pct = c / total * 100</span></span>
+<span class="line"><span style="color:#98C379;">        bar = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        for (j = 0; j &lt; pct; j++) bar = bar &quot;#&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%-12s %8d %7.1f%%  %s\\n&quot;, l, c, pct, bar</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_3-6-综合日志分析脚本" tabindex="-1"><a class="header-anchor" href="#_3-6-综合日志分析脚本"><span>3.6 综合日志分析脚本</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;">#!/bin/bash</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># nginx_report.sh —— Nginx 日志综合分析报告</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E06C75;">LOG</span><span style="color:#56B6C2;">=</span><span style="color:#E06C75;font-style:italic;">\${1</span><span style="color:#ABB2BF;">:-</span><span style="color:#E06C75;">access</span><span style="color:#ABB2BF;">.</span><span style="color:#E06C75;">log</span><span style="color:#E06C75;font-style:italic;">}</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;=========================================&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;  Nginx 日志分析报告&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;  日志文件: </span><span style="color:#E06C75;">$LOG</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;  分析时间: $(</span><span style="color:#61AFEF;">date</span><span style="color:#98C379;"> &#39;+%Y-%m-%d %H:%M:%S&#39;)&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;=========================================&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 1. 基本统计</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> &quot;\\n--- 基本统计 ---&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;END {printf &quot;总请求数: %d\\n&quot;, NR}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$LOG</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{ip[$1]++} END {printf &quot;独立IP数: %d\\n&quot;, length(ip)}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$LOG</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{sum += $10} END {printf &quot;总流量: %.2f MB\\n&quot;, sum/1024/1024}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$LOG</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 2. 状态码分布</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> &quot;\\n--- 状态码分布 ---&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    status[$9]++</span></span>
+<span class="line"><span style="color:#98C379;">    total++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (s in status) {</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;  %s  %6d  (%5.1f%%)\\n&quot;, s, status[s], status[s]/total*100</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$LOG</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -t</span><span style="color:#98C379;">&#39;(&#39;</span><span style="color:#D19A66;"> -k2</span><span style="color:#D19A66;"> -rn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 3. Top 10 IP</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> &quot;\\n--- Top 10 访问IP ---&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{ip[$1]++} END {for(i in ip) printf &quot;%6d %s\\n&quot;, ip[i], i}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$LOG</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -10</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 4. Top 10 URL</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> &quot;\\n--- Top 10 请求URL ---&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{url[$7]++} END {for(u in url) printf &quot;%6d %s\\n&quot;, url[u], u}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$LOG</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -10</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 5. 每小时请求分布</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> &quot;\\n--- 每小时请求分布 ---&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    match($4, /:([0-9]{2}):/, arr)</span></span>
+<span class="line"><span style="color:#98C379;">    hour[arr[1]]++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (h = 0; h &lt; 24; h++) {</span></span>
+<span class="line"><span style="color:#98C379;">        hh = sprintf(&quot;%02d&quot;, h)</span></span>
+<span class="line"><span style="color:#98C379;">        c = hour[hh] + 0</span></span>
+<span class="line"><span style="color:#98C379;">        bar = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        for (i = 0; i &lt; c/100; i++) bar = bar &quot;#&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;  %s:00  %5d  %s\\n&quot;, hh, c, bar</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$LOG</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> &quot;\\n=========================================&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;  报告生成完毕&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;=========================================&quot;</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_4-系统日志分析" tabindex="-1"><a class="header-anchor" href="#_4-系统日志分析"><span>4. 系统日志分析</span></a></h2><h3 id="_4-1-认证日志分析" tabindex="-1"><a class="header-anchor" href="#_4-1-认证日志分析"><span>4.1 认证日志分析</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># /var/log/auth.log（Debian/Ubuntu）或 /var/log/secure（CentOS/RHEL）</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 暴力破解检测——统计失败登录 IP</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;Failed password&#39;</span><span style="color:#98C379;"> /var/log/auth.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">      for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">          if ($i == &quot;from&quot;) {ip = $(i+1); break}</span></span>
+<span class="line"><span style="color:#98C379;">      }</span></span>
+<span class="line"><span style="color:#98C379;">      fail[ip]++</span></span>
+<span class="line"><span style="color:#98C379;">  } END {</span></span>
+<span class="line"><span style="color:#98C379;">      printf &quot;%-18s %10s %s\\n&quot;, &quot;IP地址&quot;, &quot;失败次数&quot;, &quot;风险等级&quot;</span></span>
+<span class="line"><span style="color:#98C379;">      for (i in fail) {</span></span>
+<span class="line"><span style="color:#98C379;">          level = (fail[i] &gt; 100 ? &quot;CRITICAL&quot; : fail[i] &gt; 20 ? &quot;HIGH&quot; : fail[i] &gt; 5 ? &quot;MEDIUM&quot; : &quot;LOW&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">          printf &quot;%-18s %10d %s\\n&quot;, i, fail[i], level</span></span>
+<span class="line"><span style="color:#98C379;">      }</span></span>
+<span class="line"><span style="color:#98C379;">  }&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -k2</span><span style="color:#D19A66;"> -rn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 成功登录统计</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;Accepted&#39;</span><span style="color:#98C379;"> /var/log/auth.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">      for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">          if ($i == &quot;from&quot;) {ip = $(i+1); break}</span></span>
+<span class="line"><span style="color:#98C379;">      }</span></span>
+<span class="line"><span style="color:#98C379;">      user = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">      for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">          if ($i == &quot;for&quot;) {user = $(i+1); break}</span></span>
+<span class="line"><span style="color:#98C379;">      }</span></span>
+<span class="line"><span style="color:#98C379;">      success[user, ip]++</span></span>
+<span class="line"><span style="color:#98C379;">  } END {</span></span>
+<span class="line"><span style="color:#98C379;">      for (key in success) {</span></span>
+<span class="line"><span style="color:#98C379;">          split(key, parts, SUBSEP)</span></span>
+<span class="line"><span style="color:#98C379;">          printf &quot;%-15s %-18s %5d\\n&quot;, parts[1], parts[2], success[key]</span></span>
+<span class="line"><span style="color:#98C379;">      }</span></span>
+<span class="line"><span style="color:#98C379;">  }&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -k3</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -20</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sudo 使用记录</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;sudo:&#39;</span><span style="color:#98C379;"> /var/log/auth.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/.*sudo://&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">      user = $3</span></span>
+<span class="line"><span style="color:#98C379;">      cmd = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">      for (i = 11; i &lt;= NF; i++) cmd = cmd $i &quot; &quot;</span></span>
+<span class="line"><span style="color:#98C379;">      cmds[user, cmd]++</span></span>
+<span class="line"><span style="color:#98C379;">  } END {</span></span>
+<span class="line"><span style="color:#98C379;">      for (key in cmds) {</span></span>
+<span class="line"><span style="color:#98C379;">          split(key, parts, SUBSEP)</span></span>
+<span class="line"><span style="color:#98C379;">          printf &quot;%-15s %-50s %3d\\n&quot;, parts[1], parts[2], cmds[key]</span></span>
+<span class="line"><span style="color:#98C379;">      }</span></span>
+<span class="line"><span style="color:#98C379;">  }&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -k3</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -20</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_4-2-系统日志分析" tabindex="-1"><a class="header-anchor" href="#_4-2-系统日志分析"><span>4.2 系统日志分析</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># /var/log/syslog 或 /var/log/messages</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 按优先级统计</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -E</span><span style="color:#98C379;"> &#39;emerg|alert|crit|err|warning&#39;</span><span style="color:#98C379;"> /var/log/syslog</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">      level = $5</span></span>
+<span class="line"><span style="color:#98C379;">      gsub(/:/, &quot;&quot;, level)</span></span>
+<span class="line"><span style="color:#98C379;">      count[level]++</span></span>
+<span class="line"><span style="color:#98C379;">  } END {</span></span>
+<span class="line"><span style="color:#98C379;">      for (l in count) printf &quot;%10d %s\\n&quot;, count[l], l</span></span>
+<span class="line"><span style="color:#98C379;">  }&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># OOM Killer 记录</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -i</span><span style="color:#98C379;"> &#39;out of memory\\|oom-killer\\|killed process&#39;</span><span style="color:#98C379;"> /var/log/syslog</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">      printf &quot;[%s %s] %s\\n&quot;, $1, $2, $0</span></span>
+<span class="line"><span style="color:#98C379;">  }&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 磁盘错误</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -i</span><span style="color:#98C379;"> &#39;I/O error\\|read error\\|write error\\|ext4.*error&#39;</span><span style="color:#98C379;"> /var/log/syslog</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/.*kernel: //&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;!seen[$0]++&#39;</span><span style="color:#7F848E;font-style:italic;">    # 去重</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 内核模块加载记录</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;module.*loaded\\|loading module&#39;</span><span style="color:#98C379;"> /var/log/syslog</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{for(i=1;i&lt;=NF;i++) if($i ~ /module/) print $i}&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sort</span><span style="color:#D19A66;"> -u</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># cron 执行记录</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;CRON&#39;</span><span style="color:#98C379;"> /var/log/syslog</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">      cmd = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">      for (i = 7; i &lt;= NF; i++) cmd = cmd $i &quot; &quot;</span></span>
+<span class="line"><span style="color:#98C379;">      print $1, $2, cmd</span></span>
+<span class="line"><span style="color:#98C379;">  }&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -k3</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">uniq</span><span style="color:#D19A66;"> -c</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_4-3-应用日志分析" tabindex="-1"><a class="header-anchor" href="#_4-3-应用日志分析"><span>4.3 应用日志分析</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Java 应用日志分析</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 提取异常类型及频次</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -E</span><span style="color:#98C379;"> &#39;Exception|Error&#39;</span><span style="color:#98C379;"> app.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#D19A66;"> -E</span><span style="color:#98C379;"> &#39;s/.*([A-Z][a-zA-Z]*Exception|Error).*/\\1/&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{count[$1]++} END {for(e in count) printf &quot;%6d %s\\n&quot;, count[e], e}&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sort</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -20</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 提取完整异常堆栈（异常行 + 后续 at 行）</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;/Exception|Error/{</span></span>
+<span class="line"><span style="color:#98C379;">    print</span></span>
+<span class="line"><span style="color:#98C379;">    while ((getline line) &gt; 0) {</span></span>
+<span class="line"><span style="color:#98C379;">        if (line ~ /^[[:space:]]+at /) print line</span></span>
+<span class="line"><span style="color:#98C379;">        else break</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> app.log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 按 5 分钟窗口统计错误率</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;/ERROR/{</span></span>
+<span class="line"><span style="color:#98C379;">    # 提取时间戳（假设格式 2024-01-15 09:30:15）</span></span>
+<span class="line"><span style="color:#98C379;">    ts = $1 &quot; &quot; $2</span></span>
+<span class="line"><span style="color:#98C379;">    gsub(/:[0-9][0-9]$/, &quot;&quot;, ts)    # 截断到分钟</span></span>
+<span class="line"><span style="color:#98C379;">    # 按5分钟取整</span></span>
+<span class="line"><span style="color:#98C379;">    split(ts, parts, &quot;:&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">    min = int(substr(parts[2], length(parts[2])-1, 2) / 5) * 5</span></span>
+<span class="line"><span style="color:#98C379;">    window = parts[1] &quot;:&quot; sprintf(&quot;%02d&quot;, min)</span></span>
+<span class="line"><span style="color:#98C379;">    errors[window]++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (w in errors) print w, errors[w]</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> app.log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Spring Boot 日志级别统计</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    # Spring Boot 默认格式：2024-01-15 09:30:00.123 INFO 12345 ---</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        if ($i ~ /^(TRACE|DEBUG|INFO|WARN|ERROR|FATAL)$/) {</span></span>
+<span class="line"><span style="color:#98C379;">            count[$i]++</span></span>
+<span class="line"><span style="color:#98C379;">            break</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    total = 0</span></span>
+<span class="line"><span style="color:#98C379;">    for (l in count) total += count[l]</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-10s %10s %10s\\n&quot;, &quot;级别&quot;, &quot;数量&quot;, &quot;占比&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    split(&quot;FATAL,ERROR,WARN,INFO,DEBUG,TRACE&quot;, levels, &quot;,&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= 6; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        l = levels[i]</span></span>
+<span class="line"><span style="color:#98C379;">        if (count[l] + 0 &gt; 0) {</span></span>
+<span class="line"><span style="color:#98C379;">            printf &quot;%-10s %10d %9.1f%%\\n&quot;, l, count[l], count[l]/total*100</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> app.log</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_5-csv-tsv-数据处理" tabindex="-1"><a class="header-anchor" href="#_5-csv-tsv-数据处理"><span>5. CSV/TSV 数据处理</span></a></h2><h3 id="_5-1-基础操作" tabindex="-1"><a class="header-anchor" href="#_5-1-基础操作"><span>5.1 基础操作</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 查看CSV结构（前5行）</span></span>
+<span class="line"><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -5</span><span style="color:#98C379;"> data.csv</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{for(i=1;i&lt;=NF;i++) printf &quot;%2d: %s\\n&quot;, i, $i}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 提取指定列</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{print $1, $3, $5}&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 按条件过滤</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;$3 &gt; 100&#39;</span><span style="color:#98C379;"> data.csv</span><span style="color:#7F848E;font-style:italic;">                      # 第3列大于100</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;$5 == &quot;active&quot;&#39;</span><span style="color:#98C379;"> data.csv</span><span style="color:#7F848E;font-style:italic;">                 # 第5列等于active</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;$3 &gt; 100 &amp;&amp; $5 == &quot;active&quot;&#39;</span><span style="color:#98C379;"> data.csv</span><span style="color:#7F848E;font-style:italic;">     # 组合条件</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 添加行号</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{print NR, $0}&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 去重（按第1列）</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;!seen[$1]++&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 排序（按第3列数值降序）</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{print $3, $0}&#39;</span><span style="color:#98C379;"> data.csv</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -t</span><span style="color:#98C379;">&#39; &#39;</span><span style="color:#D19A66;"> -k1</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{$1=&quot;&quot;; print substr($0,2)}&#39;</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 或者更简洁</span></span>
+<span class="line"><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -t</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#D19A66;"> -k3</span><span style="color:#D19A66;"> -rn</span><span style="color:#98C379;"> data.csv</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_5-2-数据清洗" tabindex="-1"><a class="header-anchor" href="#_5-2-数据清洗"><span>5.2 数据清洗</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 去除字段前后空格</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        gsub(/^[[:space:]]+/, &quot;&quot;, $i)</span></span>
+<span class="line"><span style="color:#98C379;">        gsub(/[[:space:]]+$/, &quot;&quot;, $i)</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    print</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> OFS=&#39;,&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 处理引号包裹的字段</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        gsub(/^&quot;/, &quot;&quot;, $i)</span></span>
+<span class="line"><span style="color:#98C379;">        gsub(/&quot;$/, &quot;&quot;, $i)</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    print</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> OFS=&#39;,&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 统一日期格式</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    # MM/DD/YYYY → YYYY-MM-DD</span></span>
+<span class="line"><span style="color:#98C379;">    if ($2 ~ /[0-9]{2}\\/[0-9]{2}\\/[0-9]{4}/) {</span></span>
+<span class="line"><span style="color:#98C379;">        split($2, d, &quot;/&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">        $2 = d[3] &quot;-&quot; d[1] &quot;-&quot; d[2]</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    print</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> OFS=&#39;,&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 数据类型转换与校验</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    valid = 1</span></span>
+<span class="line"><span style="color:#98C379;">    # 检查第3列是否为数字</span></span>
+<span class="line"><span style="color:#98C379;">    if ($3 !~ /^-?[0-9]+\\.?[0-9]*$/) {</span></span>
+<span class="line"><span style="color:#98C379;">        print &quot;非数字行:&quot;, NR, $0 &gt; &quot;/dev/stderr&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        valid = 0</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    # 检查第5列是否为有效日期</span></span>
+<span class="line"><span style="color:#98C379;">    if ($5 !~ /[0-9]{4}-[0-9]{2}-[0-9]{2}/) {</span></span>
+<span class="line"><span style="color:#98C379;">        print &quot;日期格式错误:&quot;, NR, $0 &gt; &quot;/dev/stderr&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        valid = 0</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    if (valid) print</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> OFS=&#39;,&#39;</span><span style="color:#98C379;"> data.csv</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">clean_data.csv</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_5-3-数据聚合与透视" tabindex="-1"><a class="header-anchor" href="#_5-3-数据聚合与透视"><span>5.3 数据聚合与透视</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 分组求和</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{sum[$1] += $3; count[$1]++} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (k in sum) printf &quot;%s,%d,%.2f\\n&quot;, k, count[k], sum[k]</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 多维分组统计</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    key = $1 &quot;,&quot; $2</span></span>
+<span class="line"><span style="color:#98C379;">    sum[key] += $3</span></span>
+<span class="line"><span style="color:#98C379;">    count[key]++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-15s %-10s %10s %10s %10s\\n&quot;, &quot;类别1&quot;, &quot;类别2&quot;, &quot;数量&quot;, &quot;总和&quot;, &quot;均值&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (k in sum) {</span></span>
+<span class="line"><span style="color:#98C379;">        split(k, parts, SUBSEP)</span></span>
+<span class="line"><span style="color:#98C379;">        # k 中用 , 分隔</span></span>
+<span class="line"><span style="color:#98C379;">        n = split(k, parts, &quot;,&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%-15s %-10s %10d %10.2f %10.2f\\n&quot;, parts[1], parts[2], count[k], sum[k], sum[k]/count[k]</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 行列转置</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        rows[i] = rows[i] (rows[i] ? &quot;,&quot; : &quot;&quot;) $i</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= length(rows); i++) print rows[i]</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 宽表转长表</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;</span></span>
+<span class="line"><span style="color:#98C379;">NR == 1 {</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 2; i &lt;= NF; i++) headers[i] = $i</span></span>
+<span class="line"><span style="color:#98C379;">    next</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#98C379;">{</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 2; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        print $1, headers[i], $i</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> OFS=&#39;,&#39;</span><span style="color:#98C379;"> wide.csv</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_5-4-csv-转-json" tabindex="-1"><a class="header-anchor" href="#_5-4-csv-转-json"><span>5.4 CSV 转 JSON</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># CSV → JSON 数组</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;</span></span>
+<span class="line"><span style="color:#98C379;">BEGIN {</span></span>
+<span class="line"><span style="color:#98C379;">    print &quot;[&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    first = 1</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#98C379;">NR == 1 {</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) headers[i] = $i</span></span>
+<span class="line"><span style="color:#98C379;">    next</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#98C379;">{</span></span>
+<span class="line"><span style="color:#98C379;">    if (!first) print &quot;,&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    first = 0</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;  {&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        if (i &gt; 1) printf &quot;,&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        val = $i</span></span>
+<span class="line"><span style="color:#98C379;">        gsub(/&quot;/, &quot;\\\\\\&quot;&quot;, val)</span></span>
+<span class="line"><span style="color:#98C379;">        # 判断是否为数字</span></span>
+<span class="line"><span style="color:#98C379;">        if (val ~ /^-?[0-9]+\\.?[0-9]*$/) {</span></span>
+<span class="line"><span style="color:#98C379;">            printf &quot; \\&quot;%s\\&quot;: %s&quot;, headers[i], val</span></span>
+<span class="line"><span style="color:#98C379;">        } else {</span></span>
+<span class="line"><span style="color:#98C379;">            printf &quot; \\&quot;%s\\&quot;: \\&quot;%s\\&quot;&quot;, headers[i], val</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot; }&quot;</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#98C379;">END {</span></span>
+<span class="line"><span style="color:#98C379;">    print &quot;\\n]&quot;</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># CSV → JSON Lines（每行一个JSON对象，更适合流式处理）</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;</span></span>
+<span class="line"><span style="color:#98C379;">NR == 1 {</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) headers[i] = $i</span></span>
+<span class="line"><span style="color:#98C379;">    next</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#98C379;">{</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;{&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        if (i &gt; 1) printf &quot;,&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        val = $i</span></span>
+<span class="line"><span style="color:#98C379;">        gsub(/&quot;/, &quot;\\\\\\&quot;&quot;, val)</span></span>
+<span class="line"><span style="color:#98C379;">        if (val ~ /^-?[0-9]+\\.?[0-9]*$/) {</span></span>
+<span class="line"><span style="color:#98C379;">            printf &quot;\\&quot;%s\\&quot;:%s&quot;, headers[i], val</span></span>
+<span class="line"><span style="color:#98C379;">        } else {</span></span>
+<span class="line"><span style="color:#98C379;">            printf &quot;\\&quot;%s\\&quot;:\\&quot;%s\\&quot;&quot;, headers[i], val</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;}\\n&quot;</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.csv</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_6-数据清洗与转换" tabindex="-1"><a class="header-anchor" href="#_6-数据清洗与转换"><span>6. 数据清洗与转换</span></a></h2><h3 id="_6-1-文本数据清洗流水线" tabindex="-1"><a class="header-anchor" href="#_6-1-文本数据清洗流水线"><span>6.1 文本数据清洗流水线</span></a></h3>`,41),i(p,{code:`eJxLy8kvT85ILCpRCHHhUgACx2ilp33zny7vfjZ1w7PedUqxCrq6dgpO0UrP90x7vqDx+e75T3Y0xOQVp6boZybn55UpxYK1OYGVOYM07345c8nTmaueLt4AUZZelFoAVeUMVuUSrfRswZ6ne/qfLWh/2t72tGcaWCFUjQtYjSvQpLXTn63b+qx/wtN+oILE8myoAlewAjegIWAXPluw8OWqHmQFbmAF7tFKLxpnPZ3QAXTyi3ULwQr0i/OLSqCq3MGqPGBuAbrixb7JT9t3gRUqFBRl5pWkAZWC1RaXVOakKjgqpGXm5Fgpp6Ulp6QYIUl4QCWSLVLNki25AExtiCM=`}),c[3]||=o(`<div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 完整清洗流水线示例</span></span>
+<span class="line"><span style="color:#61AFEF;">cat</span><span style="color:#98C379;"> raw_data.txt</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/\\r$//&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">\\</span><span style="color:#7F848E;font-style:italic;">                         # 1. 去除 Windows 换行符</span></span>
+<span class="line"><span style="color:#61AFEF;">  grep</span><span style="color:#D19A66;"> -v</span><span style="color:#98C379;"> &#39;^#&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">\\</span><span style="color:#7F848E;font-style:italic;">                            # 2. 去除注释行</span></span>
+<span class="line"><span style="color:#61AFEF;">  grep</span><span style="color:#D19A66;"> -v</span><span style="color:#98C379;"> &#39;^$&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">\\</span><span style="color:#7F848E;font-style:italic;">                            # 3. 去除空行</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/[[:space:]]\\+/ /g&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">\\</span><span style="color:#7F848E;font-style:italic;">              # 4. 压缩多余空格</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/^[[:space:]]*//&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">\\</span><span style="color:#7F848E;font-style:italic;">                # 5. 去除行首空格</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39; &#39;</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">      if (NF &gt;= 5) {                          # 6. 字段数校验</span></span>
+<span class="line"><span style="color:#98C379;">          gsub(/&quot;/, &quot;&quot;, $3)                   # 7. 去引号</span></span>
+<span class="line"><span style="color:#98C379;">          if ($3 ~ /^[0-9]+$/) {              # 8. 类型校验</span></span>
+<span class="line"><span style="color:#98C379;">              print $1, $2, $3, $4, $5</span></span>
+<span class="line"><span style="color:#98C379;">          }</span></span>
+<span class="line"><span style="color:#98C379;">      }</span></span>
+<span class="line"><span style="color:#98C379;">  }&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sort</span><span style="color:#D19A66;"> -k1,1</span><span style="color:#D19A66;"> -k2,2</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">\\</span><span style="color:#7F848E;font-style:italic;">                       # 9. 排序</span></span>
+<span class="line"><span style="color:#61AFEF;">  uniq</span><span style="color:#7F848E;font-style:italic;">                                        # 10. 去重</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_6-2-日志格式转换" tabindex="-1"><a class="header-anchor" href="#_6-2-日志格式转换"><span>6.2 日志格式转换</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># Syslog → 结构化 CSV</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    month = $1</span></span>
+<span class="line"><span style="color:#98C379;">    day = $2</span></span>
+<span class="line"><span style="color:#98C379;">    time = $3</span></span>
+<span class="line"><span style="color:#98C379;">    host = $4</span></span>
+<span class="line"><span style="color:#98C379;">    # 提取进程名</span></span>
+<span class="line"><span style="color:#98C379;">    split($5, proc, &quot;[&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">    process = proc[1]</span></span>
+<span class="line"><span style="color:#98C379;">    gsub(/:$/, &quot;&quot;, process)</span></span>
+<span class="line"><span style="color:#98C379;">    # 合并消息</span></span>
+<span class="line"><span style="color:#98C379;">    msg = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 6; i &lt;= NF; i++) msg = msg (i &gt; 6 ? &quot; &quot; : &quot;&quot;) $i</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%s,%s,%s,%s,%s,%s\\n&quot;, month, day, time, host, process, msg</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> /var/log/syslog</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">syslog_structured.csv</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># Apache Combined → TSV</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    ip = $1</span></span>
+<span class="line"><span style="color:#98C379;">    # 提取时间</span></span>
+<span class="line"><span style="color:#98C379;">    match($0, /\\[([^\\]]+)\\]/, arr)</span></span>
+<span class="line"><span style="color:#98C379;">    time = arr[1]</span></span>
+<span class="line"><span style="color:#98C379;">    # 提取请求</span></span>
+<span class="line"><span style="color:#98C379;">    match($0, /&quot;([^&quot;]+)&quot;/, arr)</span></span>
+<span class="line"><span style="color:#98C379;">    request = arr[1]</span></span>
+<span class="line"><span style="color:#98C379;">    # 提取状态码和大小</span></span>
+<span class="line"><span style="color:#98C379;">    match($0, /&quot; ([0-9]+) ([0-9-]+)/, arr)</span></span>
+<span class="line"><span style="color:#98C379;">    status = arr[1]</span></span>
+<span class="line"><span style="color:#98C379;">    size = arr[2]</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%s\\t%s\\t%s\\t%s\\t%s\\n&quot;, ip, time, request, status, size</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> access.log</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">access_structured.tsv</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_6-3-数据脱敏" tabindex="-1"><a class="header-anchor" href="#_6-3-数据脱敏"><span>6.3 数据脱敏</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 手机号脱敏</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    gsub(/1[3-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]/, \\</span></span>
+<span class="line"><span style="color:#98C379;">         &quot;1***&quot; substr(&amp;, length(&amp;)-3, 4))    # 不太好实现</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#98C379;"># 更好的方式</span></span>
+<span class="line"><span style="color:#98C379;">sed -E &#39;s/</span><span style="color:#ABB2BF;">(</span><span style="color:#61AFEF;">1[3-9][0-9]</span><span style="color:#ABB2BF;">)</span><span style="color:#98C379;">[0-9]{</span><span style="color:#D19A66;">4</span><span style="color:#98C379;">}</span><span style="color:#ABB2BF;">([0-9]{</span><span style="color:#61AFEF;">4}</span><span style="color:#ABB2BF;">)</span><span style="color:#98C379;">/</span><span style="color:#56B6C2;">\\1</span><span style="color:#E5C07B;">****</span><span style="color:#56B6C2;">\\2</span><span style="color:#98C379;">/g&#39; user_data.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#98C379;"># 邮箱脱敏</span></span>
+<span class="line"><span style="color:#98C379;">sed -E &#39;s/</span><span style="color:#ABB2BF;">([a-zA-Z0-9])</span><span style="color:#98C379;">[a-zA-Z0-9._%+-]</span><span style="color:#E5C07B;">*</span><span style="color:#98C379;">@/</span><span style="color:#56B6C2;">\\1</span><span style="color:#E5C07B;">***</span><span style="color:#98C379;">@/g&#39; user_data.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#98C379;"># IP 脱敏（保留前两段）</span></span>
+<span class="line"><span style="color:#98C379;">sed -E &#39;s/</span><span style="color:#ABB2BF;">([0-9]{</span><span style="color:#61AFEF;">1,3}\\.[0-9]</span><span style="color:#98C379;">{1,3}</span><span style="color:#ABB2BF;">)</span><span style="color:#56B6C2;">\\.</span><span style="color:#98C379;">[0-9]{1,3}</span><span style="color:#56B6C2;">\\.</span><span style="color:#98C379;">[0-9]{1,3}/</span><span style="color:#56B6C2;">\\1</span><span style="color:#98C379;">.</span><span style="color:#E5C07B;">*</span><span style="color:#98C379;">.</span><span style="color:#E5C07B;">*</span><span style="color:#98C379;">/g&#39; log.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#98C379;"># 身份证号脱敏</span></span>
+<span class="line"><span style="color:#98C379;">sed -E &#39;s/</span><span style="color:#ABB2BF;">([0-9]{</span><span style="color:#61AFEF;">6}</span><span style="color:#ABB2BF;">)</span><span style="color:#98C379;">[0-9]{</span><span style="color:#D19A66;">8</span><span style="color:#98C379;">}</span><span style="color:#ABB2BF;">([0-9]{</span><span style="color:#61AFEF;">4}</span><span style="color:#ABB2BF;">)</span><span style="color:#98C379;">/</span><span style="color:#56B6C2;">\\1</span><span style="color:#E5C07B;">********</span><span style="color:#56B6C2;">\\2</span><span style="color:#98C379;">/g&#39; data.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#98C379;"># 综合脱敏脚本</span></span>
+<span class="line"><span style="color:#98C379;">awk &#39;{</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">    # 手机号</span></span>
+<span class="line"><span style="color:#61AFEF;">    gsub(/1[3-9][0-9]</span><span style="color:#98C379;">{9}</span><span style="color:#61AFEF;">/,</span><span style="color:#98C379;"> &quot;***PHONE***&quot;</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">    # 邮箱</span></span>
+<span class="line"><span style="color:#61AFEF;">    gsub(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]</span><span style="color:#98C379;">{2,}</span><span style="color:#61AFEF;">/,</span><span style="color:#98C379;"> &quot;***EMAIL***&quot;</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">    # 身份证</span></span>
+<span class="line"><span style="color:#61AFEF;">    gsub(/[0-9]</span><span style="color:#98C379;">{17}</span><span style="color:#61AFEF;">[0-9Xx]/,</span><span style="color:#98C379;"> &quot;***IDCARD***&quot;</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">    # 银行卡</span></span>
+<span class="line"><span style="color:#61AFEF;">    gsub(/[0-9]</span><span style="color:#98C379;">{16,19}</span><span style="color:#61AFEF;">/,</span><span style="color:#98C379;"> &quot;***BANKCARD***&quot;</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#56B6C2;">    print</span></span>
+<span class="line"><span style="color:#ABB2BF;">}&#39; sensitive_data.txt &gt; masked_data.txt</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_7-文本报表生成" tabindex="-1"><a class="header-anchor" href="#_7-文本报表生成"><span>7. 文本报表生成</span></a></h2><h3 id="_7-1-格式化表格" tabindex="-1"><a class="header-anchor" href="#_7-1-格式化表格"><span>7.1 格式化表格</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 自动对齐的表格生成器</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;|&#39;</span><span style="color:#98C379;"> &#39;</span></span>
+<span class="line"><span style="color:#98C379;">BEGIN {</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-5s %-20s %-10s %12s %8s\\n&quot;, &quot;序号&quot;, &quot;名称&quot;, &quot;类型&quot;, &quot;大小&quot;, &quot;占比&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-5s %-20s %-10s %12s %8s\\n&quot;, &quot;----&quot;, &quot;----&quot;, &quot;----&quot;, &quot;----&quot;, &quot;----&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    total_size = 0</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#98C379;">NR &gt; 1 {</span></span>
+<span class="line"><span style="color:#98C379;">    name = $1; type = $2; size = $3</span></span>
+<span class="line"><span style="color:#98C379;">    total_size += size</span></span>
+<span class="line"><span style="color:#98C379;">    names[NR] = name; types[NR] = type; sizes[NR] = size</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#98C379;">END {</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 2; i &lt;= NR; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        pct = sizes[i] / total_size * 100</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%-5d %-20s %-10s %12d %7.1f%%\\n&quot;, i-1, names[i], types[i], sizes[i], pct</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-5s %-20s %-10s %12s %8s\\n&quot;, &quot;----&quot;, &quot;----&quot;, &quot;----&quot;, &quot;----&quot;, &quot;----&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;%-5s %-20s %-10s %12d %7.1f%%\\n&quot;, &quot;&quot;, &quot;合计&quot;, &quot;&quot;, total_size, 100.0</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.txt</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_7-2-柱状图报表" tabindex="-1"><a class="header-anchor" href="#_7-2-柱状图报表"><span>7.2 柱状图报表</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 字符柱状图</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    count[$1]++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    max_count = 0</span></span>
+<span class="line"><span style="color:#98C379;">    for (k in count) {</span></span>
+<span class="line"><span style="color:#98C379;">        if (count[k] &gt; max_count) max_count = count[k]</span></span>
+<span class="line"><span style="color:#98C379;">        keys[++n] = k</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">    # 按数量排序（简单冒泡）</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= n; i++)</span></span>
+<span class="line"><span style="color:#98C379;">        for (j = i + 1; j &lt;= n; j++)</span></span>
+<span class="line"><span style="color:#98C379;">            if (count[keys[i]] &lt; count[keys[j]]) {</span></span>
+<span class="line"><span style="color:#98C379;">                tmp = keys[i]; keys[i] = keys[j]; keys[j] = tmp</span></span>
+<span class="line"><span style="color:#98C379;">            }</span></span>
+<span class="line"><span style="color:#98C379;">    max_bar = 50</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= n &amp;&amp; i &lt;= 20; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        k = keys[i]</span></span>
+<span class="line"><span style="color:#98C379;">        bar_len = int(count[k] / max_count * max_bar)</span></span>
+<span class="line"><span style="color:#98C379;">        bar = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        for (j = 0; j &lt; bar_len; j++) bar = bar &quot;█&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;%-15s %6d %s\\n&quot;, k, count[k], bar</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.txt</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_7-3-markdown-表格生成" tabindex="-1"><a class="header-anchor" href="#_7-3-markdown-表格生成"><span>7.3 Markdown 表格生成</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 从 CSV 生成 Markdown 表格</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;</span></span>
+<span class="line"><span style="color:#98C379;">NR == 1 {</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;| &quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) printf &quot;%s | &quot;, $i</span></span>
+<span class="line"><span style="color:#98C379;">    print &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;| &quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) printf &quot;--- | &quot;</span></span>
+<span class="line"><span style="color:#98C379;">    print &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    next</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#98C379;">{</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;| &quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= NF; i++) printf &quot;%s | &quot;, $i</span></span>
+<span class="line"><span style="color:#98C379;">    print &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.csv</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_7-4-综合报表脚本" tabindex="-1"><a class="header-anchor" href="#_7-4-综合报表脚本"><span>7.4 综合报表脚本</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;">#!/bin/bash</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># generate_report.sh —— 从 CSV 数据生成综合报表</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E06C75;">INPUT</span><span style="color:#56B6C2;">=</span><span style="color:#E06C75;font-style:italic;">\${1</span><span style="color:#ABB2BF;">:-</span><span style="color:#E06C75;">data</span><span style="color:#ABB2BF;">.</span><span style="color:#E06C75;">csv</span><span style="color:#E06C75;font-style:italic;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;# 数据分析报告&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&gt; 生成时间: $(</span><span style="color:#61AFEF;">date</span><span style="color:#98C379;"> &#39;+%Y-%m-%d %H:%M:%S&#39;)&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&gt; 数据源: </span><span style="color:#E06C75;">$INPUT</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 基本统计</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;## 1. 基本统计&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;END {printf &quot;- 总行数: %d\\n&quot;, NR}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$INPUT</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;NR &gt; 1 {sum += $3; if (NR == 2 || $3 &lt; min) min = $3; if ($3 &gt; max) max = $3}</span></span>
+<span class="line"><span style="color:#98C379;">    END {printf &quot;- 第3列: 最小=%.2f, 最大=%.2f, 均值=%.2f\\n&quot;, min, max, sum/(NR-1)}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$INPUT</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 分组统计</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;## 2. 分组统计&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;NR &gt; 1 {</span></span>
+<span class="line"><span style="color:#98C379;">    group[$1]++</span></span>
+<span class="line"><span style="color:#98C379;">    sum[$1] += $3</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;| %-15s | %8s | %12s | %10s |\\n&quot;, &quot;分组&quot;, &quot;数量&quot;, &quot;总和&quot;, &quot;均值&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    printf &quot;| %-15s | %8s | %12s | %10s |\\n&quot;, &quot;---&quot;, &quot;---&quot;, &quot;---&quot;, &quot;---&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    for (g in group) {</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;| %-15s | %8d | %12.2f | %10.2f |\\n&quot;, g, group[g], sum[g], sum[g]/group[g]</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$INPUT</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -t</span><span style="color:#98C379;">&#39;|&#39;</span><span style="color:#D19A66;"> -k4</span><span style="color:#D19A66;"> -rn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 分布统计</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;## 3. 数值分布&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;NR &gt; 1 {</span></span>
+<span class="line"><span style="color:#98C379;">    val = $3</span></span>
+<span class="line"><span style="color:#98C379;">    if (val &lt; 10) bucket[&quot;0-9&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    else if (val &lt; 50) bucket[&quot;10-49&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    else if (val &lt; 100) bucket[&quot;50-99&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    else if (val &lt; 500) bucket[&quot;100-499&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    else bucket[&quot;500+&quot;]++</span></span>
+<span class="line"><span style="color:#98C379;">    total++</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    split(&quot;0-9,10-49,50-99,100-499,500+&quot;, labels, &quot;,&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">    for (i = 1; i &lt;= 5; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">        c = bucket[labels[i]] + 0</span></span>
+<span class="line"><span style="color:#98C379;">        pct = c / total * 100</span></span>
+<span class="line"><span style="color:#98C379;">        bar = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        for (j = 0; j &lt; pct / 2; j++) bar = bar &quot;█&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;- %8s: %5d (%5.1f%%) %s\\n&quot;, labels[i], c, pct, bar</span></span>
+<span class="line"><span style="color:#98C379;">    }</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$INPUT</span><span style="color:#98C379;">&quot;</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_8-性能对比与选型" tabindex="-1"><a class="header-anchor" href="#_8-性能对比与选型"><span>8. 性能对比与选型</span></a></h2><h3 id="_8-1-三剑客适用场景对比" tabindex="-1"><a class="header-anchor" href="#_8-1-三剑客适用场景对比"><span>8.1 三剑客适用场景对比</span></a></h3>`,16),i(p,{code:`eJxVkE9LwzAYh+9+ihCPMlDGRDwo7p+bm5sHb2WHoomKBWUbDFmFCW4TTxWleqhKZewk7UUGM2C/TJt238KaNjbNKbzP733yvsHKRe/oVG53wWFxCYRnR4JUH1Pj05vc+trIJcS7N2ELZDJbIN+HC2MQTG+oZvhfH4EzpmSyDa9ZY/4votIXWwUFnnMdiz7NvdHQs+bpnKdNVVDkucAyfevZJ+/hhecKSa4kwZM2uoQtAbCHylwQdlPDDhwtvHBBMRHsSrCDjgG9073hzCV6bIoSzFSRoNw7j+vlpLPKOlN1lt8T8yX2O7U+9MkjfTPEnfgwtaS1Hm0DVkBiiDB7cV+C/rcNhIWrTN/4//xX0yWzxYAEPw9c30j0TXGyqM68B5E32obBTvdKQeHw+ExRNpfRGs5hJIBqDDDGWbQqgAoHWZTDOQHUuWoDyXhdAM00+AXzN/FH`}),c[4]||=o(`<h3 id="_8-2-性能基准参考" tabindex="-1"><a class="header-anchor" href="#_8-2-性能基准参考"><span>8.2 性能基准参考</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 测试数据：100 万行日志</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 生成测试数据</span></span>
+<span class="line"><span style="color:#61AFEF;">seq</span><span style="color:#D19A66;"> 1000000</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{printf &quot;192.168.%d.%d - - [15/Jan/2024:%02d:%02d:%02d +0800] \\&quot;GET /api/%d HTTP/1.1\\&quot; %d %d\\n&quot;, int(rand()*255), int(rand()*255), int(rand()*24), int(rand()*60), int(rand()*60), int(rand()*1000), (rand()&gt;0.9?500:200), int(rand()*10000)}&#39;</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">test_1m.log</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 测试1：简单过滤</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> grep </span><span style="color:#98C379;">&#39;ERROR&#39;</span><span style="color:#ABB2BF;"> test_1m.log                    </span><span style="color:#7F848E;font-style:italic;"># ~0.3s</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> sed -n </span><span style="color:#98C379;">&#39;/ERROR/p&#39;</span><span style="color:#ABB2BF;"> test_1m.log               </span><span style="color:#7F848E;font-style:italic;"># ~0.5s</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> awk </span><span style="color:#98C379;">&#39;/ERROR/&#39;</span><span style="color:#ABB2BF;"> test_1m.log                   </span><span style="color:#7F848E;font-style:italic;"># ~0.6s</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># grep 胜出——搜索是它的核心优化方向</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 测试2：替换</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> sed </span><span style="color:#98C379;">&#39;s/ERROR/CRITICAL/g&#39;</span><span style="color:#ABB2BF;"> test_1m.log        </span><span style="color:#7F848E;font-style:italic;"># ~0.8s</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> awk </span><span style="color:#98C379;">&#39;{gsub(/ERROR/, &quot;CRITICAL&quot;); print}&#39;</span><span style="color:#ABB2BF;"> test_1m.log  </span><span style="color:#7F848E;font-style:italic;"># ~1.2s</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># sed 胜出——替换是它的核心优化方向</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 测试3：字段计算</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> awk </span><span style="color:#98C379;">&#39;{sum += $10} END {print sum}&#39;</span><span style="color:#ABB2BF;"> test_1m.log  </span><span style="color:#7F848E;font-style:italic;"># ~0.8s</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># awk 是唯一选择——grep/sed 不能做算术</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 测试4：固定字符串匹配</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> grep -F </span><span style="color:#98C379;">&#39;specific_error_code&#39;</span><span style="color:#ABB2BF;"> test_1m.log   </span><span style="color:#7F848E;font-style:italic;"># ~0.1s</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> grep </span><span style="color:#98C379;">&#39;specific_error_code&#39;</span><span style="color:#ABB2BF;"> test_1m.log       </span><span style="color:#7F848E;font-style:italic;"># ~0.3s</span></span>
+<span class="line"><span style="color:#C678DD;">time</span><span style="color:#ABB2BF;"> grep -E </span><span style="color:#98C379;">&#39;specific_error_code&#39;</span><span style="color:#ABB2BF;"> test_1m.log    </span><span style="color:#7F848E;font-style:italic;"># ~0.3s</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># grep -F 最快——跳过正则引擎</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_8-3-选型决策表" tabindex="-1"><a class="header-anchor" href="#_8-3-选型决策表"><span>8.3 选型决策表</span></a></h3><table><thead><tr><th>场景</th><th>首选</th><th>理由</th></tr></thead><tbody><tr><td>搜索包含某关键字的行</td><td><code>grep</code></td><td>速度快，语法简</td></tr><tr><td>搜索不含某关键字的行</td><td><code>grep -v</code></td><td>语义清晰</td></tr><tr><td>替换文本</td><td><code>sed</code></td><td>替换是核心功能</td></tr><tr><td>删除行</td><td><code>sed</code> 或 <code>grep -v</code></td><td>两者皆可</td></tr><tr><td>提取字段</td><td><code>awk</code></td><td>原生字段分割</td></tr><tr><td>数值计算</td><td><code>awk</code></td><td>唯一选择</td></tr><tr><td>格式化输出</td><td><code>awk</code></td><td>printf 功能强大</td></tr><tr><td>就地修改文件</td><td><code>sed -i</code></td><td>原生支持</td></tr><tr><td>多条件过滤+统计</td><td><code>grep</code> + <code>awk</code></td><td>各取所长</td></tr><tr><td>配置文件修改</td><td><code>sed -i.bak</code></td><td>安全+便捷</td></tr><tr><td>日志分析</td><td><code>awk</code></td><td>计算能力不可替代</td></tr><tr><td>批量替换（多文件）</td><td><code>sed</code> + <code>find</code></td><td>组合使用</td></tr></tbody></table><h2 id="_9-xargs-与-parallel-配合" tabindex="-1"><a class="header-anchor" href="#_9-xargs-与-parallel-配合"><span>9. xargs 与 parallel 配合</span></a></h2><h3 id="_9-1-xargs-批量处理" tabindex="-1"><a class="header-anchor" href="#_9-1-xargs-批量处理"><span>9.1 xargs 批量处理</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 批量搜索多个文件</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.log&#39;</span><span style="color:#D19A66;"> -print0</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">xargs</span><span style="color:#D19A66;"> -0</span><span style="color:#98C379;"> grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 批量替换</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.conf&#39;</span><span style="color:#D19A66;"> -print0</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">xargs</span><span style="color:#D19A66;"> -0</span><span style="color:#98C379;"> sed</span><span style="color:#D19A66;"> -i</span><span style="color:#98C379;"> &#39;s/old_host/new_host/g&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 限制并发数</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.log&#39;</span><span style="color:#D19A66;"> -print0</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">xargs</span><span style="color:#D19A66;"> -0</span><span style="color:#D19A66;"> -P</span><span style="color:#D19A66;"> 4</span><span style="color:#D19A66;"> -I</span><span style="color:#98C379;"> {}</span><span style="color:#98C379;"> grep</span><span style="color:#D19A66;"> -c</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> {}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 批量统计</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.log&#39;</span><span style="color:#D19A66;"> -print0</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">xargs</span><span style="color:#D19A66;"> -0</span><span style="color:#98C379;"> awk</span><span style="color:#98C379;"> &#39;{sum += $5} END {print FILENAME, sum}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 合并多文件统计</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;access*.log&#39;</span><span style="color:#D19A66;"> -print0</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  xargs</span><span style="color:#D19A66;"> -0</span><span style="color:#98C379;"> cat</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{ip[$1]++} END {for(i in ip) print ip[i], i}&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sort</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -20</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_9-2-gnu-parallel-并行加速" tabindex="-1"><a class="header-anchor" href="#_9-2-gnu-parallel-并行加速"><span>9.2 GNU parallel 并行加速</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 安装 GNU parallel</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># apt install parallel / yum install parallel</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行搜索</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.log&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">parallel</span><span style="color:#D19A66;"> -j</span><span style="color:#D19A66;"> 4</span><span style="color:#98C379;"> grep</span><span style="color:#D19A66;"> -c</span><span style="color:#98C379;"> &#39;ERROR&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行统计各文件</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.log&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">parallel</span><span style="color:#D19A66;"> -j</span><span style="color:#D19A66;"> 4</span><span style="color:#56B6C2;"> \\</span></span>
+<span class="line"><span style="color:#98C379;">  &quot;awk &#39;{ip[</span><span style="color:#56B6C2;">\\$</span><span style="color:#98C379;">1]++} END {for(i in ip) print ip[i], i}&#39; {} | sort -rn | head -5&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行处理 + 合并结果</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.log&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">parallel</span><span style="color:#D19A66;"> -j</span><span style="color:#D19A66;"> 4</span><span style="color:#56B6C2;"> \\</span></span>
+<span class="line"><span style="color:#98C379;">  &quot;grep &#39;ERROR&#39; {} | wc -l&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{sum += $1} END {print &quot;总错误数:&quot;, sum}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行替换</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> .</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.conf&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">parallel</span><span style="color:#D19A66;"> -j</span><span style="color:#D19A66;"> 4</span><span style="color:#98C379;"> sed</span><span style="color:#D19A66;"> -i</span><span style="color:#98C379;"> &#39;s/old/new/g&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行压缩旧日志</span></span>
+<span class="line"><span style="color:#61AFEF;">find</span><span style="color:#98C379;"> /var/log</span><span style="color:#D19A66;"> -name</span><span style="color:#98C379;"> &#39;*.log&#39;</span><span style="color:#D19A66;"> -mtime</span><span style="color:#98C379;"> +30</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">parallel</span><span style="color:#D19A66;"> -j</span><span style="color:#D19A66;"> 2</span><span style="color:#98C379;"> gzip</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><div class="hint-container tip"><p class="hint-container-title">parallel vs xargs</p><ul><li><code>xargs -P N</code>：简单并行，N 为并发数，适合简单命令</li><li><code>parallel</code>：功能更强——支持进度条、重试、负载均衡、远程执行</li><li>日常运维用 <code>xargs</code> 足够，复杂批处理用 <code>parallel</code></li></ul></div><h3 id="_9-3-大文件并行处理" tabindex="-1"><a class="header-anchor" href="#_9-3-大文件并行处理"><span>9.3 大文件并行处理</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 将大文件分割后并行处理</span></span>
+<span class="line"><span style="color:#61AFEF;">split</span><span style="color:#D19A66;"> -l</span><span style="color:#D19A66;"> 1000000</span><span style="color:#98C379;"> huge.log</span><span style="color:#98C379;"> chunk_</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行搜索</span></span>
+<span class="line"><span style="color:#61AFEF;">ls</span><span style="color:#98C379;"> chunk_</span><span style="color:#E5C07B;">*</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">parallel</span><span style="color:#D19A66;"> -j</span><span style="color:#D19A66;"> 4</span><span style="color:#98C379;"> &quot;grep -c &#39;ERROR&#39; {}&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 并行统计</span></span>
+<span class="line"><span style="color:#61AFEF;">ls</span><span style="color:#98C379;"> chunk_</span><span style="color:#E5C07B;">*</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">parallel</span><span style="color:#D19A66;"> -j</span><span style="color:#D19A66;"> 4</span><span style="color:#56B6C2;"> \\</span></span>
+<span class="line"><span style="color:#98C379;">  &quot;awk &#39;{status[</span><span style="color:#56B6C2;">\\$</span><span style="color:#98C379;">9]++} END {for(s in status) print s, status[s]}&#39; {}&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{status[$1] += $2} END {for(s in status) print s, status[s]}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 清理</span></span>
+<span class="line"><span style="color:#61AFEF;">rm</span><span style="color:#98C379;"> chunk_</span><span style="color:#E5C07B;">*</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_10-综合案例-日志审计系统脚本" tabindex="-1"><a class="header-anchor" href="#_10-综合案例-日志审计系统脚本"><span>10. 综合案例：日志审计系统脚本</span></a></h2><h3 id="_10-1-需求分析" tabindex="-1"><a class="header-anchor" href="#_10-1-需求分析"><span>10.1 需求分析</span></a></h3><p>构建一个轻量级日志审计脚本，实现以下功能：</p><ol><li>多日志源采集</li><li>异常检测与告警</li><li>统计报表生成</li><li>结果归档</li></ol>`,16),i(p,{code:`eJxN0D1LAzEYB/C9nyLEUUp9QVEHpe+ts9ulw3GX1MOYlmukqHURbKVTdTlBUA5tcdC6OBzWo5/m4vVbGNO0XKbA7/9/HhJCG23r2HQ5OCqkgDxZAwpvGE098T2ANZBO74OcAWe93uyxixhxmA1WgWVyWFPxnErkDRhPe2LyiljdxU1teWUFOTC4EV8eYi1sayooKhowuu2KpwFiZvtEU1FR6RKKh89oMIp+rqMgOIBXCkv/2JHSAWVZvuvHHyPETk2HZqwzl+oR85Qsd0DFgL+T53jsi/4w9t/UItB0HcaJDpfVvqqcFt4L/wUxjnGmfuEsXlGZu7pX1f1w8UVxOI7Dd8Roo+42uMmxrKhci59TDLKAOJTureB1skVwAsoaCLFseyMBFQ3WDt62dhNQXTbIJl5L/QGMa5wd`}),c[5]||=o(`<h3 id="_10-2-完整脚本" tabindex="-1"><a class="header-anchor" href="#_10-2-完整脚本"><span>10.2 完整脚本</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;">#!/bin/bash</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># log_audit.sh —— 日志审计系统</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 用法: ./log_audit.sh [--report] [--alert-threshold N] [日志目录]</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">#</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#56B6C2;">set</span><span style="color:#D19A66;"> -euo</span><span style="color:#98C379;"> pipefail</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ========== 配置 ==========</span></span>
+<span class="line"><span style="color:#E06C75;">LOG_DIR</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;font-style:italic;">\${1</span><span style="color:#ABB2BF;">:-/</span><span style="color:#E06C75;">var</span><span style="color:#ABB2BF;">/</span><span style="color:#E06C75;">log</span><span style="color:#E06C75;font-style:italic;">}</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#E06C75;">ALERT_THRESHOLD</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;font-style:italic;">\${2</span><span style="color:#ABB2BF;">:-</span><span style="color:#E06C75;font-style:italic;">100}</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#E06C75;">REPORT_DATE</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#61AFEF;">date</span><span style="color:#98C379;"> &#39;+%Y-%m-%d&#39;</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#E06C75;">REPORT_FILE</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;/tmp/log_audit_\${</span><span style="color:#E06C75;">REPORT_DATE</span><span style="color:#98C379;">}.txt&quot;</span></span>
+<span class="line"><span style="color:#E06C75;">ALERT_EMAIL</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;admin@example.com&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ========== 函数定义 ==========</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 统计函数：SSH 暴力破解检测</span></span>
+<span class="line"><span style="color:#61AFEF;">check_ssh_brute_force</span><span style="color:#ABB2BF;">() {</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> log_file</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;font-style:italic;">$1</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;=== SSH 暴力破解检测 ===&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#61AFEF;">    grep</span><span style="color:#98C379;"> &#39;Failed password&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">      awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">          for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">              if ($i == &quot;from&quot;) {ip = $(i+1); break}</span></span>
+<span class="line"><span style="color:#98C379;">          }</span></span>
+<span class="line"><span style="color:#98C379;">          fail[ip]++</span></span>
+<span class="line"><span style="color:#98C379;">      } END {</span></span>
+<span class="line"><span style="color:#98C379;">          found = 0</span></span>
+<span class="line"><span style="color:#98C379;">          for (ip in fail) {</span></span>
+<span class="line"><span style="color:#98C379;">              if (fail[ip] &gt;= &#39;</span><span style="color:#ABB2BF;">\${</span><span style="color:#E06C75;">ALERT_THRESHOLD</span><span style="color:#ABB2BF;">}</span><span style="color:#98C379;">&#39;) {</span></span>
+<span class="line"><span style="color:#98C379;">                  level = (fail[ip] &gt;= 1000 ? &quot;CRITICAL&quot; : fail[ip] &gt;= 500 ? &quot;HIGH&quot; : &quot;MEDIUM&quot;)</span></span>
+<span class="line"><span style="color:#98C379;">                  printf &quot;  %-18s %8d 次失败  [%s]\\n&quot;, ip, fail[ip], level</span></span>
+<span class="line"><span style="color:#98C379;">                  found = 1</span></span>
+<span class="line"><span style="color:#98C379;">              }</span></span>
+<span class="line"><span style="color:#98C379;">          }</span></span>
+<span class="line"><span style="color:#98C379;">          if (!found) print &quot;  未检测到暴力破解行为&quot;</span></span>
+<span class="line"><span style="color:#98C379;">      }&#39;</span></span>
+<span class="line"><span style="color:#ABB2BF;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 统计函数：HTTP 状态码异常</span></span>
+<span class="line"><span style="color:#61AFEF;">check_http_errors</span><span style="color:#ABB2BF;">() {</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> log_file</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;font-style:italic;">$1</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;=== HTTP 状态码分析 ===&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD;">    if</span><span style="color:#ABB2BF;"> [ </span><span style="color:#56B6C2;">!</span><span style="color:#56B6C2;"> -f</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> ]; </span><span style="color:#C678DD;">then</span></span>
+<span class="line"><span style="color:#56B6C2;">        echo</span><span style="color:#98C379;"> &quot;  Nginx 日志不存在: </span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">        return</span></span>
+<span class="line"><span style="color:#C678DD;">    fi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#61AFEF;">    awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">        status[$9]++</span></span>
+<span class="line"><span style="color:#98C379;">        total++</span></span>
+<span class="line"><span style="color:#98C379;">    } END {</span></span>
+<span class="line"><span style="color:#98C379;">        error_count = 0</span></span>
+<span class="line"><span style="color:#98C379;">        for (s in status) {</span></span>
+<span class="line"><span style="color:#98C379;">            if (s+0 &gt;= 400) error_count += status[s]</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;  总请求: %d\\n&quot;, total</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;  错误请求: %d (%.1f%%)\\n\\n&quot;, error_count, error_count/total*100</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;  %-8s %10s %10s\\n&quot;, &quot;状态码&quot;, &quot;数量&quot;, &quot;占比&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        printf &quot;  %-8s %10s %10s\\n&quot;, &quot;------&quot;, &quot;------&quot;, &quot;------&quot;</span></span>
+<span class="line"><span style="color:#98C379;">        for (s in status) {</span></span>
+<span class="line"><span style="color:#98C379;">            printf &quot;  %-8s %10d %9.1f%%\\n&quot;, s, status[s], status[s]/total*100</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">    }&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -k2</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -15</span></span>
+<span class="line"><span style="color:#ABB2BF;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 统计函数：系统资源异常</span></span>
+<span class="line"><span style="color:#61AFEF;">check_system_errors</span><span style="color:#ABB2BF;">() {</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> log_file</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;font-style:italic;">$1</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;=== 系统错误检测 ===&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">    # OOM</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;  [OOM Killer]&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">    grep</span><span style="color:#D19A66;"> -i</span><span style="color:#98C379;"> &#39;oom-killer\\|out of memory\\|killed process&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">      awk</span><span style="color:#98C379;"> &#39;!seen[$0]++ {printf &quot;    %s\\n&quot;, $0}&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -5</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> oom_count</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -ci</span><span style="color:#98C379;"> &#39;oom-killer\\|out of memory&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> || </span><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> 0</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;    共 \${</span><span style="color:#E06C75;">oom_count</span><span style="color:#98C379;">} 次 OOM 事件&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">    # 磁盘</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;  [磁盘错误]&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">    grep</span><span style="color:#D19A66;"> -i</span><span style="color:#98C379;"> &#39;I/O error\\|read error\\|write error&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">      awk</span><span style="color:#98C379;"> &#39;!seen[$0]++ {printf &quot;    %s\\n&quot;, $0}&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -5</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> disk_count</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -ci</span><span style="color:#98C379;"> &#39;I/O error\\|read error\\|write error&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> || </span><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> 0</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;    共 \${</span><span style="color:#E06C75;">disk_count</span><span style="color:#98C379;">} 次磁盘错误&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;">    # 内核 Panic</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;  [内核异常]&quot;</span></span>
+<span class="line"><span style="color:#61AFEF;">    grep</span><span style="color:#D19A66;"> -i</span><span style="color:#98C379;"> &#39;panic\\|call trace\\|bug:&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">      awk</span><span style="color:#98C379;"> &#39;!seen[$0]++ {printf &quot;    %s\\n&quot;, $0}&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -5</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> panic_count</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -ci</span><span style="color:#98C379;"> &#39;panic\\|call trace&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> || </span><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> 0</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;    共 \${</span><span style="color:#E06C75;">panic_count</span><span style="color:#98C379;">} 次内核异常&quot;</span></span>
+<span class="line"><span style="color:#ABB2BF;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 统计函数：应用错误趋势</span></span>
+<span class="line"><span style="color:#61AFEF;">check_app_errors</span><span style="color:#ABB2BF;">() {</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> log_file</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;font-style:italic;">$1</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;=== 应用错误趋势（按小时）===&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#61AFEF;">    awk</span><span style="color:#98C379;"> &#39;/ERROR/{</span></span>
+<span class="line"><span style="color:#98C379;">        # 提取小时</span></span>
+<span class="line"><span style="color:#98C379;">        for (i = 1; i &lt;= NF; i++) {</span></span>
+<span class="line"><span style="color:#98C379;">            if ($i ~ /^[0-9]{2}:[0-9]{2}:[0-9]{2}$/) {</span></span>
+<span class="line"><span style="color:#98C379;">                hour = substr($i, 1, 2)</span></span>
+<span class="line"><span style="color:#98C379;">                break</span></span>
+<span class="line"><span style="color:#98C379;">            }</span></span>
+<span class="line"><span style="color:#98C379;">            if ($i ~ /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}/) {</span></span>
+<span class="line"><span style="color:#98C379;">                hour = substr($i, 12, 2)</span></span>
+<span class="line"><span style="color:#98C379;">                break</span></span>
+<span class="line"><span style="color:#98C379;">            }</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">        if (hour != &quot;&quot;) errors[hour]++</span></span>
+<span class="line"><span style="color:#98C379;">    } END {</span></span>
+<span class="line"><span style="color:#98C379;">        max_err = 0</span></span>
+<span class="line"><span style="color:#98C379;">        for (h in errors) if (errors[h] &gt; max_err) max_err = errors[h]</span></span>
+<span class="line"><span style="color:#98C379;">        for (h = 0; h &lt; 24; h++) {</span></span>
+<span class="line"><span style="color:#98C379;">            hh = sprintf(&quot;%02d&quot;, h)</span></span>
+<span class="line"><span style="color:#98C379;">            c = errors[hh] + 0</span></span>
+<span class="line"><span style="color:#98C379;">            bar_len = (max_err &gt; 0 ? int(c / max_err * 40) : 0)</span></span>
+<span class="line"><span style="color:#98C379;">            bar = &quot;&quot;</span></span>
+<span class="line"><span style="color:#98C379;">            for (i = 0; i &lt; bar_len; i++) bar = bar &quot;█&quot;</span></span>
+<span class="line"><span style="color:#98C379;">            printf &quot;  %s:00  %5d  %s\\n&quot;, hh, c, bar</span></span>
+<span class="line"><span style="color:#98C379;">        }</span></span>
+<span class="line"><span style="color:#98C379;">    }&#39;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$log_file</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span></span>
+<span class="line"><span style="color:#ABB2BF;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 告警函数</span></span>
+<span class="line"><span style="color:#61AFEF;">send_alert</span><span style="color:#ABB2BF;">() {</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> subject</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;[日志审计] \${</span><span style="color:#E06C75;">REPORT_DATE</span><span style="color:#98C379;">} 检测到异常&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">    local</span><span style="color:#E06C75;"> body</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;font-style:italic;">$1</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$body</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">mail</span><span style="color:#D19A66;"> -s</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$subject</span><span style="color:#98C379;">&quot;</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$ALERT_EMAIL</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> || </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#56B6C2;">      echo</span><span style="color:#98C379;"> &quot;[告警] </span><span style="color:#E06C75;">$body</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> &gt;&amp;2</span></span>
+<span class="line"><span style="color:#ABB2BF;">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ========== 主逻辑 ==========</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;日志审计报告 - \${</span><span style="color:#E06C75;">REPORT_DATE</span><span style="color:#98C379;">}&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;==========================&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 1. SSH 安全审计</span></span>
+<span class="line"><span style="color:#61AFEF;">check_ssh_brute_force</span><span style="color:#98C379;"> &quot;\${</span><span style="color:#E06C75;">LOG_DIR</span><span style="color:#98C379;">}/auth.log&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 2. HTTP 状态码分析</span></span>
+<span class="line"><span style="color:#61AFEF;">check_http_errors</span><span style="color:#98C379;"> &quot;\${</span><span style="color:#E06C75;">LOG_DIR</span><span style="color:#98C379;">}/nginx/access.log&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 3. 系统错误检测</span></span>
+<span class="line"><span style="color:#61AFEF;">check_system_errors</span><span style="color:#98C379;"> &quot;\${</span><span style="color:#E06C75;">LOG_DIR</span><span style="color:#98C379;">}/syslog&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 4. 应用错误趋势</span></span>
+<span class="line"><span style="color:#61AFEF;">check_app_errors</span><span style="color:#98C379;"> &quot;\${</span><span style="color:#E06C75;">LOG_DIR</span><span style="color:#98C379;">}/app/app.log&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 5. 异常告警判断</span></span>
+<span class="line"><span style="color:#E06C75;">alert_flag</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 检查 SSH 暴力破解</span></span>
+<span class="line"><span style="color:#E06C75;">ssh_danger</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;Failed password&#39;</span><span style="color:#98C379;"> &quot;\${</span><span style="color:#E06C75;">LOG_DIR</span><span style="color:#98C379;">}/auth.log&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{for(i=1;i&lt;=NF;i++) if($i==&quot;from&quot;){ip=$(i+1);break}} count[ip]++&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#D19A66;"> -v</span><span style="color:#98C379;"> threshold=&quot;</span><span style="color:#E06C75;">$ALERT_THRESHOLD</span><span style="color:#98C379;">&quot;</span><span style="color:#98C379;"> &#39;$1 &gt;= threshold {print; found=1} END {exit !found}&#39;</span><span style="color:#ABB2BF;"> || </span><span style="color:#56B6C2;">true</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#C678DD;">if</span><span style="color:#ABB2BF;"> [ </span><span style="color:#56B6C2;">-n</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$ssh_danger</span><span style="color:#98C379;">&quot;</span><span style="color:#ABB2BF;"> ]; </span><span style="color:#C678DD;">then</span></span>
+<span class="line"><span style="color:#E06C75;">    alert_flag</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">1</span></span>
+<span class="line"><span style="color:#61AFEF;">    send_alert</span><span style="color:#98C379;"> &quot;检测到SSH暴力破解，超过阈值 \${</span><span style="color:#E06C75;">ALERT_THRESHOLD</span><span style="color:#98C379;">}&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">fi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 检查 OOM</span></span>
+<span class="line"><span style="color:#E06C75;">oom_count</span><span style="color:#56B6C2;">=</span><span style="color:#ABB2BF;">$(</span><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -ci</span><span style="color:#98C379;"> &#39;oom-killer\\|out of memory&#39;</span><span style="color:#98C379;"> &quot;\${</span><span style="color:#E06C75;">LOG_DIR</span><span style="color:#98C379;">}/syslog&quot;</span><span style="color:#ABB2BF;"> 2&gt;</span><span style="color:#98C379;">/dev/null</span><span style="color:#ABB2BF;"> || </span><span style="color:#56B6C2;">echo</span><span style="color:#D19A66;"> 0</span><span style="color:#ABB2BF;">)</span></span>
+<span class="line"><span style="color:#C678DD;">if</span><span style="color:#ABB2BF;"> [ </span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;">$oom_count</span><span style="color:#98C379;">&quot;</span><span style="color:#56B6C2;"> -gt</span><span style="color:#D19A66;"> 0</span><span style="color:#ABB2BF;"> ]; </span><span style="color:#C678DD;">then</span></span>
+<span class="line"><span style="color:#E06C75;">    alert_flag</span><span style="color:#56B6C2;">=</span><span style="color:#98C379;">1</span></span>
+<span class="line"><span style="color:#61AFEF;">    send_alert</span><span style="color:#98C379;"> &quot;检测到 \${</span><span style="color:#E06C75;">oom_count</span><span style="color:#98C379;">} 次 OOM 事件&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">fi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#C678DD;">if</span><span style="color:#ABB2BF;"> [ </span><span style="color:#98C379;">&quot;</span><span style="color:#E06C75;">$alert_flag</span><span style="color:#98C379;">&quot;</span><span style="color:#56B6C2;"> -eq</span><span style="color:#D19A66;"> 0</span><span style="color:#ABB2BF;"> ]; </span><span style="color:#C678DD;">then</span></span>
+<span class="line"><span style="color:#56B6C2;">    echo</span><span style="color:#98C379;"> &quot;[信息] 未检测到异常，一切正常&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#C678DD;">fi</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;==========================&quot;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#D19A66;"> -a</span><span style="color:#98C379;"> &quot;</span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span>
+<span class="line"><span style="color:#56B6C2;">echo</span><span style="color:#98C379;"> &quot;报告已保存至: </span><span style="color:#E06C75;">$REPORT_FILE</span><span style="color:#98C379;">&quot;</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_10-3-定时执行" tabindex="-1"><a class="header-anchor" href="#_10-3-定时执行"><span>10.3 定时执行</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 添加到 crontab</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 每天早上 8 点执行</span></span>
+<span class="line"><span style="color:#61AFEF;">0</span><span style="color:#D19A66;"> 8</span><span style="color:#E5C07B;"> *</span><span style="color:#E5C07B;"> *</span><span style="color:#E5C07B;"> *</span><span style="color:#98C379;"> /usr/local/bin/log_audit.sh</span><span style="color:#98C379;"> /var/log</span><span style="color:#D19A66;"> 100</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 每小时执行（仅检测关键异常）</span></span>
+<span class="line"><span style="color:#61AFEF;">0</span><span style="color:#E5C07B;"> *</span><span style="color:#E5C07B;"> *</span><span style="color:#E5C07B;"> *</span><span style="color:#E5C07B;"> *</span><span style="color:#98C379;"> /usr/local/bin/log_audit.sh</span><span style="color:#D19A66;"> --alert-only</span><span style="color:#98C379;"> /var/log</span><span style="color:#D19A66;"> 50</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 使用 logrotate 管理审计报告</span></span>
+<span class="line"><span style="color:#61AFEF;">cat</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">/etc/logrotate.d/log_audit</span><span style="color:#ABB2BF;"> &lt;&lt; </span><span style="color:#ABB2BF;">&#39;EOF&#39;</span></span>
+<span class="line"><span style="color:#98C379;">/tmp/log_audit_*.txt {</span></span>
+<span class="line"><span style="color:#98C379;">    daily</span></span>
+<span class="line"><span style="color:#98C379;">    rotate 30</span></span>
+<span class="line"><span style="color:#98C379;">    compress</span></span>
+<span class="line"><span style="color:#98C379;">    missingok</span></span>
+<span class="line"><span style="color:#98C379;">    notifempty</span></span>
+<span class="line"><span style="color:#98C379;">}</span></span>
+<span class="line"><span style="color:#ABB2BF;">EOF</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="_11-三剑客速查与技巧" tabindex="-1"><a class="header-anchor" href="#_11-三剑客速查与技巧"><span>11. 三剑客速查与技巧</span></a></h2><h3 id="_11-1-一行命令合集" tabindex="-1"><a class="header-anchor" href="#_11-1-一行命令合集"><span>11.1 一行命令合集</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># ===== grep 一行命令 =====</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -rnw</span><span style="color:#98C379;"> &#39;/path/&#39;</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> &#39;pattern&#39;</span><span style="color:#7F848E;font-style:italic;">                    # 递归全词搜索</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -rl</span><span style="color:#98C379;"> &#39;pattern&#39;</span><span style="color:#98C379;"> /path/</span><span style="color:#7F848E;font-style:italic;">                           # 只列文件名</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -c</span><span style="color:#98C379;"> &#39;^$&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                                   # 统计空行数</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -v</span><span style="color:#98C379;"> &#39;^#\\|^$&#39;</span><span style="color:#98C379;"> config</span><span style="color:#7F848E;font-style:italic;">                             # 去注释和空行</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -Eo</span><span style="color:#98C379;"> &#39;[0-9]{1,3}(\\.[0-9]{1,3}){3}&#39;</span><span style="color:#98C379;"> log</span><span style="color:#7F848E;font-style:italic;">         # 提取IP</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -Po</span><span style="color:#98C379;"> &#39;(?&lt;=user=)\\w+&#39;</span><span style="color:#98C379;"> log</span><span style="color:#7F848E;font-style:italic;">                        # 提取user=后面的值</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#D19A66;"> -m</span><span style="color:#D19A66;"> 5</span><span style="color:#98C379;"> &#39;pattern&#39;</span><span style="color:#98C379;"> huge.log</span><span style="color:#7F848E;font-style:italic;">                        # 只找前5个</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ===== sed 一行命令 =====</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#D19A66;"> -i.bak</span><span style="color:#98C379;"> &#39;s/old/new/g&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                      # 替换+备份</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;/^$/d&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                                    # 删除空行</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;s/^[[:space:]]*//&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                        # 去行首空格</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;s/[[:space:]]*$//&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                        # 去行尾空格</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#D19A66;"> -n</span><span style="color:#98C379;"> &#39;5,10p&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                                 # 打印5-10行</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;1d;$d&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                                    # 删除首尾行</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> :a</span><span style="color:#D19A66;"> -e</span><span style="color:#98C379;"> &#39;/\\\\$/N; s/\\\\\\n//; ta&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">           # 合并续行</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;1!G;h;$!d&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                               # 反转行序</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;=&#39;</span><span style="color:#98C379;"> file</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;N;s/\\n/\\t/&#39;</span><span style="color:#7F848E;font-style:italic;">                     # 加行号</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># ===== awk 一行命令 =====</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{print $1}&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                               # 提取第一列</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;END{print NR}&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                            # 统计行数</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{sum+=$3}END{print sum}&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                  # 求和</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;!seen[$1]++&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                              # 去重</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{a[NR]=$0}END{for(i=NR;i&gt;=1;i--)print a[i]}&#39;</span><span style="color:#7F848E;font-style:italic;">  # 反转行</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;NR==FNR{a[$1];next}$1 in a&#39;</span><span style="color:#98C379;"> f1</span><span style="color:#98C379;"> f2</span><span style="color:#7F848E;font-style:italic;">             # 交集</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{gsub(/old/,&quot;new&quot;)}1&#39;</span><span style="color:#98C379;"> file</span><span style="color:#7F848E;font-style:italic;">                     # 替换</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;length&gt;max{max=length;line=$0}END{print line}&#39;</span><span style="color:#7F848E;font-style:italic;"> # 最长行</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_11-2-常见组合模式" tabindex="-1"><a class="header-anchor" href="#_11-2-常见组合模式"><span>11.2 常见组合模式</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 搜索 + 统计</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;pattern&#39;</span><span style="color:#98C379;"> log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{count[$2]++} END{for(k in count) print count[k], k}&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 过滤 + 替换 + 提取</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;s/\\[ERROR\\] //&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{print $1, $3}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 清洗 + 去重 + 排序</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;s/[[:space:]]\\+/ /g&#39;</span><span style="color:#98C379;"> data</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;!seen[$0]++&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 提取 + 分组 + 排序 + Top N</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#D19A66;"> -F</span><span style="color:#98C379;">&#39;,&#39;</span><span style="color:#98C379;"> &#39;{count[$1]++} END{for(k in count) print count[k], k}&#39;</span><span style="color:#98C379;"> data.csv</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">sort</span><span style="color:#D19A66;"> -rn</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">head</span><span style="color:#D19A66;"> -10</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 多文件关联</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;NR==FNR{data[$1]=$2;next}{print $0, data[$1]}&#39;</span><span style="color:#98C379;"> file1</span><span style="color:#98C379;"> file2</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h3 id="_11-3-调试技巧" tabindex="-1"><a class="header-anchor" href="#_11-3-调试技巧"><span>11.3 调试技巧</span></a></h3><div class="language-bash line-numbers-mode" data-highlighter="shiki" data-ext="bash" style="background-color:#282c34;color:#abb2bf;"><pre class="shiki one-dark-pro vp-code"><code class="language-bash"><span class="line"><span style="color:#7F848E;font-style:italic;"># 1. 逐步调试管道</span></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 第一步输出</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> log</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">/tmp/step1.txt</span></span>
+<span class="line"><span style="color:#61AFEF;">wc</span><span style="color:#D19A66;"> -l</span><span style="color:#98C379;"> /tmp/step1.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 第二步输出</span></span>
+<span class="line"><span style="color:#61AFEF;">sed</span><span style="color:#98C379;"> &#39;s/pattern//&#39;</span><span style="color:#98C379;"> /tmp/step1.txt</span><span style="color:#ABB2BF;"> &gt; </span><span style="color:#98C379;">/tmp/step2.txt</span></span>
+<span class="line"><span style="color:#61AFEF;">wc</span><span style="color:#D19A66;"> -l</span><span style="color:#98C379;"> /tmp/step2.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 第三步输出</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{sum += $3} END{print sum}&#39;</span><span style="color:#98C379;"> /tmp/step2.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 2. 使用 tee 查看中间结果</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#98C379;"> /tmp/debug1.txt</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  sed</span><span style="color:#98C379;"> &#39;s/pattern//&#39;</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">tee</span><span style="color:#98C379;"> /tmp/debug2.txt</span><span style="color:#ABB2BF;"> | </span><span style="color:#56B6C2;">\\</span></span>
+<span class="line"><span style="color:#61AFEF;">  awk</span><span style="color:#98C379;"> &#39;{sum += $3} END{print sum}&#39;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 3. 使用 set -x 调试脚本</span></span>
+<span class="line"><span style="color:#56B6C2;">set</span><span style="color:#D19A66;"> -x</span></span>
+<span class="line"><span style="color:#61AFEF;">grep</span><span style="color:#98C379;"> &#39;ERROR&#39;</span><span style="color:#98C379;"> log</span><span style="color:#ABB2BF;"> | </span><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{sum += $3} END{print sum}&#39;</span></span>
+<span class="line"><span style="color:#56B6C2;">set</span><span style="color:#98C379;"> +x</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#7F848E;font-style:italic;"># 4. awk 调试输出</span></span>
+<span class="line"><span style="color:#61AFEF;">awk</span><span style="color:#98C379;"> &#39;{</span></span>
+<span class="line"><span style="color:#98C379;">    # 调试：打印每行解析结果</span></span>
+<span class="line"><span style="color:#98C379;">    # print &quot;DEBUG: NF=&quot; NF &quot; $1=&quot; $1 &gt; &quot;/dev/stderr&quot;</span></span>
+<span class="line"><span style="color:#98C379;">    sum += $3</span></span>
+<span class="line"><span style="color:#98C379;">} END {</span></span>
+<span class="line"><span style="color:#98C379;">    print sum</span></span>
+<span class="line"><span style="color:#98C379;">}&#39;</span><span style="color:#98C379;"> data.txt</span></span></code></pre><div class="line-numbers" aria-hidden="true" style="counter-reset:line-number 0;"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div><h2 id="小结" tabindex="-1"><a class="header-anchor" href="#小结"><span>小结</span></a></h2>`,12),i(p,{code:`eJxtkstOwkAUhvc+xSx1xUO49RYv7JtAiBGBVBNZtspdEQjlEiEUCAQWWkARkIJ9mZ4zw1s4oW1oE3cz3/n/c2b+mdvrSOBWiO0RIkaj9/v75iIL2RJoXaqvoJgBrYWZ+sEBrxMC+YK5bsKrSoupLSAkJAZjhBlp1HtYbNJp1+Z3wQDBhoH5rmloqPzYWHi4IUzrUK1GdZUvbEy1zkYum4tPJitbdBK6jsQJ1vpg1CCTwlbRVp75fVd+4jXnZijJtC17hJenZ+Tq/MjeYbLLRnOcPLo09Evnff6ZwbQeG8lWwZnh0toIlgpVhi50eOH3XV74CfQSu3xAXdKOhOU8D845S2WMeQ0XSZw6vZj8xrPeSAU2cIzYXsGqwNbvPMItsmwuwG2JCVYKnnmWDdtpSKfgperQ7TD8lnE8pUvD6pfrs86QKipmnItbZm7jBb52qDrhEUPj194fC+JNIPoQIR6V9V14UyjlrP7SgD2tzVV9dwyY9yE530hZaD17X96tigti6M4XE0QhHA6GHWtvgNW0qc/oR5VW+nt/XuBN7A==`}),c[6]||=n(`blockquote`,null,[n(`p`,null,[n(`strong`,null,`参考书目`)]),n(`ul`,null,[n(`li`,null,`《sed & awk 101 Hacks》—— Ramesh Natarajan`),n(`li`,null,`《AWK程序设计语言》—— Alfred V. Aho, Brian W. Kernighan, Peter J. Weinberger`),n(`li`,null,`《Linux命令行与Shell脚本编程大全》（第4版）—— Richard Blum, Christine Bresnahan`),n(`li`,null,[a(`Nginx 日志格式官方文档：`),n(`a`,{href:`https://nginx.org/en/docs/http/ngx_http_log_module.html`,target:`_blank`,rel:`noopener noreferrer`},`https://nginx.org/en/docs/http/ngx_http_log_module.html`)])])],-1)])}var d=s(l,[[`render`,u]]);export{c as _pageData,d as default};
