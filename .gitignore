@@ -3,4 +3,5 @@ src/.vuepress/.cache/
 src/.vuepress/.temp/
 src/.vuepress/dist/
 release/
+src/.vuepress/public/audio/friends-tv/
 *.apk
