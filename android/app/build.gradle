@@ -44,10 +44,6 @@ dependencies {
 
 apply from: 'capacitor.build.gradle'
 
-tasks.matching { it.name == 'compressDebugAssets' }.configureEach {
-    enabled = false
-}
-
 try {
     def servicesJSON = file('google-services.json')
     if (servicesJSON.text) {
