@@ -7,6 +7,10 @@ files:
   - package.json
   - src/.vuepress/dist/**
 asar: true
+# dist 全量约 7.6GB(含老友记音频约 5.2GB),超 asar 4GB 上限,
+# 音频目录解出到 app.asar.unpacked,PC 端全量内置
+asarUnpack:
+  - src/.vuepress/dist/audio/**
 win:
   target: nsis
   icon: src/.vuepress/public/logo.png

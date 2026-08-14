@@ -146,7 +146,11 @@ NODE_OPTIONS="--max-old-space-size=16384" pnpm docs:build
 # 2. 同步资源到 android 工程
 npx cap sync
 
-# 3. 镜像到暂存区并编译
+# 3. 剔除超大音频:逐句原文件(App 只用整集拼接版 episodes/,页面零引用)+第四季起的原声(见第八节)
+rm -rf android/app/src/main/assets/public/audio/friends
+rm -rf android/app/src/main/assets/public/audio/friends-tv/S{04,05,06,07,08,09,10}
+
+# 4. 镜像到暂存区并编译
 robocopy android E:\apk_build\android /MIR
 cd E:\apk_build\android
 .\gradlew.bat assembleDebug
@@ -161,8 +165,34 @@ cd E:\apk_build\android
 | `non-ASCII characters` | 仓库路径含中文 | 镜像到英文路径暂存区编译 |
 | `Could not resolve project :capacitor-android` | 暂存区相对路径找不到 node_modules | 拷出库本体,settings.gradle 改绝对路径 |
 | `<script setup>` 中报 `Unexpected token` | md 内联脚本字符串引号嵌套(如 `'我叫'阿雪''`) | 内层改全角引号 `‘’` 或换双引号 |
+| `Too many zip entries (MAX=65535)` | APK 是 ZIP,条目数硬上限 | 逐句音频无损拼接为整集,片段播放 |
+| `Zip32 ... MAX=4294967295` | APK 包体硬上限 4GB | 大体积音频改外置数据包(见第八节) |
 
-## 八、后续可选项
+## 八、外置原声数据包(第四季起)
+
+老友记剧集原声共约 3.6GB,全量打进 APK 会超 4GB 上限。按季拆分:
+
+- **S01-S03(约 1.1GB):随 APK 内置**,安装即可播放
+- **S04-S10(约 2.5GB):外置数据包**,单独分发,应用内直接读取,**免解压、免导入**
+
+### 安装步骤
+
+1. 安装主 APK(约 3.2GB,含前三季原声)。
+2. 把数据包文件夹 `friends-tv`(只需 S04-S10 七个子目录)拷到设备:
+
+```
+内部存储/Android/data/io.github.moklgydocs/files/audio/friends-tv
+```
+
+(`audio` 目录不存在就新建;最终路径下应是 `S04/S04E01.mp3` 这样的结构)
+
+3. 打开应用,第四季起任意一集顶部播放器即可播放原声;前三季无需数据包;逐句 TTS 按钮不受影响。
+
+- 手机:可用 `adb push friends-tv/S04 friends-tv/S05 friends-tv/S06 friends-tv/S07 friends-tv/S08 friends-tv/S09 friends-tv/S10 /sdcard/Android/data/io.github.moklgydocs/files/audio/friends-tv/`
+- 智慧屏:U盘拷贝后用文件管理器移动,或先 adb 推送。
+- 未放数据包时第四季起的播放器无声,其余功能正常。
+
+## 九、后续可选项
 
 - **Release 签名包**:生成 keystore → `android/app/build.gradle` 配 `signingConfigs` → `assembleRelease`,适合分发上架。
 - **体积瘦身**:音频(475 MB)改为在线加载或按需下载,APK 可缩到 100 MB 级。

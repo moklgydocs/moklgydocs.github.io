@@ -55,15 +55,25 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 
 const props = defineProps<{ src: string; title?: string }>()
 
-// Capacitor 离线包: 原声数据包(friends-tv)不打进 APK(超 4G 上限),
-// 由用户拷到应用专属外置目录,此处把路径重写到 _capacitor_file_ 路由直读
+// Capacitor 离线包: 前三季(S01-S03)原声随 APK 内置,第四季起(S04-S10)
+// 不打进 APK(超 4G 上限),由用户拷到应用专属外置目录,
+// 此处把外挂季的路径重写到 _capacitor_file_ 路由直读
 const EXTERNAL_PREFIX = '/audio/friends-tv/'
+const BUNDLED_PREFIXES = [
+  '/audio/friends-tv/S01/',
+  '/audio/friends-tv/S02/',
+  '/audio/friends-tv/S03/',
+]
 const EXTERNAL_BASE = '/storage/emulated/0/Android/data/io.github.moklgydocs/files'
 
 const resolvedSrc = computed(() => {
   if (typeof window === 'undefined') return props.src
   const cap = (window as unknown as { Capacitor?: { isNativePlatform?: () => boolean; convertFileSrc: (p: string) => string } }).Capacitor
-  if (cap?.isNativePlatform?.() && props.src.startsWith(EXTERNAL_PREFIX)) {
+  if (
+    cap?.isNativePlatform?.() &&
+    props.src.startsWith(EXTERNAL_PREFIX) &&
+    !BUNDLED_PREFIXES.some((p) => props.src.startsWith(p))
+  ) {
     return cap.convertFileSrc(EXTERNAL_BASE + props.src)
   }
   return props.src
