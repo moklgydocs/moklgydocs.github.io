@@ -10,6 +10,9 @@ import VocabList from "./components/VocabList.vue";
 import WordAudio from "./components/WordAudio.vue";
 import StickyAudio from "./components/StickyAudio.vue";
 import AudioButton from "./components/AudioButton.vue";
+import GrammarTip from "./components/GrammarTip.vue";
+import GrammarExpandAll from "./components/GrammarExpandAll.vue";
+import VerbDrill from "./components/VerbDrill.vue";
 
 export default defineClientConfig({
   enhance({ app }) {
@@ -24,5 +27,8 @@ export default defineClientConfig({
     app.component("WordAudio", WordAudio);
     app.component("StickyAudio", StickyAudio);
     app.component("AudioButton", AudioButton);
+    app.component("GrammarTip", GrammarTip);
+    app.component("GrammarExpandAll", GrammarExpandAll);
+    app.component("VerbDrill", VerbDrill);
   },
 });
