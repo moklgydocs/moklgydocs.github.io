@@ -1559,14 +1559,6 @@ export default sidebar({
           sidebarSorter: ["readme", "order", "filename"],
           children: "structure",
         },
-        {
-          text: "动手学深度学习",
-          icon: "fa6-solid:brain",
-          prefix: "动手学深度学习/",
-          collapsible: true,
-          sidebarSorter: ["readme", "order", "filename"],
-          children: "structure",
-        },
       ],
     },
     {
