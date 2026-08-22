@@ -141,6 +141,37 @@ export default navbar([
     link: "/AI实践/"
   },
   {
+    text: "AI 书籍",
+    icon: "fa6-solid:book",
+    children: [
+      {
+        text: "AI 知识库 (JavaGuide)",
+        icon: "fa6-solid:book-open-reader",
+        link: "/AI知识库/"
+      },
+      {
+        text: "从零构建智能体 (Hello-Agents)",
+        icon: "fa6-solid:robot",
+        link: "/从零构建智能体/"
+      },
+      {
+        text: "深入理解 AI Agent",
+        icon: "fa6-solid:wand-magic-sparkles",
+        link: "/深入理解AIAgent/"
+      },
+      {
+        text: "动手学深度学习 (d2l-zh)",
+        icon: "fa6-solid:brain",
+        link: "/动手学深度学习/"
+      },
+      {
+        text: "AI 工程实战(从零到生产)",
+        icon: "fa6-solid:gears",
+        link: "/ai-eng/"
+      },
+    ]
+  },
+  {
     text: "语言",
     icon: "fa6-solid:language",
     prefix: "/语言/",
