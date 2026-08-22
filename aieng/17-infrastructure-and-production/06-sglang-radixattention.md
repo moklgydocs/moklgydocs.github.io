@@ -39,7 +39,7 @@ root
       |- "Context: <doc B>..."        (520 tokens, 33 blocks)
 ```
 
-新请求进来:系统提示词 + "Context: <doc A>" + "Question: Carol"。调度器沿树走:系统前缀命中(复用 124 块),doc-A 分支命中(复用 31 块),只为 "Question: Carol" 分配新块(4 块)。prefill 成本:4 个新 token 块。没有这棵树:160 块。prefill 省了约 40 倍。
+新请求进来:系统提示词 + "Context: &lt;doc A&gt;" + "Question: Carol"。调度器沿树走:系统前缀命中(复用 124 块),doc-A 分支命中(复用 31 块),只为 "Question: Carol" 分配新块(4 块)。prefill 成本:4 个新 token 块。没有这棵树:160 块。prefill 省了约 40 倍。
 
 ### 缓存感知调度
 

@@ -270,7 +270,7 @@ answer = processor.decode(generated[0][inputs["input_ids"].shape[1]:], skip_spec
 | ViT-MLP-LLM | "VLM 模式" | 视觉编码器 + 投影器 + 语言模型;2026 年每一个 VLM |
 | 投影器 | "桥梁" | 把视觉 token 映射进 LLM 嵌入空间的 2–4 层 MLP(或 Q-former) |
 | DeepStack | "Qwen3-VL 的特征技巧" | 堆叠多层 ViT 特征,而非只用最后一层 |
-| 图像 token | "<image> 占位符" | 文本流中的特殊 token,会被替换成投影后的视觉嵌入 |
+| 图像 token | "&lt;image&gt; 占位符" | 文本流中的特殊 token,会被替换成投影后的视觉嵌入 |
 | CMER | "幻觉 KPI" | 跨模态错误率;文本置信度高而图文相似度低时升高 |
 | 视觉智能体 | "会点鼠标的 VLM" | 用工具调用操作 GUI(OSWorld、移动端、网页)的 VLM |
 | Q-former | "定长 token 桥" | BLIP-2 式投影器,产出固定数量的视觉查询 token |

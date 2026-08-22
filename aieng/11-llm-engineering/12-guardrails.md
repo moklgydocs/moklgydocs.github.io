@@ -125,7 +125,7 @@ flowchart TD
 
 **Guardrails AI** —— pydantic 风格的 LLM 输出校验。用 Python 定义校验器：粗口、PII、竞品提及、对照参考文本的幻觉检查，以及 50+ 种内置校验器。校验失败自动重试。
 
-**Microsoft Presidio** —— PII 检测与匿名化。28 种实体类型，正则 + NLP + 自定义识别器。可以把 "John Smith" 替换成 "<PERSON>"，或生成合成替代。输入输出都能用。
+**Microsoft Presidio** —— PII 检测与匿名化。28 种实体类型，正则 + NLP + 自定义识别器。可以把 "John Smith" 替换成 "&lt;PERSON&gt;"，或生成合成替代。输入输出都能用。
 
 | 工具 | 类型 | 类别 | 延迟 | 成本 | 开源 |
 |---|---|---|---|---|---|
