@@ -32,17 +32,26 @@ jobs:
       - name: 配置 Swap 空间
         run: |
           if [ -f /swapfile ]; then sudo swapoff /swapfile && sudo rm /swapfile; fi
-          sudo fallocate -l 24G /swapfile
+          sudo fallocate -l 16G /swapfile
           sudo chmod 600 /swapfile
           sudo mkswap /swapfile
           sudo swapon /swapfile
           free -h
 
-      - name: 构建文档
+      - name: 构建主站
         env:
-          NODE_OPTIONS: --max_old_space_size=12288
+          NODE_OPTIONS: --max_old_space_size=16384
+        run: pnpm run docs:build
+
+      - name: 构建 ai-eng 子站
+        env:
+          NODE_OPTIONS: --max_old_space_size=8192
+        run: pnpm run docs:build:aieng
+
+      - name: 合并子站产物
         run: |
-          pnpm run docs:build
+          mkdir -p src/.vuepress/dist/ai-eng
+          cp -r aieng/.vuepress/dist/* src/.vuepress/dist/ai-eng/
           touch src/.vuepress/dist/.nojekyll
 
       - name: 验证产物
