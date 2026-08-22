@@ -13,8 +13,10 @@ import AudioButton from "./components/AudioButton.vue";
 import GrammarTip from "./components/GrammarTip.vue";
 import GrammarExpandAll from "./components/GrammarExpandAll.vue";
 import VerbDrill from "./components/VerbDrill.vue";
+import ReadingMode from "./components/ReadingMode.vue";
 
 export default defineClientConfig({
+  rootComponents: [ReadingMode],
   enhance({ app }) {
     app.component("Test", Test);
     app.component("Note", Note);
