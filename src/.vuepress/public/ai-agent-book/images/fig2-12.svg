@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 660" width="820" height="660" style="background:#ffffff">
+  <defs>
+    <marker id="arrow-gold" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto">
+      <polygon points="0 0, 12 4, 0 8" fill="#d69e00"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto">
+      <polygon points="0 0, 12 4, 0 8" fill="#d45d3d"/>
+    </marker>
+  </defs>
+
+  <text x="35" y="35" font-family="'Courier New', Courier, monospace" font-size="18" fill="#333333" font-weight="bold">request context:</text>
+
+  <!-- Stable startup prefix -->
+  <rect x="50" y="58" width="525" height="82" rx="6" fill="#eeeeee" stroke="#999999" stroke-width="1.5"/>
+  <text x="66" y="82" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">{ role: "system", content:</text>
+  <text x="82" y="105" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">"你是 Claude Code 助手...</text>
+  <text x="82" y="127" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">&lt;available_skills&gt;pdf, pptx, ...&lt;/available_skills&gt;" }</text>
+
+  <line x1="635" y1="99" x2="585" y2="99" stroke="#d69e00" stroke-width="2" marker-end="url(#arrow-gold)"/>
+  <text x="648" y="80" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#b58100" font-weight="bold">Ⓐ Skill 元数据目录</text>
+  <text x="648" y="101" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">会话启动时加载</text>
+  <text x="648" y="120" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">属于 system prompt</text>
+
+  <rect x="50" y="150" width="525" height="45" rx="6" fill="#eeeeee" stroke="#999999" stroke-width="1.5"/>
+  <text x="66" y="173" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">tools: [Read, Bash, Edit, Write, ...]</text>
+
+  <path d="M590 58 C615 58,615 75,625 95 C615 115,615 195,590 195" fill="none" stroke="#999999" stroke-width="1.5"/>
+  <text x="648" y="160" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">稳定启动前缀</text>
+  <text x="648" y="180" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">可复用 Prompt Cache</text>
+
+  <!-- Conversation -->
+  <rect x="50" y="218" width="525" height="45" rx="6" fill="#dcecf7" stroke="#8aa9bd" stroke-width="1.5"/>
+  <text x="66" y="241" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">{ role: "user", content: "帮我从这个 PDF 生成 PPT" }</text>
+
+  <rect x="50" y="278" width="525" height="84" rx="6" fill="#fde2d7" stroke="#d45d3d" stroke-width="2"/>
+  <text x="66" y="302" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">{ role: "user", isMeta: true, content:</text>
+  <text x="82" y="325" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">"Base directory: ...\n# PPTX Skill</text>
+  <text x="82" y="348" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">## Workflow: 1. Use markitdown..." }</text>
+
+  <line x1="635" y1="320" x2="585" y2="320" stroke="#d45d3d" stroke-width="2" marker-end="url(#arrow-red)"/>
+  <text x="648" y="300" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#b84c31" font-weight="bold">Ⓑ Skill 完整内容</text>
+  <text x="648" y="321" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">调用时才加载</text>
+  <text x="648" y="340" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">进入会话历史</text>
+
+  <rect x="50" y="382" width="525" height="45" rx="6" fill="#dff1df" stroke="#8dad8d" stroke-width="1.5"/>
+  <text x="66" y="405" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">{ role: "assistant", tool_calls: [Read("input.pdf")] }</text>
+
+  <rect x="50" y="437" width="525" height="45" rx="6" fill="#fff7df" stroke="#b8a982" stroke-width="1.5"/>
+  <text x="66" y="460" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">{ role: "tool", content: "...PDF 文本内容..." }</text>
+
+  <rect x="50" y="492" width="525" height="45" rx="6" fill="#dff1df" stroke="#8dad8d" stroke-width="1.5"/>
+  <text x="66" y="515" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">{ role: "assistant", tool_calls: [Write("slides.html")] }</text>
+
+  <rect x="50" y="547" width="525" height="45" rx="6" fill="#fff7df" stroke="#b8a982" stroke-width="1.5"/>
+  <text x="66" y="570" font-family="'Courier New', Courier, monospace" font-size="13" fill="#333333">{ role: "tool", content: "Wrote 12345 bytes" }</text>
+
+  <text x="35" y="615" font-family="'Courier New', Courier, monospace" font-size="18" fill="#333333" font-weight="bold">]</text>
+
+  <rect x="50" y="626" width="720" height="24" rx="4" fill="#f5f5f5"/>
+  <text x="410" y="638" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#555555" text-anchor="middle" dominant-baseline="central">以 Anthropic 文档描述的逻辑布局为例：元数据从启动时就在 system prompt；完整指令在调用点按需加入会话。</text>
+</svg>

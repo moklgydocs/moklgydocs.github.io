@@ -1,0 +1,725 @@
+---
+title: 大模型网关详解：多模型路由、Fallback、限流与成本控制
+description: 介绍 LLM Gateway 的边界、模型路由、Fallback、限流配额、Token 预算、成本统计、观测审计、缓存策略、Java 后端落地方案和主流方案选型。
+category: AI 应用开发
+head:
+  - - meta
+    - name: keywords
+      content: LLM Gateway,大模型网关,LLM Router,模型路由,多模型路由,fallback,限流,Token 预算,AI Gateway,LiteLLM,Cloudflare AI Gateway,Kong AI Gateway
+---
+
+> 本文转载自 [JavaGuide《AI 应用开发》专栏](https://javaguide.cn/ai/)(作者:Snailclimb),原文:<https://javaguide.cn/ai/system-design/llm-gateway.html>。著作权归原作者所有,本站按作者转载要求注明出处,仅供个人学习使用。
+
+
+前段时间有读者朋友想让我聊聊 LLM 网关：它到底解决什么问题，什么时候值得单独部署，又该怎么选型。
+
+于是，我把自己做项目时的实践和思考整理成了这篇详细介绍，内容有点干，算上极少的代码的话，有 3w+ 字了。
+
+先说结论：对大多数单体或单团队项目来说，自己在应用内写一个轻量 LLM 网关就够了。先把分散在各个业务模块中的模型调用集中到一个统一入口，再按需补上超时、重试、日志和简单路由。通常没必要专门引入 LiteLLM、Kong AI Gateway 这类额外组件，更没必要一开始就搭一套独立的网关平台。
+
+意图分类、标题生成、JSON 修复和复杂报告生成如果全部调用同一个旗舰模型，早期开发确实省事。流量上来后，成本、延迟和供应商限流会一起暴露：轻量任务占用昂贵模型的配额，关键任务失败时又没有备用链路，月底账单还无法归因到具体租户和功能。
+
+这类问题不适合让各个业务模块各自解决，否则模型选择、重试、限流和调用记录等逻辑很快就会散落在业务代码里。LLM Gateway 的作用，就是在应用层和模型供应商之间提供一个统一的调用入口，集中管理这些共性逻辑。
+
+## 大模型网关基础
+
+### LLM Gateway 到底是什么？
+
+LLM Gateway 更像是：**API 网关能力 + 模型调用控制面**。
+
+传统 API 网关是位于客户端与后端服务之间的**统一入口**，所有客户端请求先经过网关，再由网关路由到具体的目标服务，主要管 HTTP 流量：鉴权、限流、转发、日志、熔断。
+
+![传统 API 网关示意图](https://oss.javaguide.cn/github/javaguide/system-design/distributed-system/api-gateway-overview.png)
+
+LLM Gateway 则面对的是大模型调用，它除了处理普通 API 问题，还要处理模型特有的问题：模型选择、Token 预算、上下文长度、供应商差异、流式输出、工具调用、结构化响应、成本统计、Prompt 版本和输出质量。
+
+更准确地说，**LLM Gateway 是应用层和模型供应商之间的一层治理入口**。它不一定替代企业已有的 API 网关，但会把模型调用相关的路由、预算、审计和适配逻辑收口。
+
+![LLM 网关示意图](https://oss.javaguide.cn/github/javaguide/ai/llm/llm-gateway-overview.png)
+
+业务代码不直接关心 OpenAI、Anthropic、Gemini、Qwen、DeepSeek、私有化模型分别怎么调，而是统一向 Gateway 发一个标准请求。Gateway 根据场景、预算、延迟、模型可用性和业务策略，决定调用哪个模型、走哪个供应商、是否需要重试、是否需要降级、怎么记录日志。
+
+第一版 Gateway 可以很轻，只做统一封装、超时、重试和日志。到生产阶段，它通常还会管理模型路由、Token 预算、限流、成本归因、缓存、审计和安全策略。
+
+如果只做“把请求转发一下”，它只是一个代理；开始记录为什么选这个模型、怎么扣预算、失败后怎么兜底，才进入 Gateway 的范围。
+
+### 为什么需要 LLM Gateway？
+
+很多团队第一次做 AI 应用时，会直接在业务服务里写模型调用：
+
+```text
+Controller -> Service -> OpenAI SDK -> 返回答案
+```
+
+这条链路很短，开发体验也好。但只要线上规模稍微起来，问题会集中暴露。
+
+| 直连模型的典型问题 | 线上表现                                            | Gateway 对应能力                 |
+| ------------------ | --------------------------------------------------- | -------------------------------- |
+| 模型名写死         | 模型升级、下线、切换供应商时到处改代码              | 模型注册表 + 配置化路由          |
+| API Key 分散       | 多个服务各自保存密钥，轮换困难                      | 统一密钥管理                     |
+| 供应商限流         | 429 后业务服务疯狂重试，越重试越糟                  | 限流、排队、Fallback、熔断       |
+| 成本不可见         | 月底只知道总账单，不知道哪个租户、功能、Prompt 花钱 | usage 记录 + 成本归因            |
+| 所有请求走同一模型 | 简单任务浪费钱，复杂任务效果差                      | 按任务类型做模型路由             |
+| 日志缺失           | 用户投诉“刚才 AI 胡说”，排查时找不到模型输入输出    | Trace、Prompt 版本、模型调用日志 |
+| 供应商 SDK 分散    | 每个业务都处理流式、错误码、重试和结构化解析        | Provider Adapter 统一封装        |
+
+除了访问控制，还要单独设计成本归因和问题回放。
+
+这里简单解释一下：
+
+- 成本归因指的是“一笔模型费用花在了谁、什么功能和哪次调用上”：例如按租户、用户、业务场景、Prompt 版本、模型和供应商拆分 Token 与金额。
+- 问题回放则是在用户反馈“刚才的回答不对”时，能够通过 `request_id` 找回当时使用的 Prompt 版本、检索上下文、路由结果、模型版本、工具调用和错误信息，判断问题出在输入、路由、模型输出，还是下游解析。
+
+传统 API 调用失败，通常能从状态码、请求参数、数据库状态里定位。LLM 调用失败就麻烦得多：可能是 Prompt 版本变了，可能是模型升级了，可能是检索上下文噪声太多，可能是输出被截断，可能是路由去了一个便宜但能力不够的模型。
+
+没有 Gateway，所有这些线索都散在业务系统里。
+
+散了就很难管。
+
+### LLM Gateway 和 LLM Router 有什么区别？
+
+Router 管的事情比较窄：这个请求该选哪个模型。输入是用户问题、任务类型、预算、上下文长度这些，输出就是一个模型名或者一组候选。
+
+Gateway 的范围大得多。从请求进来到结果返回，中间经过的鉴权、限流、路由、fallback、日志、成本记录，都归它管。Router 只是 Gateway 里的一个环节。
+
+| 维度     | LLM Router                           | LLM Gateway                                          |
+| -------- | ------------------------------------ | ---------------------------------------------------- |
+| 主要职责 | 模型选择                             | 统一接入、路由、限流、Fallback、观测、成本治理       |
+| 决策粒度 | 单次请求选模型                       | 请求全生命周期治理                                   |
+| 典型输入 | 用户问题、任务类型、预算、上下文长度 | 请求、用户、租户、场景、Prompt、模型、供应商、策略   |
+| 典型输出 | 目标模型或模型集合                   | 完整调用结果、usage、日志、错误、成本、Fallback 轨迹 |
+| 适合阶段 | 多模型调用开始变复杂                 | AI 应用进入生产                                      |
+
+可以这么理解：**Router 负责选模型，Gateway 负责把整次模型调用管起来**。
+
+你可以只有 Router，没有 Gateway，就做简单的模型路由功能。例如写一个函数，根据任务类型返回对应的模型。
+
+这能解决一部分成本问题，但解决不了密钥管理、限流、日志、审计、统一错误处理和供应商切换。
+
+反过来，一个早期 Gateway 也可以先没有复杂 Router。第一版只做统一接入、日志和 Fallback，就已经能减少很多生产事故。
+
+路由策略不要绑死在某个具体模型名上，应尽量绑定到模型层级、成本区间、上下文能力和风险等级等相对稳定的属性。模型会升级，名字会变，但这些决策维度不会消失。
+
+### LLM Gateway 和 RAG、Agent、MCP 是什么关系？
+
+这几个概念经常一起出现，但边界不一样。
+
+| 概念  | 主要解决什么问题                                | 和 Gateway 的关系                                                                        |
+| ----- | ----------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| RAG   | 检索外部知识，把相关上下文塞进模型请求          | Gateway 可以限制 Token、记录 Prompt 版本、缓存检索后结果，但不负责检索质量本身           |
+| Agent | 拆任务、调用工具、多轮执行                      | Gateway 可以管理每一步模型调用的预算、路由和 Fallback，不决定 Agent 的任务规划逻辑       |
+| MCP   | 让模型或 Agent 以统一协议访问工具、资源和上下文 | Gateway 可以审计和治理模型请求，也可以配合工具调用日志，但不替代 MCP Server 或工具注册表 |
+
+所以，Gateway 更靠近“模型调用治理”；RAG、Agent、MCP 更靠近“应用能力组织”。
+
+一个复杂 Agent 可以在多个步骤里调用 Gateway，Gateway 也可以对每个步骤分别记录 `scene`、`route_reason`、Token 使用量和成本。
+
+### LLM Gateway 会不会增加延迟？
+
+会增加一点，但这部分通常不是用户等待的主要来源。
+
+Gateway 在同机房完成路由、Token 估算和日志写入，耗时相对有限；模型排队、长上下文推理、跨区域网络、输出 Token、工具调用和重试，才更容易把端到端延迟拉长。
+
+网关能介入的也正是这些地方。意图分类直接走低延迟模型，重复 FAQ 返回缓存结果，长上下文在发送前压缩；语音交互和在线客服则需要把 TTFT 纳入候选模型的健康指标。供应商出现抖动时，按策略切换候选或排队，比让业务接口一直等到超时更容易控制。
+
+路由本身也有成本。每次请求都先调用强模型“判断该用什么模型”，很可能把节省下来的 Token 和时间又花回去。没有足够的请求量、评测集和质量反馈时，按场景配置规则或使用轻量分类器就够了。
+
+### 你真的需要 LLM Gateway 吗？
+
+先看模型调用在系统里处于什么位置。一个内部工具只调用一家模型、每天只有少量请求时，单独部署 Gateway 通常没有必要；在业务服务外封装一个 `LLMClient`，统一处理超时、重试、基础日志和错误转换就够了。
+
+调用开始被多个服务、团队或租户复用后，事情就变了。模型配置分散在各处时，换供应商要逐个服务改代码；某个场景成本突然升高时，账单又无法按租户、功能和 Prompt 版本拆开。多供应商切换、配额、Fallback、审计和质量回放也会反复出现在每个调用点。
+
+这时需要的未必是一个很重的平台，但模型调用应该有唯一入口。可以先让统一模块维护模型名、密钥、调用日志和错误处理，再逐步接入路由、预算和限流；当多个业务线共用模型、需要按租户计费，或需要管理 Prompt 留存和敏感内容时，再把它演进为完整的 LLM Gateway。
+
+我的 [AI 面试平台](https://javaguide.cn/zhuanlan/interview-guide.html)走的就是这条路。项目没有单独部署网关，也没有引入专门的 LLM Gateway 组件，而是在应用内通过 `LlmProviderRegistry` 统一管理不同 Provider 的配置、默认模型、API Key、`ChatClient` 和 Embedding 模型，再用 `StructuredOutputInvoker` 收口结构化输出的校验、修复、重试和指标。这已经具备了轻量 LLM 网关的核心形态，能够满足当前项目的需求。
+
+不过，它还不是本文后面所说的完整生产级网关：跨 Provider 自动 Fallback、Token 预算、按调用成本归因、网关级多维限流和智能路由等能力，仍要等业务确实需要时再补。这个边界也说明了一件事：LLM Gateway 首先是一组需要集中治理的职责，不一定非要对应一个独立服务或第三方组件。
+
+![LLM Gateway 演进路径](https://oss.javaguide.cn/github/javaguide/ai/llm/llm-gateway-evolution-path.webp)
+
+是否收口要看一次模型策略修改会影响多少服务，以及一次故障需要排查多少调用链。调用集中在一个模块时，后续增加模型、切换供应商或补审计都只改这一处；调用散进各个业务服务后，即使流量不大，也应先建立统一入口。
+
+## 为什么不能所有请求都用最强模型？
+
+### 最贵的模型不一定是最适合的模型
+
+把最强模型设为默认值，确实能少做一些前期选择，但它无法替代任务分级。意图分类、标题生成、JSON 修复和轻量摘要更看重响应速度、结构化输出和失败兜底；它们长期占用强模型，只会放大成本和排队时间。复杂任务也不是模型越贵结果就越好，检索上下文、工具返回值和输出约束同样决定最终质量。
+
+`tier-fast`、`tier-pro` 这类名称只表示能力层级，具体映射到哪个供应商、模型版本、上下文窗口和价格，应由模型注册表维护。供应商替换模型或调整价格时，角色规则不需要跟着改。
+
+因此，路由记录不能只留下最终模型名，还要保留场景、模型层级、候选、路由原因和实际 usage。这样才能回看某次调用为什么选择快速模型、何时换了备用模型，以及这个决定对延迟和成本产生了什么影响。
+
+### 什么任务适合小模型？什么任务必须上强模型？
+
+模型选择可以先从任务本身开始，而不是先比较模型排行榜。固定规则过滤、关键词判断、权限校验和模板填充应交给代码处理；让模型判断“输入是否为空”或“文件后缀是否为 PDF”，既增加费用，也引入不必要的不确定性。
+
+意图分类、标题生成、轻量摘要、简单改写和低风险信息抽取，通常适合低成本模型。这里更需要的是枚举约束、结构化输出校验和明确的失败路径，而不是最大的参数规模。解析失败或置信度不足时，再按场景升级模型即可。
+
+多文档归纳、代码架构设计、复杂 Agent 规划和强事实核验更需要推理能力；金融、法务、医疗等错误代价高的场景，还要叠加人工审核或业务规则。强模型应留给这些请求，而不是成为所有请求的默认通道。
+
+拿我的多智能体股票分析项目来说：技术指标整理和新闻初筛可以优先低延迟模型；研究资料归纳、多个角色结论冲突后的汇总，则需要更强的推理能力。
+
+### LLM Router 如何选择模型？
+
+LLM Router 的任务，是给每个请求选一个合适模型。
+
+这里的合适不只看回答质量，还要看成本、延迟、上下文长度、供应商可用性和风险策略。
+
+[LLMRouter](https://github.com/ulab-uiuc/LLMRouter) 这类智能路由项目，思路是为每个查询动态选择更合适的模型，从而在质量、成本和延迟之间做取舍。它覆盖了单轮路由、多轮路由、个性化路由、Agentic 路由等方向，也提供 KNN、SVM、MLP、Matrix Factorization、Elo Rating、Graph-based routing 等策略。
+
+这些策略适合学习和实验，但生产里要先解决可解释性和回放能力。更稳的路线是：**模型路由从简单规则出发，然后根据实际场景慢慢演进成可训练、可评估、可迭代的系统**。
+
+常见路由策略有这几类：
+
+| **路由策略**        | **怎么做**                                | **适合场景**                     | **风险**                 |
+| ------------------- | ----------------------------------------- | -------------------------------- | ------------------------ |
+| 固定规则路由        | 按业务场景、接口、租户套餐选择模型        | 第一版 Gateway，大多数业务足够用 | 规则维护靠人，容易滞后   |
+| 成本优先 / 级联路由 | 默认走便宜模型，失败或低置信度再升级      | 分类、摘要、客服 FAQ             | 低成本模型误判会传导     |
+| 语义 / 分类路由     | 根据 Query 语义、复杂度、风险等级选择模型 | 问题类型稳定、流量较大           | 阈值和分类器需要持续调优 |
+| 学习型路由          | 基于历史质量、成本、延迟训练 Router       | 多模型、多任务、大流量           | 依赖评测数据和反馈闭环   |
+| 个性化路由          | 结合用户偏好、历史交互选择模型            | C 端助手、教育、内容平台         | 隐私和一致性成本更高     |
+| Agentic 路由        | 多轮任务里动态切换模型和工具              | 复杂 Agent、长链路任务           | 调试和成本控制难度高     |
+
+第一版通常从固定规则开始。翻译、代码生成、默认对话分别绑定模型层级；不同套餐或风险等级再覆盖默认规则。规则会随着业务增长变多，但它可以被配置、被审计，也能随时回退，适合先把模型调用收口。
+
+级联路由把低成本模型放在前面，只有结构化输出解析失败、置信度不足或业务校验不通过时才升级。它会增加一次推理或评估，适用于摘要、分类、客服 FAQ 等可以容忍额外等待的场景；实时语音和在线协作编辑通常不宜把它放在主链路。
+
+语义/分类路由会用 embedding 与任务原型、模型 profile 的相似度，或轻量分类器给请求标记复杂度和风险等级。模型能力、用户表达和请求分布都会变化，因此阈值、误路由率和评测样本需要持续检查。学习型、个性化和 Agentic 路由更依赖这些数据：前两者还要处理隐私与可解释性，后者则要处理多轮步骤的成本上限和调试问题。
+
+多智能体场景还多了一层角色选择。可以先查角色配置，再继承整套策略的默认模型，最后才使用系统默认值；技术分析、舆情整理和最终报告由不同角色承担时，这比仅按接口名路由更稳定。配置的 Provider 健康时直接使用，只有它未注册或健康检查不通过时，才从可用候选中按能力、延迟、成本和成功率选择。
+
+一次 Agent 调用开始前，应把选中的模型、Provider、模型名和是否发生调用前兜底固定为同一份路由结果。流式生成期间健康状态变化，不能在结束后重新路由再记 usage，否则实际由 A 产生的费用可能记到 B。这里的调用前兜底也不等于失败后的跨 Provider 重放：后者还要定义哪些异常可重放、ReAct 工具结果是否复用，以及已经输出的流式文本如何处理。
+
+## LLM Gateway 需要具备哪些能力？
+
+![LLM 网关示意图](https://oss.javaguide.cn/github/javaguide/ai/llm/llm-gateway-overview.png)
+
+### 多模型统一接入
+
+业务代码里最不该到处散落的，就是供应商 SDK 调用。
+
+今天一个服务调 OpenAI，明天另一个服务调 DeepSeek，后天一个定时任务又接了 Gemini。短期看都能跑，时间一长就会变成一堆重复逻辑：API Key、超时、重试、流式解析、错误码、usage、日志格式、模型名映射，每个地方都处理一遍。
+
+更稳的做法，是先定义统一请求和响应。
+
+```java
+public record LLMRequest(
+        String requestId,
+        String idempotencyKey,
+        String tenantId,
+        String userId,
+        String scene,
+        List<ChatMessage> messages,
+        Map<String, Object> responseSchema,
+        LLMOptions options
+) {
+}
+
+public record LLMResponse(
+        String requestId,
+        String model,
+        String provider,
+        String content,
+        TokenUsage usage,
+        String finishReason,
+        boolean fallbackUsed
+) {
+}
+
+public interface ProviderClient {
+
+    String providerName();
+
+    boolean supports(String model);
+
+    LLMResponse chat(LLMRequest request, RenderedPrompt prompt, ModelRoute route);
+
+    Flux<LLMChunk> streamChat(LLMRequest request, RenderedPrompt prompt, ModelRoute route);
+}
+
+public interface LLMGateway {
+
+    LLMResponse chat(LLMRequest request);
+}
+```
+
+这几个接口解决几个实际问题：
+
+- 业务侧只依赖 `LLMGateway`，不依赖某个供应商 SDK。
+- 模型名、供应商、fallback 策略都能配置化。
+- usage、成本、错误、延迟可以统一记录。
+- 后续接入新模型，只需要增加 Provider Adapter。
+
+统一请求的入口形状，工程上常见的是 OpenAI Chat Completions 兼容风格。LiteLLM、DeepSeek、Qwen 等方案都提供了类似入口，Kong AI Gateway 这类网关也会用 OpenAI 兼容格式作为 AI 插件的通用入口之一。
+
+对外暴露 OpenAI 兼容接口的好处很直接：业务方通常不用大改 SDK，改 `base_url` 或网关地址就能从直连供应商切到统一入口。
+
+但这只是入口形状统一，不代表出口也统一。
+
+Cloudflare AI Gateway 这类托管网关还要按它当前文档支持的 Provider Native、REST 或 Binding 集成方式接入，不能默认所有供应商都能被当成同一个 OpenAI 协议透传。OpenAI 协议也表达不了一些供应商的专属能力，比如 Anthropic 的 extended thinking、Gemini 的 grounding 元数据。这类能力通常要放进 `extra_body`、`metadata` 或内部扩展字段里，再由 Provider Adapter 转成目标供应商自己的请求格式。
+
+Provider Adapter 的工作不止 endpoint 和鉴权头，工具调用、流式事件、系统提示、结构化输出、usage 和错误码也要正确转换。
+
+| 维度         | OpenAI Chat Completions          | Anthropic Messages API                    | Gemini generateContent      |
+| ------------ | -------------------------------- | ----------------------------------------- | --------------------------- |
+| 工具调用字段 | `tool_calls`                     | `tool_use` content block                  | `functionCall` part         |
+| 工具结果回传 | `role=tool` 消息                 | `role=user` + `tool_result` content block | `functionResponse` part     |
+| 工具 Schema  | JSON Schema                      | JSON Schema 子集                          | OpenAPI 子集                |
+| 系统提示位置 | `messages` 中的 system/developer | 顶层 `system` 字段                        | `systemInstruction`         |
+| 多工具调用   | 原生支持                         | 原生支持                                  | 结合模型和 SDK 行为单独验证 |
+| 专属能力扩展 | `metadata` / 扩展参数            | thinking、cache_control 等                | grounding、cachedContent 等 |
+
+OpenAI 兼容接口解决的是业务侧的接入方式，不能消除供应商协议差异。是否支持 Claude、Gemini 或私有模型，主要取决于 Provider Adapter 能否正确转换请求和事件；产品文档中的“支持某类 Provider”也不代表每项专属能力都可以无损映射。
+
+先收口模型调用，再逐步补齐路由、限流和审计，通常比一开始覆盖所有专属能力更容易验证。
+
+### 模型路由
+
+模型路由很容易看到收益，尤其是有明显任务分层的系统。
+
+第一版可以配置化，不需要训练模型。
+
+```yaml
+routes:
+  - scene: intent_classification
+    primary: tier-fast
+    fallback:
+      - tier-nano
+      - tier-balanced
+    max_output_tokens: 256
+    risk_level: low
+
+  - scene: complex_reasoning
+    primary: tier-flagship
+    fallback:
+      - tier-pro
+      - tier-balanced
+    max_output_tokens: 4096
+    risk_level: medium
+
+  - scene: legal_review
+    primary: tier-flagship
+    fallback:
+      - tier-compliance
+    require_human_review: true
+    risk_level: high
+
+default:
+  primary: tier-balanced
+  fallback:
+    - tier-fast
+```
+
+这里的 `tier-*` 是网关内部的模型层级名，不是供应商真实模型 ID。生产里通常会由 `Model Registry` 把 `tier-fast`、`tier-balanced`、`tier-flagship` 映射到当前可用的具体模型，并且在日志里同时记录“模型层级”和“真实模型名”。这样模型升级时只改注册表和灰度配置，不用改业务路由规则。
+
+路由决策时，Gateway 至少要看这些因素：
+
+| 因素         | 作用                                 |
+| ------------ | ------------------------------------ |
+| `scene`      | 业务场景，决定默认模型和风险等级     |
+| 输入 Token   | 判断是否超过模型上下文窗口或预算     |
+| 输出长度     | 控制成本和延迟                       |
+| 用户套餐     | 免费用户和企业用户可以走不同模型     |
+| 风险等级     | 高风险任务强制走合规模型或人工审核   |
+| 当前模型状态 | 供应商异常、429、P95 延迟升高时切走  |
+| 历史质量     | 某模型在某类任务上持续失败时降低权重 |
+
+一个简单路由器可以先这样写：
+
+```java
+public class RuleBasedModelRouter {
+
+    private final RouteConfigRepository routeConfigRepository;
+    private final ModelHealthService modelHealthService;
+
+    public ModelRoute route(LLMRequest request, TokenBudget budget) {
+        RoutePolicy policy = routeConfigRepository.findByScene(request.scene())
+                .orElseGet(routeConfigRepository::defaultPolicy);
+
+        for (String model : policy.candidates()) {
+            if (!budget.fits(model)) {
+                continue;
+            }
+            if (!modelHealthService.isAvailable(model)) {
+                continue;
+            }
+            return ModelRoute.of(model, policy.providerOf(model), policy);
+        }
+
+        throw new NoAvailableModelException(request.scene());
+    }
+}
+```
+
+这段代码不复杂，重点在职责边界：路由器只负责选模型，不负责调模型；健康检查只提供状态，不掺业务逻辑；预算判断单独放出来，后续替换估算方式也方便。
+
+![LLM Gateway 模型路由决策图](https://oss.javaguide.cn/github/javaguide/ai/llm/llm-gateway-routing-decision.webp)
+
+### 优雅降级
+
+Fallback 不是失败就换一个模型再试这么简单。
+
+需要先区分错误类型。
+
+| 错误类型       | 是否适合 Fallback | 处理方式                                 |
+| -------------- | ----------------- | ---------------------------------------- |
+| 网络瞬断       | 适合              | 短重试后切备用模型                       |
+| 供应商 5xx     | 适合              | 重试 + 熔断 + 切供应商                   |
+| 429 限流       | 适合但要谨慎      | 读 `Retry-After`，必要时排队或切模型     |
+| 上下文超限     | 不适合直接重试    | 压缩上下文、减少检索片段或换长上下文模型 |
+| 参数错误       | 不适合            | 修请求，不要重复打供应商                 |
+| 安全拒答       | 通常不适合        | 进入业务拒答或人工流程                   |
+| 结构化解析失败 | 可有限修复        | 在同一 Schema 下重试、修复格式或明确失败 |
+
+表中“切备用模型”表示由 Gateway 创建新的调用 attempt，不是让通用重试回调在异常后随意换一个客户端。一次请求已经执行过写操作、工具调用或扣费时，要先确认该步骤是否可重放；流式输出已经发给用户时，也不能把两个模型的片段直接拼成一段结果。
+
+流式调用还要单独处理用户取消、TTFT 超时、连接断开和客户端重连。Gateway 需要保存流式响应的状态、序号和终止原因，避免把断流请求记成成功，也不能在重连后重复返回已经发送的片段。
+
+![流式调用异常处理](https://oss.javaguide.cn/github/javaguide/ai/llm/llm-api-engineering-streaming-exceptions.webp)
+
+一个 Fallback 链可以写成这样：
+
+```text
+优先模型可用 -> 正常调用
+优先模型 429 -> 读取限流信息 -> 切备用同级模型
+备用模型也不可用 -> 切轻量模型并缩短输出
+仍不可用 -> 排队、返回降级提示或转人工
+```
+
+报告落库、工具执行和扣费这类带副作用的请求，Fallback 要和幂等机制一起设计。纯文本生成虽然不改变业务状态，重复调用仍会产生额外费用和不同版本的内容，因此每次 attempt 都应留下记录，并按场景决定是否复用结果。
+
+降级后的语义也要可见。法务审核等高风险任务从强模型换到低成本模型，必须标记并纳入审核；没有满足质量约束的候选时，返回“当前系统繁忙，稍后重试”比悄悄返回低质量结论更合适。
+
+幂等记录不能只存一个“已处理”标记。对于需要复用结果的场景，可以保存最终 `LLMResponse`，但键和值都要绑定请求语义，例如 `tenant_id + scene + idempotency_key + request_fingerprint`，同时记录 Prompt/路由策略版本和过期时间。相同幂等键对应的请求指纹不一致时应拒绝复用，避免把另一条请求的历史结果返回给用户。
+
+并发请求还需要原子占用。可以使用数据库唯一约束、条件更新或 Redis `SET NX` 创建 `running` 记录，只有抢到 claim 的请求可以调用模型；其他请求等待、返回冲突或复用 `completed` 结果。`failed`、超时 `running` 和租约接管也要定义清楚，不能用“先查、再写”实现幂等。日志与缓存还要遵守租户隔离、敏感数据和留存策略。
+
+![模型调用重试与幂等处理流程](https://oss.javaguide.cn/github/javaguide/ai/llm/llm-api-engineering-retry-idempotency.webp)
+
+### 限流与配额
+
+LLM API 仍然可以按 QPS、RPM 和并发数限流，但只看请求数不够。
+
+两个请求都是 1 次调用，但成本可能差几十倍：
+
+- 请求 A：输入 500 Token，输出 100 Token。
+- 请求 B：输入 80K Token，输出 8K Token。
+
+如果只看请求数，B 和 A 一样。但对供应商配额、账单和延迟来说，它们完全不是一个量级。
+
+LLM Gateway 通常要看这几层限流。
+
+| 限流维度 | 控制对象                         | 解决问题             |
+| -------- | -------------------------------- | -------------------- |
+| 用户级   | 单用户请求                       | 防滥用、防脚本刷接口 |
+| 租户级   | 团队预算                         | 控成本、做套餐隔离   |
+| 模型级   | 某个模型                         | 防热门模型被打满     |
+| 供应商级 | OpenAI / Anthropic / DeepSeek 等 | 防外部依赖拖垮系统   |
+| Token 级 | 输入输出 Token                   | 控真实成本和配额压力 |
+
+更稳的做法是：请求发给供应商之前，先扣预算。
+
+```java
+public record TokenBudget(
+        int estimatedInputTokens,
+        int reservedOutputTokens,
+        int totalReservedTokens
+) {
+}
+
+public interface LLMRateLimiter {
+
+    RateLimitPermit acquire(String tenantId, String userId, String model, TokenBudget budget);
+
+    void reconcile(RateLimitPermit permit, TokenUsage actualUsage);
+
+    void release(RateLimitPermit permit);
+}
+```
+
+进入 Gateway 后，先估算 `input_tokens + reserved_output_tokens`。用户桶、租户桶、模型桶、供应商桶都扣得动，再发请求。扣不动就排队、降级或拒绝。
+
+预算要按 attempt 预留和结算。主模型超时或断流时可能已经产生 Token，不能直接释放全部额度；切换备用模型时，还要按备用供应商和价格层级重新 reserve。供应商返回 usage 后调用 `reconcile`，暂时拿不到 usage 时按保守值挂账，再通过账单或异步对账修正。
+
+Token 估算不可能完全准，但粗估也比不估强。尤其是 RAG、长上下文、Agent 工具调用这类场景，不做预算很容易失控。
+
+这里更推荐按四步走：**estimate → reserve → 真实 usage → reconcile**。先用估算值占住预算，调用结束后再用供应商返回的真实 `usage` 对账修正。不同供应商、不同模型的 tokenizer 和 usage 字段并不完全一致，生产里通常会先用统一近似器扣预算，再用真实 `input_tokens`、`output_tokens` 修正。如果直接按估算落库，长时间跑下来，成本和配额统计很容易积累出偏差。
+
+![Token 预算预留与对账闭环](https://oss.javaguide.cn/github/javaguide/ai/llm/llm-gateway-token-budget-lifecycle.webp)
+
+### 成本统计
+
+很多团队说要“降低大模型成本”，但连钱花在哪都不知道。
+
+这不是优化，这是猜。
+
+LLM Gateway 要记录每次调用的成本归因字段。
+
+| 字段             | 说明                                        |
+| ---------------- | ------------------------------------------- |
+| `request_id`     | 一次业务请求的唯一 ID                       |
+| `attempt_id`     | 一次模型调用尝试，fallback 或重试会产生多个 |
+| `tenant_id`      | 租户或团队                                  |
+| `user_id`        | 用户                                        |
+| `scene`          | 业务场景，比如客服、摘要、代码生成          |
+| `prompt_version` | Prompt 版本                                 |
+| `provider`       | 供应商                                      |
+| `model_tier`     | 路由选中的内部模型层级                      |
+| `model`          | 实际调用模型                                |
+| `input_tokens`   | 输入 Token                                  |
+| `output_tokens`  | 输出 Token                                  |
+| `cached_tokens`  | 命中 Prompt cache 或供应商缓存的 Token      |
+| `cost`           | 按价格快照计算的成本                        |
+| `price_version`  | 成本计算使用的价格版本或生效时间            |
+| `latency_ms`     | 总延迟                                      |
+| `ttft_ms`        | 首 Token 延迟                               |
+| `fallback_used`  | 是否发生 fallback                           |
+| `error_code`     | 错误类型                                    |
+
+成本通常按价格快照计算：`input_tokens × 输入单价 + output_tokens × 输出单价`，再叠加缓存写入、缓存读取或供应商额外计费项。`cached_tokens` 因而不能只当作普通输入 Token；它需要和模型、价格版本一起解释，才能还原一次调用的金额。
+
+这些字段可以把账单落回具体决策：租户或功能成本突然增加时，先看 Token、Prompt 版本和模型层级；某次 Fallback 集中发生时，查看当时的供应商、候选和错误码；模型升级后，再用同一场景的质量、延迟和成本做对比。
+
+价格表、缓存折扣和供应商计费项会变化，成本记录不能只保存 `cost`。`usage` 明细、价格版本和计算时间要与每次调用一起留存，账单出现差异时才知道该按哪份规则复算。后续调整路由，也应以这些调用记录和失败样本为依据。
+
+### 观测与审计
+
+传统系统出问题，看日志、Trace、指标。AI 系统也一样，只是要多记录一些模型相关字段。
+
+Cloudflare AI Gateway、LiteLLM、Kong AI Gateway 这类产品都把日志、Token、成本、错误、延迟、缓存、限流放在很显眼的位置。AI 应用出问题时，如果只记录最终答案，基本没法复盘。
+
+一次模型调用的 Trace 至少应该长这样：
+
+```json
+{
+  "request_id": "req_202605210001",
+  "attempt_id": "att_01",
+  "tenant_id": "team_java",
+  "user_id": "u_1024",
+  "scene": "knowledge_qa",
+  "prompt_version": "rag_qa_v7",
+  "provider": "openai",
+  "model_tier": "tier-balanced",
+  "model": "provider-model-id",
+  "route_reason": "scene=knowledge_qa,cost_priority=true",
+  "input_tokens": 4210,
+  "output_tokens": 612,
+  "cost": 0.0059,
+  "ttft_ms": 680,
+  "latency_ms": 4120,
+  "fallback_used": false,
+  "finish_reason": "stop"
+}
+```
+
+`request_id`、模型、路由原因和 usage 足以支撑大部分聚合排障；完整 Prompt 和回答则可能包含个人信息、企业文档、内部代码或合同条款。日志是否保留原文，不能默认采用全量长期留存，应由数据分类、处理目的、合同、适用法规和排障需求共同决定。Cloudflare AI Gateway 等产品已经把请求/响应正文采集做成可配置项，自研系统也应把它放进策略而不是写死在日志代码里。
+
+元数据同样要有明确期限，`usage`、模型、延迟、成本、`route_reason` 和错误码也可能关联到个人或租户。需要抽样保存 Prompt 或响应时，按数据级别、租户授权和最短必要期限控制比例与时长；手机号、身份证、银行卡、邮箱、地址等信息应在入口脱敏后再进入日志链路。留存开关之外，还要有访问控制、加密、导出、删除和法律保留机制，并记录每类数据的处理目的和删除结果。
+
+### 缓存与语义缓存
+
+缓存只在答案可复用时节省成本。请求里一旦带有权限、实时状态、私密上下文或需要专业判断的内容，缓存必须绕过或使用严格隔离的键。
+
+| 缓存类型                 | 做法                                 | 适合场景                       | 风险                                       |
+| ------------------------ | ------------------------------------ | ------------------------------ | ------------------------------------------ |
+| 精确缓存                 | 请求完全一致时返回旧结果             | FAQ、固定说明、重复测试        | 个性化和权限场景容易错                     |
+| OpenAI Prompt Caching    | 稳定长前缀自动命中缓存               | 长系统提示、稳定工具 Schema    | 支持模型、阈值和折扣以官方文档和价格表为准 |
+| Anthropic Prompt Caching | 用 `cache_control` 标记可缓存块      | 长系统提示、大文档、多轮 Agent | 写入和读取的计费规则要按当前价格表核对     |
+| Gemini Context Caching   | 通过 cached content 机制复用长上下文 | 长文档、视频、代码库、多轮问答 | 要管理缓存对象、TTL、存储成本和失效        |
+| 语义缓存                 | 语义相似的问题复用旧答案             | 客服 FAQ、产品说明、低风险问答 | 相似不等于相同，容易答偏                   |
+| 结果片段缓存             | 缓存中间摘要、检索结果、工具结果     | 长文档摘要、批处理             | 缓存失效和版本管理复杂                     |
+
+客服 FAQ 这类问题很适合缓存：“怎么修改密码”“发票在哪里下载”“会员怎么退款”。这些答案稳定，个性化少，缓存收益明显。
+
+带用户权限、实时状态、金融医疗法务建议、私密多轮对话，以及依赖当前时间、订单或库存状态的问题，都不适合直接复用通用答案。
+
+语义缓存的键至少要隔离租户、权限范围、数据版本、场景和 Prompt 版本；向量相似度只能作为候选命中条件，不能替代这些边界。“我的订单为什么没发货”和“我的订单能不能退款”在向量空间里可能接近，但一个需要解释物流状态，另一个涉及售后规则；误命中会把用户带到错误流程。命中率应和业务校验、投诉率或转人工率一起看。
+
+Prompt cache 也不是开了就赚。显式缓存通常要区分写入和读取；自动缓存也会受支持模型、最小前缀长度、价格表变化影响。如果你的 system prompt、工具 Schema 或上下文每次都夹带时间戳、随机 ID、用户临时状态，前缀一直变，缓存命中率上不去，成本收益就会很差。稳定内容放前面、动态内容放后面，是使用供应商缓存时最重要的 Prompt 结构原则。
+
+## 如何让你设计一个 LLM Gateway，你会怎么做？
+
+### 一个生产级 LLM Gateway 长什么样？
+
+设计 LLM Gateway 时，可以先拆成这些组件：
+
+| 组件                   | 职责                                                                                     |
+| ---------------------- | ---------------------------------------------------------------------------------------- |
+| API Adapter            | 对外暴露统一 API，兼容 OpenAI 风格请求或内部标准请求                                     |
+| Auth / Tenant          | 鉴权、租户识别、套餐和权限校验                                                           |
+| Prompt Renderer        | 渲染 Prompt 模板，记录 Prompt 版本                                                       |
+| Token Budget Estimator | 估算输入输出 Token，判断是否超预算                                                       |
+| Model Registry         | 维护模型能力、价格、上下文、供应商、状态                                                 |
+| Router                 | 根据场景、预算、延迟、风险选择模型                                                       |
+| Provider Adapter       | 通过统一的 `ProviderClient` 接口适配各家协议差异，包括工具调用、流式事件、usage 和错误码 |
+| Retry / Fallback       | 按错误类型做重试、降级和熔断                                                             |
+| Rate Limiter           | 用户、租户、模型、供应商、Token 多维限流                                                 |
+| Cost Tracker           | 记录 usage，计算成本，按租户和场景归因                                                   |
+| Observability          | 输出指标、日志、Trace、告警                                                              |
+| Audit Log              | 审计关键请求，支持脱敏、留存和回放                                                       |
+
+第一版先完成统一 API、Provider Adapter 以及 usage、成本、错误和延迟日志。调用记录足够稳定后，再接规则路由、Fallback、Token 预算和租户配额；质量回放、审计和分类路由需要建立在这些数据之上。这样可以先验证模型调用是否被正确收口，再判断新增的路由复杂度是否值得维护。
+
+### 请求进来后，Gateway 内部怎么跑？
+
+请求进入 Gateway 后，先完成鉴权和租户识别，得到能够使用的功能、套餐和预算边界；再由接口参数或轻量分类器确定 `scene`，渲染对应版本的 Prompt、上下文和工具 Schema。
+
+Token 估算和路由紧接着发生。网关为候选模型预留输入与最大输出 Token，并在用户、租户、模型和供应商几个维度申请限额；路由结果固定后，由 Provider Adapter 进行同步或流式调用。响应中的文本、结构化 JSON、tool call、usage 和 finish reason 都要归到这一次 attempt。
+
+发生网络错误、429 或解析失败时，错误分类决定重试、切候选、排队还是直接失败。每次新 attempt 都重新预留预算；调用结束后再按真实 usage 结算，写入模型、供应商、Prompt 版本、路由原因、延迟和错误信息，最后才把统一结果交回业务服务。
+
+![LLM Gateway 请求生命周期](https://oss.javaguide.cn/github/javaguide/ai/llm/llm-gateway-request-lifecycle.webp)
+
+### 路由策略怎么从简单演进到智能？
+
+路由策略不要一步到位。前面提到的固定规则、级联路由、语义 / 分类路由、学习型路由、个性化路由和 Agentic 路由，其实对应的是一条演进路线，而不是一份“第一版全都要做”的清单。
+
+更稳妥的节奏是：先让系统可控，再让系统省钱，最后才让系统变聪明。
+
+| 阶段   | 对应策略                  | 重点能力                          | 进入下一阶段的信号                       |
+| ------ | ------------------------- | --------------------------------- | ---------------------------------------- |
+| 阶段一 | 固定模型 + 手动配置       | 把模型调用收口，避免 SDK 到处散落 | 多个场景开始共用模型，成本和延迟差异明显 |
+| 阶段二 | 固定规则路由              | 按场景、租户、风险等级选模型      | 规则越来越多，人工维护开始吃力           |
+| 阶段三 | 成本优先 / 级联路由       | 小模型先试，失败或低置信度再升级  | 有稳定的质量校验和可接受的额外延迟       |
+| 阶段四 | 语义 / 分类路由           | 根据 Query 类型、复杂度、风险路由 | 有足够请求样本，可以评估分类器漂移       |
+| 阶段五 | 质量反馈 + 成本回归       | 用 trace 回放模型质量和成本收益   | 有评测集、人工抽样或业务反馈闭环         |
+| 阶段六 | 学习型 / 个性化 / Agentic | 动态选择模型，甚至按步骤切模型    | 大流量、多任务、多模型，且有持续评测体系 |
+
+进入下一阶段以前，要用表中信号验证新增复杂度确有收益，并保留固定规则作为回滚路径。分类路由需要监控误路由和阈值漂移；学习型或 Agentic 路由还需要稳定评测集、线上 Trace、成本上限和隐私控制。
+
+### 路由错了怎么办？
+
+路由一定会错。
+
+任何路由策略都会出现误判，生产系统要为误判留下发现、兜底和回放的入口。
+
+常见兜底方式有这些：
+
+| 问题                         | 兜底方式                                            |
+| ---------------------------- | --------------------------------------------------- |
+| 分类器置信度低               | 走默认中强模型，或要求用户澄清                      |
+| 小模型输出低质量             | 自动升级强模型重试                                  |
+| 高风险任务被路由到低风险链路 | 风险规则优先级高于成本规则                          |
+| 新模型上线后效果漂移         | 灰度、A/B、固定评测集回归                           |
+| 用户投诉答案错误             | 通过 request_id 回放 Prompt、模型、上下文和路由原因 |
+| 某模型 P95 延迟升高          | 健康检查降低权重或临时熔断                          |
+
+“自动升级强模型重试”只适合无副作用、可重放的请求。带工具调用的 Agent 需要先持久化本轮工具结果或明确放弃本次执行；否则升级后的模型可能重复调用工具，导致状态和费用都不一致。
+
+路由日志除模型名外还要记录 `route_reason`，否则无法还原这次选择依据。
+
+例如：
+
+```json
+{
+  "scene": "intent_classification",
+  "selected_model_tier": "tier-fast",
+  "selected_model": "provider-model-id",
+  "route_reason": "scene_rule:low_risk,cost_priority,estimated_tokens=320",
+  "confidence": 0.91,
+  "fallback_candidates": ["tier-nano", "tier-balanced"]
+}
+```
+
+没有 `route_reason`，路由系统后期会很难调。
+
+## 主流方案怎么选？
+
+### 自研、LiteLLM、Cloudflare AI Gateway、Kong AI Gateway、Inworld Router 怎么选？
+
+现在 LLM Gateway / Router 方案很多，别只看“支持多少模型”。选型时先看几个问题：团队技术栈是什么，合规要求有多强，流量规模多大，是否要自托管，是否已经有 API 网关，是否需要深度观测。
+
+| 方案                            | 主要优势                                                                | 适合场景                                                  | 不适合场景                                                               |
+| ------------------------------- | ----------------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------ |
+| 自研轻量网关                    | 可控、贴合业务，能和内部权限、计费、审计深度结合                        | 有后端能力，需求明确，想从规则路由逐步演进                | 想快速接入大量供应商，或缺少网关维护能力                                 |
+| LiteLLM                         | 多供应商接入、OpenAI 兼容格式、Proxy / SDK 生态成熟                     | 平台团队、快速集成、多模型实验、统一入口                  | 强合规或深度企业治理场景需要额外改造；生产使用要注意版本锁定和供应链安全 |
+| Cloudflare AI Gateway           | 托管入口、日志分析、缓存、限流、重试、动态路由、DLP、BYOK 等能力        | 已在 Cloudflare 平台上，想快速获得观测、缓存和统一入口    | 强自托管、私有化部署、复杂企业治理                                       |
+| Kong AI Gateway                 | 企业 API 治理能力强，插件体系成熟，能结合鉴权、限流、PII 脱敏、成本治理 | 已有 Kong 基础设施，或需要把 AI 请求纳入企业 API 网关体系 | 小团队早期项目，或不想引入完整 API 网关体系                              |
+| Inworld Router                  | 条件路由、流量切分、实验和 sticky user assignment                       | 实时语音、对话式 AI、AI 编程工具、用户分层和 A/B 测试     | 需要开源审计源码、私有化部署或明确企业 SLA 的场景需单独确认              |
+| LLMRouter / RouteLLM 类研究项目 | 路由算法丰富，适合验证复杂度路由、成本质量权衡                          | 研究、实验、离线评估、验证路由策略                        | 直接作为生产 Gateway，需要补齐鉴权、计费、审计、限流、观测和高可用       |
+
+LiteLLM 主要解决多家模型 SDK 重复接入的问题。业务统一使用 OpenAI 兼容接口，Proxy 负责对接不同供应商，还能集中管理 Key、预算、权限、日志和路由。它适合想快速接入多个模型供应商，又不想自己开发适配层的团队。
+
+需要注意的是，Proxy 会保存供应商密钥，所有模型请求也会经过它。生产环境要固定依赖和镜像版本，做好升级测试、漏洞扫描和密钥轮换，别长期使用 `latest` 镜像。
+
+Cloudflare AI Gateway 更适合已经使用 Cloudflare 的团队。请求链路不用大改，就能加上日志、缓存、限流、重试和 Fallback，也支持动态路由、BYOK 和 DLP 扫描。
+
+具体怎么选择模型，仍然要由业务自己决定。如果数据、网络和审计都必须完全自控，接入前要先确认 Cloudflare 的托管方式是否合适。
+
+Kong AI Gateway 适合已经使用 Kong，或者准备统一建设 API 网关的团队。原有的认证、限流、审计、安全和监控能力可以直接复用，再通过 AI 插件实现模型转换、路由和负载均衡。
+
+对小团队来说，Kong 可能有些重。部分高级 AI 插件还需要企业授权，选型时要把授权、部署和运维成本一起考虑。
+
+Inworld Router 更偏向实时路由和 A/B 实验。它可以按照价格、速度、模型能力或用户类型选择模型，并对比不同模型和 Prompt 的质量、留存和成本。
+
+它比较适合实时对话、语音交互和 AI 编程工具。不过，它属于托管服务。如果涉及私有化、数据限制、SLA 或采购预算，要以最新的官方说明和商务条款为准。
+
+LLMRouter 更适合研究和评测路由算法，支持 KNN、SVM、MLP、Elo、Graph、个性化、多轮和 Agentic Router 等方法。
+
+它不能直接当作生产网关使用。权限、配额、计费、审计、限流和运维都要自己补齐。如果没有稳定的评测集和线上 Trace，复杂算法也很难证明比规则路由更好。
+
+### 选型建议
+
+如果业务刚起步，先做轻量自研 Gateway。不要一上来买很重的平台，先把模型调用收口，至少做到日志、usage、Token 预算和 Fallback。
+
+如果你要快速接入很多模型和供应商，优先看 LiteLLM 这类成熟统一接口。它能让团队很快从“到处写 SDK”切到“统一入口”。
+
+如果企业已经在用 Kong，可以考虑 Kong AI Gateway。它的价值在于把 AI 流量放进已有 API 治理体系里。
+
+如果已经重度使用 Cloudflare，可以用 Cloudflare AI Gateway 先把观测、缓存、限流和统一入口补上。
+
+如果要做智能路由，先准备评测集和线上 trace，再谈 LLMRouter 这类学习型策略。没有数据，路由算法越复杂，越难解释。
+
+这里的顺序不要反：**先解决工程治理，再追求智能路由**。
+
+## 怎么衡量 LLM Gateway 做得好不好？
+
+LLM Gateway 做得好不好，不能只看“接了多少模型”。模型接得多，只能说明适配层写得多，不能说明线上链路稳定。
+
+路由命中率、质量通过率、Fallback 率、成本和延迟等指标，需要按场景、模型层级和供应商分别统计。
+
+| 指标             | 含义                                     |
+| ---------------- | ---------------------------------------- |
+| 路由命中率       | 请求是否进入预期模型或预期模型层级       |
+| 质量通过率       | 输出是否通过评测、人工抽样或业务校验     |
+| Fallback 率      | 主链路是否稳定，备用链路是否频繁触发     |
+| 平均成本         | 单次请求或单业务场景成本                 |
+| P95 延迟         | 用户体验，尤其是在线交互和语音场景       |
+| TTFT             | 首 Token 延迟，影响流式体验              |
+| 429 率           | 供应商限流压力                           |
+| 缓存命中率       | 缓存节省的请求和 Token                   |
+| 结构化解析失败率 | Schema、Prompt、模型适配是否稳定         |
+| 路由漂移         | 模型升级或流量变化后，原路由策略是否失效 |
+
+这里面最容易被忽略的是“路由漂移”。
+
+模型能力不是静态的。一个便宜模型今天不适合复杂摘要，三个月后升级了，可能已经够用。反过来，一个原本稳定的模型升级后，也可能在某类格式化任务上变差。
+
+所以路由规则不能写完就不管。它要像 Prompt 一样有版本，像代码一样做回归测试。
+
+## 总结
+
+LLM Gateway 让业务服务从供应商协议、模型路由、限流、缓存、Token 预算和审计细节中退出，只保留一次统一的模型调用入口。
+
+但对大多数项目来说，这个入口完全可以是应用内自己写的一个轻量模块，不需要为了“用了 LLM Gateway”而专门引入额外组件。我的 [AI 面试平台](https://javaguide.cn/zhuanlan/interview-guide.html)目前就是这么做的：先用统一的 Provider 注册表和调用封装解决眼前问题，后续再由真实流量和治理需求决定是否补齐路由、预算、Fallback 和成本统计，或者演进为独立网关。
+
+第一版先验证三件事：请求是否被正确适配、每次调用是否可以按真实模型和 usage 回放、故障是否按预期兜底。配额、成本治理和缓存应由实际流量推动；分类或学习型路由则要等稳定评测集、线上 Trace 和回滚机制具备后再引入。
+
+模型版本和价格变化后，同一套路由规则也要重新评估质量、延迟与成本。
+
+## 参考资料
+
+- [LiteLLM Docs](https://docs.litellm.ai/docs/)
+- [LiteLLM Security Update: Suspected Supply Chain Incident](https://docs.litellm.ai/blog/security-update-march-2026)
+- [Cloudflare AI Gateway Docs](https://developers.cloudflare.com/ai-gateway/)
+- [Cloudflare AI Gateway Request Handling](https://developers.cloudflare.com/ai-gateway/configuration/request-handling/)
+- [Cloudflare AI Gateway Fallbacks](https://developers.cloudflare.com/ai-gateway/configuration/fallbacks/)
+- [Cloudflare AI Gateway DLP](https://developers.cloudflare.com/ai-gateway/features/dlp/set-up-dlp/)
+- [Cloudflare AI Gateway BYOK](https://developers.cloudflare.com/ai-gateway/configuration/bring-your-own-keys/)
+- [Kong AI Gateway Docs](https://developer.konghq.com/ai-gateway/)
+- [Inworld Router Docs](https://docs.inworld.ai/router/introduction)
+- [LLMRouter GitHub Repository](https://github.com/ulab-uiuc/LLMRouter)
+- [OpenAI Prompt Caching](https://platform.openai.com/docs/guides/prompt-caching)
+- [Anthropic Prompt Caching](https://docs.anthropic.com/en/docs/build-with-claude/prompt-caching)
+- [Gemini Context Caching](https://ai.google.dev/gemini-api/docs/caching)

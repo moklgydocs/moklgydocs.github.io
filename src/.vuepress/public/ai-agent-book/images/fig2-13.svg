@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 520" width="860" height="520" style="background:#ffffff">
+  <!-- Column headers -->
+  <text x="145" y="28" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="15" fill="#333333" text-anchor="middle" font-weight="bold">Turn 1 完成时</text>
+  <text x="400" y="28" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="15" fill="#333333" text-anchor="middle" font-weight="bold">Turn 2 完成时</text>
+  <text x="655" y="28" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="15" fill="#333333" text-anchor="middle" font-weight="bold">Turn 3 完成时</text>
+  <text x="145" y="49" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666" text-anchor="middle">(启动并调用 PPTX Skill)</text>
+  <text x="400" y="49" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666" text-anchor="middle">(读取 PDF 文件)</text>
+  <text x="655" y="49" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666" text-anchor="middle">(写出 HTML)</text>
+
+  <line x1="270" y1="18" x2="270" y2="395" stroke="#dddddd"/>
+  <line x1="525" y1="18" x2="525" y2="395" stroke="#dddddd"/>
+
+  <!-- Turn 1: startup prefix and invoked skill body are new -->
+  <g font-family="'Courier New', Courier, monospace" font-size="11">
+    <rect x="25" y="72" width="240" height="28" rx="3" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="33" y="90" fill="#333333">system + skill_catalog</text><text x="258" y="90" fill="#b58100" text-anchor="end" font-family="Arial" font-weight="bold">NEW</text>
+    <rect x="25" y="104" width="240" height="28" rx="3" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="33" y="122" fill="#333333">tools</text><text x="258" y="122" fill="#b58100" text-anchor="end" font-family="Arial" font-weight="bold">NEW</text>
+    <rect x="25" y="136" width="240" height="28" rx="3" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="33" y="154" fill="#333333">user_q1</text><text x="258" y="154" fill="#b58100" text-anchor="end" font-family="Arial" font-weight="bold">NEW</text>
+    <rect x="25" y="168" width="240" height="28" rx="3" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="33" y="186" fill="#333333">★ skill_content</text><text x="258" y="186" fill="#b58100" text-anchor="end" font-family="Arial" font-weight="bold">NEW</text>
+    <rect x="25" y="200" width="240" height="28" rx="3" fill="none" stroke="#cccccc" stroke-dasharray="4,3"/>
+    <rect x="25" y="232" width="240" height="28" rx="3" fill="none" stroke="#cccccc" stroke-dasharray="4,3"/>
+    <rect x="25" y="264" width="240" height="28" rx="3" fill="none" stroke="#cccccc" stroke-dasharray="4,3"/>
+    <rect x="25" y="296" width="240" height="28" rx="3" fill="none" stroke="#cccccc" stroke-dasharray="4,3"/>
+
+    <!-- Turn 2 -->
+    <rect x="280" y="72" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="288" y="90" fill="#777777">system + skill_catalog</text><text x="513" y="90" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="280" y="104" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="288" y="122" fill="#777777">tools</text><text x="513" y="122" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="280" y="136" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="288" y="154" fill="#777777">user_q1</text><text x="513" y="154" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="280" y="168" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="288" y="186" fill="#777777">★ skill_content</text><text x="513" y="186" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="280" y="200" width="240" height="28" rx="3" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="288" y="218" fill="#333333">asst: Read(pdf)</text><text x="513" y="218" fill="#b58100" text-anchor="end" font-family="Arial" font-weight="bold">NEW</text>
+    <rect x="280" y="232" width="240" height="28" rx="3" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="288" y="250" fill="#333333">tool_result</text><text x="513" y="250" fill="#b58100" text-anchor="end" font-family="Arial" font-weight="bold">NEW</text>
+    <rect x="280" y="264" width="240" height="28" rx="3" fill="none" stroke="#cccccc" stroke-dasharray="4,3"/>
+    <rect x="280" y="296" width="240" height="28" rx="3" fill="none" stroke="#cccccc" stroke-dasharray="4,3"/>
+
+    <!-- Turn 3 -->
+    <rect x="535" y="72" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="543" y="90" fill="#777777">system + skill_catalog</text><text x="768" y="90" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="535" y="104" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="543" y="122" fill="#777777">tools</text><text x="768" y="122" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="535" y="136" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="543" y="154" fill="#777777">user_q1</text><text x="768" y="154" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="535" y="168" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="543" y="186" fill="#777777">★ skill_content</text><text x="768" y="186" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="535" y="200" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="543" y="218" fill="#777777">asst: Read(pdf)</text><text x="768" y="218" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="535" y="232" width="240" height="28" rx="3" fill="#f0f0f0" stroke="#aaaaaa"/>
+    <text x="543" y="250" fill="#777777">tool_result</text><text x="768" y="250" fill="#666666" text-anchor="end" font-family="Arial">HIT</text>
+    <rect x="535" y="264" width="240" height="28" rx="3" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="543" y="282" fill="#333333">asst: Write(html)</text><text x="768" y="282" fill="#b58100" text-anchor="end" font-family="Arial" font-weight="bold">NEW</text>
+    <rect x="535" y="296" width="240" height="28" rx="3" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="543" y="314" fill="#333333">tool_result</text><text x="768" y="314" fill="#b58100" text-anchor="end" font-family="Arial" font-weight="bold">NEW</text>
+  </g>
+
+  <!-- Illustrative costs -->
+  <g font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" text-anchor="middle">
+    <rect x="25" y="342" width="240" height="48" rx="4" fill="#fff8e1" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="145" y="361" font-size="12" fill="#333333" font-weight="bold">本轮 cache_creation（示意）</text><text x="145" y="380" font-size="13" fill="#a06a00" font-weight="bold">≈ 2.5k tokens</text>
+    <rect x="280" y="342" width="240" height="48" rx="4" fill="#fff8e1" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="400" y="361" font-size="12" fill="#333333" font-weight="bold">本轮 cache_creation（示意）</text><text x="400" y="380" font-size="13" fill="#a06a00" font-weight="bold">≈ 0.5k tokens</text>
+    <rect x="535" y="342" width="240" height="48" rx="4" fill="#fff8e1" stroke="#e6a817" stroke-width="1.5"/>
+    <text x="655" y="361" font-size="12" fill="#333333" font-weight="bold">本轮 cache_creation（示意）</text><text x="655" y="380" font-size="13" fill="#a06a00" font-weight="bold">≈ 0.4k tokens</text>
+  </g>
+
+  <!-- Legend -->
+  <rect x="40" y="414" width="20" height="14" rx="2" fill="#fff3cd" stroke="#e6a817" stroke-width="1.5"/>
+  <text x="68" y="425" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#333333">NEW = 本轮新增，需要首次计算</text>
+  <rect x="40" y="438" width="20" height="14" rx="2" fill="#f0f0f0" stroke="#aaaaaa"/>
+  <text x="68" y="449" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#333333">HIT = 复用已缓存前缀，按缓存读取处理</text>
+  <rect x="40" y="462" width="20" height="14" rx="2" fill="none" stroke="#cccccc" stroke-dasharray="4,3"/>
+  <text x="68" y="473" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#333333">— = 该轮尚未生成</text>
+
+  <text x="435" y="425" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">★ 仅标记调用时加载的完整 Skill 内容；</text>
+  <text x="435" y="448" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="12" fill="#666666">Skill 元数据从 Turn 1 起就在 system prompt 中（Anthropic 逻辑布局）。</text>
+
+  <text x="430" y="505" font-family="Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif" font-size="13" fill="#333333" text-anchor="middle" font-style="italic">调用 Skill 只在调用位置追加完整指令，不会回头改写 system prompt（其他 Harness 的 role 可能不同）。</text>
+</svg>
