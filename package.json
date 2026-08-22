@@ -8,6 +8,7 @@
   "scripts": {
     "docs:build": "vuepress-vite build src",
     "docs:build:aieng": "vuepress-vite build aieng",
+    "docs:build:d2l": "vuepress-vite build d2l",
     "docs:clean-dev": "vuepress-vite dev src --clean-cache",
     "docs:dev": "vuepress-vite dev src",
     "docs:update-package": "pnpm dlx vp-update",
