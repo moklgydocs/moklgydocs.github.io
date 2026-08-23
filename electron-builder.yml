@@ -14,6 +14,11 @@ asarUnpack:
 win:
   target: nsis
   icon: src/.vuepress/public/logo.png
+linux:
+  target: AppImage
+  icon: src/.vuepress/public/logo.png
+  category: Education
+  artifactName: ${productName}-${version}.${ext}
 nsis:
   oneClick: false
   allowToChangeInstallationDirectory: true
