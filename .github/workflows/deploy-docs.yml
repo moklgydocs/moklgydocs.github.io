@@ -38,15 +38,52 @@ jobs:
           sudo swapon /swapfile
           free -h
 
-      - name: 构建文档
+      - name: 构建主站(分片 1/3,不含 ai-eng/d2l)
         env:
           NODE_OPTIONS: --max_old_space_size=16384
         run: |
+          mkdir -p /tmp/stash
+          mv src/ai-eng "/tmp/stash/ai-eng"
+          mv "src/动手学深度学习" "/tmp/stash/d2l"
           pnpm run docs:build
+
+      - name: 构建 ai-eng 分片(分片 2/3)
+        env:
+          NODE_OPTIONS: --max_old_space_size=8192
+        run: |
+          mv "/tmp/stash/ai-eng" src/ai-eng
+          rm -rf src/.vuepress/.temp src/.vuepress/.cache
+          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/**/*.md']#" src/.vuepress/config.ts
+          pnpm exec vuepress-vite build src --dest .build/ai-eng
+
+      - name: 构建 d2l 分片(分片 3/3)
+        env:
+          NODE_OPTIONS: --max_old_space_size=8192
+        run: |
+          mv "/tmp/stash/d2l" "src/动手学深度学习"
+          rm -rf src/.vuepress/.temp src/.vuepress/.cache
+          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['动手学深度学习/**/*.md']#" src/.vuepress/config.ts
+          pnpm exec vuepress-vite build src --dest .build/d2l
+
+      - name: 合并分片产物
+        run: |
+          cp -r .build/ai-eng/ai-eng src/.vuepress/dist/
+          mkdir -p src/.vuepress/dist/assets
+          cp -rn .build/ai-eng/assets/* src/.vuepress/dist/assets/ 2>/dev/null || true
+          cp -r ".build/d2l/动手学深度学习" src/.vuepress/dist/
+          cp -rn .build/d2l/assets/* src/.vuepress/dist/assets/ 2>/dev/null || true
           touch src/.vuepress/dist/.nojekyll
 
       - name: 验证产物
-        run: ls -la src/.vuepress/dist/
+        run: ls -la src/.vuepress/dist/ src/.vuepress/dist/ai-eng | head -30
+
+      - name: 上传 dist 供三端打包
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: src/.vuepress/dist
+          compression-level: 0
+          retention-days: 3
 
       - name: 部署文档
         uses: JamesIves/github-pages-deploy-action@v4
