@@ -38,26 +38,11 @@ jobs:
           sudo swapon /swapfile
           free -h
 
-      - name: 构建主站
+      - name: 构建文档
         env:
           NODE_OPTIONS: --max_old_space_size=16384
-        run: pnpm run docs:build
-
-      - name: 构建 ai-eng 子站
-        env:
-          NODE_OPTIONS: --max_old_space_size=8192
-        run: pnpm run docs:build:aieng
-
-      - name: 构建 d2l 子站
-        env:
-          NODE_OPTIONS: --max_old_space_size=8192
-        run: pnpm run docs:build:d2l
-
-      - name: 合并子站产物
         run: |
-          mkdir -p src/.vuepress/dist/ai-eng src/.vuepress/dist/d2l
-          cp -r aieng/.vuepress/dist/* src/.vuepress/dist/ai-eng/
-          cp -r d2l/.vuepress/dist/* src/.vuepress/dist/d2l/
+          pnpm run docs:build
           touch src/.vuepress/dist/.nojekyll
 
       - name: 验证产物

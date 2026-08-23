@@ -162,7 +162,7 @@ export default navbar([
       {
         text: "动手学深度学习 (d2l-zh)",
         icon: "fa6-solid:brain",
-        link: "/d2l/"
+        link: "/动手学深度学习/"
       },
       {
         text: "AI 工程实战(从零到生产)",
