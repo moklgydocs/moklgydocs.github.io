@@ -1,0 +1,9810 @@
+[
+ {
+  "num": 1,
+  "title_jp": "はるさんハウスはどこですか",
+  "title_cn": "春奶奶之家在哪儿",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "すみません。",
+      "romaji": "Sumimasen.",
+      "cn": "请问，"
+     },
+     {
+      "jp": "はるさんハウスはどこですか。",
+      "romaji": "Haru-san-Hausu wa doko desu ka.",
+      "cn": "春奶奶之家在哪儿？"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "はるさんハウス？",
+      "romaji": "Haru-san-Hausu?",
+      "cn": "春奶奶之家？"
+     },
+     {
+      "jp": "あれ？ ぼくたちのうちだよね。",
+      "romaji": "Are? Bokutachi no uchi da yo ne.",
+      "cn": "咦？是我们住的地方啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "すぐ近くです。",
+      "romaji": "Sugu chikaku desu.",
+      "cn": "就在附近。"
+     },
+     {
+      "jp": "一緒に行きましょう。",
+      "romaji": "Issho ni ikimashoo.",
+      "cn": "一起走吧。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "こっちだよ。",
+      "romaji": "Kocchi da yo.",
+      "cn": "这边。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。ありがとうございます。",
+      "romaji": "Hai. Arigatoo gozaimasu.",
+      "cn": "好，谢谢。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "すみません",
+    "cn": "请问",
+    "romaji": "sumimasen"
+   },
+   {
+    "jp": "どこ",
+    "cn": "哪里、哪儿",
+    "romaji": "doko"
+   },
+   {
+    "jp": "ぼくたち",
+    "cn": "我们（男性用语）",
+    "romaji": "bokutachi"
+   },
+   {
+    "jp": "うち",
+    "cn": "家",
+    "romaji": "uchi"
+   },
+   {
+    "jp": "すぐ近く",
+    "cn": "很近",
+    "romaji": "sugu chikaku"
+   },
+   {
+    "jp": "一緒に",
+    "cn": "一起",
+    "romaji": "issho ni"
+   },
+   {
+    "jp": "行く",
+    "cn": "去",
+    "romaji": "iku"
+   },
+   {
+    "jp": "こっち",
+    "cn": "这边",
+    "romaji": "kocchi"
+   },
+   {
+    "jp": "はい",
+    "cn": "好",
+    "romaji": "hai"
+   }
+  ],
+  "key": {
+   "jp": "はるさんハウスはどこですか。",
+   "romaji": "Haru-san-Hausu wa doko desu ka.",
+   "cn": "春奶奶之家在哪儿？",
+   "explain": "问路时，可以用这个说法：「【处所】 wa doko desu ka」。助词「wa」接在名词后面，表示主题。用平假名写作「は(ha)」，但读作「wa」。在疑问词「doko」（哪儿）后面加上「desu ka」，用升调来读的话，就变成了疑问句。"
+  },
+  "use": [
+   {
+    "jp": "すみません。トイレはどこですか。",
+    "romaji": "Sumimasen. Toire wa doko desu ka.",
+    "cn": "请问，厕所在哪儿？"
+   },
+   {
+    "jp": "あそこです。",
+    "romaji": "Asoko desu.",
+    "cn": "在那儿。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。～はどこですか。",
+    "romaji": "Sumimasen. ~wa doko desu ka.",
+    "cn": "请问，～在哪儿？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "駅",
+       "romaji": "eki",
+       "cn": "车站"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "コンビニ",
+       "romaji": "konbini",
+       "cn": "便利店"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "ありがとうございます。",
+   "romaji": "Arigatoo gozaimasu.",
+   "cn": "谢谢。",
+   "explain": "这是表示感谢的说法。如果对方是你的家人或朋友等，和你关系比较亲近，那也可以简略地说「arigatoo」。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "ありがとうございます。",
+   "Ari⎤gatoo gozaima⎤su.",
+   "谢谢。",
+   "这是表示感谢的说法。如果对方是你的家人或朋友等，和你关系比较亲近，那也",
+   "可以简略地说「arigatoo」。"
+  ],
+  "cando": "问路",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。駅はどこですか。",
+    "romaji": "Sumimasen. Eki wa doko desu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。コンビニはどこですか。",
+    "romaji": "Sumimasen. Konbini wa doko desu ka."
+   }
+  ],
+  "info": [
+   "日语里大部分的音节是由一个辅音加上一个元音构成的。",
+   "日语的重音不是强弱重音，而是高低重音。一个单词的音高是否下降，以及下降的位置都是固定的，这个位置以⎤来表示。",
+   "か",
+   "ka",
+   "辅音",
+   "元音",
+   "k",
+   "a",
+   "下雨了",
+   "雨",
+   "糖",
+   "下糖了",
+   "日语的语音"
+  ]
+ },
+ {
+  "num": 2,
+  "title_jp": "タムです。学生です",
+  "title_cn": "我叫心心 是学生",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "ただいま。",
+      "romaji": "Tadaima.",
+      "cn": "我回来了。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "はるさん、新しい住人が着きましたよ。",
+      "romaji": "Ha ru-san, atarashi i juunin ga tsukima shita yo.",
+      "cn": "春奶奶，新的房客到了。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "はーい。",
+      "romaji": "Haai.",
+      "cn": "来啦。"
+     },
+     {
+      "jp": "ようこそいらっしゃいました。",
+      "romaji": "Yookoso irasshaimashita.",
+      "cn": "欢迎欢迎。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "え、ロボット？",
+      "romaji": "E, robotto?",
+      "cn": "咦？机器人？"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "そう。大家のはるさんです。",
+      "romaji": "Soo. Ooya no Haru-san desu.",
+      "cn": "对，她是房东春奶奶。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はじめまして。",
+      "romaji": "Hajimemashite.",
+      "cn": "初次见面！"
+     },
+     {
+      "jp": "タムです。学生です。",
+      "romaji": "Tamu desu. Gakusee desu.",
+      "cn": "我叫心心，是学生。"
+     },
+     {
+      "jp": "よろしくお願いします。",
+      "romaji": "Yoroshiku onegai-shimasu.",
+      "cn": "请多关照。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "新しい",
+    "cn": "新",
+    "romaji": "atarashii"
+   },
+   {
+    "jp": "住人",
+    "cn": "房客",
+    "romaji": "juunin"
+   },
+   {
+    "jp": "着く",
+    "cn": "到达",
+    "romaji": "tsuku"
+   },
+   {
+    "jp": "ロボット",
+    "cn": "机器人",
+    "romaji": "robotto"
+   },
+   {
+    "jp": "大家",
+    "cn": "房东",
+    "romaji": "ooya"
+   },
+   {
+    "jp": "学生",
+    "cn": "学生",
+    "romaji": "gakusee"
+   }
+  ],
+  "key": {
+   "jp": "タムです。学生です。",
+   "romaji": "Tamu desu. Gakusee desu.",
+   "cn": "我叫心心，是学生。",
+   "explain": "像「【名字／姓】desu」「【职业】desu」这样，「desu」接在名词后面就构成了句子。使用「A wa B desu」（A 是 B）的形式，A是主题／主语，B是对A做出的说明。重点语句中相当于「A wa」的「Ｗatashi wa」（我）的部分被省略了。"
+  },
+  "use": [
+   {
+    "jp": "はじめまして。アンナです。学生です。",
+    "romaji": "Hajimemashite. Anna desu. Gakusee desu.",
+    "cn": "初次见面！我叫安娜，是学生。"
+   },
+   {
+    "jp": "はじめまして。鈴木です。",
+    "romaji": "Hajimemashite. Suzuki desu.",
+    "cn": "初次见面！我姓铃木。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "はじめまして。【名字／姓】です。【职业】です。",
+    "romaji": "Hajimemashite. 【名字／姓】 desu. 【职业】 desu.",
+    "cn": "初次见面！我叫【名字】／姓【姓】，是【职业】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "トーマス",
+       "romaji": "Toomasu",
+       "cn": "托马斯"
+      },
+      {
+       "jp": "会社員",
+       "romaji": "kaishain",
+       "cn": "公司职员"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "エリン",
+       "romaji": "Erin",
+       "cn": "艾琳"
+      },
+      {
+       "jp": "教師",
+       "romaji": "kyooshi",
+       "cn": "老师"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "よろしくお願いします。",
+   "romaji": "Yoroshiku onegai-shimasu.",
+   "cn": "请多关照。",
+   "explain": "对将要给予你关照的人说这句话。自我介绍时常常使用。如果对方是你的朋友或年龄比你小，也可以简略地说「yoroshiku」。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "よろしくお願いします。",
+   "Yoroshiku onegai-shima⎤su.",
+   "请多关照。",
+   "对将要给予你关照的人说这句话。自我介绍时常常使用。如果对方是你的朋友或",
+   "年龄比你小，也可以简略地说「yoroshiku」。"
+  ],
+  "cando": "自我介绍　告诉别人你的名字和职业",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "はじめまして。トーマスです。会社員です。",
+    "romaji": "Hajimemashite. Toomasu desu. Kaishain desu."
+   },
+   {
+    "marker": "②",
+    "jp": "はじめまして。エリンです。教師です。",
+    "romaji": "Hajimemashite. Erin desu. Kyooshi desu."
+   }
+  ],
+  "info": [
+   "日语里有汉字、平假名和片假名三种文字。例如：「Watashi wa Tamu desu」（我叫心心）这句话，用日语文字书写的话，就是：",
+   "私はタムです",
+   "「私」是汉字；「は」和「です」是平假名；「タム」是片假名。",
+   "外国人的名字和外来语用片假名书写，除此以外的用平假名书写。片假名和平假名是表音文字，由汉字演变而来。",
+   "表达意义的主要部分用汉字来书写，汉字是表意文字。",
+   "片假名：a",
+   "平假名：a",
+   "汉字：yama",
+   "用日语书写的招牌",
+   "日语的文字"
+  ]
+ },
+ {
+  "num": 3,
+  "title_jp": "ベトナムから来ました",
+  "title_cn": "来自越南",
+  "turns": [
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "タムさん、たくさん食べてね。",
+      "romaji": "Tamu-san, takusan tabete ne.",
+      "cn": "心心，多吃点啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "好。"
+     },
+     {
+      "jp": "タムです。ベトナムから来ました。",
+      "romaji": "Tamu desu. Betonamu kara kimashita.",
+      "cn": "我是心心，来自越南。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "ミーヤーです。中国からです。",
+      "romaji": "Miiyaa desu. Chuugoku kara desu.",
+      "cn": "我是米亚，来自中国。"
+     },
+     {
+      "jp": "写真家です。",
+      "romaji": "Shashinka desu.",
+      "cn": "是摄影师。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "ぼくは海斗。学生です。",
+      "romaji": "Boku wa Kaito. Gakusee desu.",
+      "cn": "我是海斗，是学生。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "わたくし、大家のはるです。",
+      "romaji": "Watakushi, ooya no Haru desu.",
+      "cn": "我是房东阿春。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "はるさんは何でも知っています。",
+      "romaji": "Haru-san wa nan de mo shitte imasu.",
+      "cn": "春奶奶是万事通。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "そうですか。よろしくお願いします。",
+      "romaji": "Soo desu ka. Yoroshiku onegai-shimasu.",
+      "cn": "真的？请多关照。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "たくさん",
+    "cn": "多",
+    "romaji": "takusan"
+   },
+   {
+    "jp": "食べる",
+    "cn": "吃",
+    "romaji": "taberu"
+   },
+   {
+    "jp": "来る",
+    "cn": "来",
+    "romaji": "kuru"
+   },
+   {
+    "jp": "写真家",
+    "cn": "摄影师",
+    "romaji": "shashinka"
+   },
+   {
+    "jp": "ぼく",
+    "cn": "我 （男性用语）",
+    "romaji": "boku"
+   },
+   {
+    "jp": "知っている",
+    "cn": "知道",
+    "romaji": "shitte iru"
+   }
+  ],
+  "key": {
+   "jp": "ベトナムから来ました。",
+   "romaji": "Betonamu kara kimashita.",
+   "cn": "来自越南。",
+   "explain": "要说明你来自哪里，可以用这个说法：「【处所】kara kimashita」。助词「kara」（从）表示出处或起点。「kimashita」是「kuru」（来）的过去时。也可以把「kimashita」换成「desu」，说「Betonamu kara desu」（来自越南）。"
+  },
+  "use": [
+   {
+    "jp": "どちらからですか。",
+    "romaji": "Dochira kara desu ka.",
+    "cn": "您来自哪儿？"
+   },
+   {
+    "jp": "アメリカから来ました。",
+    "romaji": "Amerika kara kimashita.",
+    "cn": "我来自美国。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～から来ました。",
+    "romaji": "~kara kimashita.",
+    "cn": "我来自～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "タイ",
+       "romaji": "Tai",
+       "cn": "泰国"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "ブラジル",
+       "romaji": "Burajiru",
+       "cn": "巴西"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "そうですか。",
+   "romaji": "Soo desu ka.",
+   "cn": "真的？（是吗？）",
+   "explain": "这是一个应答用语，表示自己理解了对方说的话。请注意，说的时候，句尾不要用升调。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "そうですか。",
+   "So⎤o de⎤su ka.",
+   "真的？（是吗？）",
+   "这是一个应答用语，表示自己理解了对方说的话。请注意，说的时候，句尾不要用",
+   "升调。"
+  ],
+  "cando": "说明自己来自哪里",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "タイから来ました。",
+    "romaji": "Tai kara kimashita."
+   },
+   {
+    "marker": "②",
+    "jp": "ブラジルから来ました。",
+    "romaji": "Burajiru kara kimashita."
+   }
+  ],
+  "info": [
+   "©AFLO",
+   "©The Japan Foundation",
+   "春奶奶的智慧锦囊",
+   "日本人寒暄时通常要鞠躬行礼。",
+   "鞠躬的角度取决于你与对方的关系，如果对方的年龄或地位高于你，你应该深鞠躬。",
+   "如果对方的年龄、地位低于你，或许只要微微点点头就可以了。握手或拥抱并不很常见。",
+   "日本人的寒暄方法"
+  ]
+ },
+ {
+  "num": 4,
+  "title_jp": "大学で日本語を勉強します",
+  "title_cn": "在大学学日语",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "これ、どこですか。",
+      "romaji": "Kore, doko desu ka.",
+      "cn": "这是哪儿？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "沖縄です。",
+      "romaji": "Okinawa desu.",
+      "cn": "是冲绳。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "へえ。",
+      "romaji": "Hee.",
+      "cn": "哦。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "これは京都です。",
+      "romaji": "Kore wa Kyooto desu.",
+      "cn": "这是京都。"
+     },
+     {
+      "jp": "京都はとてもきれいですよ。",
+      "romaji": "Kyooto wa totemo kiree desu yo.",
+      "cn": "京都很漂亮。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "そうですね。",
+      "romaji": "Soo desu ne.",
+      "cn": "是啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "タムさんは日本で何をしますか。",
+      "romaji": "Tamu-san wa Nihon de nani o shimasu ka.",
+      "cn": "心心，你打算在日本做什么？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "大学で日本語を勉強します。",
+      "romaji": "Daigaku de Nihongo o benkyoo-shimasu.",
+      "cn": "在大学学日语。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "いいですね。",
+      "romaji": "Ii desu ne.",
+      "cn": "真好！"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい、楽しみです。",
+      "romaji": "Hai, tanoshimi desu.",
+      "cn": "嗯，我很期待。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "大学",
+    "cn": "大学",
+    "romaji": "daigaku"
+   },
+   {
+    "jp": "日本語",
+    "cn": "日语",
+    "romaji": "Nihongo"
+   },
+   {
+    "jp": "勉強する",
+    "cn": "学习",
+    "romaji": "benkyoo-suru"
+   }
+  ],
+  "key": {
+   "jp": "大学で日本語を勉強します。",
+   "romaji": "Daigaku de Nihongo o benkyoo-shimasu.",
+   "cn": "（我打算）在大学学日语。",
+   "explain": "要说明你将要做什么，可以使用动词的マス形（以「masu」结尾的形式）。例如：「benkyoo-shimasu」（学习）。マス形是对不熟悉或年长的人使用的较为郑重的形式。助词「de」表示处所，「o」表示宾语，动词放在句子的末尾。"
+  },
+  "use": [
+   {
+    "jp": "日本で何をしますか。",
+    "romaji": "Nihon de nani o shimasu ka.",
+    "cn": "你打算在日本做什么？"
+   },
+   {
+    "jp": "買い物をします。",
+    "romaji": "Kaimono o shimasu.",
+    "cn": "我打算购物。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【宾语】を～ます。",
+    "romaji": "【宾语】o～masu.",
+    "cn": "我打算～【宾语】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "天ぷら",
+       "romaji": "tenpura",
+       "cn": "天妇罗"
+      },
+      {
+       "jp": "食べます（食べる）",
+       "romaji": "tabemasu （taberu）",
+       "cn": "吃"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "歌舞伎",
+       "romaji": "kabuki",
+       "cn": "歌舞伎"
+      },
+      {
+       "jp": "見ます（見る）",
+       "romaji": "mimasu （miru）",
+       "cn": "看"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "楽しみです。",
+   "romaji": "Tanoshimi desu.",
+   "cn": "我很期待。",
+   "explain": "表示你很期待你将要做的事。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "楽しみです。",
+   "Tanoshi⎤mi desu.",
+   "我很期待。",
+   "表示你很期待你将要做的事。"
+  ],
+  "cando": "说明你将要做什么",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "天ぷらを食べます。",
+    "romaji": "Tenpura o tabemasu."
+   },
+   {
+    "marker": "②",
+    "jp": "歌舞伎を見ます。",
+    "romaji": "Kabuki o mimasu."
+   }
+  ],
+  "info": [
+   "©Niseko Village",
+   "©Ninnaji-Temple",
+   "跟着米亚去旅行",
+   "冲绳",
+   "日光（栃木县）北海道",
+   "京都",
+   "©Nikko Toshogu Shrine",
+   "©OCVB",
+   "日本各地的四季美景多姿多彩。例如，春天是樱花盛开的季节，短剧里的京都就是赏樱名胜；夏天可以爬山、游泳；秋天红叶似火，美不胜收；银装素裹的冬天也别有情趣，可尽享滑雪等冬季运动的乐趣。",
+   "介绍日本各地的魅力"
+  ]
+ },
+ {
+  "num": 5,
+  "title_jp": "ラジオで勉強しました",
+  "title_cn": "听广播学的",
+  "turns": [
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "タムさん、今日から学校ですね。",
+      "romaji": "Tamu-san, kyoo kara gakkoo desu ne.",
+      "cn": "心心，今天开学了吧?"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "是啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "あらまあ！ どうしたんですか。",
+      "romaji": "Ara maa!  Doo shitan desu ka.",
+      "cn": "呦！怎么了？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "日本語が心配です。",
+      "romaji": "Nihongo ga shinpai desu.",
+      "cn": "担心我的日语。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "タムさんは日本語、お上手ですよ。",
+      "romaji": "Tamu-san wa Nihongo, ojoozu desu yo.",
+      "cn": "你的日语不错呀。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "いいえ、まだまだです。",
+      "romaji": "Iie, mada mada desu.",
+      "cn": "哪里，还差得远呢。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "ベトナムで勉強したんでしょう？",
+      "romaji": "Betonamu de benkyoo-shitan deshoo?",
+      "cn": "你在越南学过吧？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい、ラジオで勉強しました。",
+      "romaji": "Hai, rajio de benkyoo-shimashita.",
+      "cn": "对，听广播学的。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "それなら、大丈夫ですよ。",
+      "romaji": "Sore nara, daijoobu desu yo.",
+      "cn": "那就没问题！"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "今日",
+    "cn": "今天",
+    "romaji": "kyoo"
+   },
+   {
+    "jp": "はい",
+    "cn": "是啊",
+    "romaji": "hai"
+   },
+   {
+    "jp": "心配（な）",
+    "cn": "担心",
+    "romaji": "shinpai (na)"
+   },
+   {
+    "jp": "上手（な）",
+    "cn": "好",
+    "romaji": "joozu (na)"
+   },
+   {
+    "jp": "ラジオ",
+    "cn": "广播",
+    "romaji": "rajio"
+   },
+   {
+    "jp": "大丈夫（な）",
+    "cn": "没问题",
+    "romaji": "daijoobu (na)"
+   }
+  ],
+  "key": {
+   "jp": "ラジオで勉強しました。",
+   "romaji": "Rajio de benkyoo-shimashita.",
+   "cn": "听广播学的。",
+   "explain": "要说明你以前做过的事，把动词マス形的词尾「masu」变成「mashita」。「rajio de」（通过收听广播）的「de」表示方法。主語「watashi wa」（我）和宾语「Nihongo o」（日语）因为很容易从前后文来理解，所以被省略了。"
+  },
+  "use": [
+   {
+    "jp": "あ、日本語！ どうやって勉強しましたか。",
+    "romaji": "A, Nihongo! Dooyatte benkyoo-shimashita ka.",
+    "cn": "啊，日语！你是怎么学的？"
+   },
+   {
+    "jp": "インターネットで勉強しました。",
+    "romaji": "Intaanetto de benkyoo-shimashita.",
+    "cn": "上网学的。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～で勉強しました。",
+    "romaji": "~de benkyoo-shimashita.",
+    "cn": "～学的。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "アニメ",
+       "romaji": "anime",
+       "cn": "（看）动画片"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "学校",
+       "romaji": "gakkoo",
+       "cn": "（在）学校"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "いいえ、まだまだです。",
+   "romaji": "Iie, mada mada desu.",
+   "cn": "哪里，还差得远呢。",
+   "explain": "这是受到对方表扬时使用的谦辞。「iie」表示否定，「mada mada desu」表示还不够充分。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "いいえ、まだまだです。",
+   "Iie, ma⎤da ma⎤da de⎤su.",
+   "哪里，还差得远呢。",
+   "这是受到对方表扬时使用的谦辞。「iie」表示否定，",
+   "「mada mada desu」表示还不",
+   "够充分。"
+  ],
+  "cando": "说明自己是怎样学习日语的",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "アニメで勉強しました。",
+    "romaji": "Anime de benkyoo-shimashita."
+   },
+   {
+    "marker": "②",
+    "jp": "学校で勉強しました。",
+    "romaji": "Gakkoo de benkyoo-shimashita."
+   }
+  ],
+  "info": [
+   "春奶奶的智慧锦囊",
+   "如果有人表扬你“你的日语真好”，你该怎么回答？",
+   "１)　谢谢。",
+   "２)　哪里，还差得远呢。",
+   "３）　嗯，因为我在大学学过。",
+   "如果是日本人，常常会谦虚地说还不够好，也就是２）",
+   "「Iie, madamada desu」。",
+   "表示谦虚的说法还有很多。例如，在家里招待客人时，即使做了一桌子好菜，有时也会说“没什么好招待的”。",
+   "表示谦虚的说法"
+  ]
+ },
+ {
+  "num": 6,
+  "title_jp": "この電車は池袋に行きますか",
+  "title_cn": "这个电车去池袋吗",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "すみません。",
+      "romaji": "Sumimasen.",
+      "cn": "请问。"
+     }
+    ]
+   },
+   {
+    "speaker": "站务员",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "哦。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "この電車は池袋に行きますか。",
+      "romaji": "Kono densha wa Ikebukuro ni ikimasu ka.",
+      "cn": "这个电车去池袋吗?"
+     }
+    ]
+   },
+   {
+    "speaker": "站务员",
+    "parts": [
+     {
+      "jp": "いいえ、行きません。",
+      "romaji": "Iie, ikimasen.",
+      "cn": "不，不去。"
+     },
+     {
+      "jp": "池袋は山手線です。",
+      "romaji": "Ikebukuro wa Yamanote-sen desu.",
+      "cn": "池袋是山手线。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "山手線はどこですか。",
+      "romaji": "Yamanote-sen wa doko desu ka.",
+      "cn": "山手线在哪儿?"
+     }
+    ]
+   },
+   {
+    "speaker": "站务员",
+    "parts": [
+     {
+      "jp": "３番線です。",
+      "romaji": "San-ban-sen desu.",
+      "cn": "3号站台。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "わかりました。",
+      "romaji": "Wakarimashita.",
+      "cn": "知道了。"
+     },
+     {
+      "jp": "ありがとうございます。",
+      "romaji": "Arigatoo gozaimasu.",
+      "cn": "谢谢您。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "この",
+    "cn": "这个",
+    "romaji": "kono"
+   },
+   {
+    "jp": "電車",
+    "cn": "电车",
+    "romaji": "densha"
+   },
+   {
+    "jp": "いいえ",
+    "cn": "不",
+    "romaji": "iie"
+   },
+   {
+    "jp": "山手線",
+    "cn": "山手线",
+    "romaji": "Yamanote-sen"
+   },
+   {
+    "jp": "～番線",
+    "cn": "～号站台",
+    "romaji": "～ban-sen"
+   },
+   {
+    "jp": "わかる",
+    "cn": "知道",
+    "romaji": "wakaru"
+   }
+  ],
+  "key": {
+   "jp": "この電車は池袋に行きますか。",
+   "romaji": "Kono densha wa Ikebukuro ni ikimasu ka.",
+   "cn": "这个电车去池袋吗?",
+   "explain": "询问公共交通工具开往何处，可以用这个说法：「Kono 【公共交通工具】 wa 【处所】ni ikimasu ka」。「kono」（这个）放在名词前面，表示你问的是眼前的公共交通工具。「ni」是表示目的地的助词，「ikimasu」是动词「iku」（去）的マス形。"
+  },
+  "use": [
+   {
+    "jp": "この電車は秋葉原に行きますか。",
+    "romaji": "Kono densha wa Akihabara ni ikimasu ka.",
+    "cn": "这个电车去秋叶原吗？"
+   },
+   {
+    "jp": "いいえ、行きません。秋葉原は１番線です。",
+    "romaji": "Iie, ikimasen. Akihabara wa ichi-ban-sen desu.",
+    "cn": "不，不去。秋叶原是1号站台。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "この【公共交通工具】は【处所】に行きますか。",
+    "romaji": "Kono 【公共交通工具】 wa 【处所】 ni ikimasu ka.",
+    "cn": "这个【公共交通工具】去【处所】吗？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "バス",
+       "romaji": "basu",
+       "cn": "大巴"
+      },
+      {
+       "jp": "空港",
+       "romaji": "kuukoo",
+       "cn": "机场"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "電車",
+       "romaji": "densha",
+       "cn": "电车"
+      },
+      {
+       "jp": "新宿",
+       "romaji": "Shinjuku",
+       "cn": "新宿"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "数字 (1-10)ichi⎤ni⎤sanyo⎤ngo⎤roku⎤na⎤na hachi⎤kyu⎤uju⎤u"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "数字 (1-10)",
+   "ichi⎤",
+   "ni⎤",
+   "san",
+   "yo⎤n",
+   "go⎤",
+   "roku⎤na⎤na hachi⎤kyu⎤u",
+   "ju⎤u"
+  ],
+  "cando": "确认公共交通工具开往何处",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "このバスは空港に行きますか。",
+    "romaji": "Kono basu wa kuukoo ni ikimasu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "この電車は新宿に行きますか。",
+    "romaji": "Kono densha wa Shinjuku ni ikimasu ka."
+   }
+  ],
+  "info": [
+   "Tokyo Station",
+   "©JR EAST",
+   "©Tokyo Metro",
+   "春奶奶的智慧锦囊",
+   "日本的铁路四通八达，尤其是城市地区线路很多，不但有电车，还有地铁。新干线、特快列车将不同的城市连接起来，远途旅行也非常方便。",
+   "先在票价表上确认票价，然后把钱放进自动售票机买票。如果事先买好预付费IC卡，那么，只要在检票机上轻轻触碰一下就可自动完成支付，非常方便。",
+   "不过，请注意，早上和傍晚的高峰时间，车站和电车里都非常拥挤。",
+   "四通八达的日本铁路系统",
+   "日本的铁路"
+  ]
+ },
+ {
+  "num": 7,
+  "title_jp": "ゆっくり話してください",
+  "title_cn": "请慢点说",
+  "turns": [
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "隣、いい？",
+      "romaji": "Tonari, ii?",
+      "cn": "旁边，可以坐吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "え？ はい。",
+      "romaji": "E? Hai.",
+      "cn": "啊？可以。"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "ありがとう。留学生なの？",
+      "romaji": "Arigatoo. Ryuugakusee na no?",
+      "cn": "谢谢。你是留学生?"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "すみません。よくわかりません。",
+      "romaji": "Sumimasen. Yoku wakarimasen.",
+      "cn": "不好意思。我不太明白。"
+     },
+     {
+      "jp": "ゆっくり話してください。",
+      "romaji": "Yukkuri hanashite kudasai.",
+      "cn": "请慢点说。"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "あ、ごめん、ごめん。",
+      "romaji": "A, gomen, gomen.",
+      "cn": "哦，对不起，对不起。"
+     },
+     {
+      "jp": "あなたはりゅうがくせいですか。",
+      "romaji": "Anata wa ryuugakusee desu ka.",
+      "cn": "你是留学生吗?"
+     },
+     {
+      "jp": "わたしはあやかです。",
+      "romaji": "Watashi wa A-YA-KA desu.",
+      "cn": "我是绫香。"
+     },
+     {
+      "jp": "よろしくね。",
+      "romaji": "Yoroshiku ne.",
+      "cn": "请多关照。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。私はタムです。",
+      "romaji": "Hai. Watashi wa Tamu desu.",
+      "cn": "哦。我是心心。"
+     },
+     {
+      "jp": "よろしくお願いします。",
+      "romaji": "Yoroshiku onegai-shimasu.",
+      "cn": "请多关照。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "ゆっくり",
+    "cn": "慢慢",
+    "romaji": "yukkuri"
+   },
+   {
+    "jp": "話す",
+    "cn": "说",
+    "romaji": "hanasu"
+   },
+   {
+    "jp": "私",
+    "cn": "我",
+    "romaji": "watashi"
+   }
+  ],
+  "key": {
+   "jp": "ゆっくり話してください。",
+   "romaji": "Yukkuri hanashite kudasai.",
+   "cn": "请慢点说。",
+   "explain": "向对方提出请求时，可以用这个说法：「动词的テ形＋kudasai」。テ形就是把动词的词尾变成「テ／デ」的形式。「hanashite」是「hanasu」（说）的テ形。动词分为三类，不同类别的动词，テ形的变换方法也不一样。"
+  },
+  "use": [
+   {
+    "jp": "すみません。もう一度言ってください。",
+    "romaji": "Sumimasen. Moo ichi-do itte kudasai.",
+    "cn": "不好意思，请再说一遍。"
+   },
+   {
+    "jp": "あ、はい。",
+    "romaji": "A, hai.",
+    "cn": "哦，好。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。～てください。",
+    "romaji": "Sumimasen. ～te kudasai.",
+    "cn": "不好意思，请～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "英語で言う（→言って）",
+       "romaji": "Eego de iu （→itte）",
+       "cn": "用英语说"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "ローマ字で書く（→書いて）",
+       "romaji": "Roomaji de kaku （→kaite）",
+       "cn": "用罗马字写"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "すみません。よくわかりません。",
+   "romaji": "Sumimasen. Yoku wakarimasen.",
+   "cn": "不好意思。我不太明白。",
+   "explain": "如果你听不懂对方说的话，就可以用这个说法。在「wakarimasen」（不明白）的前面加上「yoku」（十分），会显得比较郑重。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "すみません。よくわかりません。",
+   "Sumimase⎤n. Yo⎤ku wakarimase⎤n.",
+   "不好意思。我不太明白。",
+   "如果你听不懂对方说的话，就可以用这个说法。在「wakarimasen」",
+   "（不明白）的前",
+   "面加上「yoku」",
+   "（十分），会显得比较郑重。"
+  ],
+  "cando": "请对方说得慢一些",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。英語で言ってください。",
+    "romaji": "Sumimasen. Eego de itte kudasai."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。ローマ字で書いてください。",
+    "romaji": "Sumimasen. Roomaji de kaite kudasai."
+   }
+  ],
+  "info": [
+   "M. Nakamura/S. Ebisu",
+   "©Ken Mochizuki",
+   "海斗的美食攻略",
+   "常见的日本料理有把生鱼放在醋饭上的手握寿司，还有以肉、蔬菜为材料，用酱油、糖来调味的寿喜烧等。",
+   "日本的主食是大米。日本人在家里一般吃米饭和鱼、肉、蔬菜等。通常会搭配味噌汤等汤汁。此外，日本人也经常吃意大利面和炖菜等西餐。",
+   "手握寿司",
+   "家常料理",
+   "寿喜烧",
+   "日本料理"
+  ]
+ },
+ {
+  "num": 8,
+  "title_jp": "友達のあやかさんです",
+  "title_cn": "这是我朋友绫香",
+  "turns": [
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "わあ、すごい！ きれいだね。",
+      "romaji": "Waa, sugoi! Kiree da ne.",
+      "cn": "哇哦，太棒了！好漂亮！"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "是啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "ああ、タム、遅れてごめんなさい。",
+      "romaji": "Aa, Tamu, okurete gomen nasai.",
+      "cn": "啊，心心。对不起，来晚了！"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "友達のあやかさんです。",
+      "romaji": "Tomodachi no Ayaka-san desu.",
+      "cn": "这是我朋友绫香。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "こんにちは。ミーヤーです。",
+      "romaji": "Konnichiwa. Miiyaa desu.",
+      "cn": "你好。我是米亚。"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "ああ、ミーヤーさん！",
+      "romaji": "Aa, Miiyaa-san!",
+      "cn": "哦，米亚!"
+     },
+     {
+      "jp": "写真を撮ってるんでしょう？",
+      "romaji": "Shashin o totterun deshoo?",
+      "cn": "是摄影师吧？"
+     },
+     {
+      "jp": "すごいなあ。",
+      "romaji": "Sugoi naa.",
+      "cn": "真酷！"
+     },
+     {
+      "jp": "私も撮ってくださいね。",
+      "romaji": "Watashi mo totte kudasai ne.",
+      "cn": "能给我也拍拍照吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "あ、はい・・・。",
+      "romaji": "A, hai...",
+      "cn": "哦……好。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "遅れる",
+    "cn": "迟到",
+    "romaji": "okureru"
+   },
+   {
+    "jp": "ごめんなさい",
+    "cn": "对不起",
+    "romaji": "gomen nasai"
+   },
+   {
+    "jp": "友達",
+    "cn": "朋友",
+    "romaji": "tomodachi"
+   }
+  ],
+  "key": {
+   "jp": "友達のあやかさんです。",
+   "romaji": "Tomodachi no Ayaka-san desu.",
+   "cn": "这是我朋友绫香。",
+   "explain": "向别人介绍自己的家人、朋友，可以用这个说法：「【与你的关系】 no 【名字／姓（-san)】desu」。「no」是连接名词和名词的助词，前面的名词用来修饰后面的名词。「san」是接在人名后面的敬称，但不能用于自己和家人。"
+  },
+  "use": [
+   {
+    "jp": "友達の田中さんです。",
+    "romaji": "Tomodachi no Tanaka-san desu.",
+    "cn": "这是我朋友田中。"
+   },
+   {
+    "jp": "はじめまして。田中です。",
+    "romaji": "Hajimemashite. Tanaka desu.",
+    "cn": "初次见面！我姓田中。"
+   },
+   {
+    "jp": "はじめまして。よろしくお願いします。",
+    "romaji": "Hajimemashite. Yoroshiku onegai-shimasu.",
+    "cn": "初次见面！请多关照。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【与你的关系】の【名字／姓（さん）】です。",
+    "romaji": "【与你的关系】 no 【名字／姓 （-san）】 desu.",
+    "cn": "这是我【与你的关系】【名字／姓（-san）】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "妹",
+       "romaji": "imootoAnna",
+       "cn": "妹妹"
+      },
+      {
+       "jp": "安娜",
+       "romaji": "",
+       "cn": ""
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "同僚",
+       "romaji": "dooryooYan-san",
+       "cn": "同事"
+      },
+      {
+       "jp": "杨先生",
+       "romaji": "",
+       "cn": ""
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "おはよう （ございます）",
+   "romaji": "",
+   "cn": "",
+   "explain": "寒暄语早上白天晚上こんにちはこんばんはohayoo （gozaima⎤su）konnichiwa⎤konbanwa⎤"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "寒暄语",
+   "早上",
+   "白天",
+   "晚上",
+   "おはよう （ございます）",
+   "こんにちは",
+   "こんばんは",
+   "ohayoo （gozaima⎤su）",
+   "konnichiwa⎤",
+   "konbanwa⎤"
+  ],
+  "cando": "引荐朋友等",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "妹のアンナです。",
+    "romaji": "Imooto no Anna desu."
+   },
+   {
+    "marker": "②",
+    "jp": "同僚のヤンさんです。",
+    "romaji": "Dooryoo no Yan-san desu."
+   }
+  ],
+  "info": [
+   "©TOKYO-SKYTREE",
+   "©TOKYO TOWER",
+   "©Tokyo Metropolitan Government",
+   "©TCVB",
+   "短剧里出现的东京都厅位于新宿。那里的展望室对外开放，你可以从202米的高空俯瞰东京的街景。天气好的话，还能看到富士山。",
+   "橙白相间的东京塔也很有名。另外浅草附近的东京晴空塔高634米，建于2012年。",
+   "夜间的霓彩灯饰绚丽夺目。",
+   "东京都厅",
+   "东京塔（333米）东京晴空塔（634米）从展望室看到的景色东京的展望台跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 9,
+  "title_jp": "これは何ですか",
+  "title_cn": "这是什么",
+  "turns": [
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "ここが「デパ地下」だよ。",
+      "romaji": "Koko ga depa-chika da yo.",
+      "cn": "这里就是百货商店的地下食品区。"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "いろんな食べ物があって、いいよね。",
+      "romaji": "Ironna tabemono ga atte, ii yo ne.",
+      "cn": "有各种吃的。真好!"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "わあ、すごい。",
+      "romaji": "Waa, sugoi.",
+      "cn": "哇哦！这么多！"
+     },
+     {
+      "jp": "これは何ですか。",
+      "romaji": "Kore wa nan desu ka.",
+      "cn": "这是什么？"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "大根の漬物だよ。",
+      "romaji": "Daikon no tsukemono da yo.",
+      "cn": "是腌萝卜。"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "食べてみる？",
+      "romaji": "Tabete miru?",
+      "cn": "要不要尝尝?"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "いただきます。",
+      "romaji": "Itadakimasu.",
+      "cn": "好。谢谢。"
+     },
+     {
+      "jp": "おいしいです。",
+      "romaji": "Oishii desu.",
+      "cn": "真好吃。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "これも食べてみる？",
+      "romaji": "Kore mo tabete miru?",
+      "cn": "这个也尝尝？"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "ここ",
+    "cn": "这里、这儿",
+    "romaji": "koko"
+   },
+   {
+    "jp": "デパ地下",
+    "cn": "百货商店的地下食品区",
+    "romaji": "depa-chika"
+   },
+   {
+    "jp": "食べ物",
+    "cn": "吃的",
+    "romaji": "tabemono"
+   },
+   {
+    "jp": "これ",
+    "cn": "这个",
+    "romaji": "kore"
+   },
+   {
+    "jp": "何",
+    "cn": "什么",
+    "romaji": "nan"
+   },
+   {
+    "jp": "漬物",
+    "cn": "腌菜",
+    "romaji": "tsukemono"
+   }
+  ],
+  "key": {
+   "jp": "これは何ですか。",
+   "romaji": "Kore wa nan desu ka.",
+   "cn": "这是什么？",
+   "explain": "如果不知道东西的名称，可以指着那样东西问：「Kore / Sore / Are wa nan desuka」。离自己近的东西用「kore」；离对方近的东西用「sore」；离两者都远的东西用「are」。「nan」是疑问词，意思是“什么”。"
+  },
+  "use": [
+   {
+    "jp": "すみません。これは何ですか。",
+    "romaji": "Sumimasen. Kore wa nan desu ka.",
+    "cn": "请问，这是什么？"
+   },
+   {
+    "jp": "お茶です。",
+    "romaji": "Ocha desu.",
+    "cn": "是茶叶。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "これ／それ／あれ　は何ですか。",
+    "romaji": "Kore/Sore/Are wa nan desu ka.",
+    "cn": "这个／那个／那个 是什么？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": []
+    },
+    {
+     "marker": "②",
+     "words": []
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "おいしいです。",
+   "romaji": "Oishii desu.",
+   "cn": "好吃。",
+   "explain": "有时也会简略地说「Oishii!」在日本吃到好吃的东西时，就说说看。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "おいしいです。",
+   "Oishi⎤i de⎤su.",
+   "好吃。",
+   "有时也会简略地说「Oishii!」在日本吃到好吃的东西时，就说说看。"
+  ],
+  "cando": "询问东西的名称",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "それは何ですか。（これ？たい焼きです。）",
+    "romaji": "Sore wa nan desu ka.（Kore？ Taiyaki desu.）"
+   },
+   {
+    "marker": "②",
+    "jp": "あれは何ですか。（あれはたこ焼きです。）",
+    "romaji": "Are wa nan desu ka.（Are wa takoyaki desu.）"
+   }
+  ],
+  "info": [
+   "海斗的美食攻略",
+   "食品的宝库「Depa-chika」百货商店的地下食品区「Depa-chika」出售熟菜、便当、甜品和面等各种各样的食品。有的还可以试吃。你可以把喜欢的熟菜、便当买回去，在家里或酒店的房间里品尝，非常方便。",
+   "腌菜",
+   "熟菜",
+   "面",
+   "和奶酪",
+   "甜品",
+   "©Isetan Mitsukoshi Holdings"
+  ]
+ },
+ {
+  "num": 10,
+  "title_jp": "このドライヤーはいくらですか",
+  "title_cn": "这个吹风机多少钱",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "たくさんありますね！",
+      "romaji": "Takusan arimasu ne!",
+      "cn": "有好多啊！"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "すごいでしょう？",
+      "romaji": "Sugoi deshoo?",
+      "cn": "多吧。"
+     },
+     {
+      "jp": "これはサラサラヘア。",
+      "romaji": "Kore wa sarasara hea.",
+      "cn": "这款是让头发顺滑的，"
+     },
+     {
+      "jp": "これはツヤが出るタイプ。",
+      "romaji": "Kore wa tsuya ga deru taipu.",
+      "cn": "这款是给头发带来光泽的。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "へえ、いくらですか。",
+      "romaji": "Hee, ikura desu ka.",
+      "cn": "真的？多少钱？"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "セールって書いてある。きいてみよう。",
+      "romaji": "Seeru tte kaite aru. Kiite miyoo.",
+      "cn": "这上面写着减价。问问吧。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "すみません。",
+      "romaji": "Sumimasen.",
+      "cn": "请问，"
+     },
+     {
+      "jp": "このドライヤーはいくらですか。",
+      "romaji": "Kono doraiyaa wa ikura desu ka.",
+      "cn": "这个吹风机多少钱？"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "9,900円です。",
+      "romaji": "Kyuu-sen-kyuu-hyaku-en desu.",
+      "cn": "9900 日元。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "え！ 高すぎます。",
+      "romaji": "E! Takasugimasu.",
+      "cn": "啊？太贵了。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "いくら",
+    "cn": "多少钱",
+    "romaji": "ikura"
+   },
+   {
+    "jp": "書く",
+    "cn": "写",
+    "romaji": "kaku"
+   },
+   {
+    "jp": "ドライヤー",
+    "cn": "吹风机",
+    "romaji": "doraiyaa"
+   }
+  ],
+  "key": {
+   "jp": "このドライヤーはいくらですか。",
+   "romaji": "Kono doraiyaa wa ikura desu ka.",
+   "cn": "这个吹风机多少钱？",
+   "explain": "询问价钱时，可以用这个说法：「Ikura desu ka」（多少钱）。如果问的时候要说出东西的名称，可以说「Kono / Sono / Ano【东西】wa ikura desu ka」。「ikura」是疑问词，意思是“多少钱”。"
+  },
+  "use": [
+   {
+    "jp": "すみません。この炊飯器はいくらですか。",
+    "romaji": "Sumimasen. Kono suihan-ki wa ikura desu ka.",
+    "cn": "请问，这个电饭煲多少钱？"
+   },
+   {
+    "jp": "8,700円です。",
+    "romaji": "Hassen-nanahyaku-en desu.",
+    "cn": "8700日元。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。この／その／あの ～はいくらですか。",
+    "romaji": "Sumimasen. Kono/Sono/Ano ～wa ikura desu ka.",
+    "cn": "请问，这个／那个／那个 ～多少钱？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "イヤホン",
+       "romaji": "iyahon",
+       "cn": "耳机"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "茶碗",
+       "romaji": "chawan",
+       "cn": "碗"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "两位数和三位数ju⎤uni⎤juusa⎤njuurokuju⎤uhachiju⎤uhyaku⎤nihyaku⎤sa⎤nbyakuroppyaku⎤happyaku⎤1000se⎤nnise⎤nsanze⎤nrokuse⎤nhasse⎤n※1,234　se⎤n-nihyaku-sa⎤njuu-yo⎤n"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "两位数和三位数",
+   "ju⎤u",
+   "ni⎤juu",
+   "sa⎤njuu",
+   "rokuju⎤u",
+   "hachiju⎤u",
+   "hyaku⎤",
+   "nihyaku⎤",
+   "sa⎤nbyaku",
+   "roppyaku⎤",
+   "happyaku⎤",
+   "1000",
+   "se⎤n",
+   "nise⎤n",
+   "sanze⎤n",
+   "rokuse⎤n",
+   "hasse⎤n",
+   "※1,234　se⎤n-nihyaku-sa⎤njuu-yo⎤n"
+  ],
+  "cando": "询问价钱",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。あのイヤホンはいくらですか。",
+    "romaji": "Sumimasen. Ano iyahon wa ikura desu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。この茶碗はいくらですか。",
+    "romaji": "Sumimasen. Kono chawan wa ikura desu ka."
+   }
+  ],
+  "info": [
+   "日本的纸币",
+   "春奶奶的智慧锦囊",
+   "日本的纸币有1000日元、2000日元、5000日元和1万日元4种。2000日元几乎不流通。",
+   "日本的货币",
+   "硬币有1日元、5日元、10日元、50日元、100日元和500日元6种。日本的街头有很多自动售货机，用起来非常方便。不过，请注意，在自动售货机购物，不能使用1日元和5日元。",
+   "作为结婚贺礼等赠送礼金时，要把崭新的钱币装在专用的信封里交给对方。",
+   "日本的硬币"
+  ]
+ },
+ {
+  "num": 11,
+  "title_jp": "お守りはありますか",
+  "title_cn": "有护身符吗",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "このTシャツ、見て。",
+      "romaji": "Kono tii-shatsu, mite.",
+      "cn": "你看这件T恤衫，「忍者"
+     },
+     {
+      "jp": "」って書いてある。",
+      "romaji": "“Ninja” tte kaite aru.",
+      "cn": "上面写着“忍者”。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "わあ、にんじゃ！",
+      "romaji": "Waa, ninja!",
+      "cn": "哇！忍者！"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "いらっしゃいませ。",
+      "romaji": "Irasshaimase.",
+      "cn": "欢迎光临。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "すみません。",
+      "romaji": "Sumimasen.",
+      "cn": "请问，"
+     },
+     {
+      "jp": "お守りはありますか。",
+      "romaji": "Omamori wa arimasu ka.",
+      "cn": "有护身符吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "ちょっと・・・。ここにはありませんねえ。",
+      "romaji": "Chotto... Koko ni wa arimasen nee.",
+      "cn": "呃……这里没有。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "タム、お守りはお寺にあるよ。",
+      "romaji": "Tamu, omamori wa otera ni aru yo.",
+      "cn": "心心，护身符寺院里有。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "お寺ですか。",
+      "romaji": "Otera desu ka.",
+      "cn": "寺院？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "行きましょう。",
+      "romaji": "Ikimashoo.",
+      "cn": "走吧。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "お守り",
+    "cn": "护身符",
+    "romaji": "omamori"
+   },
+   {
+    "jp": "ある",
+    "cn": "有",
+    "romaji": "aru"
+   },
+   {
+    "jp": "お寺",
+    "cn": "寺院",
+    "romaji": "otera"
+   }
+  ],
+  "key": {
+   "jp": "お守りはありますか。",
+   "romaji": "Omamori wa arimasu ka.",
+   "cn": "有护身符吗？",
+   "explain": "在商店等询问是否有你想要的东西时，可以用这个说法：「【想要的东西】waarimasu ka」。「wa」是表示主题的助词，「arimasu」是表示物体存在的动词「aru」的マス形。"
+  },
+  "use": [
+   {
+    "jp": "すみません。地図はありますか。",
+    "romaji": "Sumimasen. Chizu wa arimasu ka.",
+    "cn": "请问，有地图吗？"
+   },
+   {
+    "jp": "はい、こちらです。",
+    "romaji": "Hai, kochira desu.",
+    "cn": "有，给您。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。～はありますか。",
+    "romaji": "Sumimasen. ～wa arimasu ka.",
+    "cn": "请问，有～吗？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "扇子",
+       "romaji": "sensu",
+       "cn": "扇子"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "忍者のTシャツ",
+       "romaji": "ninja no tii-shatsu",
+       "cn": "忍者T恤衫"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "いらっしゃいませ。",
+   "romaji": "Irasshaimase.",
+   "cn": "欢迎光临！",
+   "explain": "在商店或餐馆，店员招呼客人时使用的寒暄语。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "いらっしゃいませ。",
+   "Irasshaima⎤se.",
+   "欢迎光临！",
+   "在商店或餐馆，店员招呼客人时使用的寒暄语。"
+  ],
+  "cando": "询问是否有你想要的东西",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。扇子はありますか。",
+    "romaji": "Sumimasen. Sensu wa arimasu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。忍者のTシャツはありますか。",
+    "romaji": "Sumimasen. Ninja no tii-shatsu wa arimasu ka."
+   }
+  ],
+  "info": [
+   "©Sensoji",
+   "©Sensoji",
+   "©Ganso Ningyouyaki Kimurayahonten",
+   "©Sensoji",
+   "漫步",
+   "草",
+   "草是东京的人气观光景点，悬挂着一只巨大红灯笼的雷门是草寺的入口处，往里走就是仲见世通商店街。",
+   "参道两旁有很多礼品店和点心店等，仲见世通商店街的尽头是草寺的正殿。",
+   "雷门",
+   "浅草寺正殿",
+   "仲见世通商店街",
+   "人形烧",
+   "跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 12,
+  "title_jp": "かわいいお守りですね",
+  "title_cn": "这个护身符真可爱",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "これ、かわいいお守りですね。",
+      "romaji": "Kore, kawaii omamori desu ne.",
+      "cn": "这个护身符真可爱！"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "本当、かわいい。",
+      "romaji": "Hontoo, kawaii.",
+      "cn": "真的！好可爱。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "これもいいですね。",
+      "romaji": "Kore mo ii desu ne.",
+      "cn": "这个也不错。"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "それは縁結びのお守りです。",
+      "romaji": "Sore wa enmusubi no omamori desu.",
+      "cn": "那个是 结缘护身符，"
+     },
+     {
+      "jp": "800円になります。",
+      "romaji": "Happyaku-en ni narimasu.",
+      "cn": "800日元。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "えんむす・・・。",
+      "romaji": "Enmusu...",
+      "cn": "En-musu……"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "縁結び。恋人ができるお守り。",
+      "romaji": "Enmusubi. Koibito ga dekiru omamori.",
+      "cn": "结缘，能带来良缘的护身符。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "じゃあ、これをください。",
+      "romaji": "Jaa, kore o kudasai.",
+      "cn": "那我要这个。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "かわいい",
+    "cn": "可爱",
+    "romaji": "kawaii"
+   },
+   {
+    "jp": "本当",
+    "cn": "真的",
+    "romaji": "hontoo"
+   },
+   {
+    "jp": "いい",
+    "cn": "不错",
+    "romaji": "ii"
+   },
+   {
+    "jp": "それ",
+    "cn": "那个",
+    "romaji": "sore"
+   },
+   {
+    "jp": "縁結び",
+    "cn": "结缘",
+    "romaji": "enmusubi"
+   },
+   {
+    "jp": "～になる",
+    "cn": "价格是～",
+    "romaji": "～ni naru"
+   },
+   {
+    "jp": "恋人",
+    "cn": "恋人",
+    "romaji": "koibito"
+   },
+   {
+    "jp": "できる",
+    "cn": "结交",
+    "romaji": "dekiru"
+   },
+   {
+    "jp": "じゃあ",
+    "cn": "那",
+    "romaji": "jaa"
+   }
+  ],
+  "key": {
+   "jp": "かわいいお守りですね。",
+   "romaji": "Kawaii omamori desu ne.",
+   "cn": "这个护身符真可爱！",
+   "explain": "形容词放在所修饰的名词的前面，例如：「kawaii omamori」（可爱的护身符）。此外，也可以放在句尾，构成句子。像「kawaii」（可爱）这样，词尾是「i」的形容词叫作イ形容词。"
+  },
+  "use": [
+   {
+    "jp": "見て、このTシャツ。",
+    "romaji": "Mite, kono tii-shatsu.",
+    "cn": "你看这件T恤衫。"
+   },
+   {
+    "jp": "おもしろいですね。",
+    "romaji": "Omoshiroi desu ne.",
+    "cn": "真有意思。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【イ形容词】ですね。",
+    "romaji": "【イ形容词】 desu ne.",
+    "cn": "真【イ形容词】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "大きい",
+       "romaji": "ookii",
+       "cn": "大"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "高い",
+       "romaji": "takai",
+       "cn": "贵"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "これをください。",
+   "romaji": "Kore o kudasai.",
+   "cn": "我要这个。",
+   "explain": "你可以在餐馆或商店等，指着自己想要的东西说这句话。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "これをください。",
+   "Kore o kudasa⎤i.",
+   "我要这个。",
+   "你可以在餐馆或商店等，指着自己想要的东西说这句话。"
+  ],
+  "cando": "表达感想或做出说明 1",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "大きいですね。",
+    "romaji": "Ookii desu ne."
+   },
+   {
+    "marker": "②",
+    "jp": "高いですね。",
+    "romaji": "Takai desu ne."
+   }
+  ],
+  "info": [
+   "©Zojoji",
+   "©Nara City Tourist Association",
+   "/Tatehiko Yano",
+   "日本各地都有神社和寺院。神社供奉的是日本自古相传的神道的神明，寺院则是佛教设施。有不少神社寺院已经成为观光名胜，东京都的明治神宫、浅草寺和增上寺等很有人气。",
+   "此外，被誉为神话之乡的岛根县的出云大社，以及拥有巨大佛像的奈良的东大寺也都非常有名。",
+   "明治神宫的大鸟居",
+   "出云大社",
+   "增上寺",
+   "东大寺的大佛",
+   "日本的神社和寺院",
+   "跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 13,
+  "title_jp": "雪が見たいです",
+  "title_cn": "我想看雪",
+  "turns": [
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "日本には慣れましたか。",
+      "romaji": "Nihon ni wa naremashita ka.",
+      "cn": "你对日本已经习惯了吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "嗯。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "日本でどんなことがしたいですか。",
+      "romaji": "Nihon de donna koto ga shitai desu ka.",
+      "cn": "你在日本想做什么？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "ええと、雪が見たいです。",
+      "romaji": "Eeto, yuki ga mitai desu.",
+      "cn": "嗯……我想看雪。"
+     },
+     {
+      "jp": "北海道に行きたいです。",
+      "romaji": "Hokkaidoo ni ikitai desu.",
+      "cn": "想去北海道。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "北海道！ いいね。",
+      "romaji": "Hokkaidoo! Ii ne.",
+      "cn": "北海道！真好。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "あと・・・友達に会いたいです。",
+      "romaji": "Ato...tomodachi ni aitai desu.",
+      "cn": "还有……我想见个朋友。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "おや？",
+      "romaji": "Oya?",
+      "cn": "哦？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "大丈夫？ 顔が赤いよ。",
+      "romaji": "Daijoobu? Kao ga akai yo.",
+      "cn": "没事吧？你脸红了。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "日本",
+    "cn": "日本",
+    "romaji": "Nihon"
+   },
+   {
+    "jp": "どんな",
+    "cn": "什么样的",
+    "romaji": "donna"
+   },
+   {
+    "jp": "する",
+    "cn": "做",
+    "romaji": "suru"
+   },
+   {
+    "jp": "雪",
+    "cn": "雪",
+    "romaji": "yuki"
+   },
+   {
+    "jp": "見る",
+    "cn": "看",
+    "romaji": "miru"
+   },
+   {
+    "jp": "会う",
+    "cn": "见",
+    "romaji": "au"
+   }
+  ],
+  "key": {
+   "jp": "雪が見たいです。",
+   "romaji": "Yuki ga mitai desu.",
+   "cn": "我想看雪。",
+   "explain": "要告诉别人你想做什么，把动词マス形的「masu」去掉，加上「tai」。「mitai」是「mimasu」（「miru」看）接续「tai」的形式。如果在词尾加上「desu」，就变成了郑重说法。宾语用助词「o」或「ga」来表示。"
+  },
+  "use": [
+   {
+    "jp": "日本で何がしたいですか。",
+    "romaji": "Nihon de nani ga shitai desu ka.",
+    "cn": "你在日本想做什么？"
+   },
+   {
+    "jp": "ラーメンが食べたいです。",
+    "romaji": "Raamen ga tabetai desu.",
+    "cn": "我想吃拉面。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～たいです。",
+    "romaji": "～tai desu.",
+    "cn": "我想～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "金閣寺",
+       "romaji": "Kinkakuji",
+       "cn": "金阁寺"
+      },
+      {
+       "jp": "行きます（行く）",
+       "romaji": "ikimasu （iku）",
+       "cn": "去"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "浴か",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "た",
+       "romaji": "yukata",
+       "cn": "衣"
+      },
+      {
+       "jp": "浴衣",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "買います（買う）",
+       "romaji": "kaimasu （kau）",
+       "cn": "买"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "大丈夫？Daijo⎤obu？没事吧？在为对方感到担心时使用。如果要问得更郑重一些，可以用这个说法：「daijoobudesu ka」。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "大丈夫？",
+   "Daijo⎤obu？",
+   "没事吧？",
+   "在为对方感到担心时使用。如果要问得更郑重一些，可以用这个说法：「daijoobu",
+   "desu ka」。"
+  ],
+  "cando": "告诉别人你想做什么",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "金閣寺に行きたいです。",
+    "romaji": "Kinkakuji ni ikitai desu."
+   },
+   {
+    "marker": "②",
+    "jp": "浴衣が買いたいです。",
+    "romaji": "Yukata ga kaitai desu."
+   }
+  ],
+  "info": [
+   "日式家居",
+   "春奶奶的智慧锦囊",
+   "日本的住房里有和室和洋室两种房间。和室里铺着榻榻米，上面放着小茶桌和坐垫。睡觉时就把被褥铺在榻榻米上。",
+   "和室",
+   "洋室",
+   "被褥",
+   "洋室里铺有地板或地毯，通常会摆上桌椅。现在，洋室越来越多，也有很多人过着日西合璧的生活。"
+  ]
+ },
+ {
+  "num": 14,
+  "title_jp": "日本へ行ってみたいです",
+  "title_cn": "我想去日本看看",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "こんにちは。私はタムです。",
+      "romaji": "Konnichiwa. Watashi wa Tamu desu.",
+      "cn": "你好！我是心心。"
+     }
+    ]
+   },
+   {
+    "speaker": "悠辉",
+    "parts": [
+     {
+      "jp": "あ、ぼく、悠輝です。",
+      "romaji": "A, boku, Yuuki desu.",
+      "cn": "哦。我是悠辉。"
+     },
+     {
+      "jp": "タムさん、日本語ができるんですね！",
+      "romaji": "Tamu-san, Nihongo ga dekirun desu ne!",
+      "cn": "心心小姐，你会说日语啊！"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "少しだけです。",
+      "romaji": "Sukoshi dake desu.",
+      "cn": "只会一点儿。"
+     },
+     {
+      "jp": "ラジオで勉強しました。",
+      "romaji": "Rajio de benkyoo-shimashita.",
+      "cn": "听广播学的。"
+     }
+    ]
+   },
+   {
+    "speaker": "悠辉",
+    "parts": [
+     {
+      "jp": "へえ。すごいですね。",
+      "romaji": "Hee. Sugoi desu ne.",
+      "cn": "是吗？真了不起。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "日本へ行ってみたいです。",
+      "romaji": "Nihon e itte mitai desu.",
+      "cn": "我想去日本看看。"
+     }
+    ]
+   },
+   {
+    "speaker": "悠辉",
+    "parts": [
+     {
+      "jp": "ぜひ来てください。",
+      "romaji": "Zehi kite kudasai.",
+      "cn": "一定来啊。"
+     },
+     {
+      "jp": "ぼくが案内しますよ。",
+      "romaji": "Boku ga annai-shimasu yo.",
+      "cn": "我给你做向导。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "できる",
+    "cn": "会",
+    "romaji": "dekiru"
+   },
+   {
+    "jp": "少し",
+    "cn": "一点儿",
+    "romaji": "sukoshi"
+   },
+   {
+    "jp": "だけ",
+    "cn": "只",
+    "romaji": "dake"
+   },
+   {
+    "jp": "すごい",
+    "cn": "了不起",
+    "romaji": "sugoi"
+   },
+   {
+    "jp": "ぜひ",
+    "cn": "一定",
+    "romaji": "zehi"
+   },
+   {
+    "jp": "案内する",
+    "cn": "做向导",
+    "romaji": "annai-suru"
+   }
+  ],
+  "key": {
+   "jp": "日本へ行ってみたいです。",
+   "romaji": "Nihon e itte mitai desu.",
+   "cn": "我想去日本看看。",
+   "explain": "表达自己的愿望时，用「动词的テ形＋mitai」。「itte mitai」的「itte」是动词「iku」（去）的テ形，在词尾加上「desu」，就变成了郑重说法。「～mitai」用来表示你从未经历过的事。"
+  },
+  "use": [
+   {
+    "jp": "日本で何がしたいですか。",
+    "romaji": "Nihon de nani ga shitai desu ka.",
+    "cn": "你在日本想做什么？"
+   },
+   {
+    "jp": "そうですね・・・。相撲を見てみたいです。",
+    "romaji": "Soo desu ne... Sumoo o mite mitai desu.",
+    "cn": "这个嘛……我想看看相扑。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～てみたいです。",
+    "romaji": "～te mitai desu.",
+    "cn": "我想～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "富士山に登る（→登って）",
+       "romaji": "Fujisan ni noboru （→nobotte）",
+       "cn": "爬富士山"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "新幹線に乗る（→乗って）",
+       "romaji": "Shinkansen ni noru （→notte）",
+       "cn": "坐新干线"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "少しだけです。",
+   "romaji": "Sukoshi dake desu.",
+   "cn": "只会一点儿。",
+   "explain": "回应别人对自己能力的夸奖时使用的谦辞。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "少しだけです。",
+   "Sukoshi dake⎤ de⎤su.",
+   "只会一点儿。",
+   "回应别人对自己能力的夸奖时使用的谦辞。"
+  ],
+  "cando": "表达自己的愿望",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "富士山に登ってみたいです。",
+    "romaji": "Fujisan ni nobotte mitai desu."
+   },
+   {
+    "marker": "②",
+    "jp": "新幹線に乗ってみたいです。",
+    "romaji": "Shinkansen ni notte mitai desu."
+   }
+  ],
+  "info": [
+   "相扑",
+   "春奶奶的智慧锦囊",
+   "相扑被认为是日本的国技。两名力士彼此抓住对方，谁先让对方在土表内身体着地或把对方推出土表外谁就是胜者。健硕魁梧的力士碰撞厮杀，场面十分震撼。大相扑的正式比赛每年6次，在奇数月举行。",
+   "有些相扑道场允许粉丝参观晨练。",
+   "大相扑比赛",
+   "晨练"
+  ]
+ },
+ {
+  "num": 15,
+  "title_jp": "猿の温泉までお願いします",
+  "title_cn": "麻烦您 去野猿温泉",
+  "turns": [
+   {
+    "speaker": "司机",
+    "parts": [
+     {
+      "jp": "どちらまで？",
+      "romaji": "Dochira made?",
+      "cn": "您去哪儿？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "猿の温泉までお願いします。",
+      "romaji": "Saru no onsen made onegai-shimasu.",
+      "cn": "麻烦您，去野猿温泉。"
+     }
+    ]
+   },
+   {
+    "speaker": "司机",
+    "parts": [
+     {
+      "jp": "はい、わかりました。",
+      "romaji": "Hai, wakarimashita.",
+      "cn": "好的。知道了。"
+     },
+     {
+      "jp": "こちらは初めてですか。",
+      "romaji": "Kochira wa hajimete desu ka.",
+      "cn": "您是第一次去吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "はい、初めてです。",
+      "romaji": "Hai, hajimete desu.",
+      "cn": "是的。是第一次。"
+     },
+     {
+      "jp": "猿の写真を撮りに行きます。",
+      "romaji": "Saru no shashin o tori ni ikimasu.",
+      "cn": "我要去拍些猴子的照片。"
+     }
+    ]
+   },
+   {
+    "speaker": "司机",
+    "parts": [
+     {
+      "jp": "そうですか。",
+      "romaji": "Soo desu ka.",
+      "cn": "是吗？"
+     },
+     {
+      "jp": "今日は寒いから、猿がたくさん温泉に入ってますよ。",
+      "romaji": "Kyoo wa samui kara, saru ga takusan onsen ni haitte masu yo.",
+      "cn": "今天很冷，应该有很多猴子在泡温泉。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "どちら",
+    "cn": "哪里、哪儿",
+    "romaji": "dochira"
+   },
+   {
+    "jp": "猿",
+    "cn": "猴子",
+    "romaji": "saru"
+   },
+   {
+    "jp": "温泉",
+    "cn": "温泉",
+    "romaji": "onsen"
+   },
+   {
+    "jp": "お願いする",
+    "cn": "请求、拜托",
+    "romaji": "onegai-suru"
+   },
+   {
+    "jp": "初めて",
+    "cn": "第一次",
+    "romaji": "hajimete"
+   },
+   {
+    "jp": "寒い",
+    "cn": "冷",
+    "romaji": "samui"
+   }
+  ],
+  "key": {
+   "jp": "猿の温泉までお願いします。",
+   "romaji": "Saru no onsen made onegai-shimasu.",
+   "cn": "麻烦您，去野猿温泉。",
+   "explain": "要告诉出租车司机你的目的地，可以用这个说法：「【处所】made onegai-shimasu」。「made」是表示终点的助词，意思是“到”。「onegai-shimasu」是动词「onegai-suru」（请求、拜托）的マス形，在向对方提出请求时使用。 （参见《进阶》）"
+  },
+  "use": [
+   {
+    "jp": "どちらまでですか。",
+    "romaji": "Dochira made desu ka.",
+    "cn": "您去哪儿？"
+   },
+   {
+    "jp": "空港までお願いします。",
+    "romaji": "Kuukoo made onegai-shimasu.",
+    "cn": "麻烦您，去机场。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～までお願いします。",
+    "romaji": "～made onegai-shimasu",
+    "cn": "麻烦您，去～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "東京スカイツリー",
+       "romaji": "Tookyoo Sukai-tsurii",
+       "cn": "东京晴空塔"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "このホテル",
+       "romaji": "kono hoteru",
+       "cn": "这家酒店"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "「onegai-shimasu」的用法Chekku-a⎤uto, onegai-shima⎤su.麻烦您，退房。Koohi⎤i, onegai-shima⎤su.来杯咖啡。Okaikee, onegai-shima⎤su.麻烦您，结账。"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "「onegai-shimasu」的用法",
+   "Chekku-a⎤uto, onegai-shima⎤su.",
+   "麻烦您，退房。",
+   "Koohi⎤i, onegai-shima⎤su.",
+   "来杯咖啡。",
+   "Okaikee, onegai-shima⎤su.",
+   "麻烦您，结账。"
+  ],
+  "cando": "把你的目的地告诉出租车司机",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "東京スカイツリーまでお願いします。",
+    "romaji": "Tookyoo Sukai-tsurii made onegai-shimasu."
+   },
+   {
+    "marker": "②",
+    "jp": "このホテルまでお願いします。",
+    "romaji": "Kono hoteru made onegai-shimasu."
+   }
+  ],
+  "info": [
+   "©Nikko",
+   "©Nihon Kotsu",
+   "©Daiichi Koutsu Sangyo",
+   "©Nihon Kotsu",
+   "日本的出租车",
+   "机场、车站、酒店和风景区通常都有出租车上客点。后门是自动开关的，由司机来操控。日本的出租车费会显示在计价器上，无需支付小费。",
+   "出租车空载时，会打出“空车”灯。夜间，如果顶灯亮着，就意味着是空车。",
+   "空车灯",
+   "春奶奶的智慧锦囊"
+  ]
+ },
+ {
+  "num": 16,
+  "title_jp": "有名な温泉です",
+  "title_cn": "这座温泉很有名",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "わあ、猿がいっぱい！",
+      "romaji": "Waa, saru ga ippai!",
+      "cn": "哇，这么多猴子！"
+     }
+    ]
+   },
+   {
+    "speaker": "妻子",
+    "parts": [
+     {
+      "jp": "たくさん写真を撮っているのね。",
+      "romaji": "Takusan shashin o totte iru no ne.",
+      "cn": "你拍了好多照片啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "はい。ここは海外でも有名な温泉です。",
+      "romaji": "Hai. Koko wa kaigai de mo yuumeena onsen desu.",
+      "cn": "嗯。这座温泉在海外也很有名。"
+     }
+    ]
+   },
+   {
+    "speaker": "丈夫",
+    "parts": [
+     {
+      "jp": "へえ、そうなんだ。",
+      "romaji": "Hee, soo nan da.",
+      "cn": "噢，是吗？"
+     },
+     {
+      "jp": "猿が温泉に入るのは珍しいからね。",
+      "romaji": "Saru ga onsen ni hairu no wa mezurashii kara ne.",
+      "cn": "猴子泡温泉确实不多见。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "あ、猿の赤ちゃん。かわいい。",
+      "romaji": "A, saru no akachan. Kawaii.",
+      "cn": "啊，一只小猴子。真可爱。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "わあ",
+    "cn": "哇",
+    "romaji": "waa"
+   },
+   {
+    "jp": "いっぱい",
+    "cn": "很多",
+    "romaji": "ippai"
+   },
+   {
+    "jp": "写真を撮る",
+    "cn": "拍照",
+    "romaji": "shashin o toru"
+   },
+   {
+    "jp": "海外",
+    "cn": "海外",
+    "romaji": "kaigai"
+   },
+   {
+    "jp": "有名（な）",
+    "cn": "有名",
+    "romaji": "yuumee （na）"
+   },
+   {
+    "jp": "そうなんだ",
+    "cn": "是吗",
+    "romaji": "soo nan da"
+   },
+   {
+    "jp": "温泉に入る",
+    "cn": "泡温泉",
+    "romaji": "onsen ni hairu"
+   },
+   {
+    "jp": "珍しい",
+    "cn": "不多见",
+    "romaji": "mezurashii"
+   },
+   {
+    "jp": "赤ちゃん",
+    "cn": "小宝宝",
+    "romaji": "akachan"
+   }
+  ],
+  "key": {
+   "jp": "有名な温泉です。",
+   "romaji": "Yuumeena onsen desu.",
+   "cn": "这座温泉很有名。",
+   "explain": "修饰名词时词尾变成「na」的形容词叫作ナ形容词。例如：「yuumeena」（有名）。也可以把ナ形容词放在句尾，构成句子，但要把「na」去掉，加上「desu」。例如：「Yuumee desu」（很有名）。"
+  },
+  "use": [
+   {
+    "jp": "元気な猿ですね。",
+    "romaji": "Genkina saru desu ne.",
+    "cn": "多么活泼的猴子。"
+   },
+   {
+    "jp": "本当！ 元気ですね。",
+    "romaji": "Hontoo！ Genki desu ne.",
+    "cn": "是啊！真活泼。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【ナ形容词】～ですね。",
+    "romaji": "【ナ形容词】 ～ desu ne.",
+    "cn": "多么【ナ形容词】的～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "静か（な）",
+       "romaji": "shizuka （na）",
+       "cn": "安静"
+      },
+      {
+       "jp": "場所",
+       "romaji": "basho",
+       "cn": "地方"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "きれい（な）",
+       "romaji": "kiree （na）",
+       "cn": "漂亮"
+      },
+      {
+       "jp": "景色",
+       "romaji": "keshiki",
+       "cn": "景色"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "へえ。",
+   "romaji": "Hee.",
+   "cn": "噢。",
+   "explain": "用于应和，表示钦佩或惊讶。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "へえ。",
+   "Hee.",
+   "噢。",
+   "用于应和，表示钦佩或惊讶。"
+  ],
+  "cando": "表达感想或做出说明 2",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "静かな場所ですね。",
+    "romaji": "Shizukana basho desu ne."
+   },
+   {
+    "marker": "②",
+    "jp": "きれいな景色ですね。",
+    "romaji": "Kireena keshiki desu ne."
+   }
+  ],
+  "info": [
+   "©Nyuto Onsen Association",
+   "©Kusatsu Onsen Tourist Association",
+   "日本的温泉",
+   "日本有很多火山，温泉遍布各地。温泉的颜色、气味和肤感各不相同，并且有恢复疲劳等功效。很多日本人喜欢和家人朋友一起到温泉旅馆泡温泉、享受美味，以此来放松身心，消解疲劳。",
+   "别府温泉（大分县）草津温泉（群马县）乳头温泉乡（秋田县）跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 17,
+  "title_jp": "日本を旅行しています",
+  "title_cn": "正在日本旅行",
+  "turns": [
+   {
+    "speaker": "妻子",
+    "parts": [
+     {
+      "jp": "おそば3つ、お願いします。",
+      "romaji": "Osoba mittsu, onegai-shimasu.",
+      "cn": "来3份荞麦面。"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "はーい。",
+      "romaji": "Haai.",
+      "cn": "好的。"
+     }
+    ]
+   },
+   {
+    "speaker": "妻子",
+    "parts": [
+     {
+      "jp": "日本へは、観光ですか。",
+      "romaji": "Nihon e wa, kankoo desu ka.",
+      "cn": "你是来日本旅游的吗?"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "ええと、私は写真家で、日本のことを海外に紹介しています。",
+      "romaji": "Eeto, watashi wa shashinka de, Nihon no koto o ka igai ni shookai-shite ima su.",
+      "cn": "嗯，我是摄影师，向海外介绍日本。"
+     },
+     {
+      "jp": "それで、日本を旅行しています。",
+      "romaji": "Sore de, Nihon o ryokoo-shite imasu.",
+      "cn": "所以，正在日本旅行。"
+     }
+    ]
+   },
+   {
+    "speaker": "丈夫",
+    "parts": [
+     {
+      "jp": "それはすばらしいね。",
+      "romaji": "Sore wa subarashii ne.",
+      "cn": "那可真不错。"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "お待たせしました。",
+      "romaji": "Omatase-shimashita.",
+      "cn": "面来了。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "そば／おそば",
+    "cn": "荞麦面",
+    "romaji": "soba / osoba"
+   },
+   {
+    "jp": "観光",
+    "cn": "旅游",
+    "romaji": "kankoo"
+   },
+   {
+    "jp": "ええと",
+    "cn": "嗯",
+    "romaji": "eeto"
+   },
+   {
+    "jp": "こと",
+    "cn": "事情",
+    "romaji": "koto"
+   },
+   {
+    "jp": "紹介する",
+    "cn": "介绍",
+    "romaji": "shookai-suru"
+   },
+   {
+    "jp": "それで",
+    "cn": "所以",
+    "romaji": "sore de"
+   },
+   {
+    "jp": "旅行する",
+    "cn": "旅行",
+    "romaji": "ryokoo-suru"
+   },
+   {
+    "jp": "すばらしい",
+    "cn": "不错",
+    "romaji": "subarashii"
+   },
+   {
+    "jp": "お待たせしました",
+    "cn": "让您久等了",
+    "romaji": "omatase-shimashita"
+   }
+  ],
+  "key": {
+   "jp": "日本を旅行しています。",
+   "romaji": "Nihon o ryokoo-shite imasu.",
+   "cn": "正在日本旅行。",
+   "explain": "要说明你现在正在做的事，可以用这个说法：「动词的テ形＋imasu」。「ryokoo-shite imasu」是由「ryokoo-suru」（旅行）的テ形「ryokoo-shite」加上「imasu」构成的。　（参见 p. 150-151）"
+  },
+  "use": [
+   {
+    "jp": "旅行ですか。",
+    "romaji": "Ryokoo desu ka.",
+    "cn": "你在旅行吗？"
+   },
+   {
+    "jp": "はい。あちこち旅行しています。",
+    "romaji": "Hai. Achikochi ryokoo-shite imasu.",
+    "cn": "是的。我正在各处旅行。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～ています。",
+    "romaji": "～te imasu.",
+    "cn": "我正在～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "日本語を勉強する（→勉強して）",
+       "romaji": "Nihongo o benkyoo-suru （→benkyoo-shite）",
+       "cn": "学习日语"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "仕事をする（→して）",
+       "romaji": "Shigoto o suru （→shite）",
+       "cn": "工作"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "1つ",
+   "romaji": "",
+   "cn": "",
+   "explain": "点餐时等使用的数量词2つ3つ4つ5つhito⎤tsu futatsu⎤mittsu⎤yottsu⎤itsu⎤tsu"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "点餐时等使用的数量词",
+   "1つ",
+   "2つ",
+   "3つ",
+   "4つ",
+   "5つ",
+   "hito⎤tsu futatsu⎤mittsu⎤yottsu⎤itsu⎤tsu"
+  ],
+  "cando": "告诉别人你现在正在做什么",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "日本語を勉強しています。",
+    "romaji": "Nihongo o benkyoo-shite imasu."
+   },
+   {
+    "marker": "②",
+    "jp": "仕事をしています。",
+    "romaji": "Shigoto o shite imasu."
+   }
+  ],
+  "info": [
+   "©Gomasoba YAGUMO",
+   "荞麦面是日本的传统面食。面是用荞麦粉做的，把面条煮好后，蘸着用酱油做底料的酱汁吃，或者浇上味道清淡的热汤头吃。",
+   "蘸着酱汁吃的笼屉荞麦面",
+   "浇上热汤头的素汤荞麦面",
+   "在车站内的荞麦面馆，乘客可以利用上车前的时间快速就餐。",
+   "立食荞麦面馆",
+   "日本的荞麦面",
+   "海斗的美食攻略"
+  ]
+ },
+ {
+  "num": 18,
+  "title_jp": "すごく楽しかったです",
+  "title_cn": "特别开心",
+  "turns": [
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "おかえりなさい。",
+      "romaji": "Okaerinasai.",
+      "cn": "你回来了。"
+     },
+     {
+      "jp": "長野はどうでしたか。",
+      "romaji": "Nagano wa doo deshita ka.",
+      "cn": "长野怎么样？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "すごく楽しかったです。",
+      "romaji": "Sugoku tanoshikatta desu.",
+      "cn": "特别开心。"
+     },
+     {
+      "jp": "写真をたくさん撮りました。",
+      "romaji": "Shashin o takusan torimashita.",
+      "cn": "我拍了很多照片，"
+     },
+     {
+      "jp": "それから、おそばも食べました。",
+      "romaji": "Sorekara, osoba mo tabemashita.",
+      "cn": "还吃了荞麦面，"
+     },
+     {
+      "jp": "とてもおいしかったです。",
+      "romaji": "Totemo oishikatta desu.",
+      "cn": "非常好吃。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "そうですか。よかったですね。",
+      "romaji": "Soo desu ka. Yokatta desu ne.",
+      "cn": "是吗？那太好了。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "長野の人はとても親切でした。",
+      "romaji": "Na gano no hito wa totemo shi nsetsu de shita.",
+      "cn": "长野人特别热情。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "楽しい旅行でしたね。",
+      "romaji": "Tanoshii ryokoo deshita ne.",
+      "cn": "看样子，这次旅行很开心啊。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "どう",
+    "cn": "怎么样",
+    "romaji": "doo"
+   },
+   {
+    "jp": "すごく",
+    "cn": "特别",
+    "romaji": "sugoku"
+   },
+   {
+    "jp": "楽しい",
+    "cn": "开心",
+    "romaji": "tanoshii"
+   },
+   {
+    "jp": "それから",
+    "cn": "还有",
+    "romaji": "sorekara"
+   },
+   {
+    "jp": "人",
+    "cn": "人",
+    "romaji": "hito （）"
+   },
+   {
+    "jp": "親切（な）",
+    "cn": "热情",
+    "romaji": "shinsetsu (na)"
+   }
+  ],
+  "key": {
+   "jp": "すごく楽しかったです。",
+   "romaji": "Sugoku tanoshikatta desu.",
+   "cn": "特别开心。",
+   "explain": "イ形容词的过去形是把词尾「i（desu）」变成「katta（desu）」。如果是ナ形容词或名词，就把句尾的「desu」变成「deshita」。"
+  },
+  "use": [
+   {
+    "jp": "大阪はどうでしたか。",
+    "romaji": "Oosaka wa doo deshita ka.",
+    "cn": "大阪怎么样？"
+   },
+   {
+    "jp": "よかったです。とてもにぎやかでした。",
+    "romaji": "Yokatta desu. Totemo nigiyaka deshita.",
+    "cn": "很好。非常热闹。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【イ形容词】かったです／【ナ形容词】でした。",
+    "romaji": "【イ形容词】 katta desu/【ナ形容词】 deshita.",
+    "cn": "很【イ形容词】／【ナ形容词】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "すばらしい",
+       "romaji": "subarashii",
+       "cn": "棒"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "きれい（な）",
+       "romaji": "kiree (na)",
+       "cn": "漂亮"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "おかえりなさい。",
+   "romaji": "Okaerinasai.",
+   "cn": "你回来了。",
+   "explain": "这是对回到家的人说的寒暄语。比较随意的说法是「Okaeri」，非常郑重的说法是「Okaerinasaimase」。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "おかえりなさい。",
+   "Okaerinasai.",
+   "你回来了。",
+   "这是对回到家的人说的寒暄语。比较随意的说法是「Okaeri」，非常郑重的说法",
+   "是「Okaerinasaimase」。"
+  ],
+  "cando": "就你所经历的事情表达你的感想",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すばらしかったです。",
+    "romaji": "Subarashikatta desu."
+   },
+   {
+    "marker": "②",
+    "jp": "きれいでした。",
+    "romaji": "Kiree deshita."
+   }
+  ],
+  "info": [
+   "Photo Courtesy of JR CENTRAL",
+   "©JR－CENTRAL PASSENGERS",
+   "新干线能够让人们在短时间内往来于很多主要城市。从东京到长野大约需要1个半小时；从东京到京都，快的话2个多小时就能到达。新干线车厢既安静又整洁，乘客可享受温馨舒适的旅程。",
+   "新干线路线图 （截至2019年9月）新干线与富士山车内销售跟着米亚去旅行日本的新干线"
+  ]
+ },
+ {
+  "num": 19,
+  "title_jp": "手袋が欲しいんですが",
+  "title_cn": "我想要一副手套",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "あのう、すみません。",
+      "romaji": "Anoo, sumimasen.",
+      "cn": "嗯，对不起，"
+     },
+     {
+      "jp": "手袋が欲しいんですが。",
+      "romaji": "Tebukuro ga hoshiin desu ga.",
+      "cn": "我想要一副手套。"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "手袋はこちらです。",
+      "romaji": "Tebukuro wa kochira desu.",
+      "cn": "手套在这边。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "これ、あったかそう。",
+      "romaji": "Kore, attakasoo.",
+      "cn": "这副看上去很暖和。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "いいですね。",
+      "romaji": "Ii desu ne.",
+      "cn": "真好。"
+     },
+     {
+      "jp": "これ、いくらですか。",
+      "romaji": "Kore, ikura desu ka.",
+      "cn": "这副多少钱？"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "1,900円です。",
+      "romaji": "Sen-kyuuhyaku-en desu.",
+      "cn": "1900日元。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "カードは使えますか。",
+      "romaji": "Kaado wa tsukaemasu ka.",
+      "cn": "可以用信用卡吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "はい、使えます。",
+      "romaji": "Hai, tsukaemasu.",
+      "cn": "可以。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "手袋",
+    "cn": "手套",
+    "romaji": "tebukuro"
+   },
+   {
+    "jp": "欲しい",
+    "cn": "想要",
+    "romaji": "hoshii"
+   },
+   {
+    "jp": "こちら",
+    "cn": "这边",
+    "romaji": "kochira"
+   },
+   {
+    "jp": "あったかい",
+    "cn": "暖和",
+    "romaji": "attakai"
+   },
+   {
+    "jp": "カード",
+    "cn": "信用卡",
+    "romaji": "kaado"
+   },
+   {
+    "jp": "使う",
+    "cn": "用",
+    "romaji": "tsukau"
+   }
+  ],
+  "key": {
+   "jp": "手袋が欲しいんですが。",
+   "romaji": "Tebukuro ga hoshiin desu ga.",
+   "cn": "我想要一副手套。",
+   "explain": "告诉店员你要买什么，可以用这个说法：「【东西】ga hoshiin desu ga」。在「hoshii」（想要）的后面加上「n desu ga」，就可以告诉对方你的情况，请对方做出回应。句尾要降下来，读得轻一些。"
+  },
+  "use": [
+   {
+    "jp": "あのう、すみません。北海道のお土産が欲しいんですが。",
+    "romaji": "Anoo, sumimasen. Hokkaidoo no omiyage ga hoshiin desu ga.",
+    "cn": "嗯，对不起，我想要北海道的伴手礼。"
+   },
+   {
+    "jp": "そうですね。このお菓子はいかがですか。",
+    "romaji": "Soo desu ne. Kono okashi wa ikaga desu ka.",
+    "cn": "哦。这种点心如何？"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "あのう、すみません。～が欲しいんですが。",
+    "romaji": "Anoo, sumimasen. ～ga hoshiin desu ga.",
+    "cn": "嗯，对不起，我想要～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "風呂敷",
+       "romaji": "furoshiki",
+       "cn": "包袱皮"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "傘",
+       "romaji": "kasa",
+       "cn": "雨伞"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "カードは使えますか。",
+   "romaji": "Kaado wa tsukaemasu ka.",
+   "cn": "可以用信用卡吗？",
+   "explain": "这个说法用来确认你是否可以用信用卡支付。「tsukaeru」（可以用）是「tsukau」（用）的可能形。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "カードは使えますか。",
+   "Ka⎤ado wa tsukaema⎤su ka.",
+   "可以用信用卡吗？",
+   "这个说法用来确认你是否可以用信用卡支付。「tsukaeru」（可以用）是",
+   "「tsukau」（用）的可能形。"
+  ],
+  "cando": "告诉店员你要买什么",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "あのう、すみません。風呂敷が欲しいんですが。",
+    "romaji": "Anoo, sumimasen. Furoshiki ga hoshiin desu ga."
+   },
+   {
+    "marker": "②",
+    "jp": "あのう、すみません。傘が欲しいんですが。",
+    "romaji": "Anoo, sumimasen. Kasa ga hoshiin desu ga."
+   }
+  ],
+  "info": [
+   "©Don Quijote",
+   "日本有越来越多的商店可以使用信用卡等进行电子支付。",
+   "不过，有些店家只收取现金。在日本旅行时，带上一些现金会比较方便。",
+   "有些邮局和便利店设有ATM，可以使用信用卡提取现金。",
+   "信用卡在日本",
+   "春奶奶的智慧锦囊"
+  ]
+ },
+ {
+  "num": 20,
+  "title_jp": "わさびは入れないでください",
+  "title_cn": "请别放山葵",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "おすすめは何ですか。",
+      "romaji": "Osusume wa nan desu ka.",
+      "cn": "您这儿的特色菜是什么？"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "このスペシャル海鮮丼が",
+      "romaji": "Kono supesharu-kaisen-don ga",
+      "cn": "这个特色海鲜盖饭很不错！"
+     },
+     {
+      "jp": "おすすめだよ！イクラとウニがたっぷり入ってるよ。",
+      "romaji": "osusume da yo! Ikura to uni ga tappuri haitteru yo.",
+      "cn": "里面有很多鲑鱼子和海胆。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "じゃあ、それください。",
+      "romaji": "Jaa, sore kudasai.",
+      "cn": "那我就要那个。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "私も。",
+      "romaji": "Watashi mo.",
+      "cn": "我也是。"
+     },
+     {
+      "jp": "あ、わさびは入れないでください。",
+      "romaji": "A, wasabi wa irenaide kudasai.",
+      "cn": "啊，请别放山葵。"
+     }
+    ]
+   },
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "わさび抜きね。そちらは？",
+      "romaji": "Wasabi nuki ne. Sochira wa?",
+      "cn": "不放山葵。您呢？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "私はわさびをたくさん入れてください。",
+      "romaji": "Watashi wa wasabi o takusan irete kudasai.",
+      "cn": "请给我多放点山葵。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "海鮮丼",
+    "cn": "海鲜盖饭",
+    "romaji": "kaisen-don"
+   },
+   {
+    "jp": "たっぷり",
+    "cn": "很多",
+    "romaji": "tappuri"
+   },
+   {
+    "jp": "入る",
+    "cn": "含有",
+    "romaji": "hairu"
+   },
+   {
+    "jp": "わさび",
+    "cn": "山葵",
+    "romaji": "wasabi"
+   },
+   {
+    "jp": "入れる",
+    "cn": "放入",
+    "romaji": "ireru"
+   },
+   {
+    "jp": "～抜き",
+    "cn": "不含～",
+    "romaji": "～nuki"
+   }
+  ],
+  "key": {
+   "jp": "わさびは入れないでください。",
+   "romaji": "Wasabi wa irenaide kudasai.",
+   "cn": "请别放山葵。",
+   "explain": "告诉对方你不想要某种食材等，可以用这个说法：「动词的ナイ形＋dekudasai」 。ナイ形就是词尾为「nai」的活用形，表示否定。「ireru」（放入）のナイ形是「irenai」。　（参见 p. 150-151)"
+  },
+  "use": [
+   {
+    "jp": "オレンジジュース1",
+    "romaji": "",
+    "cn": "一杯橙汁。请别放冰块。"
+   },
+   {
+    "jp": "ひと",
+    "romaji": "",
+    "cn": "好的。"
+   },
+   {
+    "jp": "つ。氷は入れないでください。",
+    "romaji": "Orenji-juusu hitotsu. Koori wa irenaide kudasai.",
+    "cn": ""
+   },
+   {
+    "jp": "かしこまりました。",
+    "romaji": "Kashikomarimashita.",
+    "cn": ""
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【不想要的东西】は～ないでください。",
+    "romaji": "",
+    "cn": "［不想要的东西］ wa ～naide kudasa⎤i.请别～【不想要的东西】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "ドレッシング",
+       "romaji": "doresshingu",
+       "cn": "调味汁"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "唐辛子",
+       "romaji": "toogarashi",
+       "cn": "辣椒"
+      },
+      {
+       "jp": "かける（→かけない）",
+       "romaji": "kakeru （→kakenai）",
+       "cn": "浇"
+      },
+      {
+       "jp": "使う（→使わない）",
+       "romaji": "tsukau （→tsukawanai）",
+       "cn": "用"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "おすすめは何ですか。",
+   "romaji": "Osusume wa nan desu ka.",
+   "cn": "您这儿的特色菜是什么？",
+   "explain": "在餐馆等询问特色菜时可以用这个说法。「osusume」的意思是“您推荐的东西”。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "おすすめは何ですか。",
+   "Osusume wa na⎤n de⎤su ka.",
+   "您这儿的特色菜是什么？",
+   "在餐馆等询问特色菜时可以用这个说法。",
+   "「osusume」的意思是“您推荐的东西”。"
+  ],
+  "cando": "请对方不要在你的菜里放某样东西",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "ドレッシングはかけないでください。",
+    "romaji": "Doresshingu wa kakenaide kudasai."
+   },
+   {
+    "marker": "②",
+    "jp": "唐辛子は使わないでください。",
+    "romaji": "Toogarashi wa tsukawanaide kudasai."
+   }
+  ],
+  "info": [
+   "©Toyako Town",
+   "©HITCA",
+   "北海道为日本海、鄂霍次克海和太平洋所环绕，盛产螃蟹、乌贼、鲑鱼、鲑鱼子等海产品，渔业非常发达。",
+   "在早市等品尝新鲜的鱼贝类也是去北海道旅行的一大乐趣。",
+   "北海道的海产品在海外也备受青睐，尤其是扇贝人气旺盛，大量出口到海外市场。",
+   "尽情享受北海道的海鲜吧！",
+   "海斗的美食攻略",
+   "扇贝",
+   "函馆的早市",
+   "丰富的海产品"
+  ]
+ },
+ {
+  "num": 21,
+  "title_jp": "時計台の中にいます",
+  "title_cn": "在钟楼里",
+  "turns": [
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "もしもし、タムさん。",
+      "romaji": "Moshimoshi, Tamu-san.",
+      "cn": "喂，心心。"
+     },
+     {
+      "jp": "今、どこにいるの？",
+      "romaji": "Ima, doko ni iru no?",
+      "cn": "你现在在哪儿？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "時計台の中にいます。",
+      "romaji": "Tokeedai no naka ni imasu.",
+      "cn": "在钟楼里。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "え、中？",
+      "romaji": "E, naka?",
+      "cn": "啊，里面？"
+     },
+     {
+      "jp": "じゃあ、ぼくもすぐそっちに行くね。",
+      "romaji": "Jaa, boku mo sugu socchi ni iku ne.",
+      "cn": "那我也马上过去。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "わかりました。",
+      "romaji": "Wakarimashita.",
+      "cn": "好。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "あ、海斗！ こっち、こっち!",
+      "romaji": "A, Kaito! Kocchi, kocchi!",
+      "cn": "啊，海斗！这里，这里！"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "ごめん、遅くなって。",
+      "romaji": "Gomen, osoku natte.",
+      "cn": "对不起，我来晚了。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "もしもし",
+    "cn": "喂",
+    "romaji": "moshimoshi"
+   },
+   {
+    "jp": "今",
+    "cn": "现在",
+    "romaji": "ima"
+   },
+   {
+    "jp": "いる",
+    "cn": "在",
+    "romaji": "iru"
+   },
+   {
+    "jp": "時計台",
+    "cn": "钟楼",
+    "romaji": "tokeedai"
+   },
+   {
+    "jp": "中",
+    "cn": "里面",
+    "romaji": "naka"
+   },
+   {
+    "jp": "すぐ",
+    "cn": "马上",
+    "romaji": "sugu"
+   },
+   {
+    "jp": "そっち",
+    "cn": "那里、那儿",
+    "romaji": "socchi"
+   },
+   {
+    "jp": "ごめん",
+    "cn": "对不起",
+    "romaji": "gomen"
+   },
+   {
+    "jp": "遅くなる",
+    "cn": "来晚",
+    "romaji": "osoku naru"
+   }
+  ],
+  "key": {
+   "jp": "時計台の中にいます。",
+   "romaji": "Tokeedai no naka ni imasu.",
+   "cn": "在钟楼里。",
+   "explain": "要告诉对方你在哪儿，可以用这个说法：「【处所】ni imasu」。如果想准确表达自己的方位，可以利用地标建筑，说出你和它的位置关系：「【地标】no【位置】ni imasu」。例如：「tokeedai no naka （钟楼里） ni imasu」。"
+  },
+  "use": [
+   {
+    "jp": "今、どこにいますか。",
+    "romaji": "Ima, doko ni imasu ka.",
+    "cn": "你现在在哪儿？"
+   },
+   {
+    "jp": "改札の前にいます。",
+    "romaji": "Kaisatsu no mae ni imasu.",
+    "cn": "在检票闸口前面。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【地标】の【位置】にいます。",
+    "romaji": "【地标】 no 【位置】 ni imasu.",
+    "cn": "在【地标】【位置】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "コンビニ",
+       "romaji": "konbini",
+       "cn": "便利店"
+      },
+      {
+       "jp": "中",
+       "romaji": "naka",
+       "cn": "里"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "インフォメーション",
+       "romaji": "infomeeshon",
+       "cn": "问询处"
+      },
+      {
+       "jp": "横",
+       "romaji": "yoko",
+       "cn": "旁边"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "わかりました。",
+   "romaji": "Wakarimashita.",
+   "cn": "好。",
+   "explain": "表示理解了对方所说的话。动词的辞书形是「wakaru」（明白）。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "わかりました。",
+   "Wakarima⎤shita.",
+   "好。",
+   "表示理解了对方所说的话。动词的辞书形是「wakaru」（明白）。"
+  ],
+  "cando": "告诉对方你在哪儿",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "コンビニの中にいます。",
+    "romaji": "Konbini no naka ni imasu."
+   },
+   {
+    "marker": "②",
+    "jp": "インフォメーションの横にいます。",
+    "romaji": "Infomeeshon no yoko ni imasu."
+   }
+  ],
+  "info": [
+   "方便的便利店",
+   "春奶奶的智慧锦囊",
+   "很多便利店都是24小时营业，全年无休。便利店不仅出售便当、三明治、点心和饮料，日用品也一应俱全。不但如此，你还可以在店里的ATM取款，在店里领取网上订购的门票等。",
+   "多功能自助服务机"
+  ]
+ },
+ {
+  "num": 22,
+  "title_jp": "写真を撮りましょう",
+  "title_cn": "拍张照片吧",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "すごい！",
+      "romaji": "Sugoi!",
+      "cn": "太美了！"
+     },
+     {
+      "jp": "タム、見て見て!",
+      "romaji": "Tamu, mite mite!",
+      "cn": "心心，你看，你看！"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "わあ、大きいですね。",
+      "romaji": "Waa, ookii desu ne.",
+      "cn": "哇，好大啊。"
+     },
+     {
+      "jp": "初めて見ました。",
+      "romaji": "Hajimete mimashita.",
+      "cn": "我还是第一次看到。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "どうやって作ったんだろう・・・。",
+      "romaji": "Doo yatte tsukuttan daroo...",
+      "cn": "是怎么做的呢……"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "きれいですね。",
+      "romaji": "Kiree desu ne.",
+      "cn": "真漂亮。"
+     },
+     {
+      "jp": "みんなで写真を撮りましょう。",
+      "romaji": "Minna de shashin o torimashoo.",
+      "cn": "咱们一起拍张照片吧。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "いいね。",
+      "romaji": "Iine.",
+      "cn": "好主意。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "見る",
+    "cn": "看",
+    "romaji": "miru"
+   },
+   {
+    "jp": "大きい",
+    "cn": "大",
+    "romaji": "ookii"
+   },
+   {
+    "jp": "初めて",
+    "cn": "第一次",
+    "romaji": "hajimete"
+   },
+   {
+    "jp": "どうやって",
+    "cn": "怎么",
+    "romaji": "dooyatte"
+   },
+   {
+    "jp": "作る",
+    "cn": "做",
+    "romaji": "tsukuru"
+   },
+   {
+    "jp": "きれい（な）",
+    "cn": "漂亮",
+    "romaji": "kiree (na)"
+   },
+   {
+    "jp": "みんなで",
+    "cn": "大家一起",
+    "romaji": "minna de"
+   },
+   {
+    "jp": "写真を撮る",
+    "cn": "拍照",
+    "romaji": "shashin o toru"
+   },
+   {
+    "jp": "いい",
+    "cn": "好",
+    "romaji": "ii"
+   }
+  ],
+  "key": {
+   "jp": "写真を撮りましょう。",
+   "romaji": "Shashin o torimashoo.",
+   "cn": "拍张照片吧。",
+   "explain": "向对方发出邀请时，把动词マス形的词尾「masu」变成「mashoo」。「shashin otoru」（拍照）的动词「toru」的マス形是「torimasu」，所以变成「torimashoo」。"
+  },
+  "use": [
+   {
+    "jp": "この店に入りましょう。",
+    "romaji": "Kono mise ni hairimashoo.",
+    "cn": "进这家店吧。"
+   },
+   {
+    "jp": "いいですね。",
+    "romaji": "Ii desu ne.",
+    "cn": "好主意。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～ましょう。",
+    "romaji": "～mashoo.",
+    "cn": "～吧。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "時計台に行く（→行きます）",
+       "romaji": "tokeedai ni iku （→ikimasu）",
+       "cn": "去钟楼"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "ちょっと休む（→休みます）",
+       "romaji": "chotto yasumu （→yasumimasu）",
+       "cn": "休息一下"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "すごい！",
+   "romaji": "Sugoi !",
+   "cn": "在感到吃惊、赞叹、感动时使用。较为郑重的说法是「Sugoi desu ne」。",
+   "explain": ""
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "すごい！",
+   "Sugo⎤i !",
+   "在感到吃惊、赞叹、感动时使用。较为郑重的说法是「Sugoi desu ne」。"
+  ],
+  "cando": "向对方发出邀请的说法 1",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "時計台に行きましょう。",
+    "romaji": "Tokeedai ni ikimashoo."
+   },
+   {
+    "marker": "②",
+    "jp": "ちょっと休みましょう。",
+    "romaji": "Chotto yasumimashoo."
+   }
+  ],
+  "info": [
+   "©SHIRETOKO SIGHTSEEING CRUISER DOLPHIN",
+   "©HTB",
+   "©Asahiyama Zoo",
+   "北海道拥有美丽的自然风光，世界遗产知床栖息着很多野生动物。冬季你可以去参观冰雪节，享受滑雪等冬季运动。在旭山动物园（旭川市），你可以看到企鹅在雪上列队散步，非常可爱。",
+   "跟着米亚去旅行",
+   "旅游胜地北海道",
+   "知床的棕熊",
+   "札幌冰雪节",
+   "企鹅散步（旭山动物园）札幌市钟楼"
+  ]
+ },
+ {
+  "num": 23,
+  "title_jp": "私はこの猫が好きです",
+  "title_cn": "我喜欢这只猫",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "かわいい。",
+      "romaji": "Kawaii.",
+      "cn": "真可爱。"
+     },
+     {
+      "jp": "みんなごはんを食べています。",
+      "romaji": "Minna gohan o tabete imasu.",
+      "cn": "它们都在吃食。"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "本当にかわいいね。",
+      "romaji": "Hontoo ni kawaii ne.",
+      "cn": "真的好可爱。"
+     },
+     {
+      "jp": "おいで、おいで！",
+      "romaji": "Oide, oide!",
+      "cn": "过来，过来！"
+     },
+     {
+      "jp": "私はこの子が好き。",
+      "romaji": "Watashi wa konoko ga suki.",
+      "cn": "我喜欢这只。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "私はこの猫が好きです。",
+      "romaji": "Watashi wa kono neko ga suki desu.",
+      "cn": "我喜欢这只猫。"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "猫カフェって、リラックスできるよね。",
+      "romaji": "Neko-kafe tte, rirakkusu dekiru yo ne.",
+      "cn": "猫咪咖啡馆可以让人放松心情，是不是？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "ほんとですね。",
+      "romaji": "Honto desu ne.",
+      "cn": "真是这样。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "みんな",
+    "cn": "都",
+    "romaji": "minna"
+   },
+   {
+    "jp": "ごはん",
+    "cn": "饭食",
+    "romaji": "gohan"
+   },
+   {
+    "jp": "本当に",
+    "cn": "真的",
+    "romaji": "hontoo ni"
+   },
+   {
+    "jp": "好き（な）",
+    "cn": "喜欢",
+    "romaji": "suki (na)"
+   },
+   {
+    "jp": "猫",
+    "cn": "猫",
+    "romaji": "neko"
+   },
+   {
+    "jp": "リラックスする",
+    "cn": "放松",
+    "romaji": "rirakkusu-suru"
+   }
+  ],
+  "key": {
+   "jp": "私はこの猫が好きです。",
+   "romaji": "Watashi wa kono neko ga suki desu.",
+   "cn": "我喜欢这只猫。",
+   "explain": "要告诉别人你喜欢什么，可以用这个说法：「【东西】ga suki desu」。「suki」（喜欢）是ナ形容词，喜欢的对象【东西】的后面要加上助词「ga」。如果喜欢「neko」（猫）的话，就是「Neko ga suki desu」。"
+  },
+  "use": [
+   {
+    "jp": "食べ物は、何が好きですか。",
+    "romaji": "Tabemono wa, nani ga suki desu ka.",
+    "cn": "吃的东西，你喜欢什么？"
+   },
+   {
+    "jp": "すしが好きです。",
+    "romaji": "Sushi ga suki desu.",
+    "cn": "我喜欢寿司。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～が好きです。",
+    "romaji": "～ga suki desu.",
+    "cn": "我喜欢～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "J-POP",
+       "romaji": "jee-poppu",
+       "cn": "日本流行音乐"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "マンガ",
+       "romaji": "manga",
+       "cn": "漫画"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "ほんとですね。",
+   "romaji": "Honto desu ne.",
+   "cn": "真是这样。",
+   "explain": "对对方的意见或感想表示强烈赞同时使用。「honto」是把「hontoo」（真的）的长音省略了的说法。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "ほんとですね。",
+   "Honto de⎤su ne.",
+   "真是这样。",
+   "对对方的意见或感想表示强烈赞同时使用。「honto」是把「hontoo」（真的）",
+   "的长音省略了的说法。"
+  ],
+  "cando": "告诉别人你喜欢什么",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "J-POPが好きです。",
+    "romaji": "Jee-poppu ga suki desu."
+   },
+   {
+    "marker": "②",
+    "jp": "マンガが好きです。",
+    "romaji": "Manga ga suki desu."
+   }
+  ],
+  "info": [
+   "©Happy Owl Café chouette",
+   "迈克与流行文化",
+   "日本的特色咖啡馆",
+   "可以和动物近距离接触的咖啡馆，除了猫咪以外，还有“猫头鹰咖啡馆”、“兔子咖啡馆”等，都很有人气。",
+   "除此以外，还有女仆咖啡馆、星象仪咖啡馆、足浴咖啡馆等各种别具特色的咖啡馆。",
+   "足浴咖啡馆",
+   "兔子咖啡馆",
+   "猫头鹰咖啡馆"
+  ]
+ },
+ {
+  "num": 24,
+  "title_jp": "生卵は食べられません",
+  "title_cn": "不能吃生鸡蛋",
+  "turns": [
+   {
+    "speaker": "海斗＆心心",
+    "parts": [
+     {
+      "jp": "いただきます。",
+      "romaji": "Itadakimasu.",
+      "cn": "Itadakimasu。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "日本食は健康にいいんですよ。",
+      "romaji": "Nihon-shoku wa kenkoo ni iin desu yo.",
+      "cn": "日本料理有益健康哦。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "これ、生卵ですか。",
+      "romaji": "Kore, nama-tamago desu ka.",
+      "cn": "这是生鸡蛋吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "是的。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "すみません。",
+      "romaji": "Sumimasen.",
+      "cn": "对不起。"
+     },
+     {
+      "jp": "私、生卵は食べられません。",
+      "romaji": "Watashi, nama-tamago wa taberaremasen.",
+      "cn": "我不能吃生鸡蛋。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "そう。じゃあ、納豆もだめ？",
+      "romaji": "Soo. Jaa, nattoo mo dame?",
+      "cn": "是吗？那纳豆也不行吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "納豆！ 大好きです。",
+      "romaji": "Nattoo! Daisuki desu.",
+      "cn": "纳豆！特别喜欢。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "日本食",
+    "cn": "日本料理",
+    "romaji": "nihonshoku"
+   },
+   {
+    "jp": "健康",
+    "cn": "健康",
+    "romaji": "kenkoo"
+   },
+   {
+    "jp": "生卵",
+    "cn": "生鸡蛋",
+    "romaji": "nama-tamago"
+   },
+   {
+    "jp": "納豆",
+    "cn": "纳豆",
+    "romaji": "nattoo"
+   },
+   {
+    "jp": "だめ（な）",
+    "cn": "不行",
+    "romaji": "dame (na)"
+   },
+   {
+    "jp": "大好き（な）",
+    "cn": "特别喜欢",
+    "romaji": "daisuki (na)"
+   }
+  ],
+  "key": {
+   "jp": "生卵は食べられません。",
+   "romaji": "Nama-tamago wa taberaremasen.",
+   "cn": "不能吃生鸡蛋。",
+   "explain": "要告诉对方你不能吃什么，可以用这个说法：「【食物】wa taberaremasen（不能吃【食物】）」。「taberaremasen」是动词「taberu」（吃）的可能形「taberareru」（能吃）的郑重语气的否定形。"
+  },
+  "use": [
+   {
+    "jp": "どうぞ、たくさん食べてください。",
+    "romaji": "Doozo, takusan tabete kudasai.",
+    "cn": "请多吃点。"
+   },
+   {
+    "jp": "すみません。私、刺身は食べられません。",
+    "romaji": "Sumimasen. Watashi, sashimi wa taberaremasen.",
+    "cn": "对不起。我不能吃生鱼片。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。私、～は食べられません。",
+    "romaji": "Sumimasen. Watashi, ～wa taberaremasen.",
+    "cn": "对不起。我不能吃～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "えび",
+       "romaji": "ebi",
+       "cn": "虾"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "豚肉",
+       "romaji": "butaniku",
+       "cn": "猪肉"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "いただきます。",
+   "romaji": "Itadakimasu.",
+   "cn": "用餐前的寒暄语。在用餐前说这句话，表示对烹饪者和食物的感谢。用餐后的寒",
+   "explain": "暄语是「Gochisoosama deshita」。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "いただきます。",
+   "Itadakima⎤su.",
+   "用餐前的寒暄语。在用餐前说这句话，表示对烹饪者和食物的感谢。用餐后的寒",
+   "暄语是「Gochisoosama deshita」。"
+  ],
+  "cando": "告诉对方你不喜欢或不能吃什么",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。私、えびは食べられません。",
+    "romaji": "Sumimasen. Watashi, ebi wa taberaremasen."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。私、豚肉は食べられません。",
+    "romaji": "Sumimasen. Watashi, butaniku wa taberaremasen."
+   }
+  ],
+  "info": [
+   "©Hotel Okura Tokyo",
+   "日本的传统早餐是和食，通常有米饭、味噌汤和烤鱼等。最近也有很多人吃西餐，有面包、鸡蛋和咖啡等。",
+   "日本的早餐",
+   "海斗的美食攻略",
+   "酒店和旅馆的早餐多种多样，有的地方提供自助餐。",
+   "自助早餐",
+   "早餐（和食）早餐（西餐）"
+  ]
+ },
+ {
+  "num": 25,
+  "title_jp": "のどが痛いんです",
+  "title_cn": "嗓子疼",
+  "turns": [
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "タムさん、顔色が悪いですよ。",
+      "romaji": "Tamu-san, kaoiro ga warui desu yo.",
+      "cn": "心心，你脸色不好。"
+     },
+     {
+      "jp": "どうしたんですか。",
+      "romaji": "Doo shitan desu ka.",
+      "cn": "怎么了？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "のどが痛いんです。",
+      "romaji": "Nodo ga itain desu.",
+      "cn": "嗓子疼。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "おやおや。",
+      "romaji": "Oya oya.",
+      "cn": "哎哟哟。"
+     },
+     {
+      "jp": "そんなときには「しょうがはちみつ湯」がいいですよ。",
+      "romaji": "Sonna toki ni wa “shooga-hachimitsu-yu” ga ii desu yo.",
+      "cn": "这种时候可以喝点儿“生姜蜂蜜水”。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "海斗が今、作っています。",
+      "romaji": "Kaito ga ima, tsukutte imasu.",
+      "cn": "海斗正在冲呢。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "タムさん、できたよ。",
+      "romaji": "Tamu-san, dekita yo.",
+      "cn": "心心，冲好了。"
+     },
+     {
+      "jp": "はい、どうぞ。",
+      "romaji": "Hai, doozo.",
+      "cn": "来，喝吧。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "お大事に。",
+      "romaji": "Odaiji ni.",
+      "cn": "多保重。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "顔色が悪い",
+    "cn": "脸色不好",
+    "romaji": "kaoiro ga warui"
+   },
+   {
+    "jp": "のど",
+    "cn": "嗓子",
+    "romaji": "nodo"
+   },
+   {
+    "jp": "痛い",
+    "cn": "疼",
+    "romaji": "itai"
+   }
+  ],
+  "key": {
+   "jp": "のどが痛いんです。",
+   "romaji": "Nodo ga itain desu.",
+   "cn": "嗓子疼。",
+   "explain": "向别人说明自己身体不舒服等情况时，在句尾加上「～n desu」。如果是有什么地方感到疼的话，可以用イ形容词「itai」（疼），这样说：「【身体部位】ga itaindesu」。助词「ga」表示疼痛的部位。"
+  },
+  "use": [
+   {
+    "jp": "どうしたんですか。",
+    "romaji": "Doo shitan desu ka.",
+    "cn": "怎么了？"
+   },
+   {
+    "jp": "頭が痛いんです。熱があるんです。",
+    "romaji": "Atama ga itain desu.Netsu ga arun desu.",
+    "cn": "头疼。发烧了。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～んです。",
+    "romaji": "～n desu.",
+    "cn": ""
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "お腹が痛い",
+       "romaji": "onaka ga itai",
+       "cn": "肚子疼"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "気持ちが悪い",
+       "romaji": "kimochi ga warui",
+       "cn": "不舒服"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "お大事に。",
+   "romaji": "Odaiji ni.",
+   "cn": "多保重。",
+   "explain": "对生病或受伤的人表示关心时说这句话，表示自己希望对方安心修养，早日康复。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "お大事に。",
+   "Odaiji ni.",
+   "多保重。",
+   "对生病或受伤的人表示关心时说这句话，表示自己希望对方安心修养，早日康复。"
+  ],
+  "cando": "身体不适的表达方法",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "お腹が痛いんです。",
+    "romaji": "Onaka ga itain desu."
+   },
+   {
+    "marker": "②",
+    "jp": "気持ちが悪いんです。",
+    "romaji": "Kimochi ga waruin desu."
+   }
+  ],
+  "info": [
+   "Medicine",
+   "Patient name",
+   "After breakfast,",
+   "lunch, and dinner",
+   "One tablet",
+   "each time",
+   "Three times",
+   "a day",
+   "如果在日本生病了······如果症状不严重的话，去药房或药妆店比较方便。跟药剂师咨询一下，对方会告诉你该买店里的哪种药，不需要处方单。",
+   "如果症状比较严重的话，还是要去诊所或医院。医生诊断后会给你开具处方，你拿着处方单到药房去拿药。日本政府观光局（JNTO）的网站刊有具备外国游客接诊条件的医疗机构信息，请输入 For safe travels in Japan JNTO 搜索所需信息。",
+   "处方药袋",
+   "春奶奶的智慧锦囊",
+   "药",
+   "患者姓名",
+   "每日三次",
+   "早中晚 饭后服用",
+   "每次一片"
+  ]
+ },
+ {
+  "num": 26,
+  "title_jp": "この卵焼き、甘くておいしいです",
+  "title_cn": "这个玉子烧甜甜的 很好吃",
+  "turns": [
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "お弁当だよ。",
+      "romaji": "Obentoo da yo.",
+      "cn": "这是便当。"
+     },
+     {
+      "jp": "ぼくが作ったんだ。どうぞ。",
+      "romaji": "Boku ga tsukuttan da. Doozo.",
+      "cn": "我做的，请尝尝。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "きれい！",
+      "romaji": "Kiree!",
+      "cn": "真漂亮!"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "すごい！ いただきます。",
+      "romaji": "Sugoi! Itadakimasu.",
+      "cn": "太丰盛了!  Itadakimasu。"
+     },
+     {
+      "jp": "この卵焼き、甘くておいしいです。",
+      "romaji": "Kono tamago-yaki, amakute oishii desu.",
+      "cn": "这个玉子烧甜甜的，很好吃。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "海斗は本当に料理が上手だね。",
+      "romaji": "Kaito wa hontoo ni ryoori ga joozu da ne.",
+      "cn": "海斗，你的厨艺真是太棒了！"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "ぼく、シェフになりたいんだ。",
+      "romaji": "Boku, shefu ni naritain da.",
+      "cn": "我想当一名厨师。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "いいねえ。",
+      "romaji": "Ii nee.",
+      "cn": "那很好啊。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "卵焼き",
+    "cn": "玉子烧",
+    "romaji": "tamago-yaki"
+   },
+   {
+    "jp": "甘い",
+    "cn": "甜",
+    "romaji": "amai"
+   },
+   {
+    "jp": "料理",
+    "cn": "烹饪",
+    "romaji": "ryoori"
+   }
+  ],
+  "key": {
+   "jp": "この卵焼き、甘くておいしいです。",
+   "romaji": "Kono tamago-yaki, amakute oishii desu.",
+   "cn": "这个玉子烧甜甜的，很好吃。",
+   "explain": "连续使用两个或两个以上的形容词时，如果是イ形容词，就把词尾「～i」变成「～kute」，再接下一个形容词。例如：「amai」→「amakute」（甜）。如果是ナ形容词，就把词尾「～na」变成「～de」。例如：「kiree（na）」→「kiree de」（漂亮）。"
+  },
+  "use": [
+   {
+    "jp": "上野公園、どうでしたか。",
+    "romaji": "Ueno-kooen, doo deshita ka.",
+    "cn": "上野公园怎么样？"
+   },
+   {
+    "jp": "広くて、きれいで、とてもよかったです。",
+    "romaji": "Hirokute, kiree de, totemo yokatta desu.",
+    "cn": "又大又漂亮，特别好。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【形容词1】くて／で【形容词2】です（ね）。",
+    "romaji": "",
+    "cn": "［形容词1］ kute/de ［形容词2］ de⎤su （ne）.又【形容词1】又【形容词2】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "小さい",
+       "romaji": "chiisaikawaii",
+       "cn": "小巧"
+      },
+      {
+       "jp": "可爱",
+       "romaji": "",
+       "cn": ""
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "正確",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "（な）",
+       "romaji": "seekaku （na）",
+       "cn": "准时"
+      },
+      {
+       "jp": "便利",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "（な）",
+       "romaji": "benri （na）",
+       "cn": "方便"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "どうぞ。",
+   "romaji": "Doozo.",
+   "cn": "请。",
+   "explain": "在餐桌上劝酒敬菜或给予对方许可时使用。把东西递给对方时也可以这样说。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "どうぞ。",
+   "Do⎤ozo.",
+   "请。",
+   "在餐桌上劝酒敬菜或给予对方许可时使用。把东西递给对方时也可以这样说。"
+  ],
+  "cando": "表达多重感想 1",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "小さくてかわいいですね。",
+    "romaji": "Chiisakute kawaii desu ne."
+   },
+   {
+    "marker": "②",
+    "jp": "正確で便利ですね。",
+    "romaji": "Seekaku de benri desu ne.©Himeji City"
+   }
+  ],
+  "info": [
+   "赏花",
+   "春奶奶的智慧锦囊",
+   "日本人春天有赏樱的习俗。或漫步在如云似霞的花海下，欣赏淡粉色的樱花，或坐在樱花树下品尝美味可口的便当。樱花的花期在每年的3月到5月，由南向北顺次开放。彩灯照耀下的夜樱别有情趣，很值得一看。",
+   "三春泷樱",
+   "（福岛县）东京中城",
+   "姬路城与樱花",
+   "（兵库县）赏花的人们"
+  ]
+ },
+ {
+  "num": 27,
+  "title_jp": "どれが一番おいしいですか",
+  "title_cn": "哪个最好吃",
+  "turns": [
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "ご注文は？",
+      "romaji": "Gochuumon wa?",
+      "cn": "来点儿什么？"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "タムさん、何にする？",
+      "romaji": "Tamu-san, nani ni suru?",
+      "cn": "心心，你想吃什么？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "どれが一番おいしいですか。",
+      "romaji": "Dore ga ichiban oishii desu ka.",
+      "cn": "哪个最好吃？"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "みそラーメンがおすすめだよ。",
+      "romaji": "Miso-raamen ga osusume da yo.",
+      "cn": "建议你吃味噌拉面。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "みそラーメン・・・。",
+      "romaji": "Miso-raamen...",
+      "cn": "味噌拉面……"
+     }
+    ]
+   },
+   {
+    "speaker": "悠辉",
+    "parts": [
+     {
+      "jp": "日本のラーメンはおいしいよ。",
+      "romaji": "Nihon no raamen wa oishii yo.",
+      "cn": "日本的拉面非常好吃。"
+     },
+     {
+      "jp": "ぼくはみそラーメンが好きなんだ。",
+      "romaji": "Boku wa miso-raamen ga suki nan da.",
+      "cn": "我喜欢吃味噌拉面。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "私、みそラーメンにします。",
+      "romaji": "Watashi, miso-raamen ni shimasu.",
+      "cn": "我要味噌拉面。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "～にする",
+    "cn": "要～",
+    "romaji": "～ni suru"
+   },
+   {
+    "jp": "どれ",
+    "cn": "哪个",
+    "romaji": "dore"
+   },
+   {
+    "jp": "一番〜",
+    "cn": "最〜",
+    "romaji": "ichiban～"
+   },
+   {
+    "jp": "みそラーメン",
+    "cn": "味噌拉面",
+    "romaji": "miso-raamen"
+   },
+   {
+    "jp": "おすすめ",
+    "cn": "推荐／建议",
+    "romaji": "osusume"
+   },
+   {
+    "jp": "日本",
+    "cn": "日本",
+    "romaji": "Nihon"
+   }
+  ],
+  "key": {
+   "jp": "どれが一番おいしいですか。",
+   "romaji": "Dore ga ichiban oishii desu ka.",
+   "cn": "哪个最好吃？",
+   "explain": "如果你想问从几样东西里选哪个好，可以用这个说法：「Dore ga ichiban～ka」。「dore」（哪个）是疑问词，表示从多个东西里选择一个。「ichiban」（第一）接在形容词前面时，意思是“最”。"
+  },
+  "use": [
+   {
+    "jp": "どれが一番人気がありますか。",
+    "romaji": "Dore ga ichiban ninki ga arimasu ka.",
+    "cn": "哪个最有人气？"
+   },
+   {
+    "jp": "これがおすすめです。",
+    "romaji": "Kore ga osusume desu.",
+    "cn": "建议您选这个。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "どれが一番",
+    "romaji": "",
+    "cn": ""
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "安い",
+       "romaji": "yasui",
+       "cn": "便宜"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "お得",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "（な）",
+       "romaji": "otoku （na）",
+       "cn": "实惠"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "ご注文は？",
+   "romaji": "Gochuumon wa?",
+   "cn": "来点儿什么？",
+   "explain": "这是店员提供点单服务时的用语。「chuumon」是“点单”的意思，前面的「go」表示尊敬。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "ご注文は？",
+   "Gochuumon wa?",
+   "来点儿什么？",
+   "这是店员提供点单服务时的用语。「chuumon」是“点单”的意思，前面的",
+   "「go」表示尊敬。"
+  ],
+  "cando": "问对方选哪个好",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "どれが一番安いですか。",
+    "romaji": "Dore ga ichiban yasui desu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "どれが一番お得ですか。",
+    "romaji": "Dore ga ichiban otoku desu ka.©Ramen Tatsunoya"
+   }
+  ],
+  "info": [
+   "日本的拉面",
+   "海斗的美食攻略",
+   "拉面原是中餐，在日本经过改良后，如今已成为具有代表性的日本料理之一了。",
+   "熬制拉面汤头的材料有鸡架、猪骨、海鲜等。味噌、盐、酱油等不同的调味料也赋予了拉面多种口味。日本各地有很多特色拉面。如果你有忌口，最好事先确认一下烹饪材料。有的拉面店提供清真食品、不含过敏源的食品或者素食。",
+   "酱油拉面",
+   "猪骨拉面",
+   "味噌拉面"
+  ]
+ },
+ {
+  "num": 28,
+  "title_jp": "写真を撮ってもいいですか",
+  "title_cn": "可以拍照吗",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "大人1ひとり人お願いします。",
+      "romaji": "Otona hitori onegai-shimasu.",
+      "cn": "要一张大人票。"
+     },
+     {
+      "jp": "すみません。",
+      "romaji": "Sumimasen.",
+      "cn": "请问，"
+     },
+     {
+      "jp": "写真を撮ってもいいですか。",
+      "romaji": "Shashin o totte mo ii desu ka.",
+      "cn": "可以拍照吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "工作人员",
+    "parts": [
+     {
+      "jp": "ええ、いいですよ。",
+      "romaji": "Ee, ii desu yo.",
+      "cn": "可以，没问题。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "すてき！",
+      "romaji": "Suteki!",
+      "cn": "真棒!"
+     }
+    ]
+   },
+   {
+    "speaker": "工作人员",
+    "parts": [
+     {
+      "jp": "お客様、ここから先はご遠慮ください。",
+      "romaji": "Okyakusama, koko kara saki wa goenryo-kudasai.",
+      "cn": "这位客人，您不能再靠近了。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "あ、すみません。",
+      "romaji": "A, sumimasen.",
+      "cn": "哦，对不起。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "大人",
+    "cn": "大人",
+    "romaji": "otona"
+   },
+   {
+    "jp": "ええ",
+    "cn": "可以",
+    "romaji": "ee"
+   },
+   {
+    "jp": "すてき（な）",
+    "cn": "好",
+    "romaji": "suteki （na）"
+   },
+   {
+    "jp": "お客様",
+    "cn": "先生/女士（用来称呼客人）",
+    "romaji": "okyakusama"
+   },
+   {
+    "jp": "先",
+    "cn": "前方",
+    "romaji": "saki"
+   },
+   {
+    "jp": "遠慮する",
+    "cn": "客气、回避、谢绝",
+    "romaji": "enryo-suru"
+   }
+  ],
+  "key": {
+   "jp": "写真を撮ってもいいですか。",
+   "romaji": "Shashin o totte mo ii desu ka.",
+   "cn": "可以拍照吗？",
+   "explain": "向对方寻求许可时，可以用这个说法：「动词的テ形＋mo ii desu ka」。「～temo ii （desu）」表示许可，意思是“可以～”。「shashin o totte」是「shashin otoru」（拍照）的テ形。（参见p.150-151）"
+  },
+  "use": [
+   {
+    "jp": "この服、試着してもいいですか。",
+    "romaji": "Kono fuku, shichaku-shite mo ii desu ka.",
+    "cn": "这件衣服可以试穿吗?"
+   },
+   {
+    "jp": "もちろんです。",
+    "romaji": "Mochiron desu.",
+    "cn": "当然。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～てもいいですか。",
+    "romaji": "～te mo ii desu ka.",
+    "cn": "可以～吗？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "入る（→入って）",
+       "romaji": "hairu （→haitte）",
+       "cn": "进去"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "休む（→休んで）",
+       "romaji": "yasumu （→yasunde）",
+       "cn": "休息"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "人数的说法1人2人3人4人5人hito⎤rifutari⎤san-ninsan-ni⎤nyo-ninyo-ni⎤ngo-ningo-ni⎤n"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "人数的说法",
+   "1人",
+   "2人",
+   "3人",
+   "4人",
+   "5人",
+   "hito⎤ri",
+   "futari⎤",
+   "san-nin",
+   "san-ni⎤n",
+   "yo-nin",
+   "yo-ni⎤n",
+   "go-nin",
+   "go-ni⎤n"
+  ],
+  "cando": "寻求许可",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "入ってもいいですか。",
+    "romaji": "Haitte mo ii desu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "休んでもいいですか。",
+    "romaji": "Yasunde mo ii desu ka."
+   }
+  ],
+  "info": [
+   "迈克与流行文化",
+   "日本的音乐",
+   "日本的音乐种类很多。有流行音乐、动漫音乐、演歌等，还有用日本筝、三味线、日式大鼓等传统乐器演奏的音乐。",
+   "单从日本流行音乐来说，就有偶像组合、摇滚乐队等多种多样的艺人在开展活动。另外，日本各地还邀请海内外音乐人举办各种音乐节。",
+   "©Kodo, Taiko Performing Arts Ensemble/Takashi Okamoto",
+   "©Masanori Naruse",
+   "©SUMMER SONIC",
+   "日式大鼓表演",
+   "日本筝演奏",
+   "SUMMER SONIC",
+   "富士摇滚音乐节"
+  ]
+ },
+ {
+  "num": 29,
+  "title_jp": "ピアノの演奏を聴きに行きました",
+  "title_cn": "我去听钢琴演奏了",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "日曜日に、ピアノの演奏を聴きに行きました。",
+      "romaji": "Nichi-yoobi ni, piano no ensoo o kiki ni ikimashita.",
+      "cn": "星期天我去听钢琴演奏了。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "どうでしたか。",
+      "romaji": "Doo deshita ka.",
+      "cn": "怎么样？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "すばらしかったです。",
+      "romaji": "Subarashikatta desu.",
+      "cn": "棒极了！"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "それはよかったですね。",
+      "romaji": "Sore wa yokatta desu ne.",
+      "cn": "那太好了！"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "写真をたくさん撮りました。",
+      "romaji": "Shashin o takusan torimashita.",
+      "cn": "我拍了好多照片。"
+     },
+     {
+      "jp": "見てください。",
+      "romaji": "Mite kudasai.",
+      "cn": "你们看。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "あ！ これ、悠輝さん・・・。",
+      "romaji": "A! Kore, Yuuki-san...",
+      "cn": "啊！这是悠辉……"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "悠輝さん？",
+      "romaji": "Yuuki-san?",
+      "cn": "悠辉？"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "日曜日",
+    "cn": "星期天",
+    "romaji": "nichi-yoobi"
+   },
+   {
+    "jp": "ピアノ",
+    "cn": "钢琴",
+    "romaji": "piano"
+   },
+   {
+    "jp": "演奏",
+    "cn": "演奏",
+    "romaji": "ensoo"
+   },
+   {
+    "jp": "聴く",
+    "cn": "听",
+    "romaji": "kiku"
+   },
+   {
+    "jp": "すばらしい",
+    "cn": "精彩",
+    "romaji": "subarashii"
+   },
+   {
+    "jp": "写真",
+    "cn": "照片",
+    "romaji": "shashin"
+   }
+  ],
+  "key": {
+   "jp": "ピアノの演奏を聴きに行きました。",
+   "romaji": "Piano no ensoo o kiki ni ikimashita.",
+   "cn": "我去听钢琴演奏了。",
+   "explain": "「マス形的动词去掉masu＋ni iku」，用这个说法可以表示去的目的。在这个句子里，目的是「pianonoensoookiku」（听钢琴演奏），所以，把「kiku」（听）的マス形「kikimasu」的「masu」去掉，加上「ni iku」。"
+  },
+  "use": [
+   {
+    "jp": "今日、どこに行きましたか。",
+    "romaji": "Kyoo, doko ni ikimashita ka.",
+    "cn": "今天你去哪儿了？"
+   },
+   {
+    "jp": "原宿に、服を買いに行きました。",
+    "romaji": "Harajuku ni, fuku o kai ni ikimashita.",
+    "cn": "去原宿买衣服了。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～に行きました。",
+    "romaji": "～ ni ikimashita.",
+    "cn": "去～了。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "すしを食べる（→食べ）",
+       "romaji": "sushi o taberu （→tabe）",
+       "cn": "吃寿司"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "野球を見る（→見",
+       "romaji": "yakyuu o miru （→mi）",
+       "cn": "）"
+      },
+      {
+       "jp": "看棒球",
+       "romaji": "",
+       "cn": ""
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "星期月曜日火曜日水曜日木曜日金曜日土曜日日曜日getsu-yo⎤obika-yo⎤obisui-yo⎤obimoku-yo⎤obikin-yo⎤obido-yo⎤obinichi-yo⎤obi"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "星期",
+   "月曜日",
+   "火曜日",
+   "水曜日",
+   "木曜日",
+   "金曜日",
+   "土曜日",
+   "日曜日",
+   "getsu-",
+   "yo⎤obi",
+   "ka-",
+   "yo⎤obi",
+   "sui-",
+   "yo⎤obi",
+   "moku-",
+   "yo⎤obi",
+   "kin-",
+   "yo⎤obi",
+   "do-",
+   "yo⎤obi",
+   "nichi-",
+   "yo⎤obi"
+  ],
+  "cando": "表述你做了什么",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すしを食べに行きました。",
+    "romaji": "Sushi o tabe ni ikimashita."
+   },
+   {
+    "marker": "②",
+    "jp": "野球を見に行きました。",
+    "romaji": "Yakyuu o mi ni ikimashita."
+   }
+  ],
+  "info": [
+   "©TSURUGAOKA HACHIMANGU",
+   "©Kotoku-in/KAMAKURA TOURIST ASSOC.",
+   "©Enoshima Electric Railway",
+   "漫步镰仓",
+   "从东京到镰仓坐电车去要大约1个小时。这里是大约800年前诞生的第一个武士政权的所在地。",
+   "鹤冈八幡宫、高11米的镰仓大佛等非常有名。",
+   "除了历史遗迹之外，这里还有随季节变换的四季美景、富有情趣的商店和咖啡馆等。可爱的支线电车江之电也很有人气。",
+   "镰仓大佛",
+   "鹤冈八幡宫",
+   "明月院",
+   "江之电",
+   "跟着米亚去旅行",
+   "（6月盛开的绣球花）"
+  ]
+ },
+ {
+  "num": 30,
+  "title_jp": "一緒に歌ったり、踊ったりしました",
+  "title_cn": "一起唱歌　一起跳舞",
+  "turns": [
+   {
+    "speaker": "店员",
+    "parts": [
+     {
+      "jp": "メロンパフェでございます。",
+      "romaji": "Meron-pafe de gozaimasu.",
+      "cn": "这是哈密瓜巴菲。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "おいしそう！",
+      "romaji": "Oishisoo!",
+      "cn": "好诱人啊！"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "タム、悠輝さんと、どこで会ったの？",
+      "romaji": "Tamu, Yuuki-san to, doko de atta no?",
+      "cn": "心心，你和悠辉是在哪儿认识的？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "ベトナムです。",
+      "romaji": "Betonamu desu.",
+      "cn": "在越南。"
+     },
+     {
+      "jp": "小学校でボランティアをしました。",
+      "romaji": "Shoogakkoo de borantia o shimashita.",
+      "cn": "我们在一所小学做义工。"
+     },
+     {
+      "jp": "一緒に歌ったり、踊ったりしました。",
+      "romaji": "Issho ni utattari, odottari shimashita.",
+      "cn": "一起唱歌，一起跳舞。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "そうだったの。",
+      "romaji": "Soo datta no.",
+      "cn": "是吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。悠輝さんに会いたいです。",
+      "romaji": "Hai. Yuuki-san ni aitai desu.",
+      "cn": "是的。我很想再见到悠辉。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "メロンパフェ",
+    "cn": "哈密瓜巴菲",
+    "romaji": "meron-pafe"
+   },
+   {
+    "jp": "小学校",
+    "cn": "小学",
+    "romaji": "shoogakkoo"
+   },
+   {
+    "jp": "ボランティア",
+    "cn": "义工",
+    "romaji": "borantia"
+   },
+   {
+    "jp": "一緒に",
+    "cn": "一起",
+    "romaji": "issho ni"
+   },
+   {
+    "jp": "歌う",
+    "cn": "唱歌",
+    "romaji": "utau"
+   },
+   {
+    "jp": "踊る",
+    "cn": "跳舞",
+    "romaji": "odoru"
+   }
+  ],
+  "key": {
+   "jp": "一緒に歌ったり、踊ったりしました。",
+   "romaji": "Issho ni utattari, odottari shimashita.",
+   "cn": "一起唱歌，一起跳舞。",
+   "explain": "从多个行为中进行列举时，可以使用动词接续「tari」的形式。变换方法是把动词テ形的「te」去掉，加上「tari」。如果要叙述已经做过的事，就在后面加上「shimashita」（做了）。"
+  },
+  "use": [
+   {
+    "jp": "北海道で何をしますか。",
+    "romaji": "Hokkaidoo de nani o shimasu ka.",
+    "cn": "你打算在北海道做什么？"
+   },
+   {
+    "jp": "ハイキングをしたり、温泉に入ったりしたいです。",
+    "romaji": "Haikingu o shitari, onsen ni haittari shitai desu.",
+    "cn": "我想郊游、洗温泉。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【动词1】たり、【动词2】たりしました。／したいです。",
+    "romaji": "",
+    "cn": "［动词1］tari, ［动词2］tari shima⎤shita./shita⎤i de⎤su.我【动词1】了，【动词2】了。／想【动词1】，【动词2】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "<做过的事>",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "買い物をする（→したり）",
+       "romaji": "kaimono o suru （→shitari）",
+       "cn": "买东西"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "<想做的事>",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "お寺に行く（→行ったり）",
+       "romaji": "otera ni iku （→ittari）",
+       "cn": "去寺院"
+      },
+      {
+       "jp": "海で泳ぐ（→泳いだり）",
+       "romaji": "umi de oyogu （→oyoidari）",
+       "cn": "在海里游泳"
+      },
+      {
+       "jp": "着物を着る（→着たり）",
+       "romaji": "kimono o kiru （→kitari）",
+       "cn": "穿和服"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "おいしそう！",
+   "romaji": "Oishisoo!",
+   "cn": "好诱人啊！",
+   "explain": "如果料理看上去很好吃，就可以这样说。如果你在吃的时候想说“好吃”，那就说「oishii」。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "おいしそう！",
+   "Oishisoo!",
+   "好诱人啊！",
+   "如果料理看上去很好吃，就可以这样说。如果你在吃的时候想说“好吃”，那就",
+   "说「oishii」。"
+  ],
+  "cando": "叙述做过的或将要做的各种事",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "買い物をしたり、海で泳いだりしました。",
+    "romaji": "Kaimono o shitari, umi de oyoidari shimashita."
+   },
+   {
+    "marker": "②",
+    "jp": "お寺に行ったり、着物を着たりしたいです。",
+    "romaji": "Otera ni ittari, kimono o kitari shitai desu."
+   }
+  ],
+  "info": [
+   "©Toraya Confectionery",
+   "©Toraya Confectionery",
+   "©SHINJUKU TAKANO",
+   "©FUJIYA",
+   "赏心悦目的日本甜点",
+   "海斗的美食攻略",
+   "日本的甜点种类繁多，有日式的，也有西式的。",
+   "日式点心有年糕、仙贝、馒头。春天有使用樱花花瓣或树叶制作的年糕，夏天有表现星空或溪流等充满清凉气息的点心，无不令人赏心悦目。",
+   "西式糕点有很多是融入了日本元素的。例如，草莓蛋糕就是在海绵蛋糕上加入了鲜奶油和草莓。点缀着五颜六色水果的巴菲也让人欲罢不能。",
+   "樱花年糕",
+   "夏季限定的日式点心",
+   "草莓蛋糕",
+   "哈密瓜巴菲"
+  ]
+ },
+ {
+  "num": 31,
+  "title_jp": "一緒に行きませんか",
+  "title_cn": "一起去 好不好",
+  "turns": [
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "今度の土曜日、海斗と忍者博物館に行きます。",
+      "romaji": "Kondo no do-yoobi, Kaito to Ninja-Hakubutsukan ni ikimasu.",
+      "cn": "这个星期六，我和海斗去忍者博物馆。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "マイクさんは、本当に忍者が好きですね。",
+      "romaji": "Maiku-san wa, hontoo ni ninja ga suki desu ne.",
+      "cn": "迈克，你可真喜欢忍者啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "是。"
+     },
+     {
+      "jp": "みんなで一緒に行きませんか。",
+      "romaji": "Minna de issho ni ikimasen ka.",
+      "cn": "大家一起去，好不好？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "ああ、土曜日はちょっと・・・。",
+      "romaji": "Aa, do-yoobi wa chotto...",
+      "cn": "啊，星期六我不太方便……"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "私も授業があります。",
+      "romaji": "Watashi mo jugyoo ga arimasu.",
+      "cn": "我也有课。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "残念。",
+      "romaji": "Zannen.",
+      "cn": "真不巧。"
+     },
+     {
+      "jp": "じゃあ、2ふた人で行こう。",
+      "romaji": "Jaa, futari de ikoo.",
+      "cn": "那我们俩去吧。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "今度",
+    "cn": "距离现在最近的下一次",
+    "romaji": "kondo"
+   },
+   {
+    "jp": "博物館",
+    "cn": "博物馆",
+    "romaji": "hakubutsukan"
+   },
+   {
+    "jp": "残念（な）",
+    "cn": "遗憾",
+    "romaji": "zannen （na）"
+   }
+  ],
+  "key": {
+   "jp": "一緒に行きませんか。",
+   "romaji": "Issho ni ikimasen ka.",
+   "cn": "一起去，好不好？",
+   "explain": "向对方发出邀请时，把动词マス形的词尾「masu」变成「masen ka」，用升调来读。「～masen」是否定形，但「～masen ka」是表示邀请的意思。如果接受邀请，可以说「ii desu ne」（好啊）。"
+  },
+  "use": [
+   {
+    "jp": "今晩、一緒にごはんを食べに行きませんか。",
+    "romaji": "Konban, issho ni gohan o tabe ni ikimasen ka.",
+    "cn": "今晚一起去吃饭，好不好？"
+   },
+   {
+    "jp": "いいですね。行きましょう。",
+    "romaji": "Ii desu ne. Ikimashoo.",
+    "cn": "好啊。一起去吧。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～ませんか。",
+    "romaji": "～masen ka.",
+    "cn": "～，好不好？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "みんなでバーベキューをする（→します）",
+       "romaji": "minna de baabekyuu o suru （→shimasu）",
+       "cn": "大家一起吃烧烤"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "一緒に歌う（→歌います）",
+       "romaji": "issho ni utau （→utaimasu）",
+       "cn": "一起唱歌"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "土曜日はちょっと…。",
+   "romaji": "Do-yoobi wa chotto...",
+   "cn": "星期六我不太方便……",
+   "explain": "这是表示拒绝的说法。「chotto」是“有点儿”的意思，不过，把词尾拉长一些，弱弱地说，就表示委婉的拒绝。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "土曜日はちょっと…。",
+   "Do-yo⎤obi wa cho⎤tto...",
+   "星期六我不太方便……",
+   "这是表示拒绝的说法。「chotto」是“有点儿”的意思，不过，把词尾拉长一",
+   "些，弱弱地说，就表示委婉的拒绝。"
+  ],
+  "cando": "向对方发出邀请的说法 2",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "みんなでバーベキューをしませんか。",
+    "romaji": "Minna de baabekyuu o shimasen ka."
+   },
+   {
+    "marker": "②",
+    "jp": "一緒に歌いませんか。",
+    "romaji": "Issho ni utaimasen ka."
+   }
+  ],
+  "info": [
+   "迈克与流行文化",
+   "忍者的秘密",
+   "忍者活跃于15世纪后的日本的战国时代，类似于今天的间谍或特种部队队员。不过，忍者的诞生还有很多未解之谜。",
+   "忍者的服装很有名，但有时为了潜入敌方阵营，忍者也会装扮成商人、僧侣或街头艺人等。",
+   "忍者使用手里剑等各种工具以及火药乃至心理学知识等来完成任务，被视为拥有特殊技能的人群，为武将所重用。",
+   "忍者的乔装打扮"
+  ]
+ },
+ {
+  "num": 32,
+  "title_jp": "忍者博物館まで、どう行ったらいいですか",
+  "title_cn": "去忍者博物馆怎么走",
+  "turns": [
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "マイク、似合うね。かっこいい。",
+      "romaji": "Maiku, niau ne. Kakkoii.",
+      "cn": "迈克，这衣服很适合你。真酷！"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "うれしいな。",
+      "romaji": "Ureshii na.",
+      "cn": "太好了。"
+     },
+     {
+      "jp": "あのう、すみません。",
+      "romaji": "Anoo, sumimasen.",
+      "cn": "啊，请问，"
+     },
+     {
+      "jp": "忍者博物館まで、どう行ったらいいですか。",
+      "romaji": "Ninja-Hakubutsukan made, doo ittara ii desu ka.",
+      "cn": "去忍者博物馆怎么走？"
+     }
+    ]
+   },
+   {
+    "speaker": "路人",
+    "parts": [
+     {
+      "jp": "この道をまっすぐ行ってください。",
+      "romaji": "Kono michi o massugu itte kudasai.",
+      "cn": "这条路一直走。"
+     },
+     {
+      "jp": "博物館は、左にあります。",
+      "romaji": "Hakubutsukan wa, hidari ni arimasu.",
+      "cn": "博物馆在左边。"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "わかりました。",
+      "romaji": "Wakarimashita.",
+      "cn": "知道了。"
+     },
+     {
+      "jp": "ありがとうございます。",
+      "romaji": "Arigatoo gozaimasu.",
+      "cn": "谢谢。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "さあ、行こう！",
+      "romaji": "Saa, ikoo!",
+      "cn": "那，走吧！"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "かっこいい",
+    "cn": "酷",
+    "romaji": "kakkoii"
+   },
+   {
+    "jp": "うれしい",
+    "cn": "高兴",
+    "romaji": "ureshii"
+   },
+   {
+    "jp": "道",
+    "cn": "路",
+    "romaji": "michi"
+   }
+  ],
+  "key": {
+   "jp": "忍者博物館まで、どう行ったらいいですか。",
+   "romaji": "Ninja-Hakubutsukan made, doo ittara ii desu ka.",
+   "cn": "去忍者博物馆怎么走？",
+   "explain": "想请别人告诉你怎么走，可以这样说：「【目的地】made, doo ittara ii desuka」。「ittara」是动词「iku」（走）的假定形式，问路时会用到这个说法，请您先把它记住。"
+  },
+  "use": [
+   {
+    "jp": "あのう、すみません。金閣寺まで、どう行ったらいいですか。",
+    "romaji": "Anoo, sumimasen. Kinkaku-ji made, doo ittara ii desu ka.",
+    "cn": "啊，请问，去金阁寺怎么走？"
+   },
+   {
+    "jp": "101番のバスに乗ってください。",
+    "romaji": "Hyaku-ichi-ban no basu ni notte kudasai.",
+    "cn": "请乘坐101路公共汽车。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "あのう、すみません。～まで、どう行ったらいいですか。",
+    "romaji": "Anoo, sumimasen. ～made, doo ittara ii desu ka.",
+    "cn": "啊，请问，去～怎么走？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "このホテル",
+       "romaji": "kono hoteru",
+       "cn": "这家酒店"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "新幹線のホーム",
+       "romaji": "shinkansen no hoomu",
+       "cn": "新干线站台"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "曲がる",
+   "romaji": "hidarimassugumigimagaru",
+   "cn": "",
+   "explain": "方向左右"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "方向",
+   "左",
+   "右",
+   "曲がる",
+   "hidari",
+   "massu⎤gu",
+   "migi",
+   "magaru"
+  ],
+  "cando": "询问如何前往目的地",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "あのう、すみません。このホテルまで、どう行ったらいいですか。",
+    "romaji": "Anoo, sumimasen.Kono hoteru made, doo ittara ii desu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "あのう、すみません。新幹線のホームまで、どう行ったらいいですか。",
+    "romaji": "Anoo, sumimasen.Shinkansen no hoomu made, doo ittara ii desu ka."
+   }
+  ],
+  "info": [
+   "©Highway Bus Tokyo Station Area Bus Stop Operator ASSOC.",
+   "©WILLER",
+   "©WILLER",
+   "便利的高速巴士",
+   "高速巴士线路很多，经济实惠。从东京到名古屋、大阪、京都等大城市自不必说，开往富士山、箱根、草津温泉等的直通巴士也很有人气。",
+   "乘坐夜行巴士的话，可以在行车时睡觉，所以还能节省时间。车票可以很简单地在网上预约，有的车次还能指定座位。",
+   "另外，豪华巴士虽然票价贵一些，但你可以充分地伸直腿，或者在类似单间的座位上享受舒适的旅程。",
+   "豪华夜行巴士",
+   "跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 33,
+  "title_jp": "どのくらい待ちますか",
+  "title_cn": "要等多长时间",
+  "turns": [
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "どのくらい待ちますか。",
+      "romaji": "Donokurai machimasu ka.",
+      "cn": "要等多长时间？"
+     }
+    ]
+   },
+   {
+    "speaker": "工作人员甲",
+    "parts": [
+     {
+      "jp": "15分くらいです。",
+      "romaji": "Juu-go-fun kurai desu.",
+      "cn": "15分钟左右。"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "わかりました。",
+      "romaji": "Wakarimashita.",
+      "cn": "好的。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "すごい！",
+      "romaji": "Sugoi!",
+      "cn": "哇哦！"
+     },
+     {
+      "jp": "本物の手裏剣だ。",
+      "romaji": "Honmono no shuriken da.",
+      "cn": "是真的手里剑。"
+     }
+    ]
+   },
+   {
+    "speaker": "工作人员乙",
+    "parts": [
+     {
+      "jp": "あの的に投げてください。",
+      "romaji": "Ano mato ni nagete kudasai.",
+      "cn": "请投到那个靶子上。"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "えい！",
+      "romaji": "Ei!",
+      "cn": "走！"
+     },
+     {
+      "jp": "あ、落ちちゃった。",
+      "romaji": "A, ochichatta.",
+      "cn": "啊！掉了。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "どのくらい",
+    "cn": "多长、多少",
+    "romaji": "donokurai"
+   },
+   {
+    "jp": "待つ",
+    "cn": "等待、等候",
+    "romaji": "matsu"
+   },
+   {
+    "jp": "~くらい",
+    "cn": "~左右",
+    "romaji": "～kurai"
+   },
+   {
+    "jp": "本物",
+    "cn": "真的、正规的、地道的",
+    "romaji": "honmono"
+   },
+   {
+    "jp": "手裏剣",
+    "cn": "手里剑",
+    "romaji": "shuriken"
+   },
+   {
+    "jp": "あの",
+    "cn": "那个",
+    "romaji": "ano"
+   },
+   {
+    "jp": "的",
+    "cn": "靶子",
+    "romaji": "mato"
+   },
+   {
+    "jp": "投げる",
+    "cn": "投掷",
+    "romaji": "nageru"
+   },
+   {
+    "jp": "落ちる",
+    "cn": "掉落",
+    "romaji": "ochiru"
+   }
+  ],
+  "key": {
+   "jp": "どのくらい待ちますか。",
+   "romaji": "Donokurai machimasu ka",
+   "cn": "要等多长时间？",
+   "explain": "询问所需时间时，使用询问时间长度、距离或数量的疑问词「donokurai」，和「machimasu ka」 （「matsu」等候）、「kakarimasu ka」（「kakaru」需要）等一起使用。"
+  },
+  "use": [
+   {
+    "jp": "すみません。あと、どのくらいかかりますか。",
+    "romaji": "Sumimasen. Ato, donokurai kakarimasu ka.",
+    "cn": "请问，还需要多长时间？"
+   },
+   {
+    "jp": "にじゅっ",
+    "romaji": "",
+    "cn": "20分钟左右。"
+   },
+   {
+    "jp": "0分くらいです。",
+    "romaji": "Nijuppun kurai desu.",
+    "cn": ""
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "どのくらい～ますか。",
+    "romaji": "Donokurai ～masu ka.",
+    "cn": "要／能～多长时间？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "歩く（→歩きます）",
+       "romaji": "aruku （→arukimasu）",
+       "cn": "走"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "もつ（→もちます）",
+       "romaji": "motsu （→mochimasu）",
+       "cn": "保存"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "时间长度分、分钟5分10分15分20分30分go⎤-funju⎤ppunjuu-go⎤-funniju⎤ppunsanju⎤ppun小时1時間1時間半4時間7時間9時間ichi-ji⎤kanichi-jikan-ha⎤nyo-ji⎤kanshichi-ji⎤kanku-ji⎤kan"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "时间长度",
+   "分、分钟",
+   "5分",
+   "10分",
+   "15分",
+   "20分",
+   "30分",
+   "go⎤-fun",
+   "ju⎤ppun",
+   "juu-go⎤-fun",
+   "niju⎤ppun",
+   "sanju⎤ppun",
+   "小时",
+   "1時間",
+   "1時間半",
+   "4時間",
+   "7時間",
+   "9時間",
+   "ichi-ji⎤kan",
+   "ichi-jikan-ha⎤n",
+   "yo-ji⎤kan",
+   "shichi-ji⎤kan",
+   "ku-ji⎤kan"
+  ],
+  "cando": "询问所需时间",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "どのくらい歩きますか。",
+    "romaji": "Donokurai arukimasu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "どのくらいもちますか。",
+    "romaji": "Donokurai mochimasu ka."
+   }
+  ],
+  "info": [
+   "©Shichijyokansyundo",
+   "©Nagominowa",
+   "©DesignPocket",
+   "迈克与流行文化",
+   "体验型旅游",
+   "日本有体验型的旅游项目。除了忍者、武士的体验活动以外，还有试穿和服、茶道、插花、制作日式点心等，都很有人气。",
+   "试穿和服",
+   "制作日式点心",
+   "您还可以尝试制作餐馆橱窗里陈列的塑料材质的食品模型。还有一种日本特有的设施，您可以在那里通过模拟体验地震、暴雨、火灾及海啸等灾害，学习防灾知识。",
+   "制作食品模型"
+  ]
+ },
+ {
+  "num": 34,
+  "title_jp": "読んだことあります",
+  "title_cn": "我读过",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "わあ、マンガがたくさん！",
+      "romaji": "Waa, manga ga takusan!",
+      "cn": "啊，好多漫画！"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "タムさん、このマンガ、知ってる？",
+      "romaji": "Tamu-san, kono manga, shitteru?",
+      "cn": "心心，这套漫画，你知道吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい、読んだことあります。",
+      "romaji": "Hai, yonda koto arimasu.",
+      "cn": "知道，我读过。"
+     }
+    ]
+   },
+   {
+    "speaker": "迈克",
+    "parts": [
+     {
+      "jp": "え？ 日本語で読んだの？",
+      "romaji": "E? Nihongo de yonda no?",
+      "cn": "欸？用日语读的？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "いえ、ベトナム語です。",
+      "romaji": "Ie, Betonamugo desu.",
+      "cn": "不，用越南语。"
+     },
+     {
+      "jp": "とてもおもしろかったです。",
+      "romaji": "Totemo omoshirokatta desu.",
+      "cn": "很有意思。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "マンガ",
+    "cn": "漫画",
+    "romaji": "manga"
+   },
+   {
+    "jp": "たくさん",
+    "cn": "很多",
+    "romaji": "takusan"
+   },
+   {
+    "jp": "知って（い）る",
+    "cn": "知道",
+    "romaji": "shitte （i） ru"
+   },
+   {
+    "jp": "読む",
+    "cn": "读",
+    "romaji": "yomu"
+   },
+   {
+    "jp": "日本語",
+    "cn": "日语",
+    "romaji": "Nihongo"
+   },
+   {
+    "jp": "いえ",
+    "cn": "不",
+    "romaji": "ie"
+   },
+   {
+    "jp": "ベトナム語",
+    "cn": "越南语",
+    "romaji": "Betonamugo"
+   },
+   {
+    "jp": "とても",
+    "cn": "很",
+    "romaji": "totemo"
+   },
+   {
+    "jp": "おもしろい",
+    "cn": "有意思",
+    "romaji": "omoshiroi"
+   }
+  ],
+  "key": {
+   "jp": "読んだことあります。",
+   "romaji": "Yonda koto arimasu.",
+   "cn": "我读过。",
+   "explain": "要叙述自己的经验，可以用这个说法：「动词的タ形＋koto (ga) arimasu」。タ形就是以「ta/da」结尾的动词活用形，表示过去或完了。变换方法就是把テ形的「～te/de」变成「～ta/da」。（参见p.150-151）"
+  },
+  "use": [
+   {
+    "jp": "明日、盆踊りがありますよ。",
+    "romaji": "Ashita, bon-odori ga arimasu yo.",
+    "cn": "明天有盂兰盆会舞蹈表演。"
+   },
+   {
+    "jp": "盆踊り、ネットで見たことあります。でも本物は見たことないです。",
+    "romaji": "Bon-odori, netto de mita koto arimasu. Demo honmono wa mita koto nai desu.",
+    "cn": "盂兰盆会舞蹈表演，我在网上看过。不过，没看过现场表演。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～ことあります／ないです。",
+    "romaji": "～koto arimasu/nai desu.",
+    "cn": "我～过／没～过。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "<有经验>",
+       "romaji": "",
+       "cn": ""
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "<没有经验>",
+       "romaji": "Okinawa",
+       "cn": "沖縄"
+      },
+      {
+       "jp": "冲绳",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "行く（→行った）",
+       "romaji": "iku （→itta）",
+       "cn": "去"
+      },
+      {
+       "jp": "天ぷら",
+       "romaji": "tenpura",
+       "cn": "天妇罗"
+      },
+      {
+       "jp": "食べる（→食べた）",
+       "romaji": "taberu （→tabeta）",
+       "cn": "吃"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "知ってる？",
+   "romaji": "Shitteru?",
+   "cn": "你知道吗？",
+   "explain": "对家人或朋友使用。郑重说法是「Shitte masu ka」。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "知ってる？",
+   "Shitteru?",
+   "你知道吗？",
+   "对家人或朋友使用。郑重说法是「Shitte masu ka」。"
+  ],
+  "cando": "表示经验的说法",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "沖縄、行ったことあります。",
+    "romaji": "Okinawa, itta koto arimasu."
+   },
+   {
+    "marker": "②",
+    "jp": "天ぷら、食べたことないです。",
+    "romaji": "Tenpura, tabeta koto nai desu."
+   }
+  ],
+  "info": [
+   "©Kaikatsu CLUB",
+   "©Kaikatsu CLUB",
+   "迈克与流行文化",
+   "漫画咖啡厅",
+   "日本的漫画有爱情、探险、体育、历史、文学等多种类型。",
+   "漫画咖啡厅是计时收费，付费后即可随意阅读。漫画咖啡厅一般都设有单间，不少地方还可以看电视、上网。果汁、茶水等饮料也是免费的。",
+   "宽敞的阅览空间",
+   "舒适的单间",
+   "饮料区"
+  ]
+ },
+ {
+  "num": 35,
+  "title_jp": "大涌谷に行って、黒たまごが食べたいです",
+  "title_cn": "我想去大涌谷 吃黑鸡蛋",
+  "turns": [
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "箱根には1時に着くよ。",
+      "romaji": "Hakone ni wa ichi-ji ni tsuku yo.",
+      "cn": "我们1点到箱根。"
+     },
+     {
+      "jp": "タムは何がしたい？",
+      "romaji": "Tamu wa nani ga shitai?",
+      "cn": "心心，你想做什么？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "大涌谷に行って、黒たまごが食べたいです。",
+      "romaji": "Oowaku-dani ni itte, kuro-tamago ga tabetai desu.",
+      "cn": "我想去大涌谷，吃黑鸡蛋。"
+     },
+     {
+      "jp": "あやかさん、卵は本当に黒いんですか。",
+      "romaji": "Ayaka-san, tamago wa hontoo ni kuroin desu ka.",
+      "cn": "绫香，那鸡蛋真的是黑的吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "うん。",
+      "romaji": "Un.",
+      "cn": "嗯。"
+     },
+     {
+      "jp": "でもね、黒いのは外側だけ。",
+      "romaji": "Demo ne, kuroi no wa sotogawa dake.",
+      "cn": "不过，只有外面是黑的。"
+     },
+     {
+      "jp": "中は普通のゆで卵。",
+      "romaji": "Naka wa futsuu no yude-tamago.",
+      "cn": "里面是普通的煮鸡蛋。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "へえ。",
+      "romaji": "Hee.",
+      "cn": "哦。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "卵",
+    "cn": "鸡蛋",
+    "romaji": "tamago"
+   },
+   {
+    "jp": "黒い",
+    "cn": "黑色",
+    "romaji": "kuroi"
+   },
+   {
+    "jp": "普通",
+    "cn": "普通",
+    "romaji": "futsuu"
+   }
+  ],
+  "key": {
+   "jp": "大涌谷に行って、黒たまごが食べたいです。",
+   "romaji": "Oowaku-dani ni itte, kuro-tamago ga tabetai desu.",
+   "cn": "我想去大涌谷，吃黑鸡蛋。",
+   "explain": "依次叙述两个或两个以上的动作时，用动词的テ形将它们连接起来。例如：「【动词１的テ形】、【动词２】」。以重点语句为例，先把动词「iku」（去）变成テ形「itte」，然后接续下一个句子。"
+  },
+  "use": [
+   {
+    "jp": "今日は、どこに行きましたか。",
+    "romaji": "Kyoo wa, doko ni ikimashita ka.",
+    "cn": "今天你去哪儿了？"
+   },
+   {
+    "jp": "美術館に行って、ご飯を食べて、それから遊覧船に乗りました。",
+    "romaji": "Bijutsukan ni itte, gohan o tabete, sorekara yuuransen ni norimashita.",
+    "cn": "去了美术馆，吃了饭，还坐了观光船。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【动词1】て、（【动词2】て、） 【动词3】たいです／ました。",
+    "romaji": "",
+    "cn": "［动词1］te, （［动词2］te,） ［动词3］ta⎤i de⎤su/ma⎤shita.我想【动词１】、(【动词２】、) 【动词３】。／我【动词１】了、(【动词２】了、) 【动词３】了。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "<想做的事>",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "高尾山に登る（→登って）",
+       "romaji": "Takao-san ni noboru （→nobotte）",
+       "cn": "爬高尾山"
+      },
+      {
+       "jp": "写真を撮る（→撮りたいです）",
+       "romaji": "shashin o toru （→toritai desu）",
+       "cn": "拍照片"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "<已经做的事>",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "渋谷に行く",
+       "romaji": "Shibuya ni iku",
+       "cn": ""
+      },
+      {
+       "jp": "（→行って）",
+       "romaji": "（→itte）",
+       "cn": "去涩谷"
+      },
+      {
+       "jp": "買い物をする",
+       "romaji": "kaimono o suru",
+       "cn": ""
+      },
+      {
+       "jp": "（→して）",
+       "romaji": "（→shite）",
+       "cn": "购物"
+      },
+      {
+       "jp": "ご飯を食べる",
+       "romaji": "gohan o taberu",
+       "cn": ""
+      },
+      {
+       "jp": "（→食べました）",
+       "romaji": "（→tabemashita）",
+       "cn": "吃饭"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "钟点1：001：302：003：004：007：009：00ichi⎤-jiichi-ji-ha⎤nni⎤-jisa⎤n-jiyo⎤-jishichi⎤-jiku⎤-ji"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "钟点",
+   "1：00",
+   "1：30",
+   "2：00",
+   "3：00",
+   "4：00",
+   "7：00",
+   "9：00",
+   "ichi⎤-ji",
+   "ichi-ji-ha⎤n",
+   "ni⎤-ji",
+   "sa⎤n-ji",
+   "yo⎤-ji",
+   "shichi⎤-ji",
+   "ku⎤-ji"
+  ],
+  "cando": "依次说明你将要做或已经做的事",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "高尾山に登って、写真を撮りたいです。",
+    "romaji": "Takao-san ni nobotte, shashin o toritai desu."
+   },
+   {
+    "marker": "②",
+    "jp": "渋谷に行って、買い物をして、ご飯を食べました。",
+    "romaji": "Shibuya ni itte, kaimono o shite, gohan o tabemashita."
+   }
+  ],
+  "info": [
+   "箱根地处山区，是著名的温泉疗养胜地，距离东京大约1个半小时车程。这里除了温泉，还有因火山喷发而形成的大涌谷以及江户时代的关卡遗址“箱根关所”等。",
+   "除此以外，还有登山电车、众多的美术馆以及芦之湖等景点。天气好的话，还能眺望到雄伟的富士山。",
+   "大涌谷",
+   "箱根关所",
+   "箱根登山电车",
+   "从芦之湖眺望富士山",
+   "东京近郊的旅游景点箱根",
+   "跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 36,
+  "title_jp": "お風呂は何時から何時までですか",
+  "title_cn": "浴场从几点到几点开放",
+  "turns": [
+   {
+    "speaker": "服务员",
+    "parts": [
+     {
+      "jp": "こちらのお部屋でございます。",
+      "romaji": "Kochira no oheya de gozaimasu.",
+      "cn": "这是二位的房间。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "お風呂は何時から何時までですか。",
+      "romaji": "Ofuro wa nan-ji kara nan-ji made desu ka.",
+      "cn": "浴场从几点到几点开放？"
+     }
+    ]
+   },
+   {
+    "speaker": "服务员",
+    "parts": [
+     {
+      "jp": "朝6時から",
+      "romaji": "Asa roku-ji kara",
+      "cn": "夜"
+     },
+     {
+      "jp": "12時までです。",
+      "romaji": "yoru juuni-ji made desu.",
+      "cn": "从早上6点到晚上12点。"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "タム、日本の温泉、入ったことある？",
+      "romaji": "Tamu, Nihon no onsen, haitta koto aru?",
+      "cn": "心心，你在日本洗过温泉吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "いいえ、初めてです。",
+      "romaji": "Iie, hajimete desu.",
+      "cn": "没有。是第一次。"
+     },
+     {
+      "jp": "楽しみです。",
+      "romaji": "Tanoshimi desu.",
+      "cn": "很期待。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "部屋／お部屋",
+    "cn": "房间",
+    "romaji": "heya / oheya"
+   },
+   {
+    "jp": "風呂／お風呂",
+    "cn": "浴室、浴缸、浴场",
+    "romaji": "furo / ofuro"
+   },
+   {
+    "jp": "何時",
+    "cn": "几点",
+    "romaji": "nan-ji"
+   },
+   {
+    "jp": "朝",
+    "cn": "早上",
+    "romaji": "asa"
+   },
+   {
+    "jp": "夜",
+    "cn": "晚上",
+    "romaji": "yoru"
+   },
+   {
+    "jp": "楽しみ（な）",
+    "cn": "期待",
+    "romaji": "tanoshimi （na）"
+   }
+  ],
+  "key": {
+   "jp": "お風呂は何時から何時までですか。",
+   "romaji": "Ofuro wa nan-ji kara nan-ji made desu ka.",
+   "cn": "浴场从几点到几点开放？",
+   "explain": "询问开始和结束的时间时，用「nan-ji」（几点）这个词，这样问：「nan-ji karanan-ji made desu ka」。要先说出疑问对象，在后面加上助词「wa」。「kara」是“从”，「made」是“到”的意思。"
+  },
+  "use": [
+   {
+    "jp": "すみません。明日の朝食は何時から何時までですか。",
+    "romaji": "Sumimasen. Ashita no chooshoku wa nan-ji kara nan-ji made desu ka.",
+    "cn": "请问，明天的早饭从几点到几点？"
+   },
+   {
+    "jp": "ろく",
+    "romaji": "",
+    "cn": "从6点到9点半。"
+   },
+   {
+    "jp": "時から9",
+    "romaji": "",
+    "cn": ""
+   },
+   {
+    "jp": "く",
+    "romaji": "",
+    "cn": ""
+   },
+   {
+    "jp": "時半までになります。",
+    "romaji": "Roku-ji kara ku-ji-han made ni narimasu.",
+    "cn": ""
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～は何時から何時までですか。",
+    "romaji": "～wa nan-ji kara nan-ji made desu ka.",
+    "cn": "～从几点到几点？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "<开始的时间>",
+       "romaji": "hanabi-taikai",
+       "cn": "花火大会"
+      },
+      {
+       "jp": "焰火晚会",
+       "romaji": "",
+       "cn": ""
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "<结束的时间>",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "この店",
+       "romaji": "kono mise",
+       "cn": "这家店"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "初めてです。",
+   "romaji": "Hajimete desu.",
+   "cn": "是第一次。",
+   "explain": "如果有人问你是否有某种经历，而你是第一次经历的话，就可以这样回答。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "初めてです。",
+   "Haji⎤mete de⎤su.",
+   "是第一次。",
+   "如果有人问你是否有某种经历，而你是第一次经历的话，就可以这样回答。"
+  ],
+  "cando": "询问时间",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "花火大会は何時からですか。",
+    "romaji": "Hanabi-taikai wa nan-ji kara desu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "この店は何時までですか。",
+    "romaji": "Kono mise wa nan-ji made desu ka."
+   }
+  ],
+  "info": [
+   "©ROUTE INN HOTELS",
+   "春奶奶的智慧锦囊",
+   "日本的温泉和公共浴场通常分为男浴池和女浴池。",
+   "一般说来，浴池入口处的门帘上会写着汉字「男」或「女」，记住这个就不会搞错了。",
+   "入浴方法",
+   "进浴池前，要先清洗身体",
+   "毛巾、头发不要浸到水里",
+   "女浴池",
+   "男浴池",
+   "享受温泉浴"
+  ]
+ },
+ {
+  "num": 37,
+  "title_jp": "テレビがつかないんですが・・・",
+  "title_cn": "电视不开机",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "あれ、テレビがつきませんね。",
+      "romaji": "Are, terebi ga tsukimasen ne.",
+      "cn": "欸？电视不开机啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "ほんとだ。",
+      "romaji": "Honto da.",
+      "cn": "是啊。"
+     },
+     {
+      "jp": "おかしいね。",
+      "romaji": "Okashii ne.",
+      "cn": "真奇怪。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "フロントに電話してみます。",
+      "romaji": "Furonto ni denwa-shite mimasu.",
+      "cn": "我给前台打个电话。"
+     },
+     {
+      "jp": "すみません。",
+      "romaji": "Sumimasen.",
+      "cn": "对不起 。"
+     },
+     {
+      "jp": "テレビがつかないんですが・・・。",
+      "romaji": "Terebi ga tsukanain desu ga...",
+      "cn": "电视不开机······"
+     }
+    ]
+   },
+   {
+    "speaker": "前台",
+    "parts": [
+     {
+      "jp": "少々お待ちください。",
+      "romaji": "Shooshoo omachi kudasai.",
+      "cn": "请稍等。"
+     },
+     {
+      "jp": "担当の者が伺います。",
+      "romaji": "Tantoo no mono ga ukagaimasu.",
+      "cn": "我们派人去看看。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "テレビ",
+    "cn": "电视",
+    "romaji": "terebi"
+   },
+   {
+    "jp": "つく",
+    "cn": "开机",
+    "romaji": "tsuku"
+   },
+   {
+    "jp": "おかしい",
+    "cn": "奇怪",
+    "romaji": "okashii"
+   },
+   {
+    "jp": "フロント",
+    "cn": "前台",
+    "romaji": "furonto"
+   },
+   {
+    "jp": "電話する",
+    "cn": "打电话",
+    "romaji": "denwa-suru"
+   },
+   {
+    "jp": "少々",
+    "cn": "稍微",
+    "romaji": "shooshoo"
+   },
+   {
+    "jp": "担当",
+    "cn": "负责",
+    "romaji": "tantoo"
+   },
+   {
+    "jp": "者",
+    "cn": "人",
+    "romaji": "mono"
+   },
+   {
+    "jp": "伺う",
+    "cn": "拜访（自谦）",
+    "romaji": "ukagau"
+   }
+  ],
+  "key": {
+   "jp": "テレビがつかないんですが・・・。",
+   "romaji": "Terebi ga tsukanain desu ga...",
+   "cn": "电视不开机······",
+   "explain": "说明不正常情况时，在动词的ナイ形后面，加上「～n desu ga」。ナイ形是否定形，表示因事出所料而感到困惑。「～n desu ga…」表示向对方说明情况，希望对方加以应对。（参见p.150-151）"
+  },
+  "use": [
+   {
+    "jp": "すみません。Wi-Fi のパスワードがわからないんですが・・・。",
+    "romaji": "Sumimasen. Waifai no pasuwaado ga wakaranain desu ga...",
+    "cn": "对不起。我不知道Wi-Fi的密码······"
+   },
+   {
+    "jp": "パスワードですね。こちらです。",
+    "romaji": "Pasuwaado desu ne. Kochira desu.",
+    "cn": "密码，是吧？是这个。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。【主语】が～ないんですが・・・。",
+    "romaji": "",
+    "cn": "Sumimase⎤n. ［主语］ ga ～na⎤in de⎤su ga...对不起。【主语】不～······"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "かぎ",
+       "romaji": "kagi",
+       "cn": "门锁"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "浴か",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "た",
+       "romaji": "",
+       "cn": ""
+      },
+      {
+       "jp": "衣のサイズ",
+       "romaji": "yukata no saizu",
+       "cn": "浴衣尺码"
+      },
+      {
+       "jp": "開く（→開かない）",
+       "romaji": "aku （→akanai）",
+       "cn": "打开"
+      },
+      {
+       "jp": "合う（→合わない）",
+       "romaji": "au （→awanai）",
+       "cn": "合适"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "少々お待ちください。",
+   "romaji": "Shooshoo omachi kudasai.",
+   "cn": "请稍等。",
+   "explain": "这是酒店工作人员或商店的店员让客人等候时使用的郑重说法。动词的辞书形是「matsu」（等待、等候）。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "少々お待ちください。",
+   "Sho⎤oshoo omachi kudasa⎤i.",
+   "请稍等。",
+   "这是酒店工作人员或商店的店员让客人等候时使用的郑重说法。动词的辞书形是",
+   "「matsu」（等待、等候）。"
+  ],
+  "cando": "说明不正常情况",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。鍵が開かないんですが・・・。",
+    "romaji": "Sumimasen. Kagi ga akanain desu ga..."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。浴衣のサイズが合わないんですが・・・。",
+    "romaji": "Sumimasen. Yukata no saizu ga awanain desu ga..."
+   }
+  ],
+  "info": [
+   "©Keiunkan",
+   "©Keiunkan",
+   "日式旅馆",
+   "旅馆的日式房间铺有榻榻米，进去之前要先脱鞋。房间里备有浴衣。有的旅馆会把餐食送到客房，让客人在房间里用餐，还会为客人铺好被褥。",
+   "温泉旅馆",
+   "住宿温泉旅馆时，很多人会穿着浴衣到街上散步，或者在入住后、临睡前以及早上起床后等多次享受温泉。在温泉旅馆，你会感受到很多日本独有的魅力。",
+   "春奶奶的智慧锦囊"
+  ]
+ },
+ {
+  "num": 38,
+  "title_jp": "外のほうがいいです",
+  "title_cn": "外面比较好",
+  "turns": [
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "タム、中に座る？",
+      "romaji": "Tamu, naka ni suwaru?",
+      "cn": "心心，坐里面？"
+     },
+     {
+      "jp": "それとも、外のデッキに行く？",
+      "romaji": "Soretomo, soto no dekki ni iku?",
+      "cn": "还是到外面的甲板上？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "外のほうがいいです。",
+      "romaji": "Soto no hoo ga ii desu.",
+      "cn": "外面比较好。"
+     },
+     {
+      "jp": "わあ、富士山！ きれい！",
+      "romaji": "Waa, Fuji-san! Kiree!",
+      "cn": "啊，富士山！好漂亮！"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "本当。",
+      "romaji": "Hontoo.",
+      "cn": "真的。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "気持ちいい！",
+      "romaji": "Kimochi ii!",
+      "cn": "好舒服！"
+     }
+    ]
+   },
+   {
+    "speaker": "绫香",
+    "parts": [
+     {
+      "jp": "今日は、晴れてよかったね。",
+      "romaji": "Kyoo wa, harete yokatta ne.",
+      "cn": "今天晴天，真是太好了。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "中",
+    "cn": "里面",
+    "romaji": "naka"
+   },
+   {
+    "jp": "座る",
+    "cn": "坐",
+    "romaji": "suwaru"
+   },
+   {
+    "jp": "それとも",
+    "cn": "还是",
+    "romaji": "soretomo"
+   },
+   {
+    "jp": "外",
+    "cn": "外面",
+    "romaji": "soto"
+   },
+   {
+    "jp": "デッキ",
+    "cn": "甲板",
+    "romaji": "dekki"
+   },
+   {
+    "jp": "富士山",
+    "cn": "富士山",
+    "romaji": "Fuji-san"
+   },
+   {
+    "jp": "きれい（な）",
+    "cn": "漂亮",
+    "romaji": "kiree （na）"
+   },
+   {
+    "jp": "気持ちいい",
+    "cn": "舒服",
+    "romaji": "kimochi ii"
+   },
+   {
+    "jp": "晴れる",
+    "cn": "晴朗",
+    "romaji": "hareru"
+   }
+  ],
+  "key": {
+   "jp": "外のほうがいいです。",
+   "romaji": "Soto no hoo ga ii desu.",
+   "cn": "外面比较好。",
+   "explain": "对两个东西进行比较时，可以用这个说法：「（A yori） B no hoo ga ＋形容词」，表示对A和B进行比较后，B的程度比较高。如果比较的对象是不言而喻的，则不必说「A yori」。"
+  },
+  "use": [
+   {
+    "jp": "洋室と和室、どちらがよろしいですか。",
+    "romaji": "Yooshitsu to washitsu, dochira ga yoroshii desu ka.",
+    "cn": "洋室和和室，您喜欢哪个？"
+   },
+   {
+    "jp": "洋室より和室のほうが広いですね。和室にします。",
+    "romaji": "Yooshitu yori washitsu no hoo ga hiroi desu ne. Washitsu ni shimasu.",
+    "cn": "和室比洋室大，是吧？我要和室。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "（Aより）Bのほうが【形容词】です（ね）。",
+    "romaji": "（A yori） B no hoo ga 【形容词】 desu （ne）.",
+    "cn": "B（比A）【形容词】。／（比起A来），更【喜欢】B。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "A 肉",
+       "romaji": "niku",
+       "cn": "肉"
+      },
+      {
+       "jp": "B 魚",
+       "romaji": "sakana",
+       "cn": "鱼"
+      },
+      {
+       "jp": "好き（な）",
+       "romaji": "suki （na）",
+       "cn": "喜欢（汉语里为动词）"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "B この店",
+       "romaji": "kono mise",
+       "cn": "这家店"
+      },
+      {
+       "jp": "安い",
+       "romaji": "yasui",
+       "cn": "便宜"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "天、星期天昨日今日明日kino⎤o / kinookyo⎤oashita⎤星期先週今週来週senshuukonshuuraishuu"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "天、星期",
+   "天",
+   "昨日",
+   "今日",
+   "明日",
+   "kino⎤o / kinoo",
+   "kyo⎤o",
+   "ashita⎤",
+   "星期",
+   "先週",
+   "今週",
+   "来週",
+   "senshuu",
+   "konshuu",
+   "raishuu"
+  ],
+  "cando": "对两个东西进行比较",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "肉より魚のほうが好きです。",
+    "romaji": "Niku yori sakana no hoo ga suki desu."
+   },
+   {
+    "marker": "②",
+    "jp": "この店のほうが安いですね。",
+    "romaji": "Kono mise no hoo ga yasui desu ne."
+   }
+  ],
+  "info": [
+   "Mt. Fuji Climbing Official website",
+   "攀登富士山",
+   "富士山是日本的最高峰，海拔3776米，游人也可以攀登。登山季节在每年的7月到9月上旬。登山路线有很多条，很多人都选择先坐巴士到五合目，然后再从那里徒步攀登。",
+   "登上山顶，极目远眺，烟波浩渺的云海、一望无际的美景尽收眼底。也有不少人在7、8合目附近的山中小屋先住宿一晚，第2天一早再登顶观赏日出。",
+   "在富士山顶看到的景色",
+   "在山顶迎接日出",
+   "跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 39,
+  "title_jp": "財布を落としてしまいました",
+  "title_cn": "我把钱包弄丢了",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はるさーん、財布を落としてしまいました。",
+      "romaji": "Haru-saan, saifu o otoshite shimaimashita.",
+      "cn": "春奶奶，我把钱包弄丢了。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "あら大変。",
+      "romaji": "Ara taihen.",
+      "cn": "哎呀，那可不得了。"
+     },
+     {
+      "jp": "交番に行ってごらんなさい。",
+      "romaji": "Kooban ni itte gorannasai.",
+      "cn": "你去警察岗亭看看吧。"
+     }
+    ]
+   },
+   {
+    "speaker": "警察",
+    "parts": [
+     {
+      "jp": "それで、どんな財布ですか。",
+      "romaji": "Sorede, donna saifu desu ka.",
+      "cn": "那，是什么样的钱包？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "黄色い財布です。",
+      "romaji": "Kiiroi saifu desu.",
+      "cn": "黄色的钱包。"
+     }
+    ]
+   },
+   {
+    "speaker": "警察",
+    "parts": [
+     {
+      "jp": "ああ、黄色・・・。これですか。",
+      "romaji": "Aa, kiiro... Kore desu ka.",
+      "cn": "哦，黄色······是这个吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "ああ、それです。",
+      "romaji": "Aa, sore desu.",
+      "cn": "啊，就是这个。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "財布",
+    "cn": "钱包",
+    "romaji": "saifu"
+   },
+   {
+    "jp": "落とす",
+    "cn": "弄丢",
+    "romaji": "otosu"
+   },
+   {
+    "jp": "あら",
+    "cn": "哎呀",
+    "romaji": "ara"
+   },
+   {
+    "jp": "大変",
+    "cn": "不得了",
+    "romaji": "taihen"
+   },
+   {
+    "jp": "交番",
+    "cn": "警察岗亭",
+    "romaji": "kooban"
+   },
+   {
+    "jp": "行く",
+    "cn": "去",
+    "romaji": "iku"
+   },
+   {
+    "jp": "それで",
+    "cn": "那",
+    "romaji": "sorede"
+   },
+   {
+    "jp": "どんな",
+    "cn": "什么样的",
+    "romaji": "donna"
+   },
+   {
+    "jp": "黄色い",
+    "cn": "黄色",
+    "romaji": "kiiroi"
+   }
+  ],
+  "key": {
+   "jp": "財布を落としてしまいました。",
+   "romaji": "Saifu o otoshite shimaimashita.",
+   "cn": "我把钱包弄丢了。",
+   "explain": "说明自己的失误，可以用这个说法：「动词的テ形＋shimaimashita」。「shimaimashita」表示对所发生的事情感到遗憾或后悔，所以，在丢东西时等使用这个说法十分贴切。（参见p.150-151）"
+  },
+  "use": [
+   {
+    "jp": "すみません。部屋の番号を忘れてしまいました。",
+    "romaji": "Sumimasen. Heya no bangoo o wasurete shimaimashita.",
+    "cn": "对不起。我把房间号码忘了。"
+   },
+   {
+    "jp": "お名前は・・・。",
+    "romaji": "Onamae wa...",
+    "cn": "您的名字是······"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。～てしまいました。",
+    "romaji": "Sumimasen. ～te shimaimashita.",
+    "cn": "对不起。我～了。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "水をこぼす（→こぼして）",
+       "romaji": "mizu o kobosu （→koboshite）",
+       "cn": "把水弄洒"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "切符をなくす（→なくして）",
+       "romaji": "kippu o nakusu （→nakushite）",
+       "cn": "把票弄丢"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "イ形容词",
+   "romaji": "aoiakaikiiroikuroishiroi",
+   "cn": "※kiiroi saifu （黄色的钱包）　※mi⎤dori no saifu （绿色的钱包）",
+   "explain": "颜色青赤黄色黒白緑名词a⎤oa⎤kakiiroku⎤roshi⎤romi⎤dori"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "颜色",
+   "青",
+   "赤",
+   "黄色",
+   "黒",
+   "白",
+   "緑",
+   "名词",
+   "a⎤o",
+   "a⎤ka",
+   "kiiro",
+   "ku⎤ro",
+   "shi⎤ro",
+   "mi⎤dori",
+   "イ形容词",
+   "ao⎤i",
+   "akai",
+   "kiiroi",
+   "kuro⎤i",
+   "shiro⎤i",
+   "※kiiroi saifu （黄色的钱包）　※mi⎤dori no saifu （绿色的钱包）"
+  ],
+  "cando": "说明自己的失误",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。水をこぼしてしまいました。",
+    "romaji": "Sumimasen. Mizu o koboshite shimaimashita."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。切符をなくしてしまいました。",
+    "romaji": "Sumimasen. Kippu o nakushite shimaimashita."
+   }
+  ],
+  "info": [
+   "©Atsushi Shibuya/JICA",
+   "©Kyoto Prefectural Police",
+   "Metropolitan Police Department website",
+   "维护地区安全的「KOBAN」春奶奶的智慧锦囊「KOBAN」即警察岗亭，是警察值勤的地方。你可以到这里来问路，遗失物品时，可以到这里登记寻找。此外，「KOBAN」的警察还负责案件搜查，社区巡逻，以及取缔交通违规行为等。",
+   "美国、新加坡、巴西等国也引进了「KOBAN」制度。",
+   "巴西的「KOBAN」日本的「KOBAN」"
+  ]
+ },
+ {
+  "num": 40,
+  "title_jp": "初めてだったから、びっくりしました",
+  "title_cn": "因为是第一次 所以被吓到了",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "あ、揺れてる。",
+      "romaji": "A, yureteru.",
+      "cn": "啊，在摇晃。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "地震！ 助けて！",
+      "romaji": "Jishin! Tasukete!",
+      "cn": "地震了！救命啊！"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "落ち着いてください。",
+      "romaji": "Ochitsuite kudasai.",
+      "cn": "镇静。"
+     },
+     {
+      "jp": "大丈夫ですよ。",
+      "romaji": "Daijoobu desu yo.",
+      "cn": "没事儿的。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "ほら、もうおさまった。",
+      "romaji": "Hora, moo osamatta.",
+      "cn": "你看，已经停了。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "初めてだったから、びっくりしました。",
+      "romaji": "Hajimete datta kara, bikkuri-shimashita.",
+      "cn": "因为是第一次，所以被吓到了。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "揺れる",
+    "cn": "摇晃",
+    "romaji": "yureru"
+   },
+   {
+    "jp": "地震",
+    "cn": "地震",
+    "romaji": "jishin"
+   },
+   {
+    "jp": "助ける",
+    "cn": "帮助",
+    "romaji": "tasukeru"
+   },
+   {
+    "jp": "落ち着く",
+    "cn": "镇静",
+    "romaji": "ochitsuku"
+   },
+   {
+    "jp": "ほら",
+    "cn": "你看",
+    "romaji": "hora"
+   },
+   {
+    "jp": "もう",
+    "cn": "已经",
+    "romaji": "moo"
+   },
+   {
+    "jp": "おさまる",
+    "cn": "平息、结束",
+    "romaji": "osamaru"
+   },
+   {
+    "jp": "初めて",
+    "cn": "第一次",
+    "romaji": "hajimete"
+   },
+   {
+    "jp": "びっくりする",
+    "cn": "吃惊",
+    "romaji": "bikkuri-suru"
+   }
+  ],
+  "key": {
+   "jp": "初めてだったから、びっくりしました。",
+   "romaji": "Hajimete datta kara, bikkuri-shimashita.",
+   "cn": "因为是第一次，所以被吓到了。",
+   "explain": "说明理由时，使用助词「kara」（因为······，所以······）。在「【句子1】kara、【句子2】」当中，【句子1】表示理由。【句子1】使用简体的话，听起来比较自然。简体就是不使用「～desu」、「～masu」的说法。（参见p.152-153）"
+  },
+  "use": [
+   {
+    "jp": "その映画、面白かったですか。",
+    "romaji": "Sono eega, omoshirokatta desu ka.",
+    "cn": "那部电影有意思吗？"
+   },
+   {
+    "jp": "話が難しかったから、よくわかりませんでした。",
+    "romaji": "Hanashi ga muzukashikatta kara, yoku wakarimasendeshita.",
+    "cn": "因为故事情节晦涩难懂，所以没太看明白。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【句子1】から、【句子2】。",
+    "romaji": "【句子1】 kara, 【句子2】.",
+    "cn": "因为【句子1】 ，所以【句子2】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "雨だった",
+       "romaji": "ame datta",
+       "cn": "下雨了"
+      },
+      {
+       "jp": "行きませんでした",
+       "romaji": "ikimasendeshita",
+       "cn": "没去"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "暑かった",
+       "romaji": "atsukatta",
+       "cn": "很热"
+      },
+      {
+       "jp": "疲れました",
+       "romaji": "tsukaremashita",
+       "cn": "累了"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "助けて！",
+   "romaji": "Tasukete!",
+   "cn": "救命啊！",
+   "explain": "它是动词「tasukeru」（帮助）的テ形。在突发急病、受伤、或遭遇事故等紧急情况下，可以用这个说法来向他人求助。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "助けて！",
+   "Tasu⎤kete!",
+   "救命啊！",
+   "它是动词「tasukeru」（帮助）的テ形。在突发急病、受伤、或遭遇事故等紧急",
+   "情况下，可以用这个说法来向他人求助。"
+  ],
+  "cando": "说明理由",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "雨だったから、行きませんでした。",
+    "romaji": "Ame datta kara, ikimasendeshita."
+   },
+   {
+    "marker": "②",
+    "jp": "暑かったから、疲れました。",
+    "romaji": "Atsukatta kara, tsukaremashita."
+   }
+  ],
+  "info": [
+   "如果发生了地震",
+   "春奶奶的智慧锦囊",
+   "如果发生了地震，而你呆在抗震性能较好的建筑物中，请不要到室外去，就在室内找个安全的地方躲避。如果因为晃得很厉害而无法行走，那就等晃动结束后再走动。无论在室内还是室外，保护头部都是至关重要的。可以把靠垫、书或书包等举到头上方，要跟头顶稍微保持一点距离。钻到桌子底下也是一个有效的方法，要用手握住桌子腿的上方。",
+   "另外，还必须警惕余震。如果在海岸附近，因为有可能发生海啸，所以要尽快到高处避难。"
+  ]
+ },
+ {
+  "num": 41,
+  "title_jp": "チケットを買うことができますか",
+  "title_cn": "能买票吗",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "タム、見て！",
+      "romaji": "Tamu, mite!",
+      "cn": "心心，你看！"
+     },
+     {
+      "jp": "悠輝さんがピアノコンクールで優勝したよ。",
+      "romaji": "Yuuki-san ga piano-konkuuru de yuushoo-shita yo.",
+      "cn": "悠辉在钢琴大赛中拿了第一名耶。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "あ、ほんとだ。すごい。",
+      "romaji": "A, honto da. Sugoi.",
+      "cn": "啊，真的。太棒了！"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "来月ふつか日にコンサートがあるよ。",
+      "romaji": "Raigetsu futsuka ni konsaato ga aru yo.",
+      "cn": "下个月2号有音乐会哦。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "行きたいです。",
+      "romaji": "Ikitai desu.",
+      "cn": "我想去。"
+     },
+     {
+      "jp": "チケットを買うことができますか。",
+      "romaji": "Chiketto o kau koto ga dekimasu ka.",
+      "cn": "能买票吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "予約してみるね。",
+      "romaji": "Yoyaku-shite miru ne.",
+      "cn": "我订订看。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "優勝する",
+    "cn": "夺得冠军",
+    "romaji": "yuushoo-suru"
+   },
+   {
+    "jp": "来月",
+    "cn": "下个月",
+    "romaji": "raigetsu"
+   },
+   {
+    "jp": "コンサート",
+    "cn": "音乐会",
+    "romaji": "konsaato"
+   },
+   {
+    "jp": "チケット",
+    "cn": "票",
+    "romaji": "chiketto"
+   },
+   {
+    "jp": "買う",
+    "cn": "买",
+    "romaji": "kau"
+   },
+   {
+    "jp": "予約する",
+    "cn": "预约、预订",
+    "romaji": "yoyaku-suru"
+   }
+  ],
+  "key": {
+   "jp": "チケットを買うことができますか。",
+   "romaji": "Chiketto o kau koto ga dekimasu ka.",
+   "cn": "能买票吗？",
+   "explain": "如果你想做某件事，并且想确认它能否实现的话，可以用这个说法：「动词的辞书形＋koto ga dekimasu ka」。「dekimasu」是「dekiru」（能够）的マス形，「～koto ga dekimasu（dekiru）」表示可能。"
+  },
+  "use": [
+   {
+    "jp": "すみません。歌舞伎は、どこで見ることができますか。",
+    "romaji": "Sumimasen. Kabuki wa doko de miru kotoga dekimasu ka.",
+    "cn": "请问，在哪儿能看歌舞伎？"
+   },
+   {
+    "jp": "本日ですか。お調べします。",
+    "romaji": "Honjitsu desu ka. Oshirabe-shimasu.",
+    "cn": "今天吗？让我查一查。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。～ことができますか。",
+    "romaji": "Sumimasen. ～koto ga dekimasu ka.",
+    "cn": "请问，能～吗？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "席を予約する",
+       "romaji": "seki o yoyaku-suru",
+       "cn": "预订座位"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "洗濯をする",
+       "romaji": "sentaku o suru",
+       "cn": "洗衣服"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "日期1日2日3日4日5日6日tsuitachi⎤futsukamikkayokkaitsukamuika7日8日9日10日11日20日nanokayookakokonokatookajuu-ichi-nichi⎤hatsuka"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "日期",
+   "1日",
+   "2日",
+   "3日",
+   "4日",
+   "5日",
+   "6日",
+   "tsuitachi⎤",
+   "futsuka",
+   "mikka",
+   "yokka",
+   "itsuka",
+   "muika",
+   "7日",
+   "8日",
+   "9日",
+   "10日",
+   "11日",
+   "20日",
+   "nanoka",
+   "yooka",
+   "kokonoka",
+   "tooka",
+   "juu-ichi-nichi⎤",
+   "hatsuka"
+  ],
+  "cando": "确认你想做的事能否实现",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。席を予約することができますか。",
+    "romaji": "Sumimasen. Seki o yoyaku suru koto ga dekimasu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。洗濯をすることができますか。",
+    "romaji": "Sumimasen. Sentaku o suru koto ga dekimasu ka."
+   }
+  ],
+  "info": [
+   "©Kashimo Kabuki Preservation Society",
+   "日本的传统艺能歌舞伎",
+   "春奶奶的智慧锦囊",
+   "歌舞伎是日本具有代表性的传统艺能之一，女性角色也由男性来扮演。突出勾绘脸部血管和肌肉的脸谱很有视觉冲击力。红色的妆容代表善人，蓝色代表恶人。",
+   "演员在表演时会突然定",
+   "格某个姿势，据说，在没有舞台灯光和摄像机的过去，这样做会产生我们今天所说的特写效果。",
+   "©Kashimo Kabuki Preservation Society"
+  ]
+ },
+ {
+  "num": 42,
+  "title_jp": "悠輝さんに渡すつもりです",
+  "title_cn": "我打算送给悠辉",
+  "turns": [
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "タム、きれいなお花だね。",
+      "romaji": "Tamu, kiree na ohana da ne.",
+      "cn": "心心， 这花真漂亮。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "悠輝さんに渡すつもりです。",
+      "romaji": "Yuuki-san ni watasu tsumori desu.",
+      "cn": "我打算送给悠辉。"
+     },
+     {
+      "jp": "すごくよかったです！",
+      "romaji": "Sugoku yokatta desu!",
+      "cn": "真是太棒了！"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "さあ、楽屋に行こう。",
+      "romaji": "Saa, gakuya ni ikoo.",
+      "cn": "走，去后台吧。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "好。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "きれい（な）",
+    "cn": "漂亮",
+    "romaji": "kiree （na）"
+   },
+   {
+    "jp": "花／お花",
+    "cn": "花",
+    "romaji": "hana / ohana"
+   },
+   {
+    "jp": "渡す",
+    "cn": "给",
+    "romaji": "watasu"
+   },
+   {
+    "jp": "すごく",
+    "cn": "非常",
+    "romaji": "sugoku"
+   },
+   {
+    "jp": "いい（←よかった）",
+    "cn": "好",
+    "romaji": "ii （← yokatta）"
+   },
+   {
+    "jp": "さあ",
+    "cn": "表示劝诱或催促的感叹词",
+    "romaji": "saa"
+   },
+   {
+    "jp": "楽屋",
+    "cn": "后台、演员休息室",
+    "romaji": "gakuya"
+   },
+   {
+    "jp": "行く",
+    "cn": "去",
+    "romaji": "iku"
+   }
+  ],
+  "key": {
+   "jp": "悠輝さんに渡すつもりです。",
+   "romaji": "Yuuki-san ni watasu tsumori desu.",
+   "cn": "我打算送给悠辉。",
+   "explain": "说明自己将要做或已经决定做的事，可以用这个说法：「动词的辞书形＋tsumori desu」。「watasu」（给）是辞书形。「Yuuki-san」后面的助词「ni」表示给的对象。"
+  },
+  "use": [
+   {
+    "jp": "これからどこに行きますか。",
+    "romaji": "Korekara doko ni ikimasu ka.",
+    "cn": "接下来你要去哪儿？"
+   },
+   {
+    "jp": "姫路に行って、お城を見るつもりです。",
+    "romaji": "Himeji ni itte, oshiro o miru tsumori desu.",
+    "cn": "我打算去姬路，看城堡。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～つもりです。",
+    "romaji": "～tsumori desu.",
+    "cn": "我打算～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "友達と博物館に行く",
+       "romaji": "tomodachi to hakubutsukan ni iku",
+       "cn": "和朋友去博物馆"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "部屋でゆっくりする",
+       "romaji": "heya de yukkuri-suru",
+       "cn": "在房间呆着"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "すごくよかったです！",
+   "romaji": "Sugoku yokatta desu!",
+   "cn": "真是太棒了！",
+   "explain": "用于表达感动或赞叹。「sugoku」是「totemo」（非常）的较为随意的说法，在会话中经常使用。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "すごくよかったです！",
+   "Sugo⎤ku yo⎤katta de⎤su!",
+   "真是太棒了！",
+   "用于表达感动或赞叹。「sugoku」是「totemo」（非常）的较为随意的说法，",
+   "在会话中经常使用。"
+  ],
+  "cando": "说明你的意愿或计划",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "友達と博物館に行くつもりです。",
+    "romaji": "Tomodachi to hakubutsukan ni iku tsumori desu."
+   },
+   {
+    "marker": "②",
+    "jp": "部屋でゆっくりするつもりです。",
+    "romaji": "Heya de yukkuri-suru tsumori desu."
+   }
+  ],
+  "info": [
+   "©Adm. Office of the Matsumoto Castle",
+   "©Himeji City",
+   "©Ehime Pref. Tourism and Local Products Assoc.",
+   "©Nagoya Castle Gen. Adm. Office",
+   "日本的城堡",
+   "日本各地有很多城堡，游览方式不一而终。雄伟壮观的城堡外观自不必说，你还可以登上天守阁，眺望周围的景色；或漫步在石墙下、护城河边，抚古思今。",
+   "姬路城因其洁白优美的外观犹如展翅高飞的白鹭，素有“白鹭城”的昵称。长野县的松本城拥有现存最古老的五重天守，外墙黑白相间，对照鲜明。",
+   "姬路城（兵库县）松本城（长野县）名古屋城（爱知县）松山城（爱媛县）跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 43,
+  "title_jp": "元気そうですね",
+  "title_cn": "看上去很不错",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "悠輝さん、お久しぶりです。",
+      "romaji": "Yuuki-san, ohisashiburi desu.",
+      "cn": "悠辉，好久不见。"
+     }
+    ]
+   },
+   {
+    "speaker": "悠辉",
+    "parts": [
+     {
+      "jp": "あ！ タムさん・・・。",
+      "romaji": "A! Tamu san...",
+      "cn": "哦！心心······"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "去年、日本に来ました。",
+      "romaji": "Kyonen, Nihon ni kimashita.",
+      "cn": "我去年来日本了。"
+     },
+     {
+      "jp": "日本語を勉強しています。",
+      "romaji": "Nihongo o benkyoo-shite imasu.",
+      "cn": "正在学习日语。"
+     }
+    ]
+   },
+   {
+    "speaker": "悠辉",
+    "parts": [
+     {
+      "jp": "そう。夢がかなったんですね。",
+      "romaji": "Soo. Yume ga kanattan desu ne.",
+      "cn": "是吗？梦想成真了。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "嗯。"
+     },
+     {
+      "jp": "悠輝さんも、元気そうですね。",
+      "romaji": "Yuuki-san mo, genki soo desu ne.",
+      "cn": "悠辉，你看上去也很不错。"
+     },
+     {
+      "jp": "また会えてうれしいです。",
+      "romaji": "Mata aete ureshii desu.",
+      "cn": "很高兴能再次见到你。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "久しぶり",
+    "cn": "好久不见",
+    "romaji": "hisashiburi"
+   },
+   {
+    "jp": "去年",
+    "cn": "去年",
+    "romaji": "kyonen"
+   },
+   {
+    "jp": "そう",
+    "cn": "是吗",
+    "romaji": "soo"
+   },
+   {
+    "jp": "夢",
+    "cn": "梦想",
+    "romaji": "yume"
+   },
+   {
+    "jp": "かなう",
+    "cn": "实现",
+    "romaji": "kanau"
+   },
+   {
+    "jp": "元気（な）",
+    "cn": "身体健康",
+    "romaji": "genki （na）"
+   },
+   {
+    "jp": "また",
+    "cn": "再次",
+    "romaji": "mata"
+   },
+   {
+    "jp": "会う",
+    "cn": "见面",
+    "romaji": "au"
+   },
+   {
+    "jp": "うれしい",
+    "cn": "高兴",
+    "romaji": "ureshii"
+   }
+  ],
+  "key": {
+   "jp": "元気そうですね。",
+   "romaji": "Genki soo desu ne",
+   "cn": "看上去很不错。",
+   "explain": "根据事物的外观或你所看到的情况来表达感想时，可以用这个说法：「形容词＋soo desu」。如果是ナ形容词，就把词尾「na」去掉，加上「soo desu」；如果是イ形容词，就把词尾「i」去掉，加上「soo desu」。"
+  },
+  "use": [
+   {
+    "jp": "あ、フリーマーケットをやってますね。",
+    "romaji": "A, furii-maaketto o yatte masu ne.",
+    "cn": "啊，跳蚤市场。"
+   },
+   {
+    "jp": "わあ、おもしろそう！",
+    "romaji": "Waa, omoshirosoo!",
+    "cn": "哇，看上去很有意思！"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～そうですね。",
+    "romaji": "～soo desu ne.",
+    "cn": "看上去～。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "ちょっと",
+       "romaji": "chotto",
+       "cn": "有点儿"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "今日は",
+       "romaji": "kyoo wa",
+       "cn": "今天"
+      },
+      {
+       "jp": "高い",
+       "romaji": "takai",
+       "cn": "贵"
+      },
+      {
+       "jp": "ダメ（な）",
+       "romaji": "dame (na)",
+       "cn": "不行"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "お久しぶりです。",
+   "romaji": "Ohisashiburi desu.",
+   "cn": "好久不见。",
+   "explain": "对久未谋面的人说的寒暄语。对朋友，也可以更随意地说「Hisashiburi」。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "お久しぶりです。",
+   "Ohisashiburi de⎤su.",
+   "好久不见。",
+   "对久未谋面的人说的寒暄语。对朋友，也可以更随意地说「Hisashiburi」。"
+  ],
+  "cando": "表达你的视觉印象",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "ちょっと、高そうですね。",
+    "romaji": "Chotto, takasoo desu ne."
+   },
+   {
+    "marker": "②",
+    "jp": "今日は、ダメそうですね。",
+    "romaji": "Kyoo wa, damesoo desu ne."
+   }
+  ],
+  "info": [
+   "©Hokkaido Hokuryu Town",
+   "©MATSUDO CITY TOURISM ASSOC.",
+   "日本的四季花卉",
+   "春奶奶的智慧锦囊",
+   "日本各地有很多赏花的名胜。春天可以欣赏樱花，梅雨季节有绣球花。",
+   "每到夏天，一望无际的薰衣草和向日葵花田便会吸引大批游客前来观光。秋天是欣赏红叶和大波斯菊的季节。从冬天到春天，有梅花绽放。看到梅花，人们便知道“春天已经不远了”。",
+   "北龙町的向日葵（北海道）皇宫的樱花（东京）本土寺的绣球花（千叶县）大阪城的梅花（大阪）"
+  ]
+ },
+ {
+  "num": 44,
+  "title_jp": "またコンサートがあるそうです",
+  "title_cn": "听说还要举办音乐会",
+  "turns": [
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "タムさん、悠輝さんに会えてよかったですね。",
+      "romaji": "Tamu-san, Yuuki-san ni aete yokatta desu ne.",
+      "cn": "心心，你见到悠辉了，真是太好了！"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい、とてもうれしいです。",
+      "romaji": "Hai, totemo ureshii desu.",
+      "cn": "嗯。我特别高兴。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "悠輝さんは、活躍してるんだね。",
+      "romaji": "Yuuki-san wa, katsuyaku-shiterun da ne.",
+      "cn": "悠辉发展得很不错啊。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。10月にまたコンサートがあるそうです。",
+      "romaji": "Hai. Juugatsu ni mata konsaato ga aru soo desu.",
+      "cn": "嗯。听说10月份还要举办音乐会。"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "そうですか。",
+      "romaji": "Soo desu ka.",
+      "cn": "是吗？"
+     },
+     {
+      "jp": "また会えますね。",
+      "romaji": "Mata aemasu ne.",
+      "cn": "那你又能见到他了。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。",
+      "romaji": "Hai.",
+      "cn": "嗯。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "とても",
+    "cn": "特别",
+    "romaji": "totemo"
+   },
+   {
+    "jp": "活躍する",
+    "cn": "大显身手",
+    "romaji": "katsuyaku-suru"
+   },
+   {
+    "jp": "ある",
+    "cn": "有、举办",
+    "romaji": "aru"
+   }
+  ],
+  "key": {
+   "jp": "またコンサートがあるそうです。",
+   "romaji": "Mata konsaato ga aru soo desu.",
+   "cn": "听说还要举办音乐会。",
+   "explain": "把你所听到的事情告诉别人时，可以用这个说法：「【句子】＋soo desu」。「soodesu」前面要用句子的简体，这个句子可以使用动词、形容词或名词。「konsaato ga aru」（举办音乐会）是「konsaato ga arimasu」的简体。（参见p.152-153）"
+  },
+  "use": [
+   {
+    "jp": "明日からお祭りだそうですね。",
+    "romaji": "Ashita kara omatsuri da soo desu ne.",
+    "cn": "听说明天开始要举办节日活动。"
+   },
+   {
+    "jp": "ええ。でも、すごく混むそうですよ。",
+    "romaji": "Ee. Demo, sugoku komu soo desu yo.",
+    "cn": "是的。不过，听说人很多。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【句子】そうですね。",
+    "romaji": "【句子】 soo desu ne.",
+    "cn": "听说【句子】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "台風が来る",
+       "romaji": "taifuu ga kuru",
+       "cn": "要刮台风"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "金曜日はただだ",
+       "romaji": "kin-yoobi wa tada da",
+       "cn": "星期五免费"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "",
+   "romaji": "",
+   "cn": "",
+   "explain": "月1月2月3月4月5月6月ichi-gatsu⎤ni-gatsu⎤sa⎤n-gatsushi-gatsu⎤go⎤-gatsuroku-gatsu⎤7月8月9月10月11月12月shichi-gatsu⎤hachi-gatsu⎤ku⎤-gatsujuu-gatsu⎤juuichi-gatsu⎤juuni-gatsu⎤"
+  },
+  "bonus_label": "进阶",
+  "bonus_raw": [
+   "月",
+   "1月",
+   "2月",
+   "3月",
+   "4月",
+   "5月",
+   "6月",
+   "ichi-gatsu⎤",
+   "ni-gatsu⎤",
+   "sa⎤n-gatsu",
+   "shi-gatsu⎤",
+   "go⎤-gatsu",
+   "roku-gatsu⎤",
+   "7月",
+   "8月",
+   "9月",
+   "10月",
+   "11月",
+   "12月",
+   "shichi-gatsu⎤hachi-gatsu⎤",
+   "ku⎤-gatsu",
+   "juu-gatsu⎤",
+   "juuichi-gatsu⎤juuni-gatsu⎤"
+  ],
+  "cando": "把你所听到的事情告诉别人",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "台風が来るそうですね。",
+    "romaji": "Taifuu ga kuru soo desu ne."
+   },
+   {
+    "marker": "②",
+    "jp": "金曜日はただだそうですね。",
+    "romaji": "Kin-yoobi wa tada da soo desu ne."
+   }
+  ],
+  "info": [
+   "©Asakusajinja",
+   "©JAPAN IMAGES",
+   "日本的节日活动",
+   "青森馁菩哒节(青森)",
+   "祗园祭（京都）日本各地都有传统的节日活动，据说其数量多达数十万个。",
+   "京都的“祗园祭”拥有长达1000年的历史，豪华绚丽的大型彩车沿街巡游；“青森馁菩哒节”的彩车最具特色，上面载有巨型花灯人偶；德岛的“阿波舞节”舞者众多，声势浩大。",
+   "阿波舞节（德岛）三社祭（东京)跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 45,
+  "title_jp": "日本語をチェックしてもらえませんか",
+  "title_cn": "能不能帮我确认一下日语",
+  "turns": [
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はるさん、お願いがあるんですが・・・。",
+      "romaji": "Haru-san, onegai ga arun desu ga...",
+      "cn": "春奶奶，有件事想麻烦您······"
+     },
+     {
+      "jp": "メールの日本語をチェックしてもらえませんか。",
+      "romaji": "Meeru no Nihongo o chekku-shite moraemasen ka.",
+      "cn": "能不能帮我确认一下邮件里的日语？"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "いいですよ。どれどれ・・・。",
+      "romaji": "Ii desu yo. Dore dore...",
+      "cn": "当然可以。让我看看······"
+     },
+     {
+      "jp": "「悠輝さん、お元気ですか。」",
+      "romaji": "“Yuuki-san, ogenki desu ka.”",
+      "cn": "“悠辉：你好吗？”"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "私の日本語、大丈夫ですか。",
+      "romaji": "Watashi no Nihongo, daijoobu desu ka.",
+      "cn": "我的日语没问题吗?"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "とても上手ですよ。",
+      "romaji": "Totemo joozu desu yo.",
+      "cn": "非常好。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "お願い",
+    "cn": "请求",
+    "romaji": "onegai"
+   },
+   {
+    "jp": "ある",
+    "cn": "有",
+    "romaji": "aru"
+   },
+   {
+    "jp": "メール",
+    "cn": "电子邮件",
+    "romaji": "meeru"
+   },
+   {
+    "jp": "チェックする",
+    "cn": "确认",
+    "romaji": "chekku-suru"
+   },
+   {
+    "jp": "いい",
+    "cn": "好",
+    "romaji": "ii"
+   },
+   {
+    "jp": "どれどれ",
+    "cn": "用于应答的感叹词",
+    "romaji": "dore dore"
+   },
+   {
+    "jp": "元気（な）",
+    "cn": "身体健康",
+    "romaji": "genki （na）"
+   },
+   {
+    "jp": "大丈夫（な）",
+    "cn": "没问题",
+    "romaji": "daijoobu （na）"
+   },
+   {
+    "jp": "上手（な）",
+    "cn": "好、擅长",
+    "romaji": "joozu （na）"
+   }
+  ],
+  "key": {
+   "jp": "日本語をチェックしてもらえませんか。",
+   "romaji": "Nihongo o chekku-shite moraemasen ka.",
+   "cn": "能不能帮我确认一下日语？",
+   "explain": "较为郑重地提出请求时，可以用这个说法：「动词的テ形＋moraemasen ka」。这是询问对方能否为自己做某事的说法，和「～tekudasai」（请～）相比，这样说更郑重。「moraemasen ka」是“我可不可以得到？”的意思。（参见p.150-151）"
+  },
+  "use": [
+   {
+    "jp": "すみません。これ、もう少し安くしてもらえませんか。",
+    "romaji": "Sumimasen. Kore, moo sukoshi yasuku shite moraemasen ka.",
+    "cn": "不好意思，这个能不能再便宜一点儿？"
+   },
+   {
+    "jp": "そうですねえ・・・。",
+    "romaji": "Soo desu nee...",
+    "cn": "这个嘛······"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "～てもらえませんか。",
+    "romaji": "～te moraemasen ka.",
+    "cn": "能不能帮我～？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "この店を予約する（→予約して）",
+       "romaji": "kono mise o yoyaku-suru （→yoyaku-shite）",
+       "cn": "预约这家店"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "荷物を預かる（→預かって）",
+       "romaji": "nimotsu o azukaru （→azukatte）",
+       "cn": "保管行李"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "お願いがあるんですが・・・。",
+   "romaji": "Onegai ga arun desu ga...",
+   "cn": "有件事想麻烦您······",
+   "explain": "这是有事拜托他人时，用来引入正题的前置语。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "お願いがあるんですが・・・。",
+   "Onegai ga a⎤run de⎤su ga...",
+   "有件事想麻烦您······",
+   "这是有事拜托他人时，用来引入正题的前置语。"
+  ],
+  "cando": "较为郑重地提出请求",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "この店を予約してもらえませんか。",
+    "romaji": "Kono mise o yoyaku-shite moraemasen ka."
+   },
+   {
+    "marker": "②",
+    "jp": "荷物を預かってもらえませんか。",
+    "romaji": "Nimotsu o azukatte moraemasen ka."
+   }
+  ],
+  "info": [
+   "享受购物的乐趣",
+   "春奶奶的智慧锦囊",
+   "购物也是在日本旅游的一大乐趣。不过，很多店铺都明码标价，不讲价。",
+   "元旦期间销售的“福袋”很有特色。店家把各种商品搭配在一起，以低于合计价格的优惠价出售。",
+   "除此以外，田边路旁的无人销售点也是日本独有的一道风景。摊棚里摆着蔬菜水果等，顾客各取所需，然后再自行把钱放到钱箱里。"
+  ]
+ },
+ {
+  "num": 46,
+  "title_jp": "小さいけどきれいですね",
+  "title_cn": "很小 不过很漂亮",
+  "turns": [
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "さあ、着いたよ！",
+      "romaji": "Saa, tsuita yo!",
+      "cn": "哎，到了！"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "ごめんください。",
+      "romaji": "Gomenkudasai.",
+      "cn": "可以进来吗？"
+     }
+    ]
+   },
+   {
+    "speaker": "房主",
+    "parts": [
+     {
+      "jp": "おいでやす。",
+      "romaji": "Oideyasu.",
+      "cn": "欢迎光临！"
+     },
+     {
+      "jp": "お部屋はこちらです。",
+      "romaji": "Oheya wa kochira desu.",
+      "cn": "房间在这边。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "わあ、すてきなお部屋！",
+      "romaji": "Waa, suteki na oheya!",
+      "cn": "哇！好温馨的房间！"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "お庭もあります！",
+      "romaji": "Oniwa mo arimasu!",
+      "cn": "还有院子呢！"
+     },
+     {
+      "jp": "小さいけどきれいですね。",
+      "romaji": "Chiisai kedo kiree desu ne.",
+      "cn": "很小，不过很漂亮！"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "着く",
+    "cn": "到达",
+    "romaji": "tsuku"
+   },
+   {
+    "jp": "おいでやす",
+    "cn": "欢迎光临 （方言）",
+    "romaji": "oideyasu"
+   },
+   {
+    "jp": "部屋／お部屋",
+    "cn": "房间",
+    "romaji": "heya / oheya"
+   },
+   {
+    "jp": "こちら",
+    "cn": "这里、这边",
+    "romaji": "kochira"
+   },
+   {
+    "jp": "すてき（な）",
+    "cn": "温馨",
+    "romaji": "suteki （na）"
+   },
+   {
+    "jp": "庭／お庭",
+    "cn": "院子",
+    "romaji": "niwa / oniwa"
+   },
+   {
+    "jp": "小さい",
+    "cn": "小",
+    "romaji": "chiisai"
+   },
+   {
+    "jp": "きれい（な）",
+    "cn": "漂亮",
+    "romaji": "kiree （na）"
+   }
+  ],
+  "key": {
+   "jp": "小さいけどきれいですね。",
+   "romaji": "Chiisai kedo kiree desu ne.",
+   "cn": "很小，不过很漂亮！",
+   "explain": "连接对比关系的两个句子时，可以用这个说法：「【句子１】 kedo 【句子2】」。「kedo」是“不过”的意思。【句子1】可以是名词句、イ形容词句、ナ形容词句、动词句，用简体会显得更自然。（参见p.152-153）"
+  },
+  "use": [
+   {
+    "jp": "このホテルはどうですか。",
+    "romaji": "Kono hoteru wa doo desu ka.",
+    "cn": "这家酒店怎么样？"
+   },
+   {
+    "jp": "うーん、きれいだけど高いですね。",
+    "romaji": "Uun, kiree da kedo takai desu ne.",
+    "cn": "嗯·····很漂亮，不过好贵啊。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【句子1】 けど 【句子2】。",
+    "romaji": "",
+    "cn": "［句子1］ kedo ［句子2］.【句子1】，不过【句子2】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "疲れた",
+       "romaji": "tsukareta",
+       "cn": "很累"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "難しい",
+       "romaji": "muzukashii",
+       "cn": "很难"
+      },
+      {
+       "jp": "楽しかった",
+       "romaji": "tanoshikattaomoshiroi",
+       "cn": "很开心"
+      },
+      {
+       "jp": "很有意思",
+       "romaji": "",
+       "cn": ""
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "ごめんください。",
+   "romaji": "Gomenkudasai.",
+   "cn": "可以进来吗？",
+   "explain": "到别人家拜访时说的寒暄语，要在门外对着屋里的人说。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "ごめんください。",
+   "Gomenkudasa⎤i.",
+   "可以进来吗？",
+   "到别人家拜访时说的寒暄语，要在门外对着屋里的人说。"
+  ],
+  "cando": "表达多重感想 2",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "疲れたけど楽しかったです。",
+    "romaji": "Tsukareta kedo tanoshikatta desu."
+   },
+   {
+    "marker": "②",
+    "jp": "難しいけどおもしろいです。",
+    "romaji": "Muzukashii kedo omoshiroi desu."
+   }
+  ],
+  "info": [
+   "©Fushimi Inari Taisha",
+   "（Photo taken in Aug. 2016）",
+   "©Nijo-jo Castle",
+   "漫步京都",
+   "京都有历史悠久的寺院、神社、城堡、庭园等，旅游景点不胜枚举。“清水寺”正殿的悬空舞台闻名遐迩；龙安寺的石庭独具匠心；“伏见稻荷大社”的鸟居绵延不绝；“二条城”御殿的内部装饰金碧辉煌，绚丽奢华。",
+   "漫步京都也是不错的选择。游走在町屋林立的小巷或河边，信步走进甜品店等小坐片刻，别有情趣。",
+   "清水寺",
+   "二条城",
+   "伏见稻荷大社",
+   "町屋",
+   "跟着米亚去旅行"
+  ]
+ },
+ {
+  "num": 47,
+  "title_jp": "どうやってするんですか",
+  "title_cn": "怎么弄",
+  "turns": [
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "おみくじだよ。",
+      "romaji": "Omikuji da yo.",
+      "cn": "这是神签。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "どうやってするんですか。",
+      "romaji": "Doo yatte surun desu ka.",
+      "cn": "怎么弄？"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "箱を振ってみて。",
+      "romaji": "Hako o futte mite.",
+      "cn": "摇一摇签筒。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "3番です。",
+      "romaji": "San-ban desu.",
+      "cn": "是3号。"
+     }
+    ]
+   },
+   {
+    "speaker": "巫女",
+    "parts": [
+     {
+      "jp": "はい、どうぞ。",
+      "romaji": "Hai, doozo.",
+      "cn": "来，给您。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "あ、大吉だ。",
+      "romaji": "A, daikichi da.",
+      "cn": "啊，是大吉。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "だいきち？ どういう意味ですか。",
+      "romaji": "Daikichi? Doo iu imi desu ka.",
+      "cn": "大吉？是什么意思？"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "とてもいい運勢ですよ。",
+      "romaji": "Totemo ii unsee desu yo.",
+      "cn": "就是运气特别好的意思。"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "おみくじ",
+    "cn": "神签",
+    "romaji": "omikuji"
+   },
+   {
+    "jp": "どうやって",
+    "cn": "怎么",
+    "romaji": "doo yatte"
+   },
+   {
+    "jp": "箱",
+    "cn": "箱",
+    "romaji": "hako"
+   },
+   {
+    "jp": "振る",
+    "cn": "摇",
+    "romaji": "furu"
+   },
+   {
+    "jp": "どうぞ",
+    "cn": "给您",
+    "romaji": "doozo"
+   },
+   {
+    "jp": "大吉",
+    "cn": "大吉",
+    "romaji": "daikichi"
+   },
+   {
+    "jp": "どういう",
+    "cn": "什么",
+    "romaji": "doo iu"
+   },
+   {
+    "jp": "意味",
+    "cn": "意思",
+    "romaji": "imi"
+   },
+   {
+    "jp": "運勢",
+    "cn": "运气",
+    "romaji": "unsee"
+   }
+  ],
+  "key": {
+   "jp": "どうやってするんですか。",
+   "romaji": "Doo yatte surun desu ka.",
+   "cn": "怎么弄？",
+   "explain": "第一次做某件事时，如果你想知道该怎么做，可以这样来询问：「Doo yatte ～ｎdesu ka」。「doo yatte」是“怎么”的意思。「～n desu ka」是在你不知道该怎么做，想请对方为你进行说明时使用的，接在动词辞书形的后面。"
+  },
+  "use": [
+   {
+    "jp": "すみません。これ、どうやって食べるんですか。",
+    "romaji": "Sumimasen. Kore, doo yatte taberun desu ka.",
+    "cn": "请问，这个怎么吃？"
+   },
+   {
+    "jp": "そちらのたれにつけて、お召し上がりください。",
+    "romaji": "Sochira no tareni tsukete, omeshiagari kudasai.",
+    "cn": "蘸着那个酱汁吃。"
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "すみません。どうやって～んですか。",
+    "romaji": "Sumimasen. Doo yatte ～n desu ka.",
+    "cn": "请问，怎么～？"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "これ",
+       "romaji": "kore",
+       "cn": "这个"
+      },
+      {
+       "jp": "使う",
+       "romaji": "tsukau",
+       "cn": "用"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "着る",
+       "romaji": "kiru",
+       "cn": "穿"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "どういう意味ですか。",
+   "romaji": "Doo iu imi desu ka.",
+   "cn": "是什么意思？",
+   "explain": "如果有什么说法你不明白，就可以这样来询问它的意义。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "どういう意味ですか。",
+   "Do⎤o iu i⎤mi de⎤su ka.",
+   "是什么意思？",
+   "如果有什么说法你不明白，就可以这样来询问它的意义。"
+  ],
+  "cando": "询问做某事的方法",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "すみません。これ、どうやって使うんですか。",
+    "romaji": "Sumimasen. Kore, doo yatte tsukaun desu ka."
+   },
+   {
+    "marker": "②",
+    "jp": "すみません。どうやって着るんですか。",
+    "romaji": "Sumimasen. Doo yatte kirun desu ka."
+   }
+  ],
+  "info": [
+   "神签：试试运气！",
+   "春奶奶的智慧锦囊",
+   "你可以到神社或寺院来求神签。神签通常是一张细长的纸条，上面写有「大吉」、「吉」、「凶」等运势以及和健康、工作、恋爱等有关的生活方面的建议。",
+   "如果抽到不好的运势，你可以把那个神签系在神社或寺院里的树上或专门用来系神签的地方，有人说这样可以逢凶化吉。",
+   "大吉",
+   "：daikichi",
+   "＝ 大吉",
+   "吉",
+   "：kichi",
+   "＝ 吉",
+   "凶",
+   "：kyoo",
+   "＝ 凶"
+  ]
+ },
+ {
+  "num": 48,
+  "title_jp": "卒業したら、日本で働きたいです",
+  "title_cn": "毕业以后 我想在日本工作",
+  "turns": [
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "タムさんが来て、もうすぐ1年ですね。",
+      "romaji": "Tamu-san ga kite, moo sugu ichi-nen desu ne.",
+      "cn": "心心，你来日本已经快1年了。"
+     },
+     {
+      "jp": "将来は何がしたいですか。",
+      "romaji": "Shoorai wa nani ga shitai desu ka.",
+      "cn": "将来你想做什么？"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "卒業したら、日本で働きたいです。",
+      "romaji": "Sotsugyoo-shitara, Nihon de hatarakitai desu.",
+      "cn": "毕业以后，我想在日本工作。"
+     },
+     {
+      "jp": "旅行会社で働きたいです。",
+      "romaji": "Ryokoo-gaisha de hatarakitai desu.",
+      "cn": "我想在旅行社工作。"
+     }
+    ]
+   },
+   {
+    "speaker": "海斗",
+    "parts": [
+     {
+      "jp": "いいね！",
+      "romaji": "Ii ne!",
+      "cn": "那太好了！"
+     }
+    ]
+   },
+   {
+    "speaker": "春奶奶",
+    "parts": [
+     {
+      "jp": "日本の魅力をいっぱい伝えてくださいね。",
+      "romaji": "Nihon no miryoku o ippai tsutaete kudasai ne.",
+      "cn": "你可要多宣传日本的魅力哦。"
+     }
+    ]
+   },
+   {
+    "speaker": "米亚",
+    "parts": [
+     {
+      "jp": "応援してるよ。",
+      "romaji": "Ooen-shiteru yo.",
+      "cn": "我支持你。"
+     }
+    ]
+   },
+   {
+    "speaker": "心心",
+    "parts": [
+     {
+      "jp": "はい。がんばります！",
+      "romaji": "Hai. Ganbarimasu!",
+      "cn": "谢谢。我会努力的！"
+     }
+    ]
+   }
+  ],
+  "vocab": [
+   {
+    "jp": "将来",
+    "cn": "将来",
+    "romaji": "shoorai"
+   },
+   {
+    "jp": "卒業する",
+    "cn": "毕业",
+    "romaji": "sotsugyoo-suru"
+   },
+   {
+    "jp": "働く",
+    "cn": "工作",
+    "romaji": "hataraku"
+   }
+  ],
+  "key": {
+   "jp": "卒業したら、日本で働きたいです。",
+   "romaji": "Sotsugyoo-shitara, Nihon de hatarakitai desu.",
+   "cn": "毕业以后，我想在日本工作。",
+   "explain": "叙述你以某个条件为前提，今后想做什么，可以用这个说法：「～tara、～taidesu」。「～tara」是在动词的タ形后面加上「ra」构成的，表示条件，意思是“在～实现的时候”。"
+  },
+  "use": [
+   {
+    "jp": "これから長崎ですか。",
+    "romaji": "Korekara Nagasaki desu ka.",
+    "cn": "你要去长崎？真好。"
+   },
+   {
+    "jp": "いいですね。",
+    "romaji": "Ii desu ne.",
+    "cn": "是的。到了长崎，我想吃杂烩面。"
+   },
+   {
+    "jp": "はい。長崎に行ったら、ちゃんぽんが食べたいです。",
+    "romaji": "Hai. Nagasaki ni ittara, chanpon ga tabetai desu.",
+    "cn": ""
+   }
+  ],
+  "try": {
+   "pattern": {
+    "jp": "【动词1】たら、【动词2】たいです。",
+    "romaji": "",
+    "cn": "［动词1］ tara, ［动词2］ ta⎤i de⎤su.【动词1】以后，我想【动词2】。／【动词1】了，我想【动词2】。"
+   },
+   "items": [
+    {
+     "marker": "①",
+     "words": [
+      {
+       "jp": "夏休みになる（→なったら）",
+       "romaji": "natsu-yasumi ni naru （→nattara）",
+       "cn": "放暑假"
+      }
+     ]
+    },
+    {
+     "marker": "②",
+     "words": [
+      {
+       "jp": "国に帰る（→帰ったら）",
+       "romaji": "kuni ni kaeru （→kaettara）",
+       "cn": "回国"
+      },
+      {
+       "jp": "また日本に来たい",
+       "romaji": "mata Nihon ni kitai",
+       "cn": "再来日本"
+      },
+      {
+       "jp": "もっと日本語を勉強したい",
+       "romaji": "motto Nihongo o benkyoo-shitai",
+       "cn": "进一步学习日语"
+      }
+     ]
+    }
+   ]
+  },
+  "bonus": {
+   "jp": "がんばります！",
+   "romaji": "Ganbarimasu!",
+   "cn": "我会努力的！",
+   "explain": "表示你将尽最大的努力去做某件事。"
+  },
+  "bonus_label": "常用语句",
+  "bonus_raw": [
+   "がんばります！",
+   "Ganbarima⎤su!",
+   "我会努力的！",
+   "表示你将尽最大的努力去做某件事。"
+  ],
+  "cando": "叙述你今后想做的事",
+  "answers": [
+   {
+    "marker": "①",
+    "jp": "夏休みになったら、また日本に来たいです。",
+    "romaji": "Natsu-yasumi ni nattara, mata Nihon ni kitai desu."
+   },
+   {
+    "marker": "②",
+    "jp": "国に帰ったら、もっと日本語を勉強したいです。",
+    "romaji": "Kuni ni kaettara, motto Nihongo o benkyoo-shitai desu."
+   }
+  ],
+  "info": [
+   "日本各地的美食",
+   "海斗的美食攻略",
+   "日本各地有很多特色美食。例如，大阪有“御好烧”，做法是先在面粉里加水，做成面糊，然后加入蔬菜和肉等材料煎烤。秋田的“米棒”非常有名，做法是先把米饭碾碎，在木签子上涂成棒状后再用火烘烤，如此炮制的“米棒”主要放在火锅里食用。",
+   "香川县的特色美食是“乌冬面”，特点是面条筋道弹牙。另外，长崎县有使用多种配料制作的“杂烩面”。",
+   "米棒锅（秋田县）御好烧（大阪）杂烩面（长崎县）赞岐乌冬面（香川县）"
+  ]
+ }
+]
