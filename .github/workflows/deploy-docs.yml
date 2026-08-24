@@ -77,16 +77,17 @@ jobs:
       - name: 验证产物
         run: ls -la src/.vuepress/dist/ src/.vuepress/dist/ai-eng | head -30
 
-      - name: 上传 dist 供三端打包
-        uses: actions/upload-artifact@v4
-        with:
-          name: site-dist
-          path: src/.vuepress/dist
-          compression-level: 0
-          retention-days: 3
-
       - name: 部署文档
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: src/.vuepress/dist
+
+      - name: 上传 dist 供三端打包(不阻塞部署)
+        uses: actions/upload-artifact@v4
+        continue-on-error: true
+        with:
+          name: site-dist
+          path: src/.vuepress/dist
+          compression-level: 0
+          retention-days: 3
