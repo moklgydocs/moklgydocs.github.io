@@ -20,7 +20,7 @@
 
 ## 概念
 
-![Audio-language model: audio encoder + projector + LLM decoder](assets/alm-architecture.svg)
+![Audio-language model: audio encoder + projector + LLM decoder](./assets/alm-architecture.svg)
 
 ### 三组件模板
 

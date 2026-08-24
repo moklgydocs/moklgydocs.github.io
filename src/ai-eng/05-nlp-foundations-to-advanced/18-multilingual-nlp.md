@@ -17,7 +17,7 @@
 
 ## 概念
 
-![通过共享多语言嵌入空间做跨语言迁移](assets/multilingual.svg)
+![通过共享多语言嵌入空间做跨语言迁移](./assets/multilingual.svg)
 
 **共享词表。** 多语言模型用在所有目标语言文本上训练的 SentencePiece 或 WordPiece 分词器。词表是共享的:同一个子词单元,在亲属语言里代表同一个语素。英语和意大利语里的 `anti-` 拿到的是同一个 token。
 

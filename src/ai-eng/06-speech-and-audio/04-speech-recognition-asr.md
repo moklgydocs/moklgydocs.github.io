@@ -21,7 +21,7 @@
 
 ## 概念
 
-![Three ASR formulations: CTC, RNN-T, attention-encoder-decoder](assets/asr-formulations.svg)
+![Three ASR formulations: CTC, RNN-T, attention-encoder-decoder](./assets/asr-formulations.svg)
 
 **CTC 直觉。** 让编码器输出 `T` 个帧级分布,词表为 `V+1`(V 个字符 + blank)。对长度 `U < T` 的目标串 `y`,任何折叠后能得到 `y` 的帧对齐都合法。CTC 损失对所有这些对齐求和。推理:逐帧 argmax,折叠重复,删掉 blank。
 

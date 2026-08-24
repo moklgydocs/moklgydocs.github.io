@@ -17,7 +17,7 @@
 
 ## 概念
 
-![编码器与解码器模块的内部结构及连线](assets/full-transformer.svg)
+![编码器与解码器模块的内部结构及连线](./assets/full-transformer.svg)
 
 ### 六个部件
 

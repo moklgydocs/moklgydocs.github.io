@@ -15,7 +15,7 @@
 
 ## 概念
 
-![Audio classification ladder: k-NN on MFCCs to AST to BEATs](assets/audio-classification.svg)
+![Audio classification ladder: k-NN on MFCCs to AST to BEATs](./assets/audio-classification.svg)
 
 **MFCC 上的 k-NN(90 年代基线)。** 把每段音频的 MFCC 拉平,与标注库算余弦相似度,取前 K 个多数投票。在干净的小数据集(Speech Commands、ESC-50)上出人意料地强。不需要 GPU 就能跑。
 

@@ -34,7 +34,7 @@
 
 ## 概念
 
-![带交叉注意力的编码器—解码器](assets/encoder-decoder.svg)
+![带交叉注意力的编码器—解码器](./assets/encoder-decoder.svg)
 
 ### 前向循环
 

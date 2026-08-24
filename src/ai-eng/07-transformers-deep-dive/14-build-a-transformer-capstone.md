@@ -17,7 +17,7 @@
 
 ## 概念
 
-![从零构建 Transformer 的框图](assets/capstone.svg)
+![从零构建 Transformer 的框图](./assets/capstone.svg)
 
 架构,带注解:
 

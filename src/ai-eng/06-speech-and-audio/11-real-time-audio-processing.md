@@ -25,7 +25,7 @@ Moshi(Kyutai,2024)做到了 200 ms 全双工;GPT-4o-realtime(2024)约 320 ms。�
 
 ## 概念
 
-![Streaming audio pipeline with ring buffer, VAD gate, interruption](assets/real-time.svg)
+![Streaming audio pipeline with ring buffer, VAD gate, interruption](./assets/real-time.svg)
 
 **帧 / 块 / 窗。** 实时音频以固定大小的块流动。常用 20 ms(16 kHz 下 320 个采样点)。下游的一切都必须跟上这个节奏。
 

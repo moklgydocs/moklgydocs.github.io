@@ -17,7 +17,7 @@
 
 ## 概念
 
-![BPE vs Unigram vs WordPiece,逐字符对比](assets/subword-tokenization.svg)
+![BPE vs Unigram vs WordPiece,逐字符对比](./assets/subword-tokenization.svg)
 
 **BPE(字节对编码)。** 从字符级词表开始,统计所有相邻对,把最高频的一对合并成新 token,重复到目标词表大小。统治地位的算法:GPT-2/3/4、Llama、Gemma、Qwen2、Mistral。
 

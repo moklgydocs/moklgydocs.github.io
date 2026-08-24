@@ -17,7 +17,7 @@
 
 ## 概念
 
-![潜在扩散:VAE 压缩 + 潜在空间中的扩散](assets/latent-diffusion.svg)
+![潜在扩散:VAE 压缩 + 潜在空间中的扩散](./assets/latent-diffusion.svg)
 
 **两个阶段,分开训练。**
 

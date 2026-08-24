@@ -17,7 +17,7 @@ Karras et al.(2019,NVIDIA)的方案:别再直接把 `z` 喂进卷积层,改为�
 
 ## 概念
 
-![StyleGAN:映射网络 + AdaIN + 逐层噪声](assets/stylegan.svg)
+![StyleGAN:映射网络 + AdaIN + 逐层噪声](./assets/stylegan.svg)
 
 **映射网络。** `f: Z → W`,8 层 MLP。`Z = N(0, I)^512`。`W` 不被强制成高斯——它学出贴合数据的形状。
 

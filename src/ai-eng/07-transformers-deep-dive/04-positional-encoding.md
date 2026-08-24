@@ -23,7 +23,7 @@
 
 ## 概念
 
-![绝对正弦 vs RoPE 旋转 vs ALiBi 距离偏置](assets/positional-encoding.svg)
+![绝对正弦 vs RoPE 旋转 vs ALiBi 距离偏置](./assets/positional-encoding.svg)
 
 ### 绝对正弦编码
 

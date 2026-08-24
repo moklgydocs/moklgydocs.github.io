@@ -22,7 +22,7 @@
 
 ## 概念
 
-![KV 缓存的增长与 Flash Attention 的分块](assets/kv-cache-flash-attn.svg)
+![KV 缓存的增长与 Flash Attention 的分块](./assets/kv-cache-flash-attn.svg)
 
 ### KV 缓存的账
 

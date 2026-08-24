@@ -19,7 +19,7 @@
 
 ## 概念
 
-![Anti-spoofing vs watermarking vs provenance — three defense layers](assets/spoofing-watermark.svg)
+![Anti-spoofing vs watermarking vs provenance — three defense layers](./assets/spoofing-watermark.svg)
 
 ### ASVspoof 5 —— 2024-2025 基准
 

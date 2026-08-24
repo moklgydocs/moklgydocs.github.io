@@ -20,7 +20,7 @@
 
 ## 概念
 
-![Four codec landscape: EnCodec, DAC, SNAC (multi-scale), Mimi (semantic+acoustic)](assets/codec-comparison.svg)
+![Four codec landscape: EnCodec, DAC, SNAC (multi-scale), Mimi (semantic+acoustic)](./assets/codec-comparison.svg)
 
 ### 核心技巧:残差向量量化(RVQ)
 

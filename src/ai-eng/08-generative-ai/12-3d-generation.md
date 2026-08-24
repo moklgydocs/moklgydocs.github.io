@@ -20,7 +20,7 @@
 
 ## 概念
 
-![3D 生成:多视角扩散 + 3D 重建](assets/3d-generation.svg)
+![3D 生成:多视角扩散 + 3D 重建](./assets/3d-generation.svg)
 
 ### 表示:3D 高斯泼溅(Kerbl et al., 2023)
 

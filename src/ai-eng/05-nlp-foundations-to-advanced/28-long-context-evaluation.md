@@ -21,7 +21,7 @@
 
 ## 概念
 
-![NIAH baseline, RULER multi-task, LongBench holistic](assets/long-context-eval.svg)
+![NIAH baseline, RULER multi-task, LongBench holistic](./assets/long-context-eval.svg)
 
 **大海捞针(NIAH,2023)。** 把一个事实("魔法词是 pineapple")放在长上下文中受控的深度上,让模型检索它。扫描 深度 × 长度 的网格。这是最早的长上下文基准。如今前沿模型已经能把它刷满——它是必要基线,但远不充分。
 

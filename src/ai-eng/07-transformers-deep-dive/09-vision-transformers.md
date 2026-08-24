@@ -19,7 +19,7 @@ ViT 开启了 2026 年的一个大模式:一个架构,多种模态。Whisper 把
 
 ## 概念
 
-![图像 → 图块 → token → Transformer](assets/vit.svg)
+![图像 → 图块 → token → Transformer](./assets/vit.svg)
 
 ### 第 1 步——切块(patchify)
 

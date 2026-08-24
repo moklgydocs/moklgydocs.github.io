@@ -17,7 +17,7 @@ Bahdanau、Cho 和 Bengio 在 2014 年发表了一个三行就能说清的修法
 
 ## 概念
 
-![Bahdanau 注意力:解码器查询所有编码器状态](assets/attention.svg)
+![Bahdanau 注意力:解码器查询所有编码器状态](./assets/attention.svg)
 
 在解码器的每一步 `t`:
 

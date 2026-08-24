@@ -19,7 +19,7 @@ REINFORCE 定理(Williams 1992)告诉你这个梯度是可算的:`∇J(θ) = E_�
 
 ## 概念
 
-![策略梯度:softmax 策略、log-π 梯度、按回报加权的更新](assets/policy-gradient.svg)
+![策略梯度:softmax 策略、log-π 梯度、按回报加权的更新](./assets/policy-gradient.svg)
 
 **策略梯度定理。** 对任何以 `θ` 参数化的策略 `π_θ`:
 

@@ -25,7 +25,7 @@
 
 ## 概念
 
-![Audio evaluation matrix — metrics vs tasks vs 2026 leaderboards](assets/eval-landscape.svg)
+![Audio evaluation matrix — metrics vs tasks vs 2026 leaderboards](./assets/eval-landscape.svg)
 
 ### ASR 指标
 

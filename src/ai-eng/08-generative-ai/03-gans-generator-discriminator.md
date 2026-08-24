@@ -23,7 +23,7 @@ min_G max_D  E_real[log D(x)] + E_fake[log(1 - D(G(z)))]
 
 ## 概念
 
-![GAN 训练:生成器与判别器的极小极大博弈](assets/gan.svg)
+![GAN 训练:生成器与判别器的极小极大博弈](./assets/gan.svg)
 
 **生成器 `G(z)`。** 把噪声向量 `z ~ N(0, I)` 映射成样本 `x̂`。解码器形状的网络(全连接或转置卷积)。
 

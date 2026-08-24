@@ -19,7 +19,7 @@
 
 ## 概念
 
-![actor-critic:策略网络加价值网络,TD 残差当优势](assets/actor-critic.svg)
+![actor-critic:策略网络加价值网络,TD 残差当优势](./assets/actor-critic.svg)
 
 **两个网络,一个联合损失:**
 

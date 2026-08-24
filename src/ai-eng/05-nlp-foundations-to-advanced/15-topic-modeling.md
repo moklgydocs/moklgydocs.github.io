@@ -21,7 +21,7 @@ BERTopic(2020)用 BERT 编码文档,UMAP 降维,HDBSCAN 聚类,再用基于类�
 
 ## 概念
 
-![LDA 混合模型 vs BERTopic 聚类](assets/topic-modeling.svg)
+![LDA 混合模型 vs BERTopic 聚类](./assets/topic-modeling.svg)
 
 **LDA 的生成故事。** 每个主题是词上的一个分布,每篇文档是主题的一个混合。要生成文档中的一个词,先从文档的主题混合里抽一个主题,再从该主题的词分布里抽一个词。推断是这个过程的逆运算:给定观察到的词,反推每篇文档的主题分布和每个主题的词分布。数学上靠坍缩吉布斯采样(collapsed Gibbs sampling)或变分贝叶斯完成。
 

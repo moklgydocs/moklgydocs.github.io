@@ -19,7 +19,7 @@
 
 ## 概念
 
-![Q-learning vs SARSA:离策略的 max vs 在策略的 Q(s', a')](assets/td.svg)
+![Q-learning vs SARSA:离策略的 max vs 在策略的 Q(s', a')](./assets/td.svg)
 
 **V 的 TD(0) 更新:**
 

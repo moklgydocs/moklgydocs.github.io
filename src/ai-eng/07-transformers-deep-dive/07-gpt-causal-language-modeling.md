@@ -19,7 +19,7 @@ GPT-1(2018)、GPT-2(2019)、GPT-3(2020)、GPT-4(2023)、GPT-5(2025)、Claude、L
 
 ## 概念
 
-![因果掩码造出三角形的注意力矩阵](assets/causal-attention.svg)
+![因果掩码造出三角形的注意力矩阵](./assets/causal-attention.svg)
 
 ### 掩码
 

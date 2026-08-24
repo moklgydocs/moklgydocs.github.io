@@ -17,7 +17,7 @@
 
 ## 概念
 
-![智能体框架矩阵:核心抽象 vs 问题形状](assets/framework-matrix.svg)
+![智能体框架矩阵:核心抽象 vs 问题形状](./assets/framework-matrix.svg)
 
 四个框架主导 2026 年的版图。它们的核心抽象并不相同。
 

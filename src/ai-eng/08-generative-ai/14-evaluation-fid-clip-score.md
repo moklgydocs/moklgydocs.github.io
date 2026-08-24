@@ -19,7 +19,7 @@
 
 ## 概念
 
-![FID、CLIP 与偏好:三根轴,各自的失败模式](assets/evaluation.svg)
+![FID、CLIP 与偏好:三根轴,各自的失败模式](./assets/evaluation.svg)
 
 ### FID —— 样本质量
 

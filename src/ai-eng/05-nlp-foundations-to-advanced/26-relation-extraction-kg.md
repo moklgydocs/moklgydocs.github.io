@@ -22,7 +22,7 @@
 
 ## 概念
 
-![文本 → 三元组 → 知识图谱](assets/relation-extraction.svg)
+![文本 → 三元组 → 知识图谱](./assets/relation-extraction.svg)
 
 **三元组形式。** `(主语实体, 关系类型, 宾语实体)`。关系可以来自封闭本体(Wikidata 属性、FIBO、UMLS),也可以是开放的(OpenIE 风格,来者不拒)。
 

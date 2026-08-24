@@ -21,7 +21,7 @@ Whisper 下了三个赌注:
 
 ## 概念
 
-![Whisper 流水线:音频 → 梅尔 → 编码器 → 解码器 → 文本](assets/whisper.svg)
+![Whisper 流水线:音频 → 梅尔 → 编码器 → 解码器 → 文本](./assets/whisper.svg)
 
 ### 第 1 步——重采样 + 加窗
 

@@ -19,7 +19,7 @@ Model Context Protocol 把这个矩阵压平了:一份基于 JSON-RPC 的规范,
 
 ## 概念
 
-![MCP:一个宿主、一个服务器、三种能力](assets/mcp-architecture.svg)
+![MCP:一个宿主、一个服务器、三种能力](./assets/mcp-architecture.svg)
 
 **三种原语。** 一个 MCP 服务器恰好暴露三样东西。
 

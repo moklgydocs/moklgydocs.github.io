@@ -23,7 +23,7 @@
 
 ## 概念
 
-![约束解码在每一步屏蔽非法 token](assets/constrained-decoding.svg)
+![约束解码在每一步屏蔽非法 token](./assets/constrained-decoding.svg)
 
 **约束解码的原理。** 生成的每一步,LLM 在整个词表(约 10 万 token)上产出一个 logit 向量。*logit 处理器*坐在模型和采样器之间:它根据当前在目标文法(JSON Schema、正则表达式、上下文无关文法)中的位置,算出哪些 token 合法,然后把所有非法 token 的 logit 设为负无穷。对剩下的 logit 做 softmax,概率质量就全落在合法续写上。
 

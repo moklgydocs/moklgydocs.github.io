@@ -15,7 +15,7 @@
 
 ## 概念
 
-![Pix2Pix:U-Net 生成器,PatchGAN 判别器](assets/pix2pix.svg)
+![Pix2Pix:U-Net 生成器,PatchGAN 判别器](./assets/pix2pix.svg)
 
 **条件 G。** `G(x, z) → y`。Pix2Pix 里,`z` 是 G 内部的 dropout(不喂输入噪声——Isola 发现显式噪声会被模型无视)。
 

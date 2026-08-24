@@ -17,7 +17,7 @@ Moshi(Kyutai,2024-2026)问了一个不同的问题:要是根本没有流水线�
 
 ## 概念
 
-![Moshi architecture: two parallel Mimi streams + inner-monologue text](assets/moshi-hibiki.svg)
+![Moshi architecture: two parallel Mimi streams + inner-monologue text](./assets/moshi-hibiki.svg)
 
 ### Moshi 架构
 

@@ -22,7 +22,7 @@
 
 ## 概念
 
-![Voice cloning vs conversion: factorize, swap speaker, recombine](assets/voice-cloning.svg)
+![Voice cloning vs conversion: factorize, swap speaker, recombine](./assets/voice-cloning.svg)
 
 **零样本克隆。** 把 5 秒音频喂给一个在上千个说话人语料上训练过的模型。说话人编码器把音频映射成说话人嵌入,TTS 解码器以该嵌入加文本为条件生成。
 

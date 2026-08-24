@@ -25,7 +25,7 @@
 
 ## 概念
 
-![四个评估维度,LLM 裁判架构](assets/llm-evaluation.svg)
+![四个评估维度,LLM 裁判架构](./assets/llm-evaluation.svg)
 
 **LLM 当裁判。** 把一个 LLM 放进静态指标的位置,按评分细则给输出打分。给定 `(查询, 上下文, 答案)`,提示裁判 LLM:"按忠实度打 0-1 分。"拿回分数。
 

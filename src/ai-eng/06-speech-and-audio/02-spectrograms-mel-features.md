@@ -17,7 +17,7 @@ Mel 频谱图更进一步。人对音高的感知是对数式的:100 Hz 与 200 
 
 ## 概念
 
-![Waveform to STFT to mel spectrogram to MFCC ladder](assets/mel-features.svg)
+![Waveform to STFT to mel spectrogram to MFCC ladder](./assets/mel-features.svg)
 
 **STFT(短时傅里叶变换)。** 把波形切成重叠的帧(典型:25 ms 窗长、10 ms 帧移,16 kHz 下即 400 采样点 / 160 采样点)。每帧乘一个窗函数(默认 Hann;Hamming 取舍略有不同)。逐帧 FFT。把幅度谱堆成形状为 `(n_frames, n_freq_bins)` 的矩阵。这就是频谱图。
 

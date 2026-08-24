@@ -19,7 +19,7 @@ ControlNet + LoRA + 文本 = 2026 年从业者的工具箱。多数生产图像�
 
 ## 概念
 
-![ControlNet 克隆编码器;LoRA 加低秩增量](assets/controlnet-lora.svg)
+![ControlNet 克隆编码器;LoRA 加低秩增量](./assets/controlnet-lora.svg)
 
 ### ControlNet(Zhang et al., 2023)
 

@@ -19,7 +19,7 @@ OpenAI 在 2022 年 9 月发布的 Whisper,是第一个以日用品形态交付�
 
 ## 概念
 
-![Whisper encoder-decoder, tasks, chunked inference, fine-tune](assets/whisper.svg)
+![Whisper encoder-decoder, tasks, chunked inference, fine-tune](./assets/whisper.svg)
 
 **架构。** 标准的 Transformer 编码器-解码器。
 

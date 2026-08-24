@@ -17,7 +17,7 @@
 
 ## 概念
 
-![MoE 层:路由器为每个 token 从 E 个专家中选出 k 个](assets/moe.svg)
+![MoE 层:路由器为每个 token 从 E 个专家中选出 k 个](./assets/moe.svg)
 
 ### FFN 的替换
 

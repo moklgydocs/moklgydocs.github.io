@@ -23,7 +23,7 @@
 
 ## 概念
 
-![稠密、稀疏与多向量嵌入](assets/embedding-modes.svg)
+![稠密、稀疏与多向量嵌入](./assets/embedding-modes.svg)
 
 **稠密嵌入。** 每个段落一个向量(通常 384-3,072 维),用余弦相似度按语义远近排名。OpenAI `text-embedding-3-large`、BGE-M3 稠密模式、Voyage-3。默认选择。
 

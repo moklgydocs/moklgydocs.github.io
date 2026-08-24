@@ -23,7 +23,7 @@
 
 ## 概念
 
-![DST: dialog history → slot-value state](assets/dst.svg)
+![DST: dialog history → slot-value state](./assets/dst.svg)
 
 **任务结构。** 一个 schema 定义若干领域(餐厅、酒店、出租车)及各自的槽位(菜系、区域、价位、人数)。每个槽位可以为空,可以填闭集中的值(price: {cheap, moderate, expensive}),也可以是自由形式的值(name: "The Copper Kettle")。
 

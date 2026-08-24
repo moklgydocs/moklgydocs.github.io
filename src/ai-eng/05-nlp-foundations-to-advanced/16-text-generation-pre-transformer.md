@@ -17,7 +17,7 @@
 
 ## 概念
 
-![N-gram 模型:计数、平滑、生成](assets/ngram.svg)
+![N-gram 模型:计数、平滑、生成](./assets/ngram.svg)
 
 ### 猜谜游戏
 

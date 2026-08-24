@@ -19,7 +19,7 @@ Kingma 2013 年的 VAE 这样解决:训练编码器输出一个*分布* `q(z|x) 
 
 ## 概念
 
-![自编码器 vs VAE:重参数化技巧](assets/vae.svg)
+![自编码器 vs VAE:重参数化技巧](./assets/vae.svg)
 
 **自编码器。** `z = encoder(x)`,`x̂ = decoder(z)`,损失 = `||x - x̂||²`。编码空间无结构。
 

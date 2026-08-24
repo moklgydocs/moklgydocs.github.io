@@ -17,7 +17,7 @@ Rectified flow(Liu 2022)更进一步:用 reflow 流程迭代地把路径拉直,�
 
 ## 概念
 
-![Flow matching:噪声与数据之间的直线插值](assets/flow-matching.svg)
+![Flow matching:噪声与数据之间的直线插值](./assets/flow-matching.svg)
 
 ### 直线流
 

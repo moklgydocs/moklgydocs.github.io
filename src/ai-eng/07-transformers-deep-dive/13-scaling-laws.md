@@ -24,7 +24,7 @@ Hoffmann 等人(2022)训练了一族叫 Chinchilla 的小模型,发现了不同�
 
 ## 概念
 
-![Chinchilla 曲线:不同 N/D 配比下损失随算力的变化](assets/scaling-laws.svg)
+![Chinchilla 曲线:不同 N/D 配比下损失随算力的变化](./assets/scaling-laws.svg)
 
 ### Hoffmann 定律
 

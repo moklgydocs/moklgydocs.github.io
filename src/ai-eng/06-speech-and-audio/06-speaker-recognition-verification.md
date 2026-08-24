@@ -17,7 +17,7 @@
 
 ## 概念
 
-![Enrollment + verification pipeline with embedding + cosine + EER](assets/speaker-verification.svg)
+![Enrollment + verification pipeline with embedding + cosine + EER](./assets/speaker-verification.svg)
 
 **流水线。** 注册:录目标说话人 5–30 秒,计算定维嵌入(ECAPA-TDNN 为 192 维,WavLM-large 为 256 维)。验证:取测试语音的嵌入,算余弦相似度,与阈值比较。
 

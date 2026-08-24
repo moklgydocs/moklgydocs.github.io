@@ -19,7 +19,7 @@
 
 ## 概念
 
-![音频生成:编解码器 token + Transformer 或扩散](assets/audio-generation.svg)
+![音频生成:编解码器 token + Transformer 或扩散](./assets/audio-generation.svg)
 
 ### 神经音频编解码器
 

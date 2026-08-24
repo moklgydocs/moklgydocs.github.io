@@ -19,7 +19,7 @@
 
 ## 概念
 
-![抽取式 TextRank vs 生成式 Transformer](assets/summarization.svg)
+![抽取式 TextRank vs 生成式 Transformer](./assets/summarization.svg)
 
 **抽取式。** 把文章看成一张图:节点是句子,边是相似度。在图上跑 PageRank(或类似算法),按句子与其余部分的连接程度打分,得分最高的句子就是摘要。经典实现是 **TextRank**(Mihalcea 和 Tarau,2004)。
 

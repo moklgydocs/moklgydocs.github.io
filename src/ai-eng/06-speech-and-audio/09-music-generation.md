@@ -17,7 +17,7 @@
 
 ## 概念
 
-![Music generation: token-LM vs diffusion, the 2026 model map](assets/music-generation.svg)
+![Music generation: token-LM vs diffusion, the 2026 model map](./assets/music-generation.svg)
 
 ### 神经编解码 token 上的语言模型
 

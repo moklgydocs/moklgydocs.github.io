@@ -20,7 +20,7 @@
 
 ## 概念
 
-![视频扩散:切 patch、DiT、解码](assets/video-generation.svg)
+![视频扩散:切 patch、DiT、解码](./assets/video-generation.svg)
 
 ### 切 patch
 

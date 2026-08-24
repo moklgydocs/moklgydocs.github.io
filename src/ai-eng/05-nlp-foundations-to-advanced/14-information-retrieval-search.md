@@ -17,7 +17,7 @@ IR(信息检索)是每个 RAG 系统、每个搜索框、每个文档站模糊�
 
 ## 概念
 
-![混合检索:BM25 + 稠密 + RRF + cross-encoder 重排](assets/retrieval.svg)
+![混合检索:BM25 + 稠密 + RRF + cross-encoder 重排](./assets/retrieval.svg)
 
 四层。按需取用。
 

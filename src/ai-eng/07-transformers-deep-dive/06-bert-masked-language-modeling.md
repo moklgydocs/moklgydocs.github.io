@@ -19,7 +19,7 @@ BERT(Devlin 等人,2018)问:如果我们拿一个 Transformer 编码器,在互�
 
 ## 概念
 
-![掩码语言建模:挑 token,遮住,预测原词](assets/bert-mlm.svg)
+![掩码语言建模:挑 token,遮住,预测原词](./assets/bert-mlm.svg)
 
 ### 训练信号
 

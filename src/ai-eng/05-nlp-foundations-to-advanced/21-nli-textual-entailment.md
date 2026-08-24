@@ -25,7 +25,7 @@
 
 ## 概念
 
-![NLI:前提对假设的三分类](assets/nli.svg)
+![NLI:前提对假设的三分类](./assets/nli.svg)
 
 **三个标签。**
 

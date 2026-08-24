@@ -23,7 +23,7 @@
 
 ## 概念
 
-![Voice assistant pipeline: mic → VAD → STT → LLM+tools → TTS → speaker](assets/voice-assistant.svg)
+![Voice assistant pipeline: mic → VAD → STT → LLM+tools → TTS → speaker](./assets/voice-assistant.svg)
 
 ### 七个组件
 

@@ -17,7 +17,7 @@
 
 ## 概念
 
-![LangGraph StateGraph:节点、边与检查点器](assets/langgraph-stategraph.svg)
+![LangGraph StateGraph:节点、边与检查点器](./assets/langgraph-stategraph.svg)
 
 一个 `StateGraph` 有三样东西。
 

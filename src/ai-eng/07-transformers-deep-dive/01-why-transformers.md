@@ -23,7 +23,7 @@
 
 ## 概念
 
-![RNN 的顺序计算 vs Transformer 的并行注意力](assets/rnn-vs-transformer.svg)
+![RNN 的顺序计算 vs Transformer 的并行注意力](./assets/rnn-vs-transformer.svg)
 
 **循环是瓶颈。** RNN 计算 `h_t = f(h_{t-1}, x_t)`。每一步都依赖前一步,`h_4` 没算完就算不了 `h_5`。在有一万多个并行核心的现代 GPU 上,长序列意味着 99% 的硅片在闲置。
 

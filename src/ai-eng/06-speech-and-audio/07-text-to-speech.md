@@ -21,7 +21,7 @@
 
 ## 概念
 
-![Tacotron, FastSpeech, VITS, F5/Kokoro side-by-side](assets/tts.svg)
+![Tacotron, FastSpeech, VITS, F5/Kokoro side-by-side](./assets/tts.svg)
 
 **Tacotron 2(2017)。** Seq2seq:字符嵌入 → BiLSTM 编码器 → 位置敏感注意力 → 自回归 LSTM 解码器逐帧输出 mel。慢(自回归),长文本上不稳。仍被引为基线。
 

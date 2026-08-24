@@ -17,7 +17,7 @@
 
 ## 概念
 
-![多头注意力:拆分、并行注意、拼接](assets/multi-head-attention.svg)
+![多头注意力:拆分、并行注意、拼接](./assets/multi-head-attention.svg)
 
 **拆分。** 输入 `X`,形状 `(N, d_model)`。投影出 Q、K、V,各为 `(N, d_model)`。reshape 成 `(N, n_heads, d_head)`,其中 `d_head = d_model / n_heads`,再转置成 `(n_heads, N, d_head)`。
 

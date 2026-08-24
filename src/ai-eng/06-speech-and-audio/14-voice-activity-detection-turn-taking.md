@@ -19,7 +19,7 @@
 
 ## 概念
 
-![VAD cascade: energy → Silero → turn-detector → flush trick](assets/vad-turn-taking.svg)
+![VAD cascade: energy → Silero → turn-detector → flush trick](./assets/vad-turn-taking.svg)
 
 ### 三级 VAD 级联
 

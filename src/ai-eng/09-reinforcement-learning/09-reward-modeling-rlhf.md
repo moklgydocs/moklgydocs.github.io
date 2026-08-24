@@ -19,7 +19,7 @@ RLHF(Christiano 等 2017;Ouyang 等 2022)把偏好转成奖励模型,再用 PPO 
 
 ## 概念
 
-![三段式 RLHF:SFT、在成对偏好上训 RM、带 KL 惩罚的 PPO](assets/rlhf.svg)
+![三段式 RLHF:SFT、在成对偏好上训 RM、带 KL 惩罚的 PPO](./assets/rlhf.svg)
 
 **第 1 阶段:监督微调(SFT)。** 从预训练基座出发,在人类撰写的目标行为示范(遵循指令的回答、有帮助的回复等)上微调。结果:`π_SFT`——一个*偏向良好行为*、但动作空间仍无界的模型。
 

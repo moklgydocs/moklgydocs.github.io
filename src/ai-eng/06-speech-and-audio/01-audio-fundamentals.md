@@ -21,7 +21,7 @@
 
 ## 概念
 
-![Waveform, sampling, DFT, and frequency bins visualized](assets/audio-fundamentals.svg)
+![Waveform, sampling, DFT, and frequency bins visualized](./assets/audio-fundamentals.svg)
 
 **波形。** 一个一维浮点数组,取值在 `[-1.0, 1.0]`。以下标按采样点编号。换算成秒,除以采样率:`t = n / sr`。16 kHz 下 10 秒的音频,就是一个 16 万个浮点数的数组。
 
