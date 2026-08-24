@@ -49,7 +49,7 @@ jobs:
 
       - name: 构建 ai-eng 分片(分片 2/3)
         env:
-          NODE_OPTIONS: --max_old_space_size=8192
+          NODE_OPTIONS: --max_old_space_size=12288
         run: |
           mv "/tmp/stash/ai-eng" src/ai-eng
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
@@ -58,7 +58,7 @@ jobs:
 
       - name: 构建 d2l 分片(分片 3/3)
         env:
-          NODE_OPTIONS: --max_old_space_size=8192
+          NODE_OPTIONS: --max_old_space_size=12288
         run: |
           mv "/tmp/stash/d2l" "src/动手学深度学习"
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
