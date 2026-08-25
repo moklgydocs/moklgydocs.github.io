@@ -1,4 +1,4 @@
-import { defineClientConfig } from "vuepress/client";
+import { defineClientConfig, resolveRoute } from "vuepress/client";
 import Test from "./components/Test.vue";
 import Note from "./components/Note.vue";
 import Tense from "./components/Tense.vue";
@@ -18,12 +18,11 @@ import ReadingMode from "./components/ReadingMode.vue";
 export default defineClientConfig({
   rootComponents: [ReadingMode],
   enhance({ app, router }) {
-    // 分片构建产物合包后,跨分片链接在本分片路由表里不存在(会命中 404)。
-    // 守卫:命中 404 时强制整页跳转,让目标页所属分片的 bundle 接管;一次性标记防死循环。
+    // 分片构建产物合包后,跨分片链接在本分片路由表里不存在(resolveRoute 判 notFound)。
+    // 守卫:notFound 时强制整页跳转,让目标页所属分片的 bundle 接管;一次性标记防死循环。
     const FLAG = "vp-cross-shard-reload:";
     router.beforeEach((to) => {
-      const notFound = to.matched.length === 0 || to.name === "404";
-      if (!notFound) return true;
+      if (!resolveRoute(to.fullPath).notFound) return true;
       const key = FLAG + to.fullPath;
       if (sessionStorage.getItem(key)) return true;
       sessionStorage.setItem(key, "1");
