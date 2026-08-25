@@ -47,21 +47,21 @@ jobs:
           mv "src/动手学深度学习" "/tmp/stash/d2l"
           pnpm run docs:build
 
-      - name: 构建 ai-eng 前半分片(分片 2/4,阶段 00-09)
+      - name: 构建 ai-eng 前半分片(分片 2/4,阶段 00-12)
         env:
           NODE_OPTIONS: --max_old_space_size=10240
         run: |
           mv "/tmp/stash/ai-eng" src/ai-eng
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/README.md', 'ai-eng/0*/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/README.md', 'ai-eng/0*/**/*.md', 'ai-eng/1[0-2]*/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/ai-eng-a
 
-      - name: 构建 ai-eng 后半分片(分片 3/4,阶段 10-19)
+      - name: 构建 ai-eng 后半分片(分片 3/4,阶段 13-19)
         env:
           NODE_OPTIONS: --max_old_space_size=10240
         run: |
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/1*/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/1[3-9]*/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/ai-eng-b
 
       - name: 构建 d2l 分片(分片 4/4)
