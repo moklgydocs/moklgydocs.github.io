@@ -53,7 +53,7 @@ jobs:
         run: |
           mv "/tmp/stash/ai-eng" src/ai-eng
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/README.md', 'ai-eng/0[0-5]*/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[.*\]#pagePatterns: ['ai-eng/README.md', 'ai-eng/0[0-5]*/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/ai-eng-a
 
       - name: 构建 ai-eng 分片 B(阶段 06-11)
@@ -61,7 +61,7 @@ jobs:
           NODE_OPTIONS: --max_old_space_size=8192
         run: |
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/0[6-9]*/**/*.md', 'ai-eng/1[0-1]*/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[.*\]#pagePatterns: ['ai-eng/0[6-9]*/**/*.md', 'ai-eng/1[0-1]*/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/ai-eng-b
 
       - name: 构建 ai-eng 分片 C(阶段 12-16)
@@ -69,7 +69,7 @@ jobs:
           NODE_OPTIONS: --max_old_space_size=8192
         run: |
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/1[2-6]*/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[.*\]#pagePatterns: ['ai-eng/1[2-6]*/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/ai-eng-c
 
       - name: 构建 ai-eng 分片 D(阶段 17-19)
@@ -77,7 +77,7 @@ jobs:
           NODE_OPTIONS: --max_old_space_size=8192
         run: |
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/1[7-9]*/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[.*\]#pagePatterns: ['ai-eng/1[7-9]*/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/ai-eng-d
 
       - name: 构建 d2l 分片(分片 6/6)
@@ -86,7 +86,7 @@ jobs:
         run: |
           mv "/tmp/stash/d2l" "src/动手学深度学习"
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['动手学深度学习/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[.*\]#pagePatterns: ['动手学深度学习/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/d2l
 
       - name: 合并分片产物
