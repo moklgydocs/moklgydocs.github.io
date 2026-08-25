@@ -38,7 +38,7 @@ jobs:
           sudo swapon /swapfile
           free -h
 
-      - name: 构建主站(分片 1/4,不含 ai-eng/d2l)
+      - name: 构建主站(分片 1/6,不含 ai-eng/d2l)
         env:
           NODE_OPTIONS: --max_old_space_size=16384
         run: |
@@ -47,24 +47,40 @@ jobs:
           mv "src/动手学深度学习" "/tmp/stash/d2l"
           pnpm run docs:build
 
-      - name: 构建 ai-eng 前半分片(分片 2/4,阶段 00-12)
+      - name: 构建 ai-eng 分片 A(阶段 00-05)
         env:
-          NODE_OPTIONS: --max_old_space_size=10240
+          NODE_OPTIONS: --max_old_space_size=8192
         run: |
           mv "/tmp/stash/ai-eng" src/ai-eng
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/README.md', 'ai-eng/0*/**/*.md', 'ai-eng/1[0-2]*/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/README.md', 'ai-eng/0[0-5]*/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/ai-eng-a
 
-      - name: 构建 ai-eng 后半分片(分片 3/4,阶段 13-19)
+      - name: 构建 ai-eng 分片 B(阶段 06-11)
         env:
-          NODE_OPTIONS: --max_old_space_size=10240
+          NODE_OPTIONS: --max_old_space_size=8192
         run: |
           rm -rf src/.vuepress/.temp src/.vuepress/.cache
-          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/1[3-9]*/**/*.md']#" src/.vuepress/config.ts
+          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/0[6-9]*/**/*.md', 'ai-eng/1[0-1]*/**/*.md']#" src/.vuepress/config.ts
           pnpm exec vuepress-vite build src --dest .build/ai-eng-b
 
-      - name: 构建 d2l 分片(分片 4/4)
+      - name: 构建 ai-eng 分片 C(阶段 12-16)
+        env:
+          NODE_OPTIONS: --max_old_space_size=8192
+        run: |
+          rm -rf src/.vuepress/.temp src/.vuepress/.cache
+          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/1[2-6]*/**/*.md']#" src/.vuepress/config.ts
+          pnpm exec vuepress-vite build src --dest .build/ai-eng-c
+
+      - name: 构建 ai-eng 分片 D(阶段 17-19)
+        env:
+          NODE_OPTIONS: --max_old_space_size=8192
+        run: |
+          rm -rf src/.vuepress/.temp src/.vuepress/.cache
+          sed -i "s#pagePatterns: \[[^]]*\]#pagePatterns: ['ai-eng/1[7-9]*/**/*.md']#" src/.vuepress/config.ts
+          pnpm exec vuepress-vite build src --dest .build/ai-eng-d
+
+      - name: 构建 d2l 分片(分片 6/6)
         env:
           NODE_OPTIONS: --max_old_space_size=12288
         run: |
@@ -79,6 +95,10 @@ jobs:
           cp -rn .build/ai-eng-a/assets/* src/.vuepress/dist/assets/ 2>/dev/null || true
           cp -rn .build/ai-eng-b/ai-eng/* src/.vuepress/dist/ai-eng/ 2>/dev/null || true
           cp -rn .build/ai-eng-b/assets/* src/.vuepress/dist/assets/ 2>/dev/null || true
+          cp -rn .build/ai-eng-c/ai-eng/* src/.vuepress/dist/ai-eng/ 2>/dev/null || true
+          cp -rn .build/ai-eng-c/assets/* src/.vuepress/dist/assets/ 2>/dev/null || true
+          cp -rn .build/ai-eng-d/ai-eng/* src/.vuepress/dist/ai-eng/ 2>/dev/null || true
+          cp -rn .build/ai-eng-d/assets/* src/.vuepress/dist/assets/ 2>/dev/null || true
           cp -r ".build/d2l/动手学深度学习" src/.vuepress/dist/
           cp -rn .build/d2l/assets/* src/.vuepress/dist/assets/ 2>/dev/null || true
           touch src/.vuepress/dist/.nojekyll
